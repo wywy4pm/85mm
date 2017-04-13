@@ -1,4 +1,8 @@
-package com.arun.a85mm.widget;
+package com.arun.a85mm.refresh;
+
+/**
+ * Created by wy on 2017/4/13.
+ */
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
@@ -12,19 +16,17 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Property;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.utils.DensityUtil;
-import com.aspsine.swipetoloadlayout.SwipeRefreshTrigger;
+import com.aspsine.swipetoloadlayout.SwipeLoadMoreTrigger;
 import com.aspsine.swipetoloadlayout.SwipeTrigger;
 
-/**
- * Created by WY on 2017/4/11.
- */
-public class RefreshHeadView extends View implements IRefreshStatus ,SwipeRefreshTrigger, SwipeTrigger {
+public class ShootRefreshView extends View implements IRefreshStatus, SwipeLoadMoreTrigger, SwipeTrigger {
     private static final int DEFAULT_STROKE_COLOR = Color.parseColor("#ffc6c6c6");
     private static final int DEFAULT_GRADIENT_START_COLOR = Color.parseColor("#ffababab");
     private static final int DEFAULT_GRADIENT_END_COLOR = Color.parseColor("#0dababab");
@@ -79,43 +81,48 @@ public class RefreshHeadView extends View implements IRefreshStatus ,SwipeRefres
     private ValueAnimator mShootLineStretchAnimator;
     private ValueAnimator mOutRingRotateAnimator;
 
-    public static final Property<RefreshHeadView, Float> SHOOT_LINE_ROTATE_RADIANS =
-            new Property<RefreshHeadView, Float>(Float.class, null) {
+    private int currentHeight;
+    public void setCurrentHeight(int currentHeight) {
+        this.currentHeight = currentHeight;
+    }
+
+    public static final Property<ShootRefreshView, Float> SHOOT_LINE_ROTATE_RADIANS =
+            new Property<ShootRefreshView, Float>(Float.class, null) {
                 @Override
-                public Float get(RefreshHeadView object) {
+                public Float get(ShootRefreshView object) {
                     return object.mShootLineRotateRadians;
                 }
 
                 @Override
-                public void set(RefreshHeadView object, Float value) {
+                public void set(ShootRefreshView object, Float value) {
                     object.mShootLineRotateRadians = value;
                     object.invalidate();
                 }
             };
 
-    public static final Property<RefreshHeadView, Float> SHOOT_LINE_TOTAL_ROTATE_DEGREE =
-            new Property<RefreshHeadView, Float>(Float.class, null) {
+    public static final Property<ShootRefreshView, Float> SHOOT_LINE_TOTAL_ROTATE_DEGREE =
+            new Property<ShootRefreshView, Float>(Float.class, null) {
                 @Override
-                public Float get(RefreshHeadView object) {
+                public Float get(ShootRefreshView object) {
                     return object.mShootLineTotalRotateAngle;
                 }
 
                 @Override
-                public void set(RefreshHeadView object, Float value) {
+                public void set(ShootRefreshView object, Float value) {
                     object.mShootLineTotalRotateAngle = value;
                     object.invalidate();
                 }
             };
 
-    public RefreshHeadView(Context context) {
+    public ShootRefreshView(Context context) {
         this(context, null);
     }
 
-    public RefreshHeadView(Context context, AttributeSet attrs) {
+    public ShootRefreshView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public RefreshHeadView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ShootRefreshView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         resolveAttrs(context, attrs);
         initPaint();
@@ -125,15 +132,15 @@ public class RefreshHeadView extends View implements IRefreshStatus ,SwipeRefres
     }
 
     private void resolveAttrs(Context context, AttributeSet attrs) {
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.RefreshHeadView);
-        mStrokeColor = ta.getColor(R.styleable.RefreshHeadView_strokeColor,
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ShootRefreshView);
+        mStrokeColor = ta.getColor(R.styleable.ShootRefreshView_strokeColor,
                 DEFAULT_STROKE_COLOR);
-        mGradientStartColor = ta.getColor(R.styleable.RefreshHeadView_gradientStartColor,
+        mGradientStartColor = ta.getColor(R.styleable.ShootRefreshView_gradientStartColor,
                 DEFAULT_GRADIENT_START_COLOR);
         mGradientEndColor =
-                ta.getColor(R.styleable.RefreshHeadView_gradientEndColor, DEFAULT_GRADIENT_END_COLOR);
+                ta.getColor(R.styleable.ShootRefreshView_gradientEndColor, DEFAULT_GRADIENT_END_COLOR);
         mStrokeWidth =
-                ta.getDimensionPixelSize(R.styleable.RefreshHeadView_strokeWidth,
+                ta.getDimensionPixelSize(R.styleable.ShootRefreshView_strokeWidth,
                         (int) DensityUtil.dp2px(getContext(), 1.0f));
         ta.recycle();
 
@@ -351,7 +358,7 @@ public class RefreshHeadView extends View implements IRefreshStatus ,SwipeRefres
     }
 
     @Override
-    public void onRefresh() {
+    public void onLoadMore() {
 
     }
 
@@ -362,21 +369,22 @@ public class RefreshHeadView extends View implements IRefreshStatus ,SwipeRefres
 
     @Override
     public void onMove(int i, boolean b, boolean b1) {
-
+        pullProgress(0, (float) currentHeight / 250f);
+        Log.d("TAG", "onMove degree = " + (float) currentHeight / 250f);
     }
 
     @Override
     public void onRelease() {
-
+        refreshing();
     }
 
     @Override
     public void onComplete() {
-
+        refreshComplete();
     }
 
     @Override
     public void onReset() {
-
+        reset();
     }
 }

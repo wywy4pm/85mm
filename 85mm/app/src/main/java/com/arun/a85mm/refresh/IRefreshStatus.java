@@ -1,8 +1,9 @@
-package com.arun.a85mm.widget;
+package com.arun.a85mm.refresh;
 
 /**
- * Created by WY on 2017/4/11.
+ * Created by wy on 2017/4/13.
  */
+
 public interface IRefreshStatus {
     /**
      * When the content view has reached to the start point and refresh has been completed, view will be reset.

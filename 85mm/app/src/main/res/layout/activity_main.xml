@@ -1,22 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.aspsine.swipetoloadlayout.SwipeToLoadLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipeToLoad"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.arun.a85mm.widget.RefreshHeadView
-        android:id="@+id/swipe_refresh_header"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:padding="10dp"
-        android:gravity="center"/>
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="5dp"
+        android:paddingTop="10dp"
+        app:tl_indicator_anim_duration="100"
+        app:tl_indicator_anim_enable="true"
+        app:tl_indicator_bounce_enable="true"
+        app:tl_indicator_color="@color/orange"
+        app:tl_indicator_width="10dp"
+        app:tl_textSelectColor="@color/charcoalgrey"
+        app:tl_textUnselectColor="@color/charcoalgrey"
+        app:tl_textsize="15sp" />
 
-    <TextView
-        android:id="@+id/swipe_target"
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/tabLayout"
+        android:background="@color/plain" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:text="Hello World!" />
-</com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+        android:layout_below="@+id/line"/>
+</RelativeLayout>
