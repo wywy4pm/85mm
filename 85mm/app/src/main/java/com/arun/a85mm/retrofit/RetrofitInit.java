@@ -3,6 +3,7 @@ package com.arun.a85mm.retrofit;
 import com.arun.a85mm.common.Constant;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -72,6 +73,7 @@ public class RetrofitInit {
         if (client == null) {
             client = new OkHttpClient
                     .Builder()
+                    .connectTimeout(10, TimeUnit.SECONDS)
                     .build();
         }
         return client;

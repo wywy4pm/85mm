@@ -369,8 +369,8 @@ public class ShootRefreshView extends View implements IRefreshStatus, SwipeLoadM
 
     @Override
     public void onMove(int i, boolean b, boolean b1) {
-        pullProgress(0, (float) currentHeight / 250f);
-        Log.d("TAG", "onMove degree = " + (float) currentHeight / 250f);
+        pullProgress(0, (float) i / 250f);
+        //Log.d("TAG", "onMove degree = " + (float) currentHeight / 250f);
     }
 
     @Override

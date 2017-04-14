@@ -27,11 +27,6 @@ public abstract class BaseFragment extends Fragment {
     private LayoutInflater inflater;
     private int layoutId;
 
-    int currentHeight = 0;
-    float downY = 0;
-    float currentY = 0;
-    private boolean isDown;
-
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,35 +53,6 @@ public abstract class BaseFragment extends Fragment {
 
     }
 
-    public void setRefreshView(final SwipeToLoadLayout swipeToLoadLayout, final ShootRefreshView swipe_refresh_header) {
-        swipeToLoadLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        if (!isDown) {
-                            downY = event.getY();
-                            isDown = true;
-                        }
-                        Log.d("TAG", "downY = " + downY);
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        currentY = event.getY();
-                        currentHeight = (int) ((int) (currentY - downY) * 0.5f);
-                        swipe_refresh_header.setCurrentHeight(currentHeight);
-                        Log.d("TAG", "currentY = " + downY);
-                        break;
-                }
-                return false;
-            }
-        });
-        swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeToLoadLayout.setRefreshing(false);
-            }
-        });
-    }
 
     public int getTheme() {
         return -1;

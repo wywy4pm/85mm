@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    >
 
     <com.flyco.tablayout.SlidingTabLayout
         android:id="@+id/tabLayout"
@@ -16,11 +17,12 @@
         app:tl_indicator_anim_duration="100"
         app:tl_indicator_anim_enable="true"
         app:tl_indicator_bounce_enable="true"
-        app:tl_indicator_color="@color/orange"
+        app:tl_indicator_color="@color/light_yellow"
         app:tl_indicator_width="10dp"
         app:tl_textSelectColor="@color/charcoalgrey"
         app:tl_textUnselectColor="@color/charcoalgrey"
-        app:tl_textsize="15sp" />
+        app:tl_textsize="15sp"
+        />
 
     <View
         android:id="@+id/line"

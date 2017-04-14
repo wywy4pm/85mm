@@ -1,6 +1,7 @@
 package com.arun.a85mm.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.ArticleDetailActivity;
 import com.arun.a85mm.bean.ArticleListResponse;
 import com.bumptech.glide.Glide;
 
@@ -48,22 +50,31 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
     }
 
     private static class ArticleHolder extends RecyclerView.ViewHolder {
+        private View itemView;
         private View divide;
         private ImageView article_image;
         private TextView article_title, article_detail;
 
         public ArticleHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             this.divide = itemView.findViewById(R.id.divide);
             this.article_image = (ImageView) itemView.findViewById(R.id.article_image);
             this.article_title = (TextView) itemView.findViewById(R.id.article_title);
             this.article_detail = (TextView) itemView.findViewById(R.id.article_detail);
         }
 
-        private void setData(Context context, ArticleListResponse.ArticleListBean articleListBean) {
+        private void setData(final Context context, ArticleListResponse.ArticleListBean articleListBean) {
             Glide.with(context).load(articleListBean.headImage).centerCrop().into(article_image);
             article_title.setText(articleListBean.title);
             article_detail.setText(articleListBean.brief);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    /*Intent intent = new Intent(context, ArticleDetailActivity.class);
+                    context.startActivity(intent);*/
+                }
+            });
         }
     }
 

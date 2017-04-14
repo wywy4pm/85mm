@@ -164,4 +164,8 @@
 
     <color name="buy_now_text">#e0ceb0</color>
 
+    <!--<color name="light_yellow">#ffff00</color>-->
+
+    <color name="light_yellow">#FFC125</color>
+
 </resources>
