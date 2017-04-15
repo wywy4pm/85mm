@@ -13,9 +13,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.arun.a85mm.refresh.ShootRefreshView;
-import com.aspsine.swipetoloadlayout.OnRefreshListener;
-import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 
 /**
  * Created by wy on 2017/4/13.

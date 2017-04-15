@@ -24,6 +24,15 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
 
     private WeakReference<Context> contexts;
     private List<ArticleListResponse.ArticleListBean> articles;
+    private static OnImageClickCallBack onImageClickCallBack;
+
+    public void setOnImageClickCallBack(OnImageClickCallBack onImageClickCallBack) {
+        ArticleListAdapter.onImageClickCallBack = onImageClickCallBack;
+    }
+
+    public interface OnImageClickCallBack {
+        void onClickImage(View view, float x, float y, String url);
+    }
 
     public ArticleListAdapter(Context context, List<ArticleListResponse.ArticleListBean> articles) {
         contexts = new WeakReference<>(context);
@@ -64,18 +73,24 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
             this.article_detail = (TextView) itemView.findViewById(R.id.article_detail);
         }
 
-        private void setData(final Context context, ArticleListResponse.ArticleListBean articleListBean) {
+        private void setData(final Context context, final ArticleListResponse.ArticleListBean articleListBean) {
             Glide.with(context).load(articleListBean.headImage).centerCrop().into(article_image);
             article_title.setText(articleListBean.title);
             article_detail.setText(articleListBean.brief);
-            itemView.setOnClickListener(new View.OnClickListener() {
+            article_image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*Intent intent = new Intent(context, ArticleDetailActivity.class);
-                    context.startActivity(intent);*/
+                    if (onImageClickCallBack != null) {
+                        int[] location = new int[2];
+                        v.getLocationOnScreen(location);
+                        int x = location[0];
+                        int y = location[1];
+                        onImageClickCallBack.onClickImage(v, x, y, articleListBean.headImage);
+                    }
                 }
             });
         }
     }
+
 
 }
