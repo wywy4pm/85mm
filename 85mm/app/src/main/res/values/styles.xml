@@ -1,13 +1,12 @@
 <resources>
 
-
-    <style name="AppTheme" parent="@style/BaseTheme">
-
-    </style>
-
     <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/catlog</item>
         <item name="colorPrimaryDark">@color/catlog</item>
+    </style>
+
+    <style name="AppTheme" parent="@style/BaseTheme">
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
 </resources>

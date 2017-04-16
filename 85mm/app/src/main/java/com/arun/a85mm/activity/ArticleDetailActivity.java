@@ -85,7 +85,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
         article_create_time = (TextView) findViewById(R.id.article_create_time);*/
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         FullyLinearLayoutManager layoutManager = new FullyLinearLayoutManager(this);
-        recyclerView.setNestedScrollingEnabled(false);
+        //recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(layoutManager);
     }
 
@@ -141,6 +141,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
         });
         animator.setDuration(1000).start();
     }
+
 
     private void requestData() {
         if (articleActivityPresenter != null) {

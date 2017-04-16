@@ -28,7 +28,7 @@ import com.flyco.tablayout.listener.OnTabSelectListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity {
 
     //private ViewGroup rootView;
     private RelativeLayout activity_main;
