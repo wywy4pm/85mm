@@ -3,15 +3,17 @@ package com.arun.a85mm.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.animation.TranslateAnimation;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.ArticleListAdapter;
 import com.arun.a85mm.bean.ArticleListResponse;
 import com.arun.a85mm.presenter.ArticleFragmentPresenter;
+import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.ShootRefreshView;
+import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.view.CommonView;
-import com.aspsine.swipetoloadlayout.OnRefreshListener;
-import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.List;
  * Created by wy on 2017/4/13.
  */
 
-public class ArticleFragment extends BaseFragment implements CommonView<ArticleListResponse> {
+public class ArticleFragment extends BaseFragment implements CommonView<ArticleListResponse>, ArticleListAdapter.OnImageClickCallBack {
 
     private SwipeToLoadLayout swipeToLoadLayout;
     private ShootRefreshView swipe_refresh_header;
@@ -29,6 +31,16 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
     private List<ArticleListResponse.ArticleListBean> articles = new ArrayList<>();
     private ArticleFragmentPresenter articleFragmentPresenter;
     private int currentPageNum = 1;
+
+    private OnImageClickCallBack onImageClickCallBack;
+
+    public void setOnImageClickCallBack(OnImageClickCallBack onImageClickCallBack) {
+        this.onImageClickCallBack = onImageClickCallBack;
+    }
+
+    public interface OnImageClickCallBack {
+        void onClickImage(View view,float x,float y,String url);
+    }
 
     public static ArticleFragment newIntense() {
         ArticleFragment articleFragment = new ArticleFragment();
@@ -56,6 +68,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
                 refreshData();
             }
         });
+        articleListAdapter.setOnImageClickCallBack(this);
     }
 
     @Override
@@ -84,5 +97,12 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
     @Override
     public void onError(String error, String tag) {
         swipeToLoadLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onClickImage(View view,float x,float y,String url) {
+        if(onImageClickCallBack != null){
+            onImageClickCallBack.onClickImage(view,x,y,url);
+        }
     }
 }

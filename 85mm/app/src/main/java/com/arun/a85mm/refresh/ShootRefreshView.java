@@ -23,8 +23,6 @@ import android.view.animation.LinearInterpolator;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.utils.DensityUtil;
-import com.aspsine.swipetoloadlayout.SwipeLoadMoreTrigger;
-import com.aspsine.swipetoloadlayout.SwipeTrigger;
 
 public class ShootRefreshView extends View implements IRefreshStatus, SwipeLoadMoreTrigger, SwipeTrigger {
     private static final int DEFAULT_STROKE_COLOR = Color.parseColor("#ffc6c6c6");

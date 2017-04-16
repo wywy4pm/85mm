@@ -7,6 +7,11 @@
     android:fitsSystemWindows="true"
     tools:context="com.arun.a85mm.activity.ArticleDetailActivity">
 
+    <ImageView
+        android:id="@+id/head_image"
+        android:layout_width="match_parent"
+        android:layout_height="220dp" />
+
     <!--<TextView
         android:layout_width="match_parent"
         android:layout_height="30dp"
