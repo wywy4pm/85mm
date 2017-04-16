@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.ArticleDetailActivity;
 import com.arun.a85mm.bean.ArticleListResponse;
+import com.arun.a85mm.utils.DensityUtil;
 import com.bumptech.glide.Glide;
 
 import java.lang.ref.WeakReference;
@@ -74,19 +75,21 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
         }
 
         private void setData(final Context context, final ArticleListResponse.ArticleListBean articleListBean) {
+            if (article_image.getLayoutParams() != null) {
+                article_image.getLayoutParams().height = (int) (DensityUtil.getScreenWidth(context) * 0.5);
+            }
             Glide.with(context).load(articleListBean.headImage).centerCrop().into(article_image);
             article_title.setText(articleListBean.title);
             article_detail.setText(articleListBean.brief);
             article_image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onImageClickCallBack != null) {
-                        int[] location = new int[2];
-                        v.getLocationOnScreen(location);
-                        int x = location[0];
-                        int y = location[1];
-                        onImageClickCallBack.onClickImage(v, x, y, articleListBean.headImage);
-                    }
+                    int[] location = new int[2];
+                    v.getLocationOnScreen(location);
+                    int x = location[0];
+                    int y = location[1];
+                    //onImageClickCallBack.onClickImage(v, x, y, articleListBean.headImage);
+                    ArticleDetailActivity.startArticleDetailActivity(context, articleListBean.id,x, y, articleListBean.headImage);
                 }
             });
         }

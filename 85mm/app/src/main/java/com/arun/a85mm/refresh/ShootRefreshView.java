@@ -139,7 +139,7 @@ public class ShootRefreshView extends View implements IRefreshStatus, SwipeLoadM
                 ta.getColor(R.styleable.ShootRefreshView_gradientEndColor, DEFAULT_GRADIENT_END_COLOR);
         mStrokeWidth =
                 ta.getDimensionPixelSize(R.styleable.ShootRefreshView_strokeWidth,
-                        (int) DensityUtil.dp2px(getContext(), 1.0f));
+                        DensityUtil.dp2px(getContext(), 1.0f));
         ta.recycle();
 
         mRefreshingShader = new SweepGradient(0, 0, new int[]{mGradientStartColor, mGradientEndColor},

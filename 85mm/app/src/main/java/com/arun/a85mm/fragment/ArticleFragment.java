@@ -22,7 +22,7 @@ import java.util.List;
  * Created by wy on 2017/4/13.
  */
 
-public class ArticleFragment extends BaseFragment implements CommonView<ArticleListResponse>, ArticleListAdapter.OnImageClickCallBack {
+public class ArticleFragment extends BaseFragment implements CommonView<ArticleListResponse>{
 
     private SwipeToLoadLayout swipeToLoadLayout;
     private ShootRefreshView swipe_refresh_header;
@@ -31,16 +31,6 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
     private List<ArticleListResponse.ArticleListBean> articles = new ArrayList<>();
     private ArticleFragmentPresenter articleFragmentPresenter;
     private int currentPageNum = 1;
-
-    private OnImageClickCallBack onImageClickCallBack;
-
-    public void setOnImageClickCallBack(OnImageClickCallBack onImageClickCallBack) {
-        this.onImageClickCallBack = onImageClickCallBack;
-    }
-
-    public interface OnImageClickCallBack {
-        void onClickImage(View view,float x,float y,String url);
-    }
 
     public static ArticleFragment newIntense() {
         ArticleFragment articleFragment = new ArticleFragment();
@@ -68,7 +58,6 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
                 refreshData();
             }
         });
-        articleListAdapter.setOnImageClickCallBack(this);
     }
 
     @Override
@@ -99,10 +88,4 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
         swipeToLoadLayout.setRefreshing(false);
     }
 
-    @Override
-    public void onClickImage(View view,float x,float y,String url) {
-        if(onImageClickCallBack != null){
-            onImageClickCallBack.onClickImage(view,x,y,url);
-        }
-    }
 }

@@ -4,9 +4,10 @@
     <style name="AppTheme" parent="@style/BaseTheme">
 
     </style>
+
     <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/catlog</item>
+        <item name="colorPrimaryDark">@color/catlog</item>
     </style>
 
 </resources>

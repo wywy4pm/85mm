@@ -21,7 +21,7 @@ public class ArticleActivityPresenter extends BasePresenter<CommonView>{
         super(context);
     }
 
-    public void getArticleListData(String articleId) {
+    public void getArticleDetailsData(String articleId) {
         Subscriber<ArticleDetailResponse> subscriber = new Subscriber<ArticleDetailResponse>() {
             @Override
             public void onCompleted() {
