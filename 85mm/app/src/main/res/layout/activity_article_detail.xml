@@ -12,11 +12,6 @@
         android:layout_height="match_parent"
         android:scrollbars="none" />
 
-    <include
-        android:id="@+id/no_network"
-        layout="@layout/layout_no_network"
-        android:visibility="gone" />
-
     <!--<ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+
+import java.util.List;
 
 
 /**
@@ -51,7 +54,6 @@ public abstract class BaseFragment extends Fragment {
             }
         }
         return rootView;
-
     }
 
     public void showNetWorkErrorView(View view) {
@@ -78,7 +80,37 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    public abstract void reloadData();
+    public void setRecyclerViewScrollListener(RecyclerView recyclerView) {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                //得到当前显示的最后一个item的view
+                View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount() - 1);
+                //得到lastChildView的bottom坐标值
+                int lastChildBottom = lastChildView.getBottom();
+                //得到RecyclerView的底部坐标减去底部padding值，也就是显示内容最底部的坐标
+                int recyclerBottom = recyclerView.getBottom() - recyclerView.getPaddingBottom();
+                int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
+                if (lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
+                    setLoadMore();
+                }
+            }
+        });
+    }
+
+    public void setLoadMore() {
+
+    }
+
+    public void reloadData() {
+
+    }
 
     public int getTheme() {
         return -1;

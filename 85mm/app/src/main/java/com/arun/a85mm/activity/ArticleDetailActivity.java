@@ -196,6 +196,11 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
         }
     }
 
+    @Override
+    public void refreshMore(ArticleDetailResponse data) {
+
+    }
+
     /*private void loadViewData() {
         if (articleBean != null) {
             if (head_image != null && head_image.getLayoutParams() != null) {

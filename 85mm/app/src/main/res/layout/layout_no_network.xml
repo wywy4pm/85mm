@@ -21,7 +21,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:text="@string/text_not_network"
-        android:textColor="@color/frenchgrey" />
+        android:textColor="@color/frenchgrey"
+        android:textSize="12sp"/>
 
     <TextView
         android:id="@+id/not_network_btn"
@@ -38,5 +39,5 @@
         android:paddingTop="5dp"
         android:text="重试"
         android:textColor="@color/white"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 </RelativeLayout>

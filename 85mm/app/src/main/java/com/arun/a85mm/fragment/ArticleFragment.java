@@ -26,12 +26,12 @@ import java.util.List;
 public class ArticleFragment extends BaseFragment implements CommonView<ArticleListResponse> {
 
     private SwipeToLoadLayout swipeToLoadLayout;
-    private ShootRefreshView swipe_refresh_header;
     private RecyclerView recyclerView;
     private ArticleListAdapter articleListAdapter;
     private List<ArticleListResponse.ArticleListBean> articles = new ArrayList<>();
     private ArticleFragmentPresenter articleFragmentPresenter;
-    private int currentPageNum = 1;
+    private int currentPageNum;
+    private boolean isHaveMore = true;
 
     public static ArticleFragment newIntense() {
         ArticleFragment articleFragment = new ArticleFragment();
@@ -46,19 +46,19 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
     @Override
     protected void initView() {
         swipeToLoadLayout = (SwipeToLoadLayout) findViewById(R.id.swipeToLoad);
-        swipe_refresh_header = (ShootRefreshView) findViewById(R.id.swipe_refresh_header);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.swipe_target);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        articleListAdapter = new ArticleListAdapter(getActivity(), articles);
         recyclerView.setLayoutManager(layoutManager);
+        articleListAdapter = new ArticleListAdapter(getActivity(), articles);
         recyclerView.setAdapter(articleListAdapter);
-
+        setRecyclerViewScrollListener(recyclerView);
         swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshData();
             }
         });
+
     }
 
     @Override
@@ -69,6 +69,8 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
     }
 
     public void refreshData() {
+        setHaveMore(true);
+        currentPageNum = 1;
         if (NetUtils.isConnected(getActivity())) {
             hideNetWorkErrorView(recyclerView);
             if (articleFragmentPresenter != null) {
@@ -79,6 +81,20 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
                 swipeToLoadLayout.setRefreshing(false);
             }
             showNetWorkErrorView(recyclerView);
+        }
+    }
+
+    private void loadMore() {
+        if (articleFragmentPresenter != null) {
+            currentPageNum += 1;
+            articleFragmentPresenter.getArticleListData(currentPageNum);
+        }
+    }
+
+    @Override
+    public void setLoadMore() {
+        if (isHaveMore) {
+            loadMore();
         }
     }
 
@@ -98,8 +114,19 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
     }
 
     @Override
+    public void refreshMore(ArticleListResponse data) {
+        if (data != null && data.articleList != null && data.articleList.size() > 0) {
+            articles.addAll(data.articleList);
+            articleListAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     public void onError(String error, String tag) {
         swipeToLoadLayout.setRefreshing(false);
     }
 
+    public void setHaveMore(boolean isHaveMore) {
+        this.isHaveMore = isHaveMore;
+    }
 }

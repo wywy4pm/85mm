@@ -5,4 +5,5 @@ package com.arun.a85mm.view;
  */
 public interface CommonView<T> extends MvpView {
     void refresh(T data);
+    void refreshMore(T data);
 }

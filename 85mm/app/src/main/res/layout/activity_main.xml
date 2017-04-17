@@ -4,9 +4,8 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:clipToPadding="false"
-    >
+    android:fitsSystemWindows="true">
 
     <com.flyco.tablayout.SlidingTabLayout
         android:id="@+id/tabLayout"
@@ -19,11 +18,11 @@
         app:tl_indicator_anim_enable="true"
         app:tl_indicator_bounce_enable="true"
         app:tl_indicator_color="@color/light_yellow"
+        app:tl_indicator_height="3dp"
         app:tl_indicator_width="10dp"
         app:tl_textSelectColor="@color/charcoalgrey"
         app:tl_textUnselectColor="@color/charcoalgrey"
-        app:tl_textsize="15sp"
-        />
+        app:tl_textsize="15sp" />
 
     <View
         android:id="@+id/line"
@@ -36,5 +35,5 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/line"/>
+        android:layout_below="@+id/line" />
 </RelativeLayout>
