@@ -24,6 +24,7 @@ import com.arun.a85mm.presenter.ArticleActivityPresenter;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.FullyLinearLayoutManager;
 import com.arun.a85mm.utils.GlideCircleTransform;
+import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.CommonView;
 import com.bumptech.glide.Glide;
 
@@ -87,6 +88,22 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
         FullyLinearLayoutManager layoutManager = new FullyLinearLayoutManager(this);
         //recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 8) {//上滑
+                    StatusBarUtils.setStatusBar(ArticleDetailActivity.this, true);
+                } else if (dy < -8) {//下滑
+                    StatusBarUtils.setStatusBar(ArticleDetailActivity.this, false);
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
     }
 
     private void initData() {
