@@ -12,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.arun.a85mm.R;
 
 
 /**
@@ -23,6 +26,7 @@ public abstract class BaseFragment extends Fragment {
     protected View rootView;
     private LayoutInflater inflater;
     private int layoutId;
+    private View no_network;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -50,6 +54,31 @@ public abstract class BaseFragment extends Fragment {
 
     }
 
+    public void showNetWorkErrorView(View view) {
+        view.setVisibility(View.GONE);
+        no_network = findViewById(R.id.no_network);
+        if (no_network != null) {
+            no_network.setVisibility(View.VISIBLE);
+        }
+        if (findViewById(R.id.not_network_btn) != null) {
+            findViewById(R.id.not_network_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    reloadData();
+                }
+            });
+        }
+    }
+
+    public void hideNetWorkErrorView(View view) {
+        view.setVisibility(View.VISIBLE);
+        no_network = findViewById(R.id.no_network);
+        if (no_network != null) {
+            no_network.setVisibility(View.GONE);
+        }
+    }
+
+    public abstract void reloadData();
 
     public int getTheme() {
         return -1;

@@ -1,27 +1,16 @@
 package com.arun.a85mm.activity;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.arun.a85mm.R;
-import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.fragment.ArticleFragment;
 import com.arun.a85mm.fragment.CommunityFragment;
-import com.arun.a85mm.fragment.ProducationFragment;
-import com.arun.a85mm.utils.DensityUtil;
-import com.bumptech.glide.Glide;
+import com.arun.a85mm.fragment.ProductionFragment;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 
@@ -79,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
             ArticleFragment articleFragment = ArticleFragment.newIntense();
             list.add(articleFragment);
         }*/
-        ProducationFragment producationFragment = new ProducationFragment();
+        ProductionFragment productionFragment = new ProductionFragment();
         CommunityFragment communityFragment = new CommunityFragment();
         ArticleFragment articleFragment = ArticleFragment.newIntense();
-        list.add(producationFragment);
+        list.add(productionFragment);
         list.add(communityFragment);
         list.add(articleFragment);
     }

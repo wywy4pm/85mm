@@ -13,6 +13,7 @@ import com.arun.a85mm.presenter.ArticleFragmentPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.ShootRefreshView;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
+import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import java.util.List;
  * Created by wy on 2017/4/13.
  */
 
-public class ArticleFragment extends BaseFragment implements CommonView<ArticleListResponse>{
+public class ArticleFragment extends BaseFragment implements CommonView<ArticleListResponse> {
 
     private SwipeToLoadLayout swipeToLoadLayout;
     private ShootRefreshView swipe_refresh_header;
@@ -46,7 +47,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
     protected void initView() {
         swipeToLoadLayout = (SwipeToLoadLayout) findViewById(R.id.swipeToLoad);
         swipe_refresh_header = (ShootRefreshView) findViewById(R.id.swipe_refresh_header);
-        recyclerView = (RecyclerView) findViewById(R.id.swipe_target);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         articleListAdapter = new ArticleListAdapter(getActivity(), articles);
         recyclerView.setLayoutManager(layoutManager);
@@ -67,10 +68,23 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
         refreshData();
     }
 
-    private void refreshData() {
-        if (articleFragmentPresenter != null) {
-            articleFragmentPresenter.getArticleListData(currentPageNum);
+    public void refreshData() {
+        if (NetUtils.isConnected(getActivity())) {
+            hideNetWorkErrorView(recyclerView);
+            if (articleFragmentPresenter != null) {
+                articleFragmentPresenter.getArticleListData(currentPageNum);
+            }
+        } else {
+            if (swipeToLoadLayout.isRefreshing()) {
+                swipeToLoadLayout.setRefreshing(false);
+            }
+            showNetWorkErrorView(recyclerView);
         }
+    }
+
+    @Override
+    public void reloadData() {
+        refreshData();
     }
 
     @Override

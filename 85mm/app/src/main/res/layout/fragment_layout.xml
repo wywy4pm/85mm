@@ -13,9 +13,21 @@
         android:gravity="center"
         android:paddingBottom="15dp" />
 
-    <android.support.v7.widget.RecyclerView
+    <RelativeLayout
         android:id="@+id/swipe_target"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none" />
+
+        <include
+            android:id="@+id/no_network"
+            layout="@layout/layout_no_network"
+            android:visibility="gone" />
+    </RelativeLayout>
+
 </com.arun.a85mm.refresh.SwipeToLoadLayout>

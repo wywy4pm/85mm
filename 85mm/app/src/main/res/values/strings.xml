@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">85mm</string>
+    <string name="text_not_network">请检查网络连接是否正常</string>
 </resources>
