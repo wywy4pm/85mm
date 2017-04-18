@@ -3,18 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <include
-        layout="@layout/layout_refresh_recyclerview"
+        layout="@layout/layout_refresh_expand_listview"
         android:visibility="visible" />
 
     <include
         android:id="@+id/no_network"
         layout="@layout/layout_no_network"
         android:visibility="gone" />
-    <!--<TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:text="作品" />-->
 </RelativeLayout>

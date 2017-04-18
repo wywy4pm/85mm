@@ -108,6 +108,8 @@
 
     <color name="catlog">#F5F6F8</color>
 
+    <color name="lightBlack">#88000000</color>
+
     <color name="header_normal">#F5F6F8</color>
 
     <color name="header_pressed">#F5F6F8</color>
