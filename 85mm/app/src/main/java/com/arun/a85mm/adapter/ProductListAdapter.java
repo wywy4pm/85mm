@@ -8,6 +8,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.utils.GlideCircleTransform;
@@ -41,11 +42,18 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         }
         if (workListHeadHolder.work_list_cover_img.getLayoutParams() != null) {
             workListHeadHolder.work_list_cover_img.getLayoutParams().height = works.get(groupPosition).coverHeight;
+            workListHeadHolder.itemView.getLayoutParams().height = works.get(groupPosition).coverHeight;
         }
         Glide.with(contexts.get()).load(works.get(groupPosition).coverUrl).centerCrop().into(workListHeadHolder.work_list_cover_img);
         workListHeadHolder.work_list_cover_count.setText(String.valueOf(works.get(groupPosition).totalImageNum));
         Glide.with(contexts.get()).load(works.get(groupPosition).sourceLogo).centerCrop().into(workListHeadHolder.source_logo);
         workListHeadHolder.create_time.setText(works.get(groupPosition).createTime);
+        /*workListHeadHolder.rippleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });*/
         return convertView;
     }
 
@@ -75,10 +83,14 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
     }
 
     private static class WorkListHeadHolder {
+        private View itemView;
+        private RippleView rippleView;
         private ImageView work_list_cover_img, source_logo;
         private TextView work_list_cover_count, create_time;
 
         private WorkListHeadHolder(View itemView) {
+            this.itemView = itemView;
+            //rippleView = (RippleView) itemView.findViewById(R.id.rippleView);
             work_list_cover_img = (ImageView) itemView.findViewById(R.id.work_list_cover_img);
             source_logo = (ImageView) itemView.findViewById(R.id.source_logo);
             work_list_cover_count = (TextView) itemView.findViewById(R.id.work_list_cover_count);
