@@ -2,15 +2,18 @@ package com.arun.a85mm.activity;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,11 +32,13 @@ public class MainActivity extends AppCompatActivity {
 
     //private ViewGroup rootView;
     private RelativeLayout activity_main;
-    private TextView toastView;
     private SlidingTabLayout tabLayout;
     private ViewPager viewPager;
     private String[] titles = new String[]{"作品", "社区", "文章"};
     private List<Fragment> list = new ArrayList<>();
+    private TextView textView;
+    private WindowManager windowManager;
+    private ProductionFragment productionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +76,45 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        initToastView();
+    }
 
+    private void initToastView() {
+
+        textView = new TextView(this);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DensityUtil.getStatusHeight(this));
+        textView.setLayoutParams(params);
+        textView.setTextColor(getResources().getColor(R.color.white));
+        textView.setBackgroundResource(R.color.black);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        //textView.setText("");
+        textView.setVisibility(View.GONE);
+
+        addManagerView();
+    }
+
+    private void addManagerView() {
+        if (windowManager == null) {
+            windowManager = getWindowManager();
+        }
+
+        WindowManager.LayoutParams param = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                DensityUtil.getStatusHeight(this),
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                        | WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                PixelFormat.TRANSLUCENT);
+
+        param.gravity = Gravity.TOP;
+        param.y = 0;
+        param.x = 0;
+        windowManager.addView(textView, param);
     }
 
     private void initData() {
-        ProductionFragment productionFragment = new ProductionFragment();
+        productionFragment = new ProductionFragment();
         CommunityFragment communityFragment = new CommunityFragment();
         ArticleFragment articleFragment = ArticleFragment.newIntense();
         list.add(productionFragment);
@@ -83,9 +122,11 @@ public class MainActivity extends AppCompatActivity {
         list.add(articleFragment);
     }
 
-    public void showTopToastView() {
-        toastView.setVisibility(View.VISIBLE);
-        ObjectAnimator animator = ObjectAnimator.ofFloat(toastView, "translationY", 0, tabLayout.getMeasuredHeight());
+    public void showTopToastView(String showName) {
+        //initToastView();
+        textView.setVisibility(View.VISIBLE);
+        textView.setText(showName);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(textView, "translationY", -DensityUtil.getStatusHeight(this), 0);
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -94,7 +135,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                //toastView.setVisibility(View.GONE);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideTopToastView();
+                    }
+                }, 500);
+                //hideTopToastView();
             }
 
             @Override
@@ -107,7 +154,42 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        animator.setDuration(1000).start();
+        animator.setDuration(500).start();
     }
 
+    public void hideTopToastView() {
+        //initToastView();
+        ObjectAnimator animator = ObjectAnimator.ofFloat(textView, "translationY", 0, -DensityUtil.getStatusHeight(this));
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                textView.setVisibility(View.GONE);
+                productionFragment.setSaveImage(false);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                //toastView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animator.setDuration(500).start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (windowManager != null) {
+            windowManager.removeView(textView);
+        }
+    }
 }

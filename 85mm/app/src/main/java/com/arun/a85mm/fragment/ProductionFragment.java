@@ -1,23 +1,12 @@
 package com.arun.a85mm.fragment;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.annotation.TargetApi;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arun.a85mm.R;
-import com.arun.a85mm.activity.ArticleDetailActivity;
 import com.arun.a85mm.activity.MainActivity;
-import com.arun.a85mm.adapter.ArticleDetailAdapter;
 import com.arun.a85mm.adapter.ProductListAdapter;
 import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.presenter.ProductFragmentPresenter;
@@ -25,12 +14,10 @@ import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.retrofit.RetrofitApi;
 import com.arun.a85mm.retrofit.RetrofitInit;
-import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.FileUtils;
-import com.arun.a85mm.utils.StatusBarUtils;
+import com.arun.a85mm.utils.PermissionUtils;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +40,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     private boolean isHaveMore = true;
     private String userId;
     private String lastWorkId;
+    private boolean isSaveImage;
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -98,7 +86,16 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     @Override
     public void onCoverClick(String coverUrl, int groupPosition) {
-        saveImage(coverUrl);
+        if (PermissionUtils.checkAlertWindowsPermission(getActivity())) {
+            if (!isSaveImage) {
+                saveImage(coverUrl);
+            } else {
+                Toast.makeText(getActivity(), "正在保存图片，请稍后...", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(getActivity(), "请打开悬浮窗权限", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void refreshData() {
@@ -153,6 +150,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     }
 
     private void saveImage(String imageUrl) {
+        setSaveImage(true);
         final String imageName = getFileName(imageUrl);
         RetrofitApi downloadService = RetrofitInit.getApi();
         Call<ResponseBody> call = downloadService.downLoadImage(imageUrl);
@@ -164,20 +162,23 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                     if (!TextUtils.isEmpty(imageName)) {
                         if (writtenToDisk) {
                             if (imageName.length() > 10) {
-                                //((MainActivity)getActivity()).showTopToastView();
-                                Toast.makeText(getActivity(), imageName.substring(imageName.length() - 10, imageName.length()) + "  保存成功", Toast.LENGTH_SHORT).show();
+                                ((MainActivity) getActivity()).showTopToastView("图片保存成功：" + imageName.substring(imageName.length() - 10, imageName.length()));
+                                //Toast.makeText(getActivity(), imageName.substring(imageName.length() - 10, imageName.length()) + "  保存成功", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(getActivity(), imageName + "  保存成功", Toast.LENGTH_SHORT).show();
+                                ((MainActivity) getActivity()).showTopToastView("图片保存成功：" + imageName);
+                                //Toast.makeText(getActivity(), imageName + "  保存成功", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(getActivity(), "保存失败", Toast.LENGTH_SHORT).show();
+                            ((MainActivity) getActivity()).showTopToastView("图片保存失败");
+                            //Toast.makeText(getActivity(), "保存失败", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(getActivity(), "保存失败", Toast.LENGTH_SHORT).show();
+                        ((MainActivity) getActivity()).showTopToastView("图片保存失败");
                     }
                 } else {
                     //Log.d("TAG", "server contact failed");
                     Toast.makeText(getActivity(), "下载失败", Toast.LENGTH_SHORT).show();
+                    isSaveImage = false;
                 }
             }
 
@@ -185,8 +186,13 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 //Log.e("TAG", "error");
                 Toast.makeText(getActivity(), "下载失败", Toast.LENGTH_SHORT).show();
+                isSaveImage = false;
             }
         });
+    }
+
+    public void setSaveImage(boolean isSaveImage) {
+        this.isSaveImage = isSaveImage;
     }
 
     private String getFileName(String imageUrl) {
