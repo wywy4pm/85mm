@@ -39,18 +39,20 @@
         <ImageView
             android:id="@+id/source_logo"
             android:layout_width="20dp"
-            android:layout_height="20dp" />
+            android:layout_height="20dp"
+            android:layout_centerVertical="true" />
 
         <TextView
             android:id="@+id/create_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:layout_toRightOf="@+id/source_logo"
             android:ellipsize="end"
             android:maxLines="1"
             android:text=""
-            android:textColor="@color/charcoalgrey"
+            android:textColor="@color/catlog"
             android:textSize="13sp" />
     </RelativeLayout>
 

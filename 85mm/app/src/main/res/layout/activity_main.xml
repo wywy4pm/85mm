@@ -7,6 +7,14 @@
     android:clipToPadding="false"
     android:fitsSystemWindows="true">
 
+    <!--<TextView
+        android:id="@+id/toastView"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/light_yellow"
+        android:textColor="@color/white"
+        android:visibility="visible" />-->
+
     <com.flyco.tablayout.SlidingTabLayout
         android:id="@+id/tabLayout"
         android:layout_width="wrap_content"

@@ -6,8 +6,11 @@ import com.arun.a85mm.bean.ArticleListResponse;
 import com.arun.a85mm.bean.ProductListResponse;
 
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import rx.Observable;
 
 
@@ -21,4 +24,7 @@ public interface RetrofitApi {
 
     @GET(RetrofitUrl.WORKS_LIST)
     Observable<ProductListResponse> getWorksList(@Query("uid") String uid, @Query("lastWorkId") String lastWorkId);
+
+    @GET
+    Call<ResponseBody> downLoadImage(@Url String url);
 }

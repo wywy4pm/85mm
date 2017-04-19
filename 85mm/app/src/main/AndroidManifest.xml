@@ -22,6 +22,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- 显示顶层浮窗 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -34,8 +36,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/BaseTheme"
-            >
+            android:theme="@style/BaseTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

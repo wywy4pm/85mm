@@ -24,6 +24,7 @@ public class ProductListResponse {
         public String sourceLogo;
         public String createTime;
         public List<WorkListItemBean> workDetail;
+        public boolean isExpand;
 
         public static class WorkListItemBean {
             public String imageUrl;

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andexert.library.RippleView;
@@ -30,8 +31,20 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         this.works = works;
     }
 
+    public OnImageClick onImageClick;
+
+    public interface OnImageClick {
+        void onCountClick(int groupPosition);
+
+        void onCoverClick(String coverUrl, int groupPosition);
+    }
+
+    public void setOnImageClick(OnImageClick onImageClick) {
+        this.onImageClick = onImageClick;
+    }
+
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+    public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         WorkListHeadHolder workListHeadHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list, parent, false);
@@ -40,20 +53,43 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         } else {
             workListHeadHolder = (WorkListHeadHolder) convertView.getTag();
         }
-        if (workListHeadHolder.work_list_cover_img.getLayoutParams() != null) {
-            workListHeadHolder.work_list_cover_img.getLayoutParams().height = works.get(groupPosition).coverHeight;
-            workListHeadHolder.itemView.getLayoutParams().height = works.get(groupPosition).coverHeight;
+        final WorkListHeadHolder headHolder = workListHeadHolder;
+        final ProductListResponse.WorkListBean bean = works.get(groupPosition);
+        if (!bean.isExpand) {
+            headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
+            headHolder.layout_source.setVisibility(View.VISIBLE);
+        } else {
+            headHolder.work_list_cover_count.setVisibility(View.GONE);
+            headHolder.layout_source.setVisibility(View.GONE);
         }
-        Glide.with(contexts.get()).load(works.get(groupPosition).coverUrl).centerCrop().into(workListHeadHolder.work_list_cover_img);
-        workListHeadHolder.work_list_cover_count.setText(String.valueOf(works.get(groupPosition).totalImageNum));
-        Glide.with(contexts.get()).load(works.get(groupPosition).sourceLogo).centerCrop().into(workListHeadHolder.source_logo);
-        workListHeadHolder.create_time.setText(works.get(groupPosition).createTime);
-        /*workListHeadHolder.rippleView.setOnClickListener(new View.OnClickListener() {
+        if (headHolder.work_list_cover_img.getLayoutParams() != null) {
+            headHolder.work_list_cover_img.getLayoutParams().height = bean.coverHeight;
+            headHolder.itemView.getLayoutParams().height = bean.coverHeight;
+        }
+        Glide.with(contexts.get()).load(bean.coverUrl).centerCrop().into(headHolder.work_list_cover_img);
+        headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
+        Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop().into(headHolder.source_logo);
+        headHolder.create_time.setText(bean.createTime);
+
+        headHolder.work_list_cover_count.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                headHolder.work_list_cover_count.setVisibility(View.GONE);
+                headHolder.layout_source.setVisibility(View.GONE);
+                bean.isExpand = true;
+                if (onImageClick != null) {
+                    onImageClick.onCountClick(groupPosition);
+                }
             }
-        });*/
+        });
+        workListHeadHolder.rippleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onImageClick != null) {
+                    onImageClick.onCoverClick(bean.coverUrl,groupPosition);
+                }
+            }
+        });
         return convertView;
     }
 
@@ -85,12 +121,14 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
     private static class WorkListHeadHolder {
         private View itemView;
         private RippleView rippleView;
+        private RelativeLayout layout_source;
         private ImageView work_list_cover_img, source_logo;
         private TextView work_list_cover_count, create_time;
 
         private WorkListHeadHolder(View itemView) {
             this.itemView = itemView;
-            //rippleView = (RippleView) itemView.findViewById(R.id.rippleView);
+            rippleView = (RippleView) itemView.findViewById(R.id.rippleView);
+            layout_source = (RelativeLayout) itemView.findViewById(R.id.layout_source);
             work_list_cover_img = (ImageView) itemView.findViewById(R.id.work_list_cover_img);
             source_logo = (ImageView) itemView.findViewById(R.id.source_logo);
             work_list_cover_count = (TextView) itemView.findViewById(R.id.work_list_cover_count);

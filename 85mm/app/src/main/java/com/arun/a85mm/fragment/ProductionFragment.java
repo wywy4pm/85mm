@@ -1,24 +1,49 @@
 package com.arun.a85mm.fragment;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.ArticleDetailActivity;
+import com.arun.a85mm.activity.MainActivity;
+import com.arun.a85mm.adapter.ArticleDetailAdapter;
 import com.arun.a85mm.adapter.ProductListAdapter;
 import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.presenter.ProductFragmentPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
+import com.arun.a85mm.retrofit.RetrofitApi;
+import com.arun.a85mm.retrofit.RetrofitInit;
+import com.arun.a85mm.utils.DensityUtil;
+import com.arun.a85mm.utils.FileUtils;
+import com.arun.a85mm.utils.StatusBarUtils;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by WY on 2017/4/14.
  */
-public class ProductionFragment extends BaseFragment {
+public class ProductionFragment extends BaseFragment implements ProductListAdapter.OnImageClick {
 
     private SwipeToLoadLayout swipeToLoadLayout;
     private ExpandableListView expandableListView;
@@ -49,17 +74,31 @@ public class ProductionFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 refreshData();
+                swipeToLoadLayout.setRefreshing(false);
             }
         });
         initdata();
+        productListAdapter.setOnImageClick(this);
         productListAdapter.notifyDataSetChanged();
-        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+        /*expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                parent.expandGroup(groupPosition,false);
+                parent.expandGroup(groupPosition, false);
                 return true;
             }
-        });
+        });*/
+    }
+
+    @Override
+    public void onCountClick(int groupPosition) {
+        if (expandableListView != null) {
+            expandableListView.expandGroup(groupPosition, false);
+        }
+    }
+
+    @Override
+    public void onCoverClick(String coverUrl, int groupPosition) {
+        saveImage(coverUrl);
     }
 
     private void refreshData() {
@@ -83,6 +122,7 @@ public class ProductionFragment extends BaseFragment {
             workListBean.workId = "123456";
             workListBean.workTitle = "呵呵哈哈哈或或或或或或或";
             workListBean.coverHeight = 900;
+            //workListBean.coverUrl = "http://img.qdaily.com/uploads/20170406161328XKrjP2zMbCHn4leB.jpg-WebpWebW640";
             workListBean.coverUrl = "http://img2.fengniao.com/product/157_700x2000/616/ce0x0nKrIpsHI.jpg";
             workListBean.sourceLogo = "http://www.qdaily.com/images/missing_face.png";
             workListBean.createTime = "10小时前";
@@ -111,4 +151,58 @@ public class ProductionFragment extends BaseFragment {
     public void setHaveMore(boolean isHaveMore) {
         this.isHaveMore = isHaveMore;
     }
+
+    private void saveImage(String imageUrl) {
+        final String imageName = getFileName(imageUrl);
+        RetrofitApi downloadService = RetrofitInit.getApi();
+        Call<ResponseBody> call = downloadService.downLoadImage(imageUrl);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    boolean writtenToDisk = FileUtils.writeResponseBodyToDisk(getActivity(), response.body(), imageName);
+                    if (!TextUtils.isEmpty(imageName)) {
+                        if (writtenToDisk) {
+                            if (imageName.length() > 10) {
+                                //((MainActivity)getActivity()).showTopToastView();
+                                Toast.makeText(getActivity(), imageName.substring(imageName.length() - 10, imageName.length()) + "  保存成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(), imageName + "  保存成功", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), "保存失败", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "保存失败", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    //Log.d("TAG", "server contact failed");
+                    Toast.makeText(getActivity(), "下载失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //Log.e("TAG", "error");
+                Toast.makeText(getActivity(), "下载失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String getFileName(String imageUrl) {
+        String fileName = "";
+        URL url = null;
+        try {
+            url = new URL(imageUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        final URL finalUrl = url;
+        if (finalUrl != null && !TextUtils.isEmpty(finalUrl.getFile())) {
+            File file = new File(finalUrl.getFile());
+            fileName = file.getName();
+        }
+        return fileName;
+    }
+
 }
