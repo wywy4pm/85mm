@@ -251,6 +251,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
             @Override
             public void onClick(View v) {
                 WebViewActivity.jumpToWebViewActivity(getActivity(), webUrl);
+                dialog.cancel();
             }
         });
         root.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
