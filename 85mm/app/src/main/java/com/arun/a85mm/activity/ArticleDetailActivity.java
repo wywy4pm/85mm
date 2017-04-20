@@ -2,12 +2,14 @@ package com.arun.a85mm.activity;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,12 +54,12 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
 
     public static void startArticleDetailActivity(Context context, int articleId, int x, int y, String headImageUrl) {
         Intent intent = new Intent(context, ArticleDetailActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(Constant.INTENT_ARTICLE_ID, articleId);
         intent.putExtra(Constant.INTENT_ARTICLE_IMAGE_POSITIONX, x);
         intent.putExtra(Constant.INTENT_ARTICLE_IMAGE_POSITIONY, y);
         intent.putExtra(Constant.INTENT_ARTICLE_HEAD_IMAGE, headImageUrl);
         context.startActivity(intent);
+        ((Activity) context).overridePendingTransition(0, 0);
     }
 
     @Override
@@ -228,5 +230,16 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
     @Override
     public void onError(String error, String tag) {
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(ArticleDetailActivity.this, MainActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, R.anim.slide_out_right);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

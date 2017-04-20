@@ -24,7 +24,9 @@ public class ArticleFragmentPresenter extends BasePresenter<CommonView> {
         Subscriber<ArticleListResponse> subscriber = new Subscriber<ArticleListResponse>() {
             @Override
             public void onCompleted() {
-
+                if (getMvpView() != null) {
+                    getMvpView().onRefreshComplete();
+                }
             }
 
             @Override

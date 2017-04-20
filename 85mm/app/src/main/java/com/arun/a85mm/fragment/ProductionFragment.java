@@ -141,6 +141,16 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                         }
                     }
                 }
+            } else {
+                List<ProductListResponse.WorkListBean.WorkListItemBean> items = new ArrayList<>();
+                ProductListResponse.WorkListBean.WorkListItemBean itemBean = new ProductListResponse.WorkListBean.WorkListItemBean();
+                itemBean.authorHeadImg = workList.get(i).authorHeadImg;
+                itemBean.authorName = workList.get(i).authorName;
+                itemBean.authorPageUrl = workList.get(i).authorPageUrl;
+                itemBean.workTitle = workList.get(i).workTitle;
+                itemBean.sourceUrl = workList.get(i).sourceUrl;
+                items.add(itemBean);
+                workList.get(i).workDetail = items;
             }
             if (i == workList.size() - 1) {
                 lastWorkId = workList.get(i).workId;
@@ -159,7 +169,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     @Override
     public void reloadData() {
-
+        loadMore();
     }
 
     @Override
@@ -171,14 +181,10 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     @Override
     public void onCoverClick(String coverUrl) {
-        if (PermissionUtils.checkAlertWindowsPermission(getActivity())) {
-            if (!isSaveImage) {
-                saveImage(coverUrl);
-            } else {
-                Toast.makeText(getActivity(), "正在保存图片，请稍后...", Toast.LENGTH_SHORT).show();
-            }
+        if (!isSaveImage) {
+            saveImage(coverUrl);
         } else {
-            Toast.makeText(getActivity(), "请打开悬浮窗权限", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "当前有图片正在保存，请稍后...", Toast.LENGTH_SHORT).show();
         }
     }
 
