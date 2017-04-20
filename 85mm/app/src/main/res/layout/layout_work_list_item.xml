@@ -1,22 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/work_list_item_img"
+    <com.andexert.library.RippleView
+        android:id="@+id/rippleView"
+        rv_centered="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="centerCrop" />
+        app:rv_color="@color/white"
+        app:rv_zoom="true"
+        app:rv_zoomDuration="300"
+        app:rv_zoomScale="1.1">
+
+        <ImageView
+            android:id="@+id/work_list_item_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop" />
+    </com.andexert.library.RippleView>
 
     <TextView
         android:id="@+id/work_list_item_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/rippleView"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
         android:gravity="left"
+        android:maxLines="3"
         android:text="asdsad"
         android:textColor="@color/charcoalgrey"
         android:textSize="18sp"
@@ -24,12 +39,14 @@
         android:visibility="gone" />
 
     <RelativeLayout
+        android:id="@+id/work_list_item_author"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_below="@+id/work_list_item_title"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         android:visibility="gone">
 
         <ImageView

@@ -105,7 +105,6 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
 
     @Override
     public void refresh(ArticleListResponse data) {
-        swipeToLoadLayout.setRefreshing(false);
         if (data != null && data.articleList != null && data.articleList.size() > 0) {
             articles.clear();
             articles.addAll(data.articleList);
@@ -122,8 +121,15 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
     }
 
     @Override
+    public void onRefreshComplete() {
+        if (swipeToLoadLayout != null) {
+            swipeToLoadLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
     public void onError(String error, String tag) {
-        swipeToLoadLayout.setRefreshing(false);
+
     }
 
     public void setHaveMore(boolean isHaveMore) {

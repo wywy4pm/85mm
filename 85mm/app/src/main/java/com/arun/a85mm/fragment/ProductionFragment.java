@@ -15,7 +15,9 @@ import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.retrofit.RetrofitApi;
 import com.arun.a85mm.retrofit.RetrofitInit;
 import com.arun.a85mm.utils.FileUtils;
+import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.utils.PermissionUtils;
+import com.arun.a85mm.view.CommonView;
 
 import java.io.File;
 import java.net.URL;
@@ -30,12 +32,12 @@ import retrofit2.Response;
 /**
  * Created by WY on 2017/4/14.
  */
-public class ProductionFragment extends BaseFragment implements ProductListAdapter.OnImageClick {
+public class ProductionFragment extends BaseFragment implements ProductListAdapter.OnImageClick, CommonView<ProductListResponse> {
 
     private SwipeToLoadLayout swipeToLoadLayout;
     private ExpandableListView expandableListView;
     private ProductListAdapter productListAdapter;
-    private List<ProductListResponse.WorkListBean> workList = new ArrayList<>();
+    private List<ProductListResponse.WorkListBean> workLists = new ArrayList<>();
     private ProductFragmentPresenter productFragmentPresenter;
     private boolean isHaveMore = true;
     private String userId;
@@ -51,23 +53,17 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     protected void initView() {
         swipeToLoadLayout = (SwipeToLoadLayout) findViewById(R.id.swipeToLoad);
         expandableListView = (ExpandableListView) findViewById(R.id.swipe_target);
-        /*LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(productListAdapter);
-        setRecyclerViewScrollListener(recyclerView);*/
-        productListAdapter = new ProductListAdapter(getActivity(), workList);
+        productListAdapter = new ProductListAdapter(getActivity(), workLists);
         expandableListView.setGroupIndicator(null);
         expandableListView.setAdapter(productListAdapter);
         swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshData();
-                swipeToLoadLayout.setRefreshing(false);
             }
         });
-        initdata();
+        //setAbListViewScrollListener(expandableListView);
         productListAdapter.setOnImageClick(this);
-        productListAdapter.notifyDataSetChanged();
         /*expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -78,6 +74,95 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     }
 
     @Override
+    protected void initData() {
+        productFragmentPresenter = new ProductFragmentPresenter(getActivity());
+        productFragmentPresenter.attachView(this);
+        refreshData();
+    }
+
+    private void refreshData() {
+        setHaveMore(true);
+        if (NetUtils.isConnected(getActivity())) {
+            hideNetWorkErrorView(expandableListView);
+            if (productFragmentPresenter != null) {
+                lastWorkId = "";
+                productFragmentPresenter.getProductListData(userId, lastWorkId);
+            }
+        } else {
+            if (swipeToLoadLayout.isRefreshing()) {
+                swipeToLoadLayout.setRefreshing(false);
+            }
+            showNetWorkErrorView(expandableListView);
+        }
+    }
+
+    @Override
+    public void setLoadMore() {
+        loadMore();
+    }
+
+    private void loadMore() {
+        if (productFragmentPresenter != null) {
+            productFragmentPresenter.getProductListData(userId, lastWorkId);
+        }
+    }
+
+    @Override
+    public void refresh(ProductListResponse data) {
+        if (data != null && data.workList != null && data.workList.size() > 0) {
+            workLists.clear();
+            formatData(data.workList);
+        }
+    }
+
+    @Override
+    public void refreshMore(ProductListResponse data) {
+        if (data != null && data.workList != null && data.workList.size() > 0) {
+            formatData(data.workList);
+        }
+    }
+
+    @Override
+    public void onError(String error, String tag) {
+
+    }
+
+    private void formatData(List<ProductListResponse.WorkListBean> workList) {
+        for (int i = 0; i < workList.size(); i++) {
+            if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
+                for (int j = 0; j < workList.get(i).workDetail.size(); j++) {
+                    if (j == workList.get(i).workDetail.size() - 1) {
+                        if (workList.get(i).workDetail.get(j) != null) {
+                            workList.get(i).workDetail.get(j).authorHeadImg = workList.get(i).authorHeadImg;
+                            workList.get(i).workDetail.get(j).authorName = workList.get(i).authorName;
+                            workList.get(i).workDetail.get(j).authorPageUrl = workList.get(i).authorPageUrl;
+                            workList.get(i).workDetail.get(j).workTitle = workList.get(i).workTitle;
+                            workList.get(i).workDetail.get(j).sourceUrl = workList.get(i).sourceUrl;
+                        }
+                    }
+                }
+            }
+            if (i == workList.size() - 1) {
+                lastWorkId = workList.get(i).workId;
+            }
+        }
+        workLists.addAll(workList);
+        productListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRefreshComplete() {
+        if (swipeToLoadLayout != null) {
+            swipeToLoadLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void reloadData() {
+
+    }
+
+    @Override
     public void onCountClick(int groupPosition) {
         if (expandableListView != null) {
             expandableListView.expandGroup(groupPosition, false);
@@ -85,7 +170,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     }
 
     @Override
-    public void onCoverClick(String coverUrl, int groupPosition) {
+    public void onCoverClick(String coverUrl) {
         if (PermissionUtils.checkAlertWindowsPermission(getActivity())) {
             if (!isSaveImage) {
                 saveImage(coverUrl);
@@ -95,63 +180,19 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         } else {
             Toast.makeText(getActivity(), "请打开悬浮窗权限", Toast.LENGTH_SHORT).show();
         }
-
-    }
-
-    private void refreshData() {
-        //productFragmentPresenter.getProductListData(userId, lastWorkId);
-    }
-
-    private void loadMore() {
-
-    }
-
-    @Override
-    protected void initData() {
-        /*productFragmentPresenter = new ProductFragmentPresenter(getActivity());
-        productFragmentPresenter.attachView(this);*/
-    }
-
-    private void initdata() {
-        List<ProductListResponse.WorkListBean> works = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            ProductListResponse.WorkListBean workListBean = new ProductListResponse.WorkListBean();
-            workListBean.workId = "123456";
-            workListBean.workTitle = "呵呵哈哈哈或或或或或或或";
-            workListBean.coverHeight = 900;
-            //workListBean.coverUrl = "http://img.qdaily.com/uploads/20170406161328XKrjP2zMbCHn4leB.jpg-WebpWebW640";
-            workListBean.coverUrl = "http://img2.fengniao.com/product/157_700x2000/616/ce0x0nKrIpsHI.jpg";
-            workListBean.sourceLogo = "http://www.qdaily.com/images/missing_face.png";
-            workListBean.createTime = "10小时前";
-            workListBean.totalImageNum = i + 1;
-            List<ProductListResponse.WorkListBean.WorkListItemBean> workListItems = new ArrayList<>();
-            for (int j = 0; j <= i; j++) {
-                ProductListResponse.WorkListBean.WorkListItemBean bean = new ProductListResponse.WorkListBean.WorkListItemBean();
-                bean.imageUrl = "http://img.qdaily.com/uploads/20170406161328XKrjP2zMbCHn4leB.jpg-WebpWebW640";
-                if (j == i) {
-                    bean.authorHeadImg = "http://www.qdaily.com/images/missing_face.png";
-                    bean.authorName = "'arun";
-                }
-                workListItems.add(bean);
-            }
-            workListBean.workDetail = workListItems;
-            works.add(workListBean);
-        }
-        workList.addAll(works);
-    }
-
-    @Override
-    public void reloadData() {
-
     }
 
     public void setHaveMore(boolean isHaveMore) {
         this.isHaveMore = isHaveMore;
     }
 
+    public void setSaveImage(boolean isSaveImage) {
+        this.isSaveImage = isSaveImage;
+    }
+
     private void saveImage(String imageUrl) {
         setSaveImage(true);
-        final String imageName = getFileName(imageUrl);
+        final String imageName = FileUtils.getFileName(imageUrl);
         RetrofitApi downloadService = RetrofitInit.getApi();
         Call<ResponseBody> call = downloadService.downLoadImage(imageUrl);
         call.enqueue(new Callback<ResponseBody>() {
@@ -163,52 +204,26 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                         if (writtenToDisk) {
                             if (imageName.length() > 10) {
                                 ((MainActivity) getActivity()).showTopToastView("图片保存成功：" + imageName.substring(imageName.length() - 10, imageName.length()));
-                                //Toast.makeText(getActivity(), imageName.substring(imageName.length() - 10, imageName.length()) + "  保存成功", Toast.LENGTH_SHORT).show();
                             } else {
                                 ((MainActivity) getActivity()).showTopToastView("图片保存成功：" + imageName);
-                                //Toast.makeText(getActivity(), imageName + "  保存成功", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             ((MainActivity) getActivity()).showTopToastView("图片保存失败");
-                            //Toast.makeText(getActivity(), "保存失败", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         ((MainActivity) getActivity()).showTopToastView("图片保存失败");
                     }
                 } else {
-                    //Log.d("TAG", "server contact failed");
                     Toast.makeText(getActivity(), "下载失败", Toast.LENGTH_SHORT).show();
-                    isSaveImage = false;
+                    setSaveImage(false);
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                //Log.e("TAG", "error");
                 Toast.makeText(getActivity(), "下载失败", Toast.LENGTH_SHORT).show();
-                isSaveImage = false;
+                setSaveImage(false);
             }
         });
     }
-
-    public void setSaveImage(boolean isSaveImage) {
-        this.isSaveImage = isSaveImage;
-    }
-
-    private String getFileName(String imageUrl) {
-        String fileName = "";
-        URL url = null;
-        try {
-            url = new URL(imageUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        final URL finalUrl = url;
-        if (finalUrl != null && !TextUtils.isEmpty(finalUrl.getFile())) {
-            File file = new File(finalUrl.getFile());
-            fileName = file.getName();
-        }
-        return fileName;
-    }
-
 }

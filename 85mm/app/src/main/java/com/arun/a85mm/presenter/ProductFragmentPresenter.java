@@ -28,7 +28,9 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView> {
         Subscriber<ProductListResponse> subscriber = new Subscriber<ProductListResponse>() {
             @Override
             public void onCompleted() {
-
+                if(getMvpView() != null){
+                    getMvpView().onRefreshComplete();
+                }
             }
 
             @Override

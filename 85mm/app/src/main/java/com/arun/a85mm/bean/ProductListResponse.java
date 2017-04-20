@@ -22,6 +22,7 @@ public class ProductListResponse {
         public String authorPageUrl;
         public String sourceUrl;
         public String sourceLogo;
+        public String sourceSite;
         public String createTime;
         public List<WorkListItemBean> workDetail;
         public boolean isExpand;
@@ -36,6 +37,7 @@ public class ProductListResponse {
             public String authorName;
             public String authorHeadImg;
             public String authorPageUrl;
+            public String sourceUrl;
         }
     }
 }

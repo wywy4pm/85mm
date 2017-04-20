@@ -2,6 +2,7 @@ package com.arun.a85mm.utils;
 
 import android.content.Context;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -10,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 
 import okhttp3.ResponseBody;
 
@@ -19,6 +21,15 @@ import okhttp3.ResponseBody;
 
 public class FileUtils {
     public static final String DIR_IMAGE_SAVE = Environment.getExternalStorageDirectory() + File.separator + "85mm";
+
+    public static boolean hasSdcard() {
+        String status = Environment.getExternalStorageState();
+        if (status.equals(Environment.MEDIA_MOUNTED)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * 下载图片到本地目录
@@ -76,13 +87,19 @@ public class FileUtils {
         }
     }
 
-
-    public static boolean hasSdcard() {
-        String status = Environment.getExternalStorageState();
-        if (status.equals(Environment.MEDIA_MOUNTED)) {
-            return true;
-        } else {
-            return false;
+    public static String getFileName(String imageUrl) {
+        String fileName = "";
+        URL url = null;
+        try {
+            url = new URL(imageUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        final URL finalUrl = url;
+        if (finalUrl != null && !TextUtils.isEmpty(finalUrl.getFile())) {
+            File file = new File(finalUrl.getFile());
+            fileName = file.getName();
+        }
+        return fileName;
     }
 }
