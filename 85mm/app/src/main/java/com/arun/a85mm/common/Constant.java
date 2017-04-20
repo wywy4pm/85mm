@@ -15,6 +15,8 @@ public class Constant {
     public static final String INTENT_ARTICLE_IMAGE_POSITIONX = "position_x";
     public static final String INTENT_ARTICLE_IMAGE_POSITIONY = "position_y";
 
+    public static final String INTENT_WEB_URL = "'url";
+
     /**
      * data type
      */

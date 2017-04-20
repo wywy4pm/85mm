@@ -1,12 +1,20 @@
 package com.arun.a85mm.fragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.MainActivity;
+import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.adapter.ProductListAdapter;
 import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.presenter.ProductFragmentPresenter;
@@ -16,11 +24,8 @@ import com.arun.a85mm.retrofit.RetrofitApi;
 import com.arun.a85mm.retrofit.RetrofitInit;
 import com.arun.a85mm.utils.FileUtils;
 import com.arun.a85mm.utils.NetUtils;
-import com.arun.a85mm.utils.PermissionUtils;
 import com.arun.a85mm.view.CommonView;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -188,6 +193,11 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         }
     }
 
+    @Override
+    public void onMoreLinkClick(String sourceUrl) {
+        showBottomDialog(sourceUrl);
+    }
+
     public void setHaveMore(boolean isHaveMore) {
         this.isHaveMore = isHaveMore;
     }
@@ -231,5 +241,36 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                 setSaveImage(false);
             }
         });
+    }
+
+    private void showBottomDialog(final String webUrl) {
+        final Dialog dialog = new Dialog(getActivity(), R.style.ActionSheetDialogStyle);
+        LinearLayout root = (LinearLayout) LayoutInflater.from(getActivity()).inflate(
+                R.layout.dialog_bottom, null);
+        root.findViewById(R.id.btn_link).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WebViewActivity.jumpToWebViewActivity(getActivity(), webUrl);
+            }
+        });
+        root.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+        dialog.setContentView(root);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+
+        Window dialogWindow = dialog.getWindow();
+        //dialogWindow.setWindowAnimations(R.style.ActionSheetDialogAnimation);
+        dialogWindow.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        lp.x = 0; // 新位置X坐标
+        lp.y = 0; // 新位置Y坐标
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        dialogWindow.setAttributes(lp);
+        dialog.show();
     }
 }

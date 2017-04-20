@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.bumptech.glide.Glide;
@@ -37,6 +38,8 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         void onCountClick(int groupPosition);
 
         void onCoverClick(String coverUrl);
+
+        void onMoreLinkClick(String sourceUrl);
     }
 
     public void setOnImageClick(OnImageClick onImageClick) {
@@ -120,13 +123,15 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             workListItemHolder.author_image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    WebViewActivity.jumpToWebViewActivity(contexts.get(), bean.authorPageUrl);
                 }
             });
             workListItemHolder.author_more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if(onImageClick != null){
+                        onImageClick.onMoreLinkClick(bean.sourceUrl);
+                    }
                 }
             });
         } else {
