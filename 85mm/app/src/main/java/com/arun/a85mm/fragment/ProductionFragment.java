@@ -54,6 +54,8 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     private static final String TAG = "ProductionFragment";
     private ImageView next_group_img;
     private int currentGroupPosition;
+    private boolean isSingleExpand;
+    private int count = 0;
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -93,12 +95,34 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                 Log.d(TAG, "visibleItemCount = " + visibleItemCount);
                 Log.d(TAG, "totalItemCount = " + totalItemCount);*/
                 //Log.d(TAG, "last = " + listView.getLastVisiblePosition());
+                int lastVisiblePosition = listView.getLastVisiblePosition();
+                int currentChildCount = 0;
+                if (workLists != null && workLists.size() > 0) {
+                    if (workLists.get(currentGroupPosition) != null && workLists.get(currentGroupPosition).workDetail != null) {
+                        currentChildCount = workLists.get(currentGroupPosition).workDetail.size();
+                    }
+                    int currentRangeMin = currentGroupPosition;
+                    int currentRangeMax = currentGroupPosition + currentChildCount;
+                    if (isSingleExpand && lastVisiblePosition >= currentGroupPosition
+                            && currentRangeMin <= firstVisibleItem
+                            && currentRangeMax >= lastVisiblePosition
+                            && currentChildCount > 4) {
+                        next_group_img.setVisibility(View.VISIBLE);
+                    } else {
+                        next_group_img.setVisibility(View.GONE);
+                        isSingleExpand = false;
+                    }
+                } else {
+                    next_group_img.setVisibility(View.GONE);
+                    isSingleExpand = false;
+                }
             }
         });
 
         expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
+                isSingleExpand = true;
                 if (workLists.get(groupPosition) != null && workLists.get(groupPosition).workDetail != null && workLists.get(groupPosition).totalImageNum > 5) {
                     if (groupPosition < workLists.size() - 1) {
                         currentGroupPosition = groupPosition;
@@ -113,11 +137,12 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
             @Override
             public void onClick(View v) {
                 if (currentGroupPosition < workLists.size()) {
-                    Log.d(TAG, "currentGroupPosition = " + (currentGroupPosition + 1));
+                    Log.d(TAG, "currentPosition = " + (currentGroupPosition + 1));
                     int currentPosition = currentGroupPosition + 1;
                     expandableListView.setSelectedGroup(currentPosition);
                 }
                 next_group_img.setVisibility(View.GONE);
+                isSingleExpand = false;
             }
         });
         /*expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
