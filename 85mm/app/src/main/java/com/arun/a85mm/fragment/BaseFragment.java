@@ -32,6 +32,7 @@ public abstract class BaseFragment extends Fragment {
     private LayoutInflater inflater;
     private int layoutId;
     private View no_network;
+    public boolean isLoading;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -56,6 +57,10 @@ public abstract class BaseFragment extends Fragment {
             }
         }
         return rootView;
+    }
+
+    public void setLoading(boolean isLoading) {
+        this.isLoading = isLoading;
     }
 
     public void showNetWorkErrorView(View view) {
@@ -101,14 +106,16 @@ public abstract class BaseFragment extends Fragment {
                 int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
                 synchronized (BaseFragment.this) {
                     if (lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
-                        setLoadMore();
+                        if (!isLoading) {
+                            setLoadMore();
+                        }
                     }
                 }
             }
         });
     }
 
-    public void setAbListViewScrollListener(final AbsListView absListView, final boolean isLoading) {
+    public void setAbListViewScrollListener(final AbsListView absListView) {
         absListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {

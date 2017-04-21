@@ -3,12 +3,15 @@ package com.arun.a85mm.fragment;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -48,7 +51,9 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     private String userId;
     private String lastWorkId;
     private boolean isSaveImage;
-    private boolean isLoading;
+    private static final String TAG = "ProductionFragment";
+    private ImageView next_group_img;
+    private int currentGroupPosition;
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -59,6 +64,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     protected void initView() {
         swipeToLoadLayout = (SwipeToLoadLayout) findViewById(R.id.swipeToLoad);
         expandableListView = (ExpandableListView) findViewById(R.id.swipe_target);
+        next_group_img = (ImageView) findViewById(R.id.next_group_img);
         productListAdapter = new ProductListAdapter(getActivity(), workLists);
         expandableListView.setGroupIndicator(null);
         expandableListView.setAdapter(productListAdapter);
@@ -68,8 +74,52 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                 refreshData();
             }
         });
-        setAbListViewScrollListener(expandableListView, isLoading);
+        //setAbListViewScrollListener(expandableListView);
+        expandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                synchronized (ProductionFragment.this) {
+                    if (view.getLastVisiblePosition() >= view.getCount() - 1) {
+                        if (!isLoading) {
+                            setLoadMore();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView listView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                /*Log.d(TAG, "firstVisibleItem = " + firstVisibleItem);
+                Log.d(TAG, "visibleItemCount = " + visibleItemCount);
+                Log.d(TAG, "totalItemCount = " + totalItemCount);*/
+                //Log.d(TAG, "last = " + listView.getLastVisiblePosition());
+            }
+        });
+
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if (workLists.get(groupPosition) != null && workLists.get(groupPosition).workDetail != null && workLists.get(groupPosition).totalImageNum > 5) {
+                    if (groupPosition < workLists.size() - 1) {
+                        currentGroupPosition = groupPosition;
+                        Log.d(TAG, "currentGroupPosition = " + currentGroupPosition);
+                        next_group_img.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
         productListAdapter.setOnImageClick(this);
+        next_group_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentGroupPosition < workLists.size()) {
+                    Log.d(TAG, "currentGroupPosition = " + (currentGroupPosition + 1));
+                    int currentPosition = currentGroupPosition + 1;
+                    expandableListView.setSelectedGroup(currentPosition);
+                }
+                next_group_img.setVisibility(View.GONE);
+            }
+        });
         /*expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -91,7 +141,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         if (NetUtils.isConnected(getActivity())) {
             hideNetWorkErrorView(expandableListView);
             if (productFragmentPresenter != null) {
-                isLoading = true;
+                setLoading(true);
                 lastWorkId = "";
                 productFragmentPresenter.getProductListData(userId, lastWorkId);
             }
@@ -111,6 +161,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     }
 
     private void loadMore() {
+        setLoading(true);
         if (productFragmentPresenter != null) {
             productFragmentPresenter.getProductListData(userId, lastWorkId);
         }
@@ -171,7 +222,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     @Override
     public void onRefreshComplete() {
-        isLoading = false;
+        setLoading(false);
         if (swipeToLoadLayout != null) {
             swipeToLoadLayout.setRefreshing(false);
         }
@@ -187,6 +238,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         if (expandableListView != null) {
             expandableListView.expandGroup(groupPosition, false);
         }
+
     }
 
     @Override
@@ -271,12 +323,14 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
         Window dialogWindow = dialog.getWindow();
         //dialogWindow.setWindowAnimations(R.style.ActionSheetDialogAnimation);
-        dialogWindow.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-        WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-        lp.x = 0; // 新位置X坐标
-        lp.y = 0; // 新位置Y坐标
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        dialogWindow.setAttributes(lp);
-        dialog.show();
+        if (dialogWindow != null) {
+            dialogWindow.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+            lp.x = 0; // 新位置X坐标
+            lp.y = 0; // 新位置Y坐标
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            dialogWindow.setAttributes(lp);
+            dialog.show();
+        }
     }
 }

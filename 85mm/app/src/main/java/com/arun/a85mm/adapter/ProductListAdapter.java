@@ -68,11 +68,14 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             headHolder.work_list_cover_count.setVisibility(View.GONE);
             headHolder.layout_source.setVisibility(View.GONE);
         }
-        int imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
-        if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
-            headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
-            headHolder.itemView.getLayoutParams().height = imageHeight;
+        if (bean.coverWidth > 0) {
+            int imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
+            if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
+                headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
+                headHolder.itemView.getLayoutParams().height = imageHeight;
+            }
         }
+
         Glide.with(contexts.get()).load(bean.coverUrl).centerCrop().into(headHolder.work_list_cover_img);
         headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
         Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop().into(headHolder.source_logo);
@@ -118,11 +121,14 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             workListItemHolder.work_list_item_author.setVisibility(View.VISIBLE);
             workListItemHolder.work_list_item_title.setText(bean.workTitle);
             workListItemHolder.author_name.setText(bean.authorName);
-            int imageHeight = (bean.height * screenWidth) / bean.width;
-            if (workListItemHolder.author_image.getLayoutParams() != null) {
-                workListItemHolder.author_image.getLayoutParams().height = imageHeight;
-                //workListItemHolder.rippleView.getLayoutParams().height = bean.height;
+            if (bean.width > 0) {
+                int imageHeight = (bean.height * screenWidth) / bean.width;
+                if (workListItemHolder.author_image.getLayoutParams() != null) {
+                    workListItemHolder.author_image.getLayoutParams().height = imageHeight;
+                    //workListItemHolder.rippleView.getLayoutParams().height = bean.height;
+                }
             }
+
             Glide.with(contexts.get()).load(bean.authorHeadImg).centerCrop()
                     .bitmapTransform(new GlideCircleTransform(contexts.get())).into(workListItemHolder.author_image);
             workListItemHolder.author_image.setOnClickListener(new View.OnClickListener() {

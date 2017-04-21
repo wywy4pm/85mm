@@ -12,4 +12,14 @@
         android:id="@+id/no_network"
         layout="@layout/layout_no_network"
         android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/next_group_img"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:src="@mipmap/next_group"
+        android:visibility="gone" />
 </RelativeLayout>
