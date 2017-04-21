@@ -48,6 +48,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     private String userId;
     private String lastWorkId;
     private boolean isSaveImage;
+    private boolean isLoading;
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                 refreshData();
             }
         });
-        //setAbListViewScrollListener(expandableListView);
+        setAbListViewScrollListener(expandableListView, isLoading);
         productListAdapter.setOnImageClick(this);
         /*expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -90,6 +91,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         if (NetUtils.isConnected(getActivity())) {
             hideNetWorkErrorView(expandableListView);
             if (productFragmentPresenter != null) {
+                isLoading = true;
                 lastWorkId = "";
                 productFragmentPresenter.getProductListData(userId, lastWorkId);
             }
@@ -103,7 +105,9 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     @Override
     public void setLoadMore() {
-        loadMore();
+        if (isHaveMore) {
+            loadMore();
+        }
     }
 
     private void loadMore() {
@@ -167,6 +171,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     @Override
     public void onRefreshComplete() {
+        isLoading = false;
         if (swipeToLoadLayout != null) {
             swipeToLoadLayout.setRefreshing(false);
         }
@@ -174,7 +179,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     @Override
     public void reloadData() {
-        loadMore();
+        refreshData();
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
@@ -98,34 +99,31 @@ public abstract class BaseFragment extends Fragment {
                 //得到RecyclerView的底部坐标减去底部padding值，也就是显示内容最底部的坐标
                 int recyclerBottom = recyclerView.getBottom() - recyclerView.getPaddingBottom();
                 int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
-                if (lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
-                    setLoadMore();
+                synchronized (BaseFragment.this) {
+                    if (lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
+                        setLoadMore();
+                    }
                 }
             }
         });
     }
 
-    public void setAbListViewScrollListener(final AbsListView absListView) {
+    public void setAbListViewScrollListener(final AbsListView absListView, final boolean isLoading) {
         absListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+                synchronized (BaseFragment.this) {
+                    if (view.getLastVisiblePosition() >= view.getCount() - 1) {
+                        if (!isLoading) {
+                            setLoadMore();
+                        }
+                    }
+                }
             }
 
             @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                //得到当前显示的最后一个item的view
-                View lastChildView = absListView.getChildAt(absListView.getChildCount() - 1);
-                //得到lastChildView的bottom坐标值
-                if (lastChildView != null) {
-                    int lastChildBottom = lastChildView.getBottom();
-                    //得到RecyclerView的底部坐标减去底部padding值，也就是显示内容最底部的坐标
-                    int recyclerBottom = absListView.getBottom() - absListView.getPaddingBottom();
-                    int lastPosition = absListView.getPositionForView(lastChildView);
-                    if (lastChildBottom == recyclerBottom && lastPosition == absListView.getChildCount() - 1) {
-                        setLoadMore();
-                    }
-                }
+            public void onScroll(AbsListView listView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
             }
         });
     }

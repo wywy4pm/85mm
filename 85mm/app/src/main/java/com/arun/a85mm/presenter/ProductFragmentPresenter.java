@@ -28,7 +28,7 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView> {
         Subscriber<ProductListResponse> subscriber = new Subscriber<ProductListResponse>() {
             @Override
             public void onCompleted() {
-                if(getMvpView() != null){
+                if (getMvpView() != null) {
                     getMvpView().onRefreshComplete();
                 }
             }
@@ -46,7 +46,7 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView> {
             public void onNext(ProductListResponse productListResponse) {
                 if (getMvpView() != null) {
                     if (productListResponse != null && productListResponse.code == ErrorCode.SUCCESS) {
-                        if (!TextUtils.isEmpty(lastWorkId)) {
+                        if (TextUtils.isEmpty(lastWorkId)) {
                             getMvpView().refresh(productListResponse);
                         } else {
                             getMvpView().refreshMore(productListResponse);

@@ -13,6 +13,7 @@ import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.bean.ProductListResponse;
+import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.bumptech.glide.Glide;
 
@@ -26,10 +27,12 @@ import java.util.List;
 public class ProductListAdapter extends BaseExpandableListAdapter {
     private WeakReference<Context> contexts;
     private List<ProductListResponse.WorkListBean> works;
+    private int screenWidth;
 
     public ProductListAdapter(Context context, List<ProductListResponse.WorkListBean> works) {
         contexts = new WeakReference<>(context);
         this.works = works;
+        screenWidth = DensityUtil.getScreenWidth(context);
     }
 
     public OnImageClick onImageClick;
@@ -65,9 +68,10 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             headHolder.work_list_cover_count.setVisibility(View.GONE);
             headHolder.layout_source.setVisibility(View.GONE);
         }
+        int imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
         if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
-            headHolder.work_list_cover_img.getLayoutParams().height = bean.coverHeight;
-            headHolder.itemView.getLayoutParams().height = bean.coverHeight;
+            headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
+            headHolder.itemView.getLayoutParams().height = imageHeight;
         }
         Glide.with(contexts.get()).load(bean.coverUrl).centerCrop().into(headHolder.work_list_cover_img);
         headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
@@ -114,8 +118,9 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             workListItemHolder.work_list_item_author.setVisibility(View.VISIBLE);
             workListItemHolder.work_list_item_title.setText(bean.workTitle);
             workListItemHolder.author_name.setText(bean.authorName);
+            int imageHeight = (bean.height * screenWidth) / bean.width;
             if (workListItemHolder.author_image.getLayoutParams() != null) {
-                workListItemHolder.author_image.getLayoutParams().height = bean.height;
+                workListItemHolder.author_image.getLayoutParams().height = imageHeight;
                 //workListItemHolder.rippleView.getLayoutParams().height = bean.height;
             }
             Glide.with(contexts.get()).load(bean.authorHeadImg).centerCrop()
@@ -129,7 +134,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             workListItemHolder.author_more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(onImageClick != null){
+                    if (onImageClick != null) {
                         onImageClick.onMoreLinkClick(bean.sourceUrl);
                     }
                 }
