@@ -27,11 +27,13 @@ import java.util.List;
 public class ProductListAdapter extends BaseExpandableListAdapter {
     private WeakReference<Context> contexts;
     private List<ProductListResponse.WorkListBean> works;
+    //private List<ProductListResponse.WorkListBean> worksCopy;
     private int screenWidth;
 
     public ProductListAdapter(Context context, List<ProductListResponse.WorkListBean> works) {
         contexts = new WeakReference<>(context);
         this.works = works;
+        //his.worksCopy = worksCopy;
         screenWidth = DensityUtil.getScreenWidth(context);
     }
 
@@ -61,6 +63,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         }
         final WorkListHeadHolder headHolder = workListHeadHolder;
         final ProductListResponse.WorkListBean bean = works.get(groupPosition);
+        //final ProductListResponse.WorkListBean copyBean = worksCopy.get(groupPosition);
         if (!bean.isExpand) {
             headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
             headHolder.layout_source.setVisibility(View.VISIBLE);
@@ -76,16 +79,18 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             }
         }
 
-        Glide.with(contexts.get()).load(bean.coverUrl).centerCrop().into(headHolder.work_list_cover_img);
         headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
         Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop().into(headHolder.source_logo);
         headHolder.create_time.setText(bean.createTime);
+
+        Glide.with(contexts.get()).load(bean.coverUrl).centerCrop().into(headHolder.work_list_cover_img);
 
         headHolder.work_list_cover_count.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 headHolder.work_list_cover_count.setVisibility(View.GONE);
                 headHolder.layout_source.setVisibility(View.GONE);
+                //copyBean.isExpand = true;
                 bean.isExpand = true;
                 if (onImageClick != null) {
                     onImageClick.onCountClick(groupPosition);

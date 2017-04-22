@@ -26,6 +26,7 @@ public class ProductListResponse {
         public String createTime;
         public List<WorkListItemBean> workDetail;
         public boolean isExpand;
+        public boolean isShowNextGroup;
 
         public static class WorkListItemBean {
             public String imageUrl;

@@ -46,6 +46,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     private ExpandableListView expandableListView;
     private ProductListAdapter productListAdapter;
     private List<ProductListResponse.WorkListBean> workLists = new ArrayList<>();
+    //private List<ProductListResponse.WorkListBean> workListsCopy = new ArrayList<>();
     private ProductFragmentPresenter productFragmentPresenter;
     private boolean isHaveMore = true;
     private String userId;
@@ -56,6 +57,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     private int currentGroupPosition;
     private boolean isSingleExpand;
     private int count = 0;
+    //private boolean isFirstLoad = true;
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -95,22 +97,26 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                 Log.d(TAG, "visibleItemCount = " + visibleItemCount);
                 Log.d(TAG, "totalItemCount = " + totalItemCount);*/
                 //Log.d(TAG, "last = " + listView.getLastVisiblePosition());
+                int currentGroupAllPosition = getCurrentGroupAllPosition(currentGroupPosition);
                 int lastVisiblePosition = listView.getLastVisiblePosition();
                 int currentChildCount = 0;
                 if (workLists != null && workLists.size() > 0) {
                     if (workLists.get(currentGroupPosition) != null && workLists.get(currentGroupPosition).workDetail != null) {
                         currentChildCount = workLists.get(currentGroupPosition).workDetail.size();
                     }
-                    int currentRangeMin = currentGroupPosition;
-                    int currentRangeMax = currentGroupPosition + currentChildCount;
-                    if (isSingleExpand && lastVisiblePosition >= currentGroupPosition
-                            && currentRangeMin <= firstVisibleItem
-                            && currentRangeMax >= lastVisiblePosition
-                            && currentChildCount > 4) {
-                        next_group_img.setVisibility(View.VISIBLE);
-                    } else {
-                        next_group_img.setVisibility(View.GONE);
-                        isSingleExpand = false;
+                    //int currentRangeMin = currentGroupAllPosition;
+                    int currentRangeMax = currentGroupAllPosition + currentChildCount;
+                    if (isSingleExpand && lastVisiblePosition >= currentGroupAllPosition && currentChildCount > 4) {
+                        if (currentChildCount > visibleItemCount && lastVisiblePosition <= currentRangeMax) {
+                            next_group_img.setVisibility(View.VISIBLE);
+                        } else {
+                            if (currentChildCount <= visibleItemCount) {
+                                next_group_img.setVisibility(View.VISIBLE);
+                            } else {
+                                next_group_img.setVisibility(View.GONE);
+                                isSingleExpand = false;
+                            }
+                        }
                     }
                 } else {
                     next_group_img.setVisibility(View.GONE);
@@ -154,6 +160,22 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         });*/
     }
 
+    private int getCurrentGroupAllPosition(int groupPosition) {
+        int currentGroupAllPosition = 0;
+        if (workLists != null && workLists.size() > 0) {
+            for (int i = 0; i < workLists.size(); i++) {
+                if (i < groupPosition) {
+                    if (workLists.get(i).isExpand) {
+                        currentGroupAllPosition += workLists.get(i).totalImageNum;
+                    } else {
+                        currentGroupAllPosition += 1;
+                    }
+                }
+            }
+        }
+        return currentGroupAllPosition;
+    }
+
     @Override
     protected void initData() {
         productFragmentPresenter = new ProductFragmentPresenter(getActivity());
@@ -162,6 +184,9 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     }
 
     private void refreshData() {
+        collapseGroup();
+        isSingleExpand = false;
+        next_group_img.setVisibility(View.GONE);
         setHaveMore(true);
         if (NetUtils.isConnected(getActivity())) {
             hideNetWorkErrorView(expandableListView);
@@ -177,6 +202,28 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
             showNetWorkErrorView(expandableListView);
         }
     }
+
+    private void collapseGroup() {
+        if (workLists != null && workLists.size() > 0) {
+            for (int i = 0; i < workLists.size(); i++) {
+                if (expandableListView.isGroupExpanded(i)) {
+                    expandableListView.collapseGroup(i);
+                }
+            }
+        }
+    }
+
+    /*private void setExpandStatus() {
+        if (workListsCopy != null && workListsCopy.size() > 0) {
+            for (int i = 0; i < workLists.size(); i++) {
+                for (int j = 0; j < workLists.size(); ) {
+                    if (workLists.get(j) != null && workListsCopy.get(i) != null) {
+                        workLists.get(j).isExpand = workListsCopy.get(i).isExpand;
+                    }
+                }
+            }
+        }
+    }*/
 
     @Override
     public void setLoadMore() {
@@ -197,6 +244,8 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         if (data != null && data.workList != null && data.workList.size() > 0) {
             workLists.clear();
             formatData(data.workList);
+            //workListsCopy.clear();
+            //workListsCopy.addAll(workLists);
         }
     }
 
@@ -204,6 +253,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     public void refreshMore(ProductListResponse data) {
         if (data != null && data.workList != null && data.workList.size() > 0) {
             formatData(data.workList);
+            //workListsCopy.addAll(workLists);
         }
     }
 
@@ -247,6 +297,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     @Override
     public void onRefreshComplete() {
+        //isFirstLoad = false;
         setLoading(false);
         if (swipeToLoadLayout != null) {
             swipeToLoadLayout.setRefreshing(false);
