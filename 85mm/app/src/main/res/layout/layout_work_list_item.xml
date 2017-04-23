@@ -12,7 +12,7 @@
         app:rv_color="@color/white"
         app:rv_zoom="true"
         app:rv_zoomDuration="300"
-        app:rv_zoomScale="1.1">
+        app:rv_zoomScale="1">
 
         <ImageView
             android:id="@+id/work_list_item_img"

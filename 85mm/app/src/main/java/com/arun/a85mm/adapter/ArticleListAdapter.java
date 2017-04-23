@@ -81,7 +81,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
             Glide.with(context).load(articleListBean.headImage).centerCrop().into(article_image);
             article_title.setText(articleListBean.title);
             article_detail.setText(articleListBean.brief);
-            article_image.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int[] location = new int[2];

@@ -29,6 +29,7 @@ import com.arun.a85mm.utils.FileUtils;
 import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -351,11 +352,12 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                     boolean writtenToDisk = FileUtils.writeResponseBodyToDisk(getActivity(), response.body(), imageName);
                     if (!TextUtils.isEmpty(imageName)) {
                         if (writtenToDisk) {
-                            if (imageName.length() > 10) {
-                                ((MainActivity) getActivity()).showTopToastView("图片保存成功：" + imageName.substring(imageName.length() - 10, imageName.length()));
+                            /*if (imageName.length() > 10) {
+                                ((MainActivity) getActivity()).showTopToastView("图片已保存至" + imageName.substring(imageName.length() - 10, imageName.length()));
                             } else {
-                                ((MainActivity) getActivity()).showTopToastView("图片保存成功：" + imageName);
-                            }
+                                ((MainActivity) getActivity()).showTopToastView("图片已保存至" + imageName);
+                            }*/
+                            ((MainActivity) getActivity()).showTopToastView("图片已保存至" + FileUtils.DIR_IMAGE_SAVE + File.separator + imageName);
                         } else {
                             ((MainActivity) getActivity()).showTopToastView("图片保存失败");
                         }

@@ -1,6 +1,7 @@
 package com.arun.a85mm.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +86,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
 
         Glide.with(contexts.get()).load(bean.coverUrl).centerCrop().into(headHolder.work_list_cover_img);
 
-        headHolder.work_list_cover_count.setOnClickListener(new View.OnClickListener() {
+        /*headHolder.work_list_cover_count.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 headHolder.work_list_cover_count.setVisibility(View.GONE);
@@ -96,13 +97,40 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                     onImageClick.onCountClick(groupPosition);
                 }
             }
-        });
+        });*/
+        if (!bean.isExpand) {
+            workListHeadHolder.rippleView.setRippleDuration(0);
+        } else {
+            workListHeadHolder.rippleView.setRippleDuration(300);
+        }
+        final WorkListHeadHolder finalWorkListHeadHolder = workListHeadHolder;
         workListHeadHolder.rippleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onImageClick != null) {
-                    onImageClick.onCoverClick(bean.coverUrl);
+                if (bean.isExpand) {
+                    finalWorkListHeadHolder.rippleView.setRippleDuration(300);
+                    if (onImageClick != null) {
+                        onImageClick.onCoverClick(bean.coverUrl);
+                    }
+                } else {
+                    headHolder.work_list_cover_count.setVisibility(View.GONE);
+                    headHolder.layout_source.setVisibility(View.GONE);
+                    bean.isExpand = true;
+                    if (onImageClick != null) {
+                        onImageClick.onCountClick(groupPosition);
+                    }
                 }
+            }
+        });
+        workListHeadHolder.work_list_cover_img.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                finalWorkListHeadHolder.rippleView.setRippleDuration(0);
+                if (onImageClick != null) {
+                    onImageClick.onMoreLinkClick(bean.sourceUrl);
+                    Log.d("TAG", "onMoreLinkClick = " + bean.sourceUrl);
+                }
+                return false;
             }
         });
         return convertView;
@@ -154,12 +182,24 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             workListItemHolder.work_list_item_title.setVisibility(View.GONE);
             workListItemHolder.work_list_item_author.setVisibility(View.GONE);
         }
+        final WorkListItemHolder finalWorkListItemHolder = workListItemHolder;
         workListItemHolder.rippleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finalWorkListItemHolder.rippleView.setRippleDuration(300);
                 if (onImageClick != null) {
                     onImageClick.onCoverClick(bean.imageUrl);
                 }
+            }
+        });
+        workListItemHolder.work_list_item_img.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                finalWorkListItemHolder.rippleView.setRippleDuration(0);
+                if (onImageClick != null) {
+                    onImageClick.onMoreLinkClick(bean.sourceUrl);
+                }
+                return false;
             }
         });
         return convertView;

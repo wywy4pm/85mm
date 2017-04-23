@@ -1,9 +1,10 @@
 package com.arun.a85mm.utils;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -21,6 +22,7 @@ import okhttp3.ResponseBody;
 
 public class FileUtils {
     public static final String DIR_IMAGE_SAVE = Environment.getExternalStorageDirectory() + File.separator + "85mm";
+    //public static final String DIR_IMAGE_SAVE_FLYME = Environment.getExternalStorageDirectory() + File.separator + "DCIM";
 
     public static boolean hasSdcard() {
         String status = Environment.getExternalStorageState();
@@ -36,28 +38,21 @@ public class FileUtils {
      *
      * @param context
      * @param body
-     * @param file
+     * @param fileName
      * @return
      */
-    public static boolean writeResponseBodyToDisk(Context context, ResponseBody body, String file) {
+    public static boolean writeResponseBodyToDisk(final Context context, ResponseBody body, String fileName) {
         if (hasSdcard()) {
             try {
-                File dir = new File(DIR_IMAGE_SAVE);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-                File futureStudioIconFile = new File(DIR_IMAGE_SAVE + File.separator + file);
-                if (!futureStudioIconFile.exists()) {
-                    futureStudioIconFile.createNewFile();
-                }
+                final File file = createDirAndFile(DIR_IMAGE_SAVE, fileName);
+
                 InputStream inputStream = null;
                 OutputStream outputStream = null;
                 try {
                     byte[] fileReader = new byte[4096];
-                    //long fileSize = body.contentLength();
                     long fileSizeDownloaded = 0;
                     inputStream = body.byteStream();
-                    outputStream = new FileOutputStream(futureStudioIconFile);
+                    outputStream = new FileOutputStream(file);
                     while (true) {
                         int read = inputStream.read(fileReader);
                         if (read == -1) {
@@ -67,6 +62,7 @@ public class FileUtils {
                         fileSizeDownloaded += read;
                     }
                     outputStream.flush();
+                    //notifySystemImageUpdate(context, file, file2);
                     return true;
                 } catch (IOException e) {
                     return false;
@@ -87,6 +83,22 @@ public class FileUtils {
         }
     }
 
+    private static File createDirAndFile(String path, String fileName) {
+        File dir = new File(path);
+        File file = new File(path + File.separator + fileName);
+        try {
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
     public static String getFileName(String imageUrl) {
         String fileName = "";
         URL url = null;
@@ -101,5 +113,29 @@ public class FileUtils {
             fileName = file.getName();
         }
         return fileName;
+    }
+
+    public static String getFilePath(String imageUrl) {
+        String filePath = "";
+        URL url = null;
+        try {
+            url = new URL(imageUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        final URL finalUrl = url;
+        if (finalUrl != null && !TextUtils.isEmpty(finalUrl.getFile())) {
+            File file = new File(finalUrl.getFile());
+            filePath = file.getAbsolutePath();
+        }
+        return filePath;
+    }
+
+    public static void notifySystemImageUpdate(final Context context, File... file) {
+        if (file.length > 0) {
+            for (int i = 0; i < file.length; i++) {
+                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file[i].getAbsolutePath())));//通知图库刷新
+            }
+        }
     }
 }
