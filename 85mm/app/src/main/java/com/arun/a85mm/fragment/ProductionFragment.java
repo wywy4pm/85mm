@@ -2,6 +2,7 @@ package com.arun.a85mm.fragment;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,6 +29,7 @@ import com.arun.a85mm.retrofit.RetrofitInit;
 import com.arun.a85mm.utils.FileUtils;
 import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -130,9 +132,9 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
             @Override
             public void onGroupExpand(int groupPosition) {
                 isSingleExpand = true;
+                currentGroupPosition = groupPosition;
                 if (workLists.get(groupPosition) != null && workLists.get(groupPosition).workDetail != null && workLists.get(groupPosition).totalImageNum > 5) {
                     if (groupPosition < workLists.size() - 1) {
-                        currentGroupPosition = groupPosition;
                         Log.d(TAG, "currentGroupPosition = " + currentGroupPosition);
                         next_group_img.setVisibility(View.VISIBLE);
                     }
@@ -152,6 +154,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                 isSingleExpand = false;
             }
         });
+
         /*expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -292,8 +295,37 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                 lastWorkId = workList.get(i).workId;
             }
         }
+
+        preLoadChildFirstImage(workList);
+
         workLists.addAll(workList);
         productListAdapter.notifyDataSetChanged();
+
+    }
+
+    private void preLoadChildFirstImage(final List<ProductListResponse.WorkListBean> workList) {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                if (workList != null && workList.size() > 0) {
+                    for (int i = 0; i < workList.size(); i++) {
+                        ProductListResponse.WorkListBean workListBean = workList.get(i);
+                        int coverHeight = (workListBean.coverHeight * screenWidth) / workListBean.coverWidth;
+                        Glide.with(getActivity()).load(workListBean.coverUrl).downloadOnly(screenWidth, coverHeight);
+                        if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
+                            ProductListResponse.WorkListBean.WorkListItemBean bean = workList.get(i).workDetail.get(0);
+                            if (bean != null) {
+                                if (bean.width > 0) {
+                                    int imageHeight = (bean.height * screenWidth) / bean.width;
+                                    Glide.with(getActivity()).load(bean.imageUrl).downloadOnly(bean.width, imageHeight);
+                                    Log.d("TAG", "imageUrl = " + bean.imageUrl);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override

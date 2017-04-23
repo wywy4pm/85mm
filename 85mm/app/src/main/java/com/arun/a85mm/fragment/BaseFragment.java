@@ -18,6 +18,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.utils.DensityUtil;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public abstract class BaseFragment extends Fragment {
     private int layoutId;
     private View no_network;
     public boolean isLoading;
+    public int screenWidth;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -56,6 +58,7 @@ public abstract class BaseFragment extends Fragment {
                 parent.removeView(rootView);
             }
         }
+        screenWidth = DensityUtil.getScreenWidth(getActivity());
         return rootView;
     }
 

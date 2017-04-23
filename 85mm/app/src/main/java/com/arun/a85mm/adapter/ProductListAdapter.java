@@ -1,6 +1,7 @@
 package com.arun.a85mm.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -84,7 +86,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop().into(headHolder.source_logo);
         headHolder.create_time.setText(bean.createTime);
 
-        Glide.with(contexts.get()).load(bean.coverUrl).centerCrop().into(headHolder.work_list_cover_img);
+        Glide.with(contexts.get()).load(bean.coverUrl).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(headHolder.work_list_cover_img);
 
         /*headHolder.work_list_cover_count.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,19 +150,23 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         }
         final ProductListResponse.WorkListBean.WorkListItemBean bean = works.get(groupPosition).workDetail.get(childPosition);
         int detailSize = works.get(groupPosition).workDetail.size();
-        Glide.with(contexts.get()).load(bean.imageUrl).centerCrop().into(workListItemHolder.work_list_item_img);
+        if (TextUtils.isEmpty(bean.imageUrl)) {
+            workListItemHolder.work_list_item_img.setVisibility(View.GONE);
+        } else {
+            if (bean.width > 0) {
+                workListItemHolder.work_list_item_img.setVisibility(View.VISIBLE);
+                int imageHeight = (bean.height * screenWidth) / bean.width;
+                if (workListItemHolder.work_list_item_img.getLayoutParams() != null) {
+                    workListItemHolder.work_list_item_img.getLayoutParams().height = imageHeight;
+                }
+                Glide.with(contexts.get()).load(bean.imageUrl).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(workListItemHolder.work_list_item_img);
+            }
+        }
         if (childPosition == detailSize - 1) {
             workListItemHolder.work_list_item_title.setVisibility(View.VISIBLE);
             workListItemHolder.work_list_item_author.setVisibility(View.VISIBLE);
             workListItemHolder.work_list_item_title.setText(bean.workTitle);
             workListItemHolder.author_name.setText(bean.authorName);
-            if (bean.width > 0) {
-                int imageHeight = (bean.height * screenWidth) / bean.width;
-                if (workListItemHolder.author_image.getLayoutParams() != null) {
-                    workListItemHolder.author_image.getLayoutParams().height = imageHeight;
-                    //workListItemHolder.rippleView.getLayoutParams().height = bean.height;
-                }
-            }
 
             Glide.with(contexts.get()).load(bean.authorHeadImg).centerCrop()
                     .bitmapTransform(new GlideCircleTransform(contexts.get())).into(workListItemHolder.author_image);
