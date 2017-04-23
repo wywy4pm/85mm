@@ -30,7 +30,7 @@ public class WebViewActivity extends BaseActivity {
         Intent intent = new Intent(context, WebViewActivity.class);
         intent.putExtra(Constant.INTENT_WEB_URL, webUrl);
         context.startActivity(intent);
-        ((Activity) context).overridePendingTransition(R.anim.top_appear, R.anim.bottom_disappear);
+        ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class WebViewActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(R.anim.top_appear, R.anim.bottom_disappear);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
     private void loadWebView(WebView webView) {

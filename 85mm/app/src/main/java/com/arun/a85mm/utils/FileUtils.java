@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,6 +54,48 @@ public class FileUtils {
                     long fileSizeDownloaded = 0;
                     inputStream = body.byteStream();
                     outputStream = new FileOutputStream(file);
+                    while (true) {
+                        int read = inputStream.read(fileReader);
+                        if (read == -1) {
+                            break;
+                        }
+                        outputStream.write(fileReader, 0, read);
+                        fileSizeDownloaded += read;
+                    }
+                    outputStream.flush();
+                    //notifySystemImageUpdate(context, file, file2);
+                    return true;
+                } catch (IOException e) {
+                    return false;
+                } finally {
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                    if (outputStream != null) {
+                        outputStream.close();
+                    }
+                }
+            } catch (IOException e) {
+                return false;
+            }
+        } else {
+            Toast.makeText(context, "请开启sd卡存储权限,方便保存图片", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    public static boolean writeFileToDisk(final Context context, File file, String fileName) {
+        if (hasSdcard()) {
+            try {
+                final File newFile = createDirAndFile(DIR_IMAGE_SAVE, fileName);
+
+                InputStream inputStream = null;
+                OutputStream outputStream = null;
+                try {
+                    byte[] fileReader = new byte[4096];
+                    long fileSizeDownloaded = 0;
+                    inputStream = new FileInputStream(file);
+                    outputStream = new FileOutputStream(newFile);
                     while (true) {
                         int read = inputStream.read(fileReader);
                         if (read == -1) {

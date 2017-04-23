@@ -3,7 +3,7 @@ package com.arun.a85mm.fragment;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,21 +24,15 @@ import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.presenter.ProductFragmentPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
-import com.arun.a85mm.retrofit.RetrofitApi;
-import com.arun.a85mm.retrofit.RetrofitInit;
 import com.arun.a85mm.utils.FileUtils;
 import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.FutureTarget;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by WY on 2017/4/14.
@@ -60,6 +54,8 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     private int currentGroupPosition;
     private boolean isSingleExpand;
     private int count = 0;
+    private static final int WHAT_SHOW_TOP_SUCCESS = 1;
+    private static final int WHAT_SHOW_TOP_FAILED = 2;
     //private boolean isFirstLoad = true;
 
     @Override
@@ -313,12 +309,14 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                         int coverHeight = (workListBean.coverHeight * screenWidth) / workListBean.coverWidth;
                         Glide.with(getActivity()).load(workListBean.coverUrl).downloadOnly(screenWidth, coverHeight);
                         if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
-                            ProductListResponse.WorkListBean.WorkListItemBean bean = workList.get(i).workDetail.get(0);
-                            if (bean != null) {
-                                if (bean.width > 0) {
-                                    int imageHeight = (bean.height * screenWidth) / bean.width;
-                                    Glide.with(getActivity()).load(bean.imageUrl).downloadOnly(bean.width, imageHeight);
-                                    Log.d("TAG", "imageUrl = " + bean.imageUrl);
+                            for (int j = 0; j < workList.get(i).workDetail.size(); j++) {
+                                ProductListResponse.WorkListBean.WorkListItemBean bean = workList.get(i).workDetail.get(j);
+                                if (bean != null) {
+                                    if (bean.width > 0) {
+                                        int imageHeight = (bean.height * screenWidth) / bean.width;
+                                        Glide.with(getActivity()).load(bean.imageUrl).downloadOnly(bean.width, imageHeight);
+                                        Log.d("TAG", "imageUrl = " + bean.imageUrl);
+                                    }
                                 }
                             }
                         }
@@ -347,13 +345,12 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         if (expandableListView != null) {
             expandableListView.expandGroup(groupPosition, false);
         }
-
     }
 
     @Override
-    public void onCoverClick(String coverUrl) {
+    public void onCoverClick(String coverUrl, int width, int height) {
         if (!isSaveImage) {
-            saveImage(coverUrl);
+            saveImage(coverUrl, width, height);
         } else {
             Toast.makeText(getActivity(), "当前有图片正在保存，请稍后...", Toast.LENGTH_SHORT).show();
         }
@@ -372,9 +369,41 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         this.isSaveImage = isSaveImage;
     }
 
-    private void saveImage(String imageUrl) {
+    private void saveImage(final String imageUrl, final int width, final int height) {
         setSaveImage(true);
-        final String imageName = FileUtils.getFileName(imageUrl);
+        //异步
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        FutureTarget<File> future = Glide.with(getActivity())
+                                .load(imageUrl)
+                                .downloadOnly(width, height);
+                        File cacheFile = null;
+                        try {
+                            cacheFile = future.get();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        String fileName = FileUtils.getFileName(imageUrl);
+                        boolean writtenToDisk = FileUtils.writeFileToDisk(getActivity(), cacheFile, fileName);
+                        if (writtenToDisk) {
+                            Message message = new Message();
+                            message.what = WHAT_SHOW_TOP_SUCCESS;
+                            message.obj = fileName;
+                            showTopHandler.sendMessage(message);
+                            //((MainActivity) getActivity()).showTopToastView("图片已保存至" + FileUtils.DIR_IMAGE_SAVE + File.separator + fileName);
+                        } else {
+                            showTopHandler.sendEmptyMessage(WHAT_SHOW_TOP_FAILED);
+                            //((MainActivity) getActivity()).showTopToastView("图片保存失败");
+                            setSaveImage(false);
+                        }
+                    }
+                }
+        ).start();
+
+        /*final String imageName = FileUtils.getFileName(imageUrl);
         RetrofitApi downloadService = RetrofitInit.getApi();
         Call<ResponseBody> call = downloadService.downLoadImage(imageUrl);
         call.enqueue(new Callback<ResponseBody>() {
@@ -384,17 +413,19 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                     boolean writtenToDisk = FileUtils.writeResponseBodyToDisk(getActivity(), response.body(), imageName);
                     if (!TextUtils.isEmpty(imageName)) {
                         if (writtenToDisk) {
-                            /*if (imageName.length() > 10) {
+                            *//*if (imageName.length() > 10) {
                                 ((MainActivity) getActivity()).showTopToastView("图片已保存至" + imageName.substring(imageName.length() - 10, imageName.length()));
                             } else {
                                 ((MainActivity) getActivity()).showTopToastView("图片已保存至" + imageName);
-                            }*/
+                            }*//*
                             ((MainActivity) getActivity()).showTopToastView("图片已保存至" + FileUtils.DIR_IMAGE_SAVE + File.separator + imageName);
                         } else {
                             ((MainActivity) getActivity()).showTopToastView("图片保存失败");
+                            setSaveImage(false);
                         }
                     } else {
                         ((MainActivity) getActivity()).showTopToastView("图片保存失败");
+                        setSaveImage(false);
                     }
                 } else {
                     Toast.makeText(getActivity(), "下载失败", Toast.LENGTH_SHORT).show();
@@ -407,7 +438,22 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                 Toast.makeText(getActivity(), "下载失败", Toast.LENGTH_SHORT).show();
                 setSaveImage(false);
             }
-        });
+        });*/
+    }
+
+    private ShowTopHandler showTopHandler = new ShowTopHandler();
+
+    private class ShowTopHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == WHAT_SHOW_TOP_SUCCESS) {
+                String fileName = (String) msg.obj;
+                ((MainActivity) getActivity()).showTopToastView("图片已保存至" + FileUtils.DIR_IMAGE_SAVE + File.separator + fileName);
+            } else if (msg.what == WHAT_SHOW_TOP_FAILED) {
+                ((MainActivity) getActivity()).showTopToastView("图片保存失败");
+            }
+        }
     }
 
     private void showBottomDialog(final String webUrl) {

@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
         //addManagerView();
         StatusBarUtils.setStatusBar(this, true);
         toastView.setVisibility(View.VISIBLE);
+        //toastView.setText("");
         toastView.setText(showName);
         ObjectAnimator animator = ObjectAnimator.ofFloat(toastView, "translationY", -DensityUtil.getStatusHeight(this), 0);
         animator.addListener(new Animator.AnimatorListener() {
