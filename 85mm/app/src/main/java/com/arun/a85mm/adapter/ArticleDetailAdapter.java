@@ -119,13 +119,13 @@ public class ArticleDetailAdapter extends RecyclerView.Adapter {
         }
 
         private void setData(Context context, ArticleDetailBean bean) {
-            if (item_fullImage.getLayoutParams() != null) {
+            /*if (item_fullImage.getLayoutParams() != null) {
                 if (getAdapterPosition() == 0) {
                     ((RelativeLayout.LayoutParams) item_fullImage.getLayoutParams()).setMargins(0, 0, 0, 0);
                 } else {
                     ((RelativeLayout.LayoutParams) item_fullImage.getLayoutParams()).setMargins(0, DensityUtil.dp2px(context, 12), 0, 0);
                 }
-            }
+            }*/
             Glide.with(context).load(bean.imageUrl).centerCrop().into(item_fullImage);
         }
     }
@@ -218,13 +218,13 @@ public class ArticleDetailAdapter extends RecyclerView.Adapter {
                 item_paragraph.setTextColor(context.getResources().getColor(R.color.black));
             }
             item_paragraph.setText(bean.text);
-            if (item_paragraph.getLayoutParams() != null && item_paragraph.getLayoutParams() instanceof RelativeLayout.LayoutParams) {
+           /* if (item_paragraph.getLayoutParams() != null && item_paragraph.getLayoutParams() instanceof RelativeLayout.LayoutParams) {
                 if (getAdapterPosition() == size - 1) {
-                    ((RelativeLayout.LayoutParams) item_paragraph.getLayoutParams()).setMargins(DensityUtil.dp2px(context, 18), DensityUtil.dp2px(context, 15), DensityUtil.dp2px(context, 18), DensityUtil.dp2px(context, 15));
+                    ((RelativeLayout.LayoutParams) item_paragraph.getLayoutParams()).setMargins(DensityUtil.dp2px(context, 18), DensityUtil.dp2px(context, 10), DensityUtil.dp2px(context, 18), DensityUtil.dp2px(context, 10));
                 } else {
-                    ((RelativeLayout.LayoutParams) item_paragraph.getLayoutParams()).setMargins(DensityUtil.dp2px(context, 18), DensityUtil.dp2px(context, 15), DensityUtil.dp2px(context, 18), 0);
+                    ((RelativeLayout.LayoutParams) item_paragraph.getLayoutParams()).setMargins(DensityUtil.dp2px(context, 18), DensityUtil.dp2px(context, 10), DensityUtil.dp2px(context, 18), 0);
                 }
-            }
+            }*/
         }
 
     }

@@ -85,7 +85,7 @@ public class FileUtils {
     }
 
     public static boolean writeFileToDisk(final Context context, File file, String fileName) {
-        if (hasSdcard()) {
+        if (hasSdcard() && file != null) {
             try {
                 final File newFile = createDirAndFile(DIR_IMAGE_SAVE, fileName);
 
@@ -121,7 +121,7 @@ public class FileUtils {
                 return false;
             }
         } else {
-            Toast.makeText(context, "请开启sd卡存储权限,方便保存图片", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "请开启sd卡存储权限,方便保存图片", Toast.LENGTH_SHORT).show();
             return false;
         }
     }
