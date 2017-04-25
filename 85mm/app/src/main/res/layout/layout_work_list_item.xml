@@ -15,7 +15,7 @@
             android:id="@+id/work_list_item_img"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
     </com.andexert.library.RippleView>
 
     <TextView
@@ -23,12 +23,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rippleView"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="5dp"
+        android:background="@color/white"
         android:ellipsize="end"
         android:gravity="left"
         android:maxLines="3"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp"
         android:text="asdsad"
         android:textColor="@color/charcoalgrey"
         android:textSize="18sp"
@@ -40,10 +41,11 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_below="@+id/work_list_item_title"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="8dp"
+        android:background="@color/white"
         android:visibility="gone">
 
         <ImageView

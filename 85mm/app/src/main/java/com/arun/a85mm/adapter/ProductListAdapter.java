@@ -1,5 +1,6 @@
 package com.arun.a85mm.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
@@ -70,8 +71,13 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         if (!bean.isExpand) {
             headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
             headHolder.layout_source.setVisibility(View.VISIBLE);
-            Glide.with(contexts.get()).load(bean.coverUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headHolder.work_list_cover_img);
+            ((Activity) contexts.get()).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Glide.with(contexts.get()).load(bean.coverUrl)
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headHolder.work_list_cover_img);
+                }
+            });
         } else {
             headHolder.work_list_cover_count.setVisibility(View.GONE);
             headHolder.layout_source.setVisibility(View.GONE);
@@ -157,6 +163,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         final ProductListResponse.WorkListBean.WorkListItemBean bean = works.get(groupPosition).workDetail.get(childPosition);
         int detailSize = works.get(groupPosition).workDetail.size();
         int saveImageHeight = 0;
+        final WorkListItemHolder finalWorkListItemHolder = workListItemHolder;
         if (TextUtils.isEmpty(bean.imageUrl)) {
             workListItemHolder.work_list_item_img.setVisibility(View.GONE);
         } else {
@@ -167,8 +174,13 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 if (workListItemHolder.work_list_item_img.getLayoutParams() != null) {
                     workListItemHolder.work_list_item_img.getLayoutParams().height = imageHeight;
                 }
-                Glide.with(contexts.get()).load(bean.imageUrl)
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(workListItemHolder.work_list_item_img);
+                ((Activity) contexts.get()).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(contexts.get()).load(bean.imageUrl)
+                                .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(finalWorkListItemHolder.work_list_item_img);
+                    }
+                });
             }
         }
         if (childPosition == detailSize - 1) {
@@ -199,11 +211,18 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                     }
                 }
             });
+            workListItemHolder.work_list_item_title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onImageClick != null) {
+                        onImageClick.onMoreLinkClick(bean.sourceUrl);
+                    }
+                }
+            });
         } else {
             workListItemHolder.work_list_item_title.setVisibility(View.GONE);
             workListItemHolder.work_list_item_author.setVisibility(View.GONE);
         }
-        final WorkListItemHolder finalWorkListItemHolder = workListItemHolder;
         final int finalSaveImageHeight = saveImageHeight;
         workListItemHolder.rippleView.setOnClickListener(new View.OnClickListener() {
             @Override

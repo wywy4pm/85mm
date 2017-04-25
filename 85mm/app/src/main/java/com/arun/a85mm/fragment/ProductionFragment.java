@@ -1,6 +1,7 @@
 package com.arun.a85mm.fragment;
 
 import android.app.Dialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,7 +29,9 @@ import com.arun.a85mm.utils.FileUtils;
 import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.target.Target;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -96,6 +99,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                 Log.d(TAG, "visibleItemCount = " + visibleItemCount);
                 Log.d(TAG, "totalItemCount = " + totalItemCount);*/
                 //Log.d(TAG, "last = " + listView.getLastVisiblePosition());
+
                 int currentGroupAllPosition = getCurrentGroupAllPosition(currentGroupPosition);
                 int lastVisiblePosition = listView.getLastVisiblePosition();
                 int currentChildCount = 0;
@@ -309,14 +313,12 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                         int coverHeight = (workListBean.coverHeight * screenWidth) / workListBean.coverWidth;
                         Glide.with(getActivity()).load(workListBean.coverUrl).downloadOnly(screenWidth, coverHeight);
                         if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
-                            for (int j = 0; j < workList.get(i).workDetail.size(); j++) {
-                                ProductListResponse.WorkListBean.WorkListItemBean bean = workList.get(i).workDetail.get(j);
-                                if (bean != null) {
-                                    if (bean.width > 0) {
-                                        int imageHeight = (bean.height * screenWidth) / bean.width;
-                                        Glide.with(getActivity()).load(bean.imageUrl).downloadOnly(bean.width, imageHeight);
-                                        Log.d("TAG", "imageUrl = " + bean.imageUrl);
-                                    }
+                            ProductListResponse.WorkListBean.WorkListItemBean bean = workList.get(i).workDetail.get(0);
+                            if (bean != null) {
+                                if (bean.width > 0) {
+                                    int imageHeight = (bean.height * screenWidth) / bean.width;
+                                    Glide.with(getActivity()).load(bean.imageUrl).downloadOnly(bean.width, imageHeight);
+                                    Log.d("TAG", "imageUrl = " + bean.imageUrl);
                                 }
                             }
                         }
@@ -354,6 +356,22 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         } else {
             Toast.makeText(getActivity(), "当前有图片正在保存，请稍后...", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    //获取可视第一个group的position
+    public int getFirstVisibleGroup() {
+        int firstVis = expandableListView.getFirstVisiblePosition();
+        long packedPosition = expandableListView.getExpandableListPosition(firstVis);
+        int groupPosition = ExpandableListView.getPackedPositionGroup(packedPosition);
+        return groupPosition;
+    }
+
+    //获取可视第一个child的position
+    public int getFirstVisibleChild() {
+        int firstVis = expandableListView.getFirstVisiblePosition();
+        long packedPosition = expandableListView.getExpandableListPosition(firstVis);
+        int childPosition = ExpandableListView.getPackedPositionChild(packedPosition);
+        return childPosition;
     }
 
     @Override
