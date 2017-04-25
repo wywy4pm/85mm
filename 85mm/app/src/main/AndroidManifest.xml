@@ -53,6 +53,11 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="58fefdadc895760f91001ff3" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="85mm" />
     </application>
-
 </manifest>
