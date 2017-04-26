@@ -1,6 +1,21 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        releaseConfig {
+            keyAlias '85mm'
+            keyPassword '85mmphoto'
+            storeFile file('85mm_keystore.jks')
+            storePassword '85mmphoto'
+        }
+        debug {
+            keyAlias '85mm'
+            keyPassword '85mmphoto'
+            storeFile file('85mm_keystore.jks')
+            storePassword '85mmphoto'
+        }
+    }
+
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
