@@ -311,13 +311,13 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                     for (int i = 0; i < workList.size(); i++) {
                         ProductListResponse.WorkListBean workListBean = workList.get(i);
                         int coverHeight = (workListBean.coverHeight * screenWidth) / workListBean.coverWidth;
-                        Glide.with(getActivity()).load(workListBean.coverUrl).downloadOnly(screenWidth, coverHeight);
+                        Glide.with(getActivity()).load(workListBean.coverUrl).preload(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
                         if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
                             ProductListResponse.WorkListBean.WorkListItemBean bean = workList.get(i).workDetail.get(0);
                             if (bean != null) {
                                 if (bean.width > 0) {
                                     int imageHeight = (bean.height * screenWidth) / bean.width;
-                                    Glide.with(getActivity()).load(bean.imageUrl).downloadOnly(bean.width, imageHeight);
+                                    Glide.with(getActivity()).load(bean.imageUrl).preload(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
                                     Log.d("TAG", "imageUrl = " + bean.imageUrl);
                                 }
                             }

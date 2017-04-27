@@ -18,6 +18,5 @@
         android:id="@+id/swipe_target"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray"
         android:scrollbars="none" />
 </com.arun.a85mm.refresh.SwipeToLoadLayout>
