@@ -1,7 +1,6 @@
 package com.arun.a85mm.fragment;
 
 import android.app.Dialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,7 +28,6 @@ import com.arun.a85mm.utils.FileUtils;
 import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.target.Target;
 
@@ -345,7 +343,9 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     @Override
     public void onCountClick(int groupPosition) {
         if (expandableListView != null) {
-            expandableListView.expandGroup(groupPosition, false);
+            if (!expandableListView.isGroupExpanded(groupPosition)) {
+                expandableListView.expandGroup(groupPosition);
+            }
         }
     }
 
