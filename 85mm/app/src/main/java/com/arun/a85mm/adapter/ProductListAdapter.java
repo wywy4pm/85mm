@@ -177,11 +177,11 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 workListItemHolder.work_list_item_img.setVisibility(View.VISIBLE);
                 int imageHeight = (bean.height * screenWidth) / bean.width;
                 saveImageHeight = imageHeight;
+
                 /*if (workListItemHolder.work_list_item_img.getLayoutParams() != null) {
                     workListItemHolder.work_list_item_img.getLayoutParams().height = imageHeight;
                 }*/
-
-                Glide.with(contexts.get()).load(bean.imageUrl).centerCrop().dontAnimate().dontTransform()
+                Glide.with(contexts.get()).load(bean.imageUrl).centerCrop().dontAnimate()
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE).override(screenWidth, imageHeight).into(finalWorkListItemHolder.work_list_item_img);
 
                 if (workListBean.size() > 1) {
@@ -189,7 +189,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                         @Override
                         public void run() {
                             for (int i = 1; i < workListBean.size(); i++) {
-                                Glide.with(contexts.get()).load(workListBean.get(i).imageUrl).priority(Priority.HIGH).preload(workListBean.get(i).width, workListBean.get(i).height);
+                                Glide.with(contexts.get()).load(workListBean.get(i).imageUrl).downloadOnly(workListBean.get(i).width, workListBean.get(i).height);
                             }
                         }
                     });
