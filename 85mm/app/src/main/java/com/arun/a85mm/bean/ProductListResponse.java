@@ -27,6 +27,7 @@ public class ProductListResponse {
         public List<WorkListItemBean> workDetail;
         public boolean isExpand;
         public boolean isShowNextGroup;
+        public boolean isCoverPreLoad;
 
         public static class WorkListItemBean {
             public String imageUrl;
@@ -39,6 +40,7 @@ public class ProductListResponse {
             public String authorHeadImg;
             public String authorPageUrl;
             public String sourceUrl;
+            public boolean isPreLoad;
         }
     }
 }

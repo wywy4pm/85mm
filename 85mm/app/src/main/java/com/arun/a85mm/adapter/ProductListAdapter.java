@@ -21,6 +21,9 @@ import com.arun.a85mm.utils.GlideCircleTransform;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -32,17 +35,12 @@ import java.util.List;
 public class ProductListAdapter extends BaseExpandableListAdapter {
     private WeakReference<Context> contexts;
     private List<ProductListResponse.WorkListBean> works;
-    //private List<ProductListResponse.WorkListBean> worksCopy;
     private int screenWidth;
-    //private BitmapRequestBuilder<GlideUrl, Bitmap> requestBuilder;
 
     public ProductListAdapter(Context context, List<ProductListResponse.WorkListBean> works) {
         contexts = new WeakReference<>(context);
         this.works = works;
-        //his.worksCopy = worksCopy;
         screenWidth = DensityUtil.getScreenWidth(context);
-        /*requestBuilder = Glide.with(context).from(GlideUrl.class)
-                .asBitmap().centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL);*/
     }
 
     public OnImageClick onImageClick;
@@ -62,57 +60,84 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         WorkListHeadHolder workListHeadHolder = null;
-        /*View view = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list, parent, false);
-        workListHeadHolder = new WorkListHeadHolder(view);*/
-        if (convertView == null) {
+        View view = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list, parent, false);
+        workListHeadHolder = new WorkListHeadHolder(view);
+        /*if (convertView == null) {
             convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list, parent, false);
             workListHeadHolder = new WorkListHeadHolder(convertView);
             convertView.setTag(workListHeadHolder);
         } else {
             workListHeadHolder = (WorkListHeadHolder) convertView.getTag();
-        }
+        }*/
         final WorkListHeadHolder headHolder = workListHeadHolder;
         final ProductListResponse.WorkListBean bean = works.get(groupPosition);
-        //final ProductListResponse.WorkListBean copyBean = worksCopy.get(groupPosition);
-        if (!bean.isExpand) {
+        /*if (!bean.isExpand) {
             headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
             headHolder.layout_source.setVisibility(View.VISIBLE);
-
         } else {
             headHolder.work_list_cover_count.setVisibility(View.GONE);
             headHolder.layout_source.setVisibility(View.GONE);
-        }
+        }*/
         int saveImageHeight = 0;
         if (bean.coverWidth > 0) {
-            int imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
+            final int imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
             saveImageHeight = imageHeight;
-            if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
-                headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
-                headHolder.itemView.getLayoutParams().height = imageHeight;
+            if (bean.isCoverPreLoad) {
+                if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
+                    headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
+                    headHolder.itemView.getLayoutParams().height = imageHeight;
+                }
+                Glide.with(contexts.get()).load(bean.coverUrl).centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headHolder.work_list_cover_img);
+
+                if (!bean.isExpand) {
+                    headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
+                    headHolder.layout_source.setVisibility(View.VISIBLE);
+
+                    headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
+                    Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop().into(headHolder.source_logo);
+                    headHolder.create_time.setText(bean.createTime);
+                } else {
+                    headHolder.work_list_cover_count.setVisibility(View.GONE);
+                    headHolder.layout_source.setVisibility(View.GONE);
+                }
+            } else {
+                Glide.with(contexts.get()).load(bean.coverUrl).centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE).override(screenWidth, imageHeight).listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
+                            headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
+                            headHolder.itemView.getLayoutParams().height = imageHeight;
+                        }
+
+                        if (!bean.isExpand) {
+                            headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
+                            headHolder.layout_source.setVisibility(View.VISIBLE);
+
+                            headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
+                            Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop().into(headHolder.source_logo);
+                            headHolder.create_time.setText(bean.createTime);
+                        } else {
+                            headHolder.work_list_cover_count.setVisibility(View.GONE);
+                            headHolder.layout_source.setVisibility(View.GONE);
+                        }
+                        return false;
+                    }
+                }).into(headHolder.work_list_cover_img);
+                bean.isCoverPreLoad = true;
             }
-            Glide.with(contexts.get()).load(bean.coverUrl).centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).override(screenWidth, imageHeight).into(headHolder.work_list_cover_img);
         }
 
-        headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
+        /*headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
         Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop().into(headHolder.source_logo);
-        headHolder.create_time.setText(bean.createTime);
+        headHolder.create_time.setText(bean.createTime);*/
 
-
-        //Glide.with(contexts.get()).load(bean.coverUrl).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(headHolder.work_list_cover_img);
-
-        /*headHolder.work_list_cover_count.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                headHolder.work_list_cover_count.setVisibility(View.GONE);
-                headHolder.layout_source.setVisibility(View.GONE);
-                //copyBean.isExpand = true;
-                bean.isExpand = true;
-                if (onImageClick != null) {
-                    onImageClick.onCountClick(groupPosition);
-                }
-            }
-        });*/
         if (!bean.isExpand) {
             workListHeadHolder.rippleView.setRippleDuration(0);
         } else {
@@ -150,7 +175,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 return false;
             }
         });
-        return convertView;
+        return view;
     }
 
     @Override
@@ -177,12 +202,17 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 workListItemHolder.work_list_item_img.setVisibility(View.VISIBLE);
                 int imageHeight = (bean.height * screenWidth) / bean.width;
                 saveImageHeight = imageHeight;
-
-                /*if (workListItemHolder.work_list_item_img.getLayoutParams() != null) {
-                    workListItemHolder.work_list_item_img.getLayoutParams().height = imageHeight;
-                }*/
-                Glide.with(contexts.get()).load(bean.imageUrl).centerCrop().dontAnimate()
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE).override(screenWidth, imageHeight).into(finalWorkListItemHolder.work_list_item_img);
+                if (bean.isPreLoad) {
+                    if (workListItemHolder.work_list_item_img.getLayoutParams() != null) {
+                        workListItemHolder.work_list_item_img.getLayoutParams().height = imageHeight;
+                    }
+                    Glide.with(contexts.get()).load(bean.imageUrl).centerCrop().dontAnimate()
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(finalWorkListItemHolder.work_list_item_img);
+                } else {
+                    Glide.with(contexts.get()).load(bean.imageUrl).centerCrop().dontAnimate()
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).override(screenWidth, imageHeight).into(finalWorkListItemHolder.work_list_item_img);
+                    bean.isPreLoad = true;
+                }
 
                 if (workListBean.size() > 1) {
                     new Handler().post(new Runnable() {

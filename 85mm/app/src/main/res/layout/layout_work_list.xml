@@ -31,7 +31,8 @@
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:layout_toLeftOf="@+id/work_list_cover_count">
+        android:layout_toLeftOf="@+id/work_list_cover_count"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/source_logo"
@@ -65,5 +66,6 @@
         android:maxLength="3"
         android:text=""
         android:textColor="@color/white"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:visibility="gone"/>
 </RelativeLayout>

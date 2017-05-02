@@ -186,6 +186,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     }
 
     private void refreshData() {
+        currentGroupPosition = 0;
         collapseGroup();
         isSingleExpand = false;
         next_group_img.setVisibility(View.GONE);
