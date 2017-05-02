@@ -19,7 +19,6 @@ import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -181,15 +180,15 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         WorkListItemHolder workListItemHolder = null;
-        /*View view = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list_item, parent, false);
-        workListItemHolder = new WorkListItemHolder(view);*/
-        if (convertView == null) {
+        View view = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list_item, parent, false);
+        workListItemHolder = new WorkListItemHolder(view);
+        /*if (convertView == null) {
             convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list_item, parent, false);
             workListItemHolder = new WorkListItemHolder(convertView);
             convertView.setTag(workListItemHolder);
         } else {
             workListItemHolder = (WorkListItemHolder) convertView.getTag();
-        }
+        }*/
         final List<ProductListResponse.WorkListBean.WorkListItemBean> workListBean = works.get(groupPosition).workDetail;
         final ProductListResponse.WorkListBean.WorkListItemBean bean = workListBean.get(childPosition);
         int detailSize = works.get(groupPosition).workDetail.size();
@@ -206,10 +205,10 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                     if (workListItemHolder.work_list_item_img.getLayoutParams() != null) {
                         workListItemHolder.work_list_item_img.getLayoutParams().height = imageHeight;
                     }
-                    Glide.with(contexts.get()).load(bean.imageUrl).centerCrop().dontAnimate()
+                    Glide.with(contexts.get()).load(bean.imageUrl).centerCrop()
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(finalWorkListItemHolder.work_list_item_img);
                 } else {
-                    Glide.with(contexts.get()).load(bean.imageUrl).centerCrop().dontAnimate()
+                    Glide.with(contexts.get()).load(bean.imageUrl).centerCrop()
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE).override(screenWidth, imageHeight).into(finalWorkListItemHolder.work_list_item_img);
                     bean.isPreLoad = true;
                 }
@@ -234,18 +233,21 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
 
             Glide.with(contexts.get()).load(bean.authorHeadImg).centerCrop()
                     .bitmapTransform(new GlideCircleTransform(contexts.get())).into(workListItemHolder.author_image);
-            workListItemHolder.author_image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    WebViewActivity.jumpToWebViewActivity(contexts.get(), bean.authorPageUrl);
-                }
-            });
-            workListItemHolder.author_name.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    WebViewActivity.jumpToWebViewActivity(contexts.get(), bean.authorPageUrl);
-                }
-            });
+            if (!TextUtils.isEmpty(bean.authorPageUrl)) {
+                workListItemHolder.author_image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        WebViewActivity.jumpToWebViewActivity(contexts.get(), bean.authorPageUrl);
+                    }
+                });
+                workListItemHolder.author_name.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        WebViewActivity.jumpToWebViewActivity(contexts.get(), bean.authorPageUrl);
+                    }
+                });
+            }
+
             workListItemHolder.work_list_item_author.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -286,7 +288,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 return false;
             }
         });
-        return convertView;
+        return view;
     }
 
     private static class WorkListHeadHolder {
