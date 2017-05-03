@@ -2,6 +2,7 @@ package com.arun.a85mm.activity;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.app.Application;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,12 +12,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.fragment.ArticleFragment;
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView toastView;
     private WindowManager windowManager;
     private ProductionFragment productionFragment;
+    private long mExitTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,5 +219,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //Toast.makeText(this, R.string.text_exit_app, Toast.LENGTH_SHORT).show();
+            if ((System.currentTimeMillis() - mExitTime) > 2000) {
+                mExitTime = System.currentTimeMillis();
+            } else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

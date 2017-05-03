@@ -212,6 +212,8 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE).override(screenWidth, imageHeight).into(finalWorkListItemHolder.work_list_item_img);
                     bean.isPreLoad = true;
                 }
+                /*Glide.with(contexts.get()).load(bean.imageUrl).centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE).override(screenWidth, imageHeight).into(finalWorkListItemHolder.work_list_item_img);*/
 
                 if (workListBean.size() > 1) {
                     new Handler().post(new Runnable() {
