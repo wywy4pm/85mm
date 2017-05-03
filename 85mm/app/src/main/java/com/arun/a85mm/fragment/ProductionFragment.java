@@ -196,7 +196,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
             if (productFragmentPresenter != null) {
                 setLoading(true);
                 lastWorkId = "";
-                productFragmentPresenter.getProductListData(userId, lastWorkId);
+                productFragmentPresenter.getProductListData(userId, deviceId, lastWorkId);
             }
         } else {
             if (swipeToLoadLayout.isRefreshing()) {
@@ -238,7 +238,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     private void loadMore() {
         setLoading(true);
         if (productFragmentPresenter != null) {
-            productFragmentPresenter.getProductListData(userId, lastWorkId);
+            productFragmentPresenter.getProductListData(userId, deviceId, lastWorkId);
         }
     }
 

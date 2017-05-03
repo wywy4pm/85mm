@@ -3,8 +3,8 @@ package com.arun.a85mm.retrofit;
 
 import com.arun.a85mm.bean.ArticleDetailResponse;
 import com.arun.a85mm.bean.ArticleListResponse;
+import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.ProductListResponse;
-
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -23,7 +23,10 @@ public interface RetrofitApi {
     Observable<ArticleDetailResponse> getArticleDetail(@Query("id") String id);
 
     @GET(RetrofitUrl.WORKS_LIST)
-    Observable<ProductListResponse> getWorksList(@Query("uid") String uid, @Query("lastWorkId") String lastWorkId);
+    Observable<ProductListResponse> getWorksList(@Query("uid") String uid, @Query("deviceId") String deviceId, @Query("lastWorkId") String lastWorkId);
+
+    @GET(RetrofitUrl.WORKS_GOODS)
+    Observable<CommunityResponse> getWorksGoods(@Query("uid") String uid, @Query("deviceId") String deviceId, @Query("lastDate") String lastDate);
 
     @GET
     Call<ResponseBody> downLoadImage(@Url String url);

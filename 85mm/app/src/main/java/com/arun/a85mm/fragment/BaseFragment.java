@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.utils.DensityUtil;
+import com.arun.a85mm.utils.DeviceUtils;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public abstract class BaseFragment extends Fragment {
     private View no_network;
     public boolean isLoading;
     public int screenWidth;
+    public String deviceId;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -59,6 +61,7 @@ public abstract class BaseFragment extends Fragment {
             }
         }
         screenWidth = DensityUtil.getScreenWidth(getActivity());
+        deviceId = DeviceUtils.getMobileIMEI(getActivity());
         return rootView;
     }
 
