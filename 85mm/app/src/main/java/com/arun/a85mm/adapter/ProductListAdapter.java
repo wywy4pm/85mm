@@ -77,10 +77,13 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             headHolder.work_list_cover_count.setVisibility(View.GONE);
             headHolder.layout_source.setVisibility(View.GONE);
         }*/
-        int saveImageHeight = 0;
+        int imageHeight = 0;
         if (bean.coverWidth > 0) {
-            final int imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
-            saveImageHeight = imageHeight;
+            if (bean.coverHeight < bean.coverWidth) {
+                imageHeight = screenWidth;
+            } else {
+                imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
+            }
             if (bean.isCoverPreLoad) {
                 if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
                     headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
@@ -101,6 +104,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                     headHolder.layout_source.setVisibility(View.GONE);
                 }
             } else {
+                final int finalImageHeight = imageHeight;
                 Glide.with(contexts.get()).load(bean.coverUrl).centerCrop()
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE).override(screenWidth, imageHeight).listener(new RequestListener<String, GlideDrawable>() {
                     @Override
@@ -111,8 +115,8 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                     @Override
                     public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                         if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
-                            headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
-                            headHolder.itemView.getLayoutParams().height = imageHeight;
+                            headHolder.work_list_cover_img.getLayoutParams().height = finalImageHeight;
+                            headHolder.itemView.getLayoutParams().height = finalImageHeight;
                         }
 
                         if (!bean.isExpand) {
@@ -144,7 +148,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         }
         final WorkListHeadHolder finalWorkListHeadHolder = workListHeadHolder;
 
-        final int finalImageHeight = saveImageHeight;
+        final int finalImageHeight = imageHeight;
         workListHeadHolder.rippleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -192,15 +196,18 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         final List<ProductListResponse.WorkListBean.WorkListItemBean> workListBean = works.get(groupPosition).workDetail;
         final ProductListResponse.WorkListBean.WorkListItemBean bean = workListBean.get(childPosition);
         int detailSize = works.get(groupPosition).workDetail.size();
-        int saveImageHeight = 0;
         final WorkListItemHolder finalWorkListItemHolder = workListItemHolder;
+        int imageHeight = 0;
         if (TextUtils.isEmpty(bean.imageUrl)) {
             workListItemHolder.work_list_item_img.setVisibility(View.GONE);
         } else {
             if (bean.width > 0) {
                 workListItemHolder.work_list_item_img.setVisibility(View.VISIBLE);
-                int imageHeight = (bean.height * screenWidth) / bean.width;
-                saveImageHeight = imageHeight;
+                if (bean.height < bean.width) {
+                    imageHeight = screenWidth;
+                } else {
+                    imageHeight = (bean.height * screenWidth) / bean.width;
+                }
                 if (bean.isPreLoad) {
                     if (workListItemHolder.work_list_item_img.getLayoutParams() != null) {
                         workListItemHolder.work_list_item_img.getLayoutParams().height = imageHeight;
@@ -270,7 +277,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             workListItemHolder.work_list_item_title.setVisibility(View.GONE);
             workListItemHolder.work_list_item_author.setVisibility(View.GONE);
         }
-        final int finalSaveImageHeight = saveImageHeight;
+        final int finalSaveImageHeight = imageHeight;
         workListItemHolder.rippleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
