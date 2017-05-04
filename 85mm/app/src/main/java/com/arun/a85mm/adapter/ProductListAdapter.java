@@ -61,6 +61,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         WorkListHeadHolder workListHeadHolder = null;
         View view = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list, parent, false);
         workListHeadHolder = new WorkListHeadHolder(view);
+        Log.d("TAG", "groupPosition = " + groupPosition);
         /*if (convertView == null) {
             convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list, parent, false);
             workListHeadHolder = new WorkListHeadHolder(convertView);
@@ -84,7 +85,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             } else {
                 imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
             }
-            if (bean.isCoverPreLoad) {
+            if (bean.isCoverLoad) {
                 if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
                     headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
                     headHolder.itemView.getLayoutParams().height = imageHeight;
@@ -104,9 +105,13 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                     headHolder.layout_source.setVisibility(View.GONE);
                 }
             } else {
+                if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
+                    headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
+                    headHolder.itemView.getLayoutParams().height = imageHeight;
+                }
                 final int finalImageHeight = imageHeight;
                 Glide.with(contexts.get()).load(bean.coverUrl).centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE).override(screenWidth, imageHeight).listener(new RequestListener<String, GlideDrawable>() {
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
                         return false;
@@ -133,7 +138,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                         return false;
                     }
                 }).into(headHolder.work_list_cover_img);
-                bean.isCoverPreLoad = true;
+                bean.isCoverLoad = true;
             }
         }
 
@@ -208,19 +213,11 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 } else {
                     imageHeight = (bean.height * screenWidth) / bean.width;
                 }
-                if (bean.isPreLoad) {
-                    if (workListItemHolder.work_list_item_img.getLayoutParams() != null) {
-                        workListItemHolder.work_list_item_img.getLayoutParams().height = imageHeight;
-                    }
-                    Glide.with(contexts.get()).load(bean.imageUrl).centerCrop()
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(finalWorkListItemHolder.work_list_item_img);
-                } else {
-                    Glide.with(contexts.get()).load(bean.imageUrl).centerCrop()
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).override(screenWidth, imageHeight).into(finalWorkListItemHolder.work_list_item_img);
-                    bean.isPreLoad = true;
+                if (workListItemHolder.work_list_item_img.getLayoutParams() != null) {
+                    workListItemHolder.work_list_item_img.getLayoutParams().height = imageHeight;
                 }
-                /*Glide.with(contexts.get()).load(bean.imageUrl).centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE).override(screenWidth, imageHeight).into(finalWorkListItemHolder.work_list_item_img);*/
+                Glide.with(contexts.get()).load(bean.imageUrl).centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(finalWorkListItemHolder.work_list_item_img);
 
                 if (workListBean.size() > 1) {
                     new Handler().post(new Runnable() {
