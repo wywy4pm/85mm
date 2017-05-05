@@ -1,42 +1,30 @@
 package com.arun.a85mm.fragment;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.arun.a85mm.R;
-import com.arun.a85mm.activity.MainActivity;
-import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.adapter.ProductListAdapter;
 import com.arun.a85mm.bean.ProductListResponse;
-import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.bean.WorkListBean;
+import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.presenter.ProductFragmentPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
-import com.arun.a85mm.utils.FileUtils;
 import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.target.Target;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +36,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     private SwipeToLoadLayout swipeToLoadLayout;
     private ExpandableListView expandableListView;
     private ProductListAdapter productListAdapter;
-    private List<ProductListResponse.WorkListBean> workLists = new ArrayList<>();
+    private List<WorkListBean> workLists = new ArrayList<>();
     private ProductFragmentPresenter productFragmentPresenter;
     private boolean isHaveMore = true;
     private String userId;
@@ -244,7 +232,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     }
 
-    private void formatData(List<ProductListResponse.WorkListBean> workList) {
+    private void formatData(List<WorkListBean> workList) {
         for (int i = 0; i < workList.size(); i++) {
             if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
                 if (workList.get(i).workDetail.size() <= 30) {
@@ -273,8 +261,8 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                     }
                 }
             } else {
-                List<ProductListResponse.WorkListBean.WorkListItemBean> items = new ArrayList<>();
-                ProductListResponse.WorkListBean.WorkListItemBean itemBean = new ProductListResponse.WorkListBean.WorkListItemBean();
+                List<WorkListItemBean> items = new ArrayList<>();
+                WorkListItemBean itemBean = new WorkListItemBean();
                 itemBean.authorHeadImg = workList.get(i).authorHeadImg;
                 itemBean.authorName = workList.get(i).authorName;
                 itemBean.authorPageUrl = workList.get(i).authorPageUrl;
@@ -295,17 +283,17 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     }
 
-    private void preLoadChildFirstImage(final List<ProductListResponse.WorkListBean> workList) {
+    private void preLoadChildFirstImage(final List<WorkListBean> workList) {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
                 if (workList != null && workList.size() > 0) {
                     for (int i = 0; i < workList.size(); i++) {
-                        ProductListResponse.WorkListBean workListBean = workList.get(i);
+                        WorkListBean workListBean = workList.get(i);
                         //int coverHeight = (workListBean.coverHeight * screenWidth) / workListBean.coverWidth;
                         Glide.with(getActivity()).load(workListBean.coverUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
                         if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
-                            ProductListResponse.WorkListBean.WorkListItemBean bean = workList.get(i).workDetail.get(0);
+                            WorkListItemBean bean = workList.get(i).workDetail.get(0);
                             if (bean != null) {
                                 if (bean.width > 0) {
                                     //int imageHeight = (bean.height * screenWidth) / bean.width;

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.arun.a85mm.bean.CommunityResponse;
-import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.retrofit.RetrofitInit;

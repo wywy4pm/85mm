@@ -16,6 +16,8 @@ import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.bean.ProductListResponse;
+import com.arun.a85mm.bean.WorkListBean;
+import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.bumptech.glide.Glide;
@@ -33,10 +35,10 @@ import java.util.List;
 
 public class ProductListAdapter extends BaseExpandableListAdapter {
     private WeakReference<Context> contexts;
-    private List<ProductListResponse.WorkListBean> works;
+    private List<WorkListBean> works;
     private int screenWidth;
 
-    public ProductListAdapter(Context context, List<ProductListResponse.WorkListBean> works) {
+    public ProductListAdapter(Context context, List<WorkListBean> works) {
         contexts = new WeakReference<>(context);
         this.works = works;
         screenWidth = DensityUtil.getScreenWidth(context);
@@ -70,7 +72,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             workListHeadHolder = (WorkListHeadHolder) convertView.getTag();
         }*/
         final WorkListHeadHolder headHolder = workListHeadHolder;
-        final ProductListResponse.WorkListBean bean = works.get(groupPosition);
+        final WorkListBean bean = works.get(groupPosition);
         /*if (!bean.isExpand) {
             headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
             headHolder.layout_source.setVisibility(View.VISIBLE);
@@ -198,8 +200,8 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         } else {
             workListItemHolder = (WorkListItemHolder) convertView.getTag();
         }*/
-        final List<ProductListResponse.WorkListBean.WorkListItemBean> workListBean = works.get(groupPosition).workDetail;
-        final ProductListResponse.WorkListBean.WorkListItemBean bean = workListBean.get(childPosition);
+        final List<WorkListItemBean> workListBean = works.get(groupPosition).workDetail;
+        final WorkListItemBean bean = workListBean.get(childPosition);
         int detailSize = works.get(groupPosition).workDetail.size();
         final WorkListItemHolder finalWorkListItemHolder = workListItemHolder;
         int imageHeight = 0;

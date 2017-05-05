@@ -18,9 +18,10 @@ public class CommunityResponse {
         public int leftWorkNum;
         public int start;
         public int workNum;
+
         public List<WorkListBean> workList;
 
-        public static class WorkListBean {
+        /*public static class WorkListBean {
 
             public String authorHeadImg;
             public String authorName;
@@ -39,16 +40,10 @@ public class CommunityResponse {
             public List<WorkDetailBean> workDetail;
 
             public static class WorkDetailBean {
-                /**
-                 * height : 2048
-                 * imageUrl : http://image18-c.poco.cn/mypoco/myphoto/20170222/00/18332497920170222000736088.jpg?1365x2048_120
-                 * width : 1365
-                 */
-
                 public int height;
                 public String imageUrl;
                 public int width;
             }
-        }
+        }*/
     }
 }

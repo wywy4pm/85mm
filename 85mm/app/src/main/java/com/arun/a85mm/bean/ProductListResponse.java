@@ -10,7 +10,7 @@ public class ProductListResponse {
     public int code;
     public List<WorkListBean> workList;
 
-    public static class WorkListBean {
+    /*public static class WorkListBean {
         public String workId;
         public String workTitle;
         public String coverUrl;
@@ -42,5 +42,5 @@ public class ProductListResponse {
             public String sourceUrl;
             //public boolean isLoad;
         }
-    }
+    }*/
 }
