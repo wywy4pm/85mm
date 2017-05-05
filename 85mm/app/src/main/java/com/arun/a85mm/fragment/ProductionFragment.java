@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -420,6 +421,9 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                         }
 
                         String fileName = FileUtils.getFileName(imageUrl);
+                        if (TextUtils.isEmpty(fileName)) {//没取到文件名，默认使用当前时间戳作为保存的文件名
+                            fileName = String.valueOf(System.currentTimeMillis());
+                        }
                         boolean writtenToDisk = FileUtils.writeFileToDisk(getActivity(), cacheFile, fileName);
                         if (writtenToDisk) {
                             Message message = new Message();
