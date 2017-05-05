@@ -29,4 +29,10 @@ public class Constant {
     public static final String ARTICLE_TITLE_ALIGN_LEFT = "left";
     public static final String ARTICLE_TITLE_ALIGN_CENTER = "center";
     public static final String ARTICLE_TITLE_ALIGN_RIGHT = "right";
+
+    /**
+     * handler what
+     */
+    public static final int WHAT_SHOW_TOP_SUCCESS = 1;
+    public static final int WHAT_SHOW_TOP_FAILED = 2;
 }

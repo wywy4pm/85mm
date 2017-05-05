@@ -11,7 +11,7 @@ public class CommunityFragment extends BaseFragment{
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
-        return R.layout.layout_community;
+        return R.layout.layout_producation;
     }
 
     @Override

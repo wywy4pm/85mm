@@ -22,6 +22,10 @@ import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.adapter.ProductListAdapter;
 import com.arun.a85mm.bean.ProductListResponse;
+import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.handler.ShowTopHandler;
+import com.arun.a85mm.helper.DialogHelper;
+import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.presenter.ProductFragmentPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
@@ -39,13 +43,12 @@ import java.util.List;
 /**
  * Created by WY on 2017/4/14.
  */
-public class ProductionFragment extends BaseFragment implements ProductListAdapter.OnImageClick, CommonView<ProductListResponse> {
+public class ProductionFragment extends BaseFragment implements ProductListAdapter.OnImageClick, CommonView<ProductListResponse>, SaveImageHelper.SaveImageCallBack {
 
     private SwipeToLoadLayout swipeToLoadLayout;
     private ExpandableListView expandableListView;
     private ProductListAdapter productListAdapter;
     private List<ProductListResponse.WorkListBean> workLists = new ArrayList<>();
-    //private List<ProductListResponse.WorkListBean> workListsCopy = new ArrayList<>();
     private ProductFragmentPresenter productFragmentPresenter;
     private boolean isHaveMore = true;
     private String userId;
@@ -56,9 +59,8 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     private int currentGroupPosition;
     private boolean isSingleExpand;
     private int count = 0;
-    private static final int WHAT_SHOW_TOP_SUCCESS = 1;
-    private static final int WHAT_SHOW_TOP_FAILED = 2;
-    //private boolean isFirstLoad = true;
+    private ShowTopHandler showTopHandler;
+    private SaveImageHelper saveImageHelper;
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -94,10 +96,6 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
             @Override
             public void onScroll(AbsListView listView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                /*Log.d(TAG, "firstVisibleItem = " + firstVisibleItem);
-                Log.d(TAG, "visibleItemCount = " + visibleItemCount);
-                Log.d(TAG, "totalItemCount = " + totalItemCount);*/
-                //Log.d(TAG, "last = " + listView.getLastVisiblePosition());
 
                 int currentGroupAllPosition = getCurrentGroupAllPosition(currentGroupPosition);
                 int lastVisiblePosition = listView.getLastVisiblePosition();
@@ -153,14 +151,9 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                 isSingleExpand = false;
             }
         });
-
-        /*expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                parent.expandGroup(groupPosition, false);
-                return true;
-            }
-        });*/
+        showTopHandler = new ShowTopHandler(getActivity());
+        saveImageHelper = new SaveImageHelper();
+        saveImageHelper.setSaveImageCallBack(this);
     }
 
     private int getCurrentGroupAllPosition(int groupPosition) {
@@ -217,18 +210,6 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         }
     }
 
-    /*private void setExpandStatus() {
-        if (workListsCopy != null && workListsCopy.size() > 0) {
-            for (int i = 0; i < workLists.size(); i++) {
-                for (int j = 0; j < workLists.size(); ) {
-                    if (workLists.get(j) != null && workListsCopy.get(i) != null) {
-                        workLists.get(j).isExpand = workListsCopy.get(i).isExpand;
-                    }
-                }
-            }
-        }
-    }*/
-
     @Override
     public void setLoadMore() {
         if (isHaveMore) {
@@ -248,8 +229,6 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         if (data != null && data.workList != null && data.workList.size() > 0) {
             workLists.clear();
             formatData(data.workList);
-            //workListsCopy.clear();
-            //workListsCopy.addAll(workLists);
         }
     }
 
@@ -257,7 +236,6 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     public void refreshMore(ProductListResponse data) {
         if (data != null && data.workList != null && data.workList.size() > 0) {
             formatData(data.workList);
-            //workListsCopy.addAll(workLists);
         }
     }
 
@@ -324,14 +302,14 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                 if (workList != null && workList.size() > 0) {
                     for (int i = 0; i < workList.size(); i++) {
                         ProductListResponse.WorkListBean workListBean = workList.get(i);
-                        int coverHeight = (workListBean.coverHeight * screenWidth) / workListBean.coverWidth;
-                        Glide.with(getActivity()).load(workListBean.coverUrl).preload(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                        //int coverHeight = (workListBean.coverHeight * screenWidth) / workListBean.coverWidth;
+                        Glide.with(getActivity()).load(workListBean.coverUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
                         if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
                             ProductListResponse.WorkListBean.WorkListItemBean bean = workList.get(i).workDetail.get(0);
                             if (bean != null) {
                                 if (bean.width > 0) {
-                                    int imageHeight = (bean.height * screenWidth) / bean.width;
-                                    Glide.with(getActivity()).load(bean.imageUrl).preload(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                                    //int imageHeight = (bean.height * screenWidth) / bean.width;
+                                    Glide.with(getActivity()).load(bean.imageUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
                                     Log.d("TAG", "imageUrl = " + bean.imageUrl);
                                 }
                             }
@@ -368,13 +346,16 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     @Override
     public void onCoverClick(String coverUrl, int width, int height) {
         if (!isSaveImage) {
-            saveImage(coverUrl, width, height);
+            //saveImage(coverUrl, width, height);
+            if (saveImageHelper != null && showTopHandler != null) {
+                saveImageHelper.saveImageShowTop(getActivity(), coverUrl, width, height, showTopHandler);
+            }
         } else {
             Toast.makeText(getActivity(), "当前有图片正在保存，请稍后...", Toast.LENGTH_SHORT).show();
         }
     }
 
-    //获取可视第一个group的position
+    /*//获取可视第一个group的position
     public int getFirstVisibleGroup() {
         int firstVis = expandableListView.getFirstVisiblePosition();
         long packedPosition = expandableListView.getExpandableListPosition(firstVis);
@@ -388,11 +369,12 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         long packedPosition = expandableListView.getExpandableListPosition(firstVis);
         int childPosition = ExpandableListView.getPackedPositionChild(packedPosition);
         return childPosition;
-    }
+    }*/
 
     @Override
     public void onMoreLinkClick(String sourceUrl) {
-        showBottomDialog(sourceUrl);
+        //showBottomDialog(sourceUrl);
+        DialogHelper.showBottomSourceLink(getActivity(), sourceUrl);
     }
 
     public void setHaveMore(boolean isHaveMore) {
@@ -403,7 +385,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         this.isSaveImage = isSaveImage;
     }
 
-    private void saveImage(final String imageUrl, final int width, final int height) {
+    /*private void saveImage(final String imageUrl, final int width, final int height) {
         setSaveImage(true);
         //异步
         new Thread(
@@ -427,60 +409,19 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                         boolean writtenToDisk = FileUtils.writeFileToDisk(getActivity(), cacheFile, fileName);
                         if (writtenToDisk) {
                             Message message = new Message();
-                            message.what = WHAT_SHOW_TOP_SUCCESS;
+                            message.what = Constant.WHAT_SHOW_TOP_SUCCESS;
                             message.obj = fileName;
                             showTopHandler.sendMessage(message);
-                            //((MainActivity) getActivity()).showTopToastView("图片已保存至" + FileUtils.DIR_IMAGE_SAVE + File.separator + fileName);
                         } else {
-                            showTopHandler.sendEmptyMessage(WHAT_SHOW_TOP_FAILED);
-                            //((MainActivity) getActivity()).showTopToastView("图片保存失败");
+                            showTopHandler.sendEmptyMessage(Constant.WHAT_SHOW_TOP_FAILED);
                             setSaveImage(false);
                         }
                     }
                 }
         ).start();
+    }*/
 
-        /*final String imageName = FileUtils.getFileName(imageUrl);
-        RetrofitApi downloadService = RetrofitInit.getApi();
-        Call<ResponseBody> call = downloadService.downLoadImage(imageUrl);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    boolean writtenToDisk = FileUtils.writeResponseBodyToDisk(getActivity(), response.body(), imageName);
-                    if (!TextUtils.isEmpty(imageName)) {
-                        if (writtenToDisk) {
-                            *//*if (imageName.length() > 10) {
-                                ((MainActivity) getActivity()).showTopToastView("图片已保存至" + imageName.substring(imageName.length() - 10, imageName.length()));
-                            } else {
-                                ((MainActivity) getActivity()).showTopToastView("图片已保存至" + imageName);
-                            }*//*
-                            ((MainActivity) getActivity()).showTopToastView("图片已保存至" + FileUtils.DIR_IMAGE_SAVE + File.separator + imageName);
-                        } else {
-                            ((MainActivity) getActivity()).showTopToastView("图片保存失败");
-                            setSaveImage(false);
-                        }
-                    } else {
-                        ((MainActivity) getActivity()).showTopToastView("图片保存失败");
-                        setSaveImage(false);
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "下载失败", Toast.LENGTH_SHORT).show();
-                    setSaveImage(false);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getActivity(), "下载失败", Toast.LENGTH_SHORT).show();
-                setSaveImage(false);
-            }
-        });*/
-    }
-
-    private ShowTopHandler showTopHandler = new ShowTopHandler();
-
-    private class ShowTopHandler extends Handler {
+   /* private class ShowTopHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -491,9 +432,9 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
                 ((MainActivity) getActivity()).showTopToastView("图片保存失败");
             }
         }
-    }
+    }*/
 
-    private void showBottomDialog(final String webUrl) {
+    /*private void showBottomDialog(final String webUrl) {
         final Dialog dialog = new Dialog(getActivity(), R.style.ActionSheetDialogStyle);
         LinearLayout root = (LinearLayout) LayoutInflater.from(getActivity()).inflate(
                 R.layout.dialog_bottom, null);
@@ -525,5 +466,5 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
             dialogWindow.setAttributes(lp);
             dialog.show();
         }
-    }
+    }*/
 }

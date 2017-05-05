@@ -25,6 +25,7 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.fragment.ArticleFragment;
 import com.arun.a85mm.fragment.CommunityFragment;
 import com.arun.a85mm.fragment.ProductionFragment;
+import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.PermissionUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
@@ -36,7 +37,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    //private ViewGroup rootView;
     private RelativeLayout activity_main;
     private SlidingTabLayout tabLayout;
     private ViewPager viewPager;
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView toastView;
     private ProductionFragment productionFragment;
     private long mExitTime;
+    //private ObjectAnimatorHelper objectAnimatorHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         activity_main = (RelativeLayout) findViewById(R.id.activity_main);
-        //toastView = (TextView) findViewById(R.id.toastView);
         tabLayout = (SlidingTabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -83,63 +83,18 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        //objectAnimatorHelper = new ObjectAnimatorHelper();
         initToastView();
     }
 
     private void initToastView() {
-       /* textView = new TextView(this);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DensityUtil.getStatusHeight(this));
-        textView.setLayoutParams(params);
-        textView.setTextColor(getResources().getColor(R.color.white));
-        textView.setBackgroundResource(R.color.black);
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        textView.setVisibility(View.GONE);*/
         toastView = (TextView) findViewById(R.id.toastView);
         topCommonView = (TextView) findViewById(R.id.topCommonView);
         if (toastView.getLayoutParams() != null && topCommonView.getLayoutParams() != null) {
             toastView.getLayoutParams().height = DensityUtil.getStatusHeight(this);
             topCommonView.getLayoutParams().height = DensityUtil.getStatusHeight(this);
         }
-
-        /*if (toastView != null) {
-            toastView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    toastView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-
-                }
-            });
-        }*/
     }
-
-    /*public void addManagerView() {
-        if (PermissionUtils.checkAlertWindowsPermission(this)) {
-            if (windowManager == null) {
-                windowManager = getWindowManager();
-            }
-            WindowManager.LayoutParams param = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    DensityUtil.getStatusHeight(this),
-                    WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
-                    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-                            | WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    PixelFormat.TRANSLUCENT);
-
-            param.gravity = Gravity.TOP;
-            param.y = 0;
-            param.x = 0;
-            windowManager.addView(toastView, param);
-        }
-    }
-
-    public void removeManagerView() {
-        if (PermissionUtils.checkAlertWindowsPermission(this)) {
-            if (windowManager != null) {
-                windowManager.removeView(toastView);
-            }
-        }
-    }*/
 
     private void initData() {
         productionFragment = new ProductionFragment();
@@ -151,10 +106,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showTopToastView(String showName) {
-        //addManagerView();
-        StatusBarUtils.setStatusBar(this, true);
+        ObjectAnimatorHelper.showTopToastView(this, toastView, showName, productionFragment);
+        /*StatusBarUtils.setStatusBar(this, true);
         toastView.setVisibility(View.VISIBLE);
-        //toastView.setText("");
         toastView.setText(showName);
         ObjectAnimator animator = ObjectAnimator.ofFloat(toastView, "translationY", -DensityUtil.getStatusHeight(this), 0);
         animator.addListener(new Animator.AnimatorListener() {
@@ -183,10 +137,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        animator.setDuration(500).start();
+        animator.setDuration(500).start();*/
     }
 
-    public void hideTopToastView() {
+    /*public void hideTopToastView() {
         ObjectAnimator animator = ObjectAnimator.ofFloat(toastView, "translationY", 0, -DensityUtil.getStatusHeight(this));
         animator.addListener(new Animator.AnimatorListener() {
             @Override
@@ -213,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         animator.setDuration(500).start();
-    }
+    }*/
 
     @Override
     protected void onDestroy() {
