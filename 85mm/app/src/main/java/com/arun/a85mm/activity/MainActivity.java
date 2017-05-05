@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         });
         //objectAnimatorHelper = new ObjectAnimatorHelper();
         initToastView();
+        viewPager.setCurrentItem(1);
     }
 
     private void initToastView() {

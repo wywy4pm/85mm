@@ -30,4 +30,6 @@ public class WorkListBean {
     public int leftWorkNum;
     public int start;
     public int workNum;
+    public boolean isTitle;
+    public boolean isBottom;
 }

@@ -1,25 +1,30 @@
 package com.arun.a85mm.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.adapter.CommunityAdapter;
 import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.WorkListBean;
+import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.handler.ShowTopHandler;
+import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.presenter.CommunityPresenter;
-import com.arun.a85mm.presenter.ProductFragmentPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
-import com.arun.a85mm.refresh.ShootRefreshView;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +32,13 @@ import java.util.List;
 /**
  * Created by WY on 2017/4/14.
  */
-public class CommunityFragment extends BaseFragment implements CommonView<CommunityResponse>,SaveImageHelper.SaveImageCallBack {
+public class CommunityFragment extends BaseFragment implements CommonView<CommunityResponse>, SaveImageHelper.SaveImageCallBack, CommunityAdapter.OnImageClick {
     public ExpandableListView expandableListView;
     public SwipeToLoadLayout swipeToLoadLayout;
     public ImageView not_network_image;
     public TextView not_network_text;
     public TextView not_network_btn;
-    private List<WorkListBean> goodsLists = new ArrayList<>();
+    private List<WorkListBean> worksList = new ArrayList<>();
     private CommunityPresenter communityPresenter;
     private boolean isHaveMore = true;
     private String userId;
@@ -46,6 +51,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     private int count = 0;
     private ShowTopHandler showTopHandler;
     private SaveImageHelper saveImageHelper;
+    private CommunityAdapter communityAdapter;
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -60,7 +66,8 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
         not_network_text = (TextView) findViewById(R.id.not_network_text);
         not_network_btn = (TextView) findViewById(R.id.not_network_btn);
         next_group_img = (ImageView) findViewById(R.id.next_group_img);
-
+        communityAdapter = new CommunityAdapter(getActivity(), worksList);
+        expandableListView.setAdapter(communityAdapter);
         expandableListView.setGroupIndicator(null);
         swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -86,9 +93,9 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                 int currentGroupAllPosition = getCurrentGroupAllPosition(currentGroupPosition);
                 int lastVisiblePosition = listView.getLastVisiblePosition();
                 int currentChildCount = 0;
-                if (goodsLists != null && goodsLists.size() > 0) {
-                    if (goodsLists.get(currentGroupPosition) != null && goodsLists.get(currentGroupPosition).workDetail != null) {
-                        currentChildCount = goodsLists.get(currentGroupPosition).workDetail.size();
+                if (worksList != null && worksList.size() > 0) {
+                    if (worksList.get(currentGroupPosition) != null && worksList.get(currentGroupPosition).workDetail != null) {
+                        currentChildCount = worksList.get(currentGroupPosition).workDetail.size();
                     }
                     //int currentRangeMin = currentGroupAllPosition;
                     int currentRangeMax = currentGroupAllPosition + currentChildCount;
@@ -116,19 +123,19 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
             public void onGroupExpand(int groupPosition) {
                 isSingleExpand = true;
                 currentGroupPosition = groupPosition;
-                if (goodsLists.get(groupPosition) != null && goodsLists.get(groupPosition).workDetail != null && goodsLists.get(groupPosition).totalImageNum > 5) {
-                    if (groupPosition < goodsLists.size() - 1) {
+                if (worksList.get(groupPosition) != null && worksList.get(groupPosition).workDetail != null && worksList.get(groupPosition).totalImageNum > 5) {
+                    if (groupPosition < worksList.size() - 1) {
                         Log.d(TAG, "currentGroupPosition = " + currentGroupPosition);
                         next_group_img.setVisibility(View.VISIBLE);
                     }
                 }
             }
         });
-        //productListAdapter.setOnImageClick(this);
+        communityAdapter.setOnImageClick(this);
         next_group_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentGroupPosition < goodsLists.size()) {
+                if (currentGroupPosition < worksList.size()) {
                     Log.d(TAG, "currentPosition = " + (currentGroupPosition + 1));
                     int currentPosition = currentGroupPosition + 1;
                     expandableListView.setSelectedGroup(currentPosition);
@@ -172,11 +179,11 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
 
     private int getCurrentGroupAllPosition(int groupPosition) {
         int currentGroupAllPosition = 0;
-        if (goodsLists != null && goodsLists.size() > 0) {
-            for (int i = 0; i < goodsLists.size(); i++) {
+        if (worksList != null && worksList.size() > 0) {
+            for (int i = 0; i < worksList.size(); i++) {
                 if (i < groupPosition) {
-                    if (goodsLists.get(i).isExpand) {
-                        currentGroupAllPosition += goodsLists.get(i).totalImageNum;
+                    if (worksList.get(i).isExpand) {
+                        currentGroupAllPosition += worksList.get(i).totalImageNum;
                     } else {
                         currentGroupAllPosition += 1;
                     }
@@ -187,8 +194,8 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     }
 
     private void collapseGroup() {
-        if (goodsLists != null && goodsLists.size() > 0) {
-            for (int i = 0; i < goodsLists.size(); i++) {
+        if (worksList != null && worksList.size() > 0) {
+            for (int i = 0; i < worksList.size(); i++) {
                 if (expandableListView.isGroupExpanded(i)) {
                     expandableListView.collapseGroup(i);
                 }
@@ -216,22 +223,125 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
 
     @Override
     public void reloadData() {
-
+        refreshData();
     }
 
     @Override
     public void refresh(CommunityResponse data) {
-
+        if (data != null && data.goodsList != null && data.goodsList.size() > 0) {
+            worksList.clear();
+            formatData(data.goodsList);
+        }
     }
 
     @Override
     public void refreshMore(CommunityResponse data) {
+        if (data != null && data.goodsList != null && data.goodsList.size() > 0) {
+            formatData(data.goodsList);
+        }
+    }
 
+    private void formatData(List<CommunityResponse.GoodsListBean> goodsList) {
+        if (goodsList != null && goodsList.size() > 0) {
+            for (int k = 0; k < goodsList.size(); k++) {
+                CommunityResponse.GoodsListBean goodsListBean = goodsList.get(k);
+                if (goodsListBean != null && goodsListBean.workList != null && goodsListBean.workList.size() > 0) {
+                    List<WorkListBean> workList = goodsListBean.workList;
+                    for (int i = 0; i < workList.size(); i++) {
+                        if (i == 0) {
+                            workList.get(i).isTitle = true;
+                            workList.get(i).date = goodsListBean.date;
+                            workList.get(i).browseNum = goodsListBean.browseNum;
+                            workList.get(i).workNum = goodsListBean.workNum;
+                            workList.get(i).downloadNum = goodsListBean.downloadNum;
+                        }
+                        if (i == workList.size() - 1) {
+                            workList.get(i).isBottom = true;
+                            workList.get(i).date = goodsListBean.date;
+                            workList.get(i).start = goodsListBean.start;
+                            workList.get(i).leftWorkNum = goodsListBean.leftWorkNum;
+                        }
+
+                        if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
+                            if (workList.get(i).workDetail.size() <= 30) {
+                                for (int j = 0; j < workList.get(i).workDetail.size(); j++) {
+                                    if (j == workList.get(i).workDetail.size() - 1) {
+                                        if (workList.get(i).workDetail.get(j) != null) {
+                                            workList.get(i).workDetail.get(j).authorHeadImg = workList.get(i).authorHeadImg;
+                                            workList.get(i).workDetail.get(j).authorName = workList.get(i).authorName;
+                                            workList.get(i).workDetail.get(j).authorPageUrl = workList.get(i).authorPageUrl;
+                                            workList.get(i).workDetail.get(j).workTitle = workList.get(i).workTitle;
+                                            workList.get(i).workDetail.get(j).sourceUrl = workList.get(i).sourceUrl;
+                                        }
+                                    }
+                                }
+                            } else if (workList.get(i).workDetail.size() > 30) {
+                                for (int j = 0; j < 30; j++) {
+                                    if (j == 29) {
+                                        if (workList.get(i).workDetail.get(j) != null) {
+                                            workList.get(i).workDetail.get(j).authorHeadImg = workList.get(i).authorHeadImg;
+                                            workList.get(i).workDetail.get(j).authorName = workList.get(i).authorName;
+                                            workList.get(i).workDetail.get(j).authorPageUrl = workList.get(i).authorPageUrl;
+                                            workList.get(i).workDetail.get(j).workTitle = workList.get(i).workTitle;
+                                            workList.get(i).workDetail.get(j).sourceUrl = workList.get(i).sourceUrl;
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            List<WorkListItemBean> items = new ArrayList<>();
+                            WorkListItemBean itemBean = new WorkListItemBean();
+                            itemBean.authorHeadImg = workList.get(i).authorHeadImg;
+                            itemBean.authorName = workList.get(i).authorName;
+                            itemBean.authorPageUrl = workList.get(i).authorPageUrl;
+                            itemBean.workTitle = workList.get(i).workTitle;
+                            itemBean.sourceUrl = workList.get(i).sourceUrl;
+                            items.add(itemBean);
+                            workList.get(i).workDetail = items;
+                        }
+                        if (i == workList.size() - 1) {
+                            lastWorkDate = workList.get(i).date;
+                        }
+                    }
+                    preLoadChildFirstImage(workList);
+                    worksList.addAll(workList);
+                }
+            }
+        }
+        communityAdapter.notifyDataSetChanged();
+    }
+
+    private void preLoadChildFirstImage(final List<WorkListBean> workList) {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                if (workList != null && workList.size() > 0) {
+                    for (int i = 0; i < workList.size(); i++) {
+                        WorkListBean workListBean = workList.get(i);
+                        //int coverHeight = (workListBean.coverHeight * screenWidth) / workListBean.coverWidth;
+                        Glide.with(getActivity()).load(workListBean.coverUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                        if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
+                            WorkListItemBean bean = workList.get(i).workDetail.get(0);
+                            if (bean != null) {
+                                if (bean.width > 0) {
+                                    //int imageHeight = (bean.height * screenWidth) / bean.width;
+                                    Glide.with(getActivity()).load(bean.imageUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                                    Log.d("TAG", "imageUrl = " + bean.imageUrl);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override
     public void onRefreshComplete() {
-
+        setLoading(false);
+        if (swipeToLoadLayout != null) {
+            swipeToLoadLayout.setRefreshing(false);
+        }
     }
 
     @Override
@@ -241,6 +351,32 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
 
     @Override
     public void setSaveImage(boolean isSaveImage) {
-
+        this.isSaveImage = isSaveImage;
     }
+
+    @Override
+    public void onCountClick(int groupPosition) {
+        if (expandableListView != null) {
+            if (!expandableListView.isGroupExpanded(groupPosition)) {
+                expandableListView.expandGroup(groupPosition);
+            }
+        }
+    }
+
+    @Override
+    public void onCoverClick(String coverUrl, int width, int height) {
+        if (!isSaveImage) {
+            if (saveImageHelper != null && showTopHandler != null) {
+                saveImageHelper.saveImageShowTop(getActivity(), coverUrl, width, height, showTopHandler);
+            }
+        } else {
+            Toast.makeText(getActivity(), "当前有图片正在保存，请稍后...", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onMoreLinkClick(String sourceUrl) {
+        DialogHelper.showBottomSourceLink(getActivity(), sourceUrl);
+    }
+
 }
