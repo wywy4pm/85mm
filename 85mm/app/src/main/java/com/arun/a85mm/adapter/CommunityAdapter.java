@@ -63,29 +63,15 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         WorkListHeadHolder workListHeadHolder = new WorkListHeadHolder(view);
         final WorkListHeadHolder headHolder = workListHeadHolder;
         final WorkListBean bean = workList.get(groupPosition);
-        /*if (!bean.isExpand) {
-            headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
-            headHolder.layout_source.setVisibility(View.VISIBLE);
-        } else {
-            headHolder.work_list_cover_count.setVisibility(View.GONE);
-            headHolder.layout_source.setVisibility(View.GONE);
-        }*/
+
         if (bean.isTitle) {
             headHolder.layout_work_title.setVisibility(View.VISIBLE);
             headHolder.works_date.setText(bean.date);
             headHolder.count_works.setText("收录作品：" + bean.workNum);
             headHolder.count_persons.setText("浏览人数：" + bean.browseNum);
             headHolder.count_downloads.setText("下载次数：" + bean.downloadNum);
-        }
-        if (bean.isBottom) {
-            headHolder.layout_works_more.setVisibility(View.VISIBLE);
-            headHolder.query_more_works.setText("查看 " + bean.date + " 剩余 " + bean.leftWorkNum + " 套作品 >");
-        }
-        if (!bean.isTitle) {
+        } else {
             headHolder.layout_work_title.setVisibility(View.GONE);
-        }
-        if (!bean.isBottom) {
-            headHolder.layout_works_more.setVisibility(View.GONE);
         }
 
         int imageHeight = 0;
@@ -94,6 +80,9 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 imageHeight = screenWidth;
             } else {
                 imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
+            }
+            if (imageHeight > 8192) {
+                imageHeight = 8192;
             }
             if (bean.isCoverLoad) {
                 if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemImageView.getLayoutParams() != null) {
@@ -189,6 +178,13 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 return false;
             }
         });
+
+        if (bean.isBottom) {
+            headHolder.layout_works_more.setVisibility(View.VISIBLE);
+            headHolder.query_more_works.setText("查看 " + bean.date + " 剩余 " + bean.leftWorkNum + " 套作品 >");
+        } else {
+            headHolder.layout_works_more.setVisibility(View.GONE);
+        }
         return view;
     }
 

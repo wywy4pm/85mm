@@ -1,34 +1,23 @@
 package com.arun.a85mm.activity;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.app.Application;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.fragment.ArticleFragment;
 import com.arun.a85mm.fragment.CommunityFragment;
 import com.arun.a85mm.fragment.ProductionFragment;
+import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.ObjectAnimatorHelper;
+import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.utils.DensityUtil;
-import com.arun.a85mm.utils.PermissionUtils;
-import com.arun.a85mm.utils.StatusBarUtils;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 
@@ -46,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView toastView;
     private ProductionFragment productionFragment;
     private long mExitTime;
+    private boolean isShowingTop;
+    private SaveImageHelper saveImageHelper;
+    private ShowTopHandler showTopHandler;
+    private ObjectAnimatorHelper objectAnimatorHelper;
     //private ObjectAnimatorHelper objectAnimatorHelper;
 
     @Override
@@ -86,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
         //objectAnimatorHelper = new ObjectAnimatorHelper();
         initToastView();
         viewPager.setCurrentItem(1);
+
+        saveImageHelper = new SaveImageHelper();
+        showTopHandler = new ShowTopHandler(this);
+        objectAnimatorHelper = new ObjectAnimatorHelper();
     }
 
     private void initToastView() {
@@ -106,68 +103,24 @@ public class MainActivity extends AppCompatActivity {
         list.add(articleFragment);
     }
 
-    public void showTopToastView(String showName) {
-        ObjectAnimatorHelper.showTopToastView(this, toastView, showName, productionFragment);
-        /*StatusBarUtils.setStatusBar(this, true);
-        toastView.setVisibility(View.VISIBLE);
-        toastView.setText(showName);
-        ObjectAnimator animator = ObjectAnimator.ofFloat(toastView, "translationY", -DensityUtil.getStatusHeight(this), 0);
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideTopToastView();
-                    }
-                }, 500);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                //removeManagerView();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        animator.setDuration(500).start();*/
+    public void saveImageShowTop(String coverUrl, int width, int height) {
+        if (saveImageHelper != null && showTopHandler != null) {
+            saveImageHelper.saveImageShowTop(this, coverUrl, width, height, showTopHandler, isShowingTop);
+        }
     }
 
-    /*public void hideTopToastView() {
-        ObjectAnimator animator = ObjectAnimator.ofFloat(toastView, "translationY", 0, -DensityUtil.getStatusHeight(this));
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+    public void showTopToastView(ShowTopBean showTopBean) {
+        if (showTopBean != null) {
+            objectAnimatorHelper.managerShowTopView(this, toastView, showTopBean);
+        }
+    }
 
-            }
+    public void setShowingTop(boolean isShowingTop) {
+        this.isShowingTop = isShowingTop;
+    }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                toastView.setVisibility(View.GONE);
-                productionFragment.setSaveImage(false);
-                StatusBarUtils.setStatusBar(MainActivity.this, false);
-                //removeManagerView();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                //removeManagerView();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        animator.setDuration(500).start();
+    /*public boolean isSaveImage() {
+        return isSaveImage;
     }*/
 
     @Override

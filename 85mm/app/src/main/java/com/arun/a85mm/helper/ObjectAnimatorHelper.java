@@ -4,13 +4,16 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.TextView;
 
-import com.arun.a85mm.fragment.ProductionFragment;
+import com.arun.a85mm.activity.MainActivity;
+import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.StatusBarUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wy on 2017/5/5.
@@ -18,12 +21,28 @@ import com.arun.a85mm.utils.StatusBarUtils;
 
 public class ObjectAnimatorHelper {
 
-    public static void showTopToastView(final Activity activity, final TextView toastView, String showName, final Fragment fragment) {
+    private ObjectAnimator startAnimator;
+    private ObjectAnimator endAnimator;
+    private List<String> waitShowTops = new ArrayList<>();
+
+    public void managerShowTopView(final Activity activity, final TextView toastView, ShowTopBean showTopBean) {
+        if (!showTopBean.isShowingTop) {
+            showTopToastView(activity, toastView, showTopBean.showData);
+        } else {
+            waitShowTops.add(showTopBean.showData);
+        }
+    }
+
+    public void showTopToastView(final Activity activity, final TextView toastView, String showData) {
+        if (activity instanceof MainActivity) {
+            ((MainActivity) activity).setShowingTop(true);
+        }
+
         StatusBarUtils.setStatusBar(activity, true);
         toastView.setVisibility(View.VISIBLE);
-        toastView.setText(showName);
-        ObjectAnimator animator = ObjectAnimator.ofFloat(toastView, "translationY", -DensityUtil.getStatusHeight(activity), 0);
-        animator.addListener(new Animator.AnimatorListener() {
+        toastView.setText(showData);
+        startAnimator = ObjectAnimator.ofFloat(toastView, "translationY", -DensityUtil.getStatusHeight(activity), 0);
+        startAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -34,14 +53,14 @@ public class ObjectAnimatorHelper {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        hideTopToastView(activity, toastView, fragment);
+                        hideTopToastView(activity, toastView);
                     }
                 }, 500);
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-                //removeManagerView();
+
             }
 
             @Override
@@ -49,12 +68,13 @@ public class ObjectAnimatorHelper {
 
             }
         });
-        animator.setDuration(500).start();
+        startAnimator.setDuration(500).start();
     }
 
-    public static void hideTopToastView(final Activity activity, final TextView toastView, final Fragment fragment) {
-        ObjectAnimator animator = ObjectAnimator.ofFloat(toastView, "translationY", 0, -DensityUtil.getStatusHeight(activity));
-        animator.addListener(new Animator.AnimatorListener() {
+    public void hideTopToastView(final Activity activity, final TextView toastView) {
+
+        endAnimator = ObjectAnimator.ofFloat(toastView, "translationY", 0, -DensityUtil.getStatusHeight(activity));
+        endAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -63,19 +83,20 @@ public class ObjectAnimatorHelper {
             @Override
             public void onAnimationEnd(Animator animation) {
                 toastView.setVisibility(View.GONE);
-                if (fragment != null) {
-                    if (fragment instanceof ProductionFragment) {
-                        ProductionFragment productionFragment = (ProductionFragment) fragment;
-                        productionFragment.setSaveImage(false);
-                    }
+                if (activity instanceof MainActivity) {
+                    ((MainActivity) activity).setShowingTop(false);
                 }
                 StatusBarUtils.setStatusBar(activity, false);
-                //removeManagerView();
+                if (waitShowTops != null && waitShowTops.size() > 0) {
+                    String nextShowData = waitShowTops.get(0);
+                    showTopToastView(activity, toastView, nextShowData);
+                    waitShowTops.remove(0);
+                }
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-                //removeManagerView();
+
             }
 
             @Override
@@ -83,6 +104,6 @@ public class ObjectAnimatorHelper {
 
             }
         });
-        animator.setDuration(500).start();
+        endAnimator.setDuration(500).start();
     }
 }

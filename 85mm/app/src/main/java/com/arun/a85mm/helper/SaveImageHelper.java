@@ -4,8 +4,8 @@ import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.common.Constant;
-import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.utils.FileUtils;
 import com.bumptech.glide.Glide;
@@ -19,20 +19,17 @@ import java.io.File;
 
 public class SaveImageHelper {
 
-    public SaveImageCallBack saveImageCallBack;
+    /*public SaveImageCallBack saveImageCallBack;
 
     public interface SaveImageCallBack {
         void setSaveImage(boolean isSaveImage);
     }
 
     public void setSaveImageCallBack(SaveImageCallBack saveImageCallBack) {
-        this.saveImageCallBack = saveImageCallBack;
-    }
+        this.saveImageCallBack = saveImageCallBack;*/
 
-    public void saveImageShowTop(final Context context, final String imageUrl, final int width, final int height, final ShowTopHandler showTopHandler) {
-        if (saveImageCallBack != null) {
-            saveImageCallBack.setSaveImage(true);
-        }
+    public void saveImageShowTop(final Context context, final String imageUrl, final int width, final int height,
+                                 final ShowTopHandler showTopHandler, final boolean isShowingTop) {
         //异步
         new Thread(
                 new Runnable() {
@@ -50,23 +47,27 @@ public class SaveImageHelper {
 
                         String fileName = FileUtils.getFileName(imageUrl);
                         if (TextUtils.isEmpty(fileName)) {//没取到文件名，默认使用当前时间戳作为保存的文件名
-                            fileName = String.valueOf(System.currentTimeMillis());
+                            fileName = System.currentTimeMillis() + ".jpg";
+                        } else {
+                            if (!fileName.contains(".")) {
+                                fileName += ".jpg";
+                            } else if (fileName.contains(".") && fileName.contains("?")) {
+                                String[] strings = fileName.split("\\?", 2);
+                                fileName = strings[0];
+                            }
                         }
                         boolean writtenToDisk = FileUtils.writeFileToDisk(context, cacheFile, fileName);
+                        String showData = "";
                         if (writtenToDisk) {
-                            Message message = new Message();
-                            message.what = Constant.WHAT_SHOW_TOP_SUCCESS;
-                            message.obj = fileName;
-                            if (showTopHandler != null) {
-                                showTopHandler.sendMessage(message);
-                            }
+                            showData = "图片已保存至" + FileUtils.DIR_IMAGE_SAVE + File.separator + fileName;
                         } else {
-                            if (showTopHandler != null) {
-                                showTopHandler.sendEmptyMessage(Constant.WHAT_SHOW_TOP_FAILED);
-                            }
-                            if (saveImageCallBack != null) {
-                                saveImageCallBack.setSaveImage(false);
-                            }
+                            showData = "图片保存失败";
+                        }
+                        Message message = new Message();
+                        message.what = Constant.WHAT_SHOW_TOP;
+                        message.obj = new ShowTopBean(isShowingTop, showData);
+                        if (showTopHandler != null) {
+                            showTopHandler.sendMessage(message);
                         }
                     }
                 }

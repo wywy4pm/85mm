@@ -8,16 +8,14 @@ import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.adapter.CommunityAdapter;
 import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
-import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.DialogHelper;
-import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.presenter.CommunityPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
@@ -32,7 +30,7 @@ import java.util.List;
 /**
  * Created by WY on 2017/4/14.
  */
-public class CommunityFragment extends BaseFragment implements CommonView<CommunityResponse>, SaveImageHelper.SaveImageCallBack, CommunityAdapter.OnImageClick {
+public class CommunityFragment extends BaseFragment implements CommonView<CommunityResponse>, CommunityAdapter.OnImageClick {
     public ExpandableListView expandableListView;
     public SwipeToLoadLayout swipeToLoadLayout;
     public ImageView not_network_image;
@@ -43,14 +41,12 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     private boolean isHaveMore = true;
     private String userId;
     private String lastWorkDate;
-    private boolean isSaveImage;
+    //private boolean isSaveImage;
     private static final String TAG = "CommunityFragment";
     private ImageView next_group_img;
     private int currentGroupPosition;
     private boolean isSingleExpand;
     private int count = 0;
-    private ShowTopHandler showTopHandler;
-    private SaveImageHelper saveImageHelper;
     private CommunityAdapter communityAdapter;
 
     @Override
@@ -78,17 +74,22 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
         expandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                synchronized (CommunityFragment.this) {
-                    if (view.getLastVisiblePosition() >= view.getCount() - 1) {
-                        if (!isLoading) {
-                            setLoadMore();
-                        }
-                    }
-                }
+
             }
 
             @Override
             public void onScroll(AbsListView listView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                //分页处理
+                if (listView.getCount() > 5) {
+                    synchronized (CommunityFragment.this) {
+                        if (listView.getLastVisiblePosition() >= listView.getCount() - 6) {
+                            if (!isLoading) {
+                                setLoadMore();
+                            }
+                        }
+                    }
+
+                }
 
                 int currentGroupAllPosition = getCurrentGroupAllPosition(currentGroupPosition);
                 int lastVisiblePosition = listView.getLastVisiblePosition();
@@ -144,9 +145,6 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                 isSingleExpand = false;
             }
         });
-        showTopHandler = new ShowTopHandler(getActivity());
-        saveImageHelper = new SaveImageHelper();
-        saveImageHelper.setSaveImageCallBack(this);
     }
 
     @Override
@@ -350,11 +348,6 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     }
 
     @Override
-    public void setSaveImage(boolean isSaveImage) {
-        this.isSaveImage = isSaveImage;
-    }
-
-    @Override
     public void onCountClick(int groupPosition) {
         if (expandableListView != null) {
             if (!expandableListView.isGroupExpanded(groupPosition)) {
@@ -365,13 +358,10 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
 
     @Override
     public void onCoverClick(String coverUrl, int width, int height) {
-        if (!isSaveImage) {
-            if (saveImageHelper != null && showTopHandler != null) {
-                saveImageHelper.saveImageShowTop(getActivity(), coverUrl, width, height, showTopHandler);
-            }
-        } else {
-            Toast.makeText(getActivity(), "当前有图片正在保存，请稍后...", Toast.LENGTH_SHORT).show();
-        }
+        /*if (saveImageHelper != null && showTopHandler != null) {
+            saveImageHelper.saveImageShowTop(getActivity(), coverUrl, width, height, showTopHandler, isSaveImage);
+        }*/
+        ((MainActivity) getActivity()).saveImageShowTop(coverUrl, width, height);
     }
 
     @Override

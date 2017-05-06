@@ -33,6 +33,5 @@ public class Constant {
     /**
      * handler what
      */
-    public static final int WHAT_SHOW_TOP_SUCCESS = 1;
-    public static final int WHAT_SHOW_TOP_FAILED = 2;
+    public static final int WHAT_SHOW_TOP = 1;
 }

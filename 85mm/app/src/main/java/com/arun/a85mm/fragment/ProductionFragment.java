@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.adapter.ProductListAdapter;
 import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.bean.WorkListBean;
@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * Created by WY on 2017/4/14.
  */
-public class ProductionFragment extends BaseFragment implements ProductListAdapter.OnImageClick, CommonView<ProductListResponse>, SaveImageHelper.SaveImageCallBack {
+public class ProductionFragment extends BaseFragment implements ProductListAdapter.OnImageClick, CommonView<ProductListResponse>{
 
     private SwipeToLoadLayout swipeToLoadLayout;
     private ExpandableListView expandableListView;
@@ -41,14 +41,13 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     private boolean isHaveMore = true;
     private String userId;
     private String lastWorkId;
-    private boolean isSaveImage;
+    //private boolean isSaveImage;
     private static final String TAG = "ProductionFragment";
     private ImageView next_group_img;
     private int currentGroupPosition;
     private boolean isSingleExpand;
     private int count = 0;
     private ShowTopHandler showTopHandler;
-    private SaveImageHelper saveImageHelper;
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -73,17 +72,21 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         expandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                synchronized (ProductionFragment.this) {
-                    if (view.getLastVisiblePosition() >= view.getCount() - 1) {
-                        if (!isLoading) {
-                            setLoadMore();
-                        }
-                    }
-                }
+
             }
 
             @Override
             public void onScroll(AbsListView listView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                //分页处理
+                if (listView.getCount() > 5) {
+                    synchronized (ProductionFragment.this) {
+                        if (listView.getLastVisiblePosition() == listView.getCount() - 6) {
+                            if (!isLoading) {
+                                setLoadMore();
+                            }
+                        }
+                    }
+                }
 
                 int currentGroupAllPosition = getCurrentGroupAllPosition(currentGroupPosition);
                 int lastVisiblePosition = listView.getLastVisiblePosition();
@@ -140,8 +143,6 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
             }
         });
         showTopHandler = new ShowTopHandler(getActivity());
-        saveImageHelper = new SaveImageHelper();
-        saveImageHelper.setSaveImageCallBack(this);
     }
 
     private int getCurrentGroupAllPosition(int groupPosition) {
@@ -333,14 +334,10 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     @Override
     public void onCoverClick(String coverUrl, int width, int height) {
-        if (!isSaveImage) {
-            //saveImage(coverUrl, width, height);
-            if (saveImageHelper != null && showTopHandler != null) {
-                saveImageHelper.saveImageShowTop(getActivity(), coverUrl, width, height, showTopHandler);
-            }
-        } else {
-            Toast.makeText(getActivity(), "当前有图片正在保存，请稍后...", Toast.LENGTH_SHORT).show();
-        }
+        /*if (saveImageHelper != null && showTopHandler != null) {
+            saveImageHelper.saveImageShowTop(getActivity(), coverUrl, width, height, showTopHandler, ((MainActivity) getActivity()).isSaveImage());
+        }*/
+        ((MainActivity) getActivity()).saveImageShowTop(coverUrl, width, height);
     }
 
     /*//获取可视第一个group的position
@@ -369,90 +366,4 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         this.isHaveMore = isHaveMore;
     }
 
-    public void setSaveImage(boolean isSaveImage) {
-        this.isSaveImage = isSaveImage;
-    }
-
-    /*private void saveImage(final String imageUrl, final int width, final int height) {
-        setSaveImage(true);
-        //异步
-        new Thread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        FutureTarget<File> future = Glide.with(getActivity())
-                                .load(imageUrl)
-                                .downloadOnly(width, height);
-                        File cacheFile = null;
-                        try {
-                            cacheFile = future.get();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        String fileName = FileUtils.getFileName(imageUrl);
-                        if (TextUtils.isEmpty(fileName)) {//没取到文件名，默认使用当前时间戳作为保存的文件名
-                            fileName = String.valueOf(System.currentTimeMillis());
-                        }
-                        boolean writtenToDisk = FileUtils.writeFileToDisk(getActivity(), cacheFile, fileName);
-                        if (writtenToDisk) {
-                            Message message = new Message();
-                            message.what = Constant.WHAT_SHOW_TOP_SUCCESS;
-                            message.obj = fileName;
-                            showTopHandler.sendMessage(message);
-                        } else {
-                            showTopHandler.sendEmptyMessage(Constant.WHAT_SHOW_TOP_FAILED);
-                            setSaveImage(false);
-                        }
-                    }
-                }
-        ).start();
-    }*/
-
-   /* private class ShowTopHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == WHAT_SHOW_TOP_SUCCESS) {
-                String fileName = (String) msg.obj;
-                ((MainActivity) getActivity()).showTopToastView("图片已保存至" + FileUtils.DIR_IMAGE_SAVE + File.separator + fileName);
-            } else if (msg.what == WHAT_SHOW_TOP_FAILED) {
-                ((MainActivity) getActivity()).showTopToastView("图片保存失败");
-            }
-        }
-    }*/
-
-    /*private void showBottomDialog(final String webUrl) {
-        final Dialog dialog = new Dialog(getActivity(), R.style.ActionSheetDialogStyle);
-        LinearLayout root = (LinearLayout) LayoutInflater.from(getActivity()).inflate(
-                R.layout.dialog_bottom, null);
-        root.findViewById(R.id.btn_link).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                WebViewActivity.jumpToWebViewActivity(getActivity(), webUrl);
-                dialog.cancel();
-            }
-        });
-        root.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.cancel();
-            }
-        });
-        dialog.setContentView(root);
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(true);
-
-        Window dialogWindow = dialog.getWindow();
-        //dialogWindow.setWindowAnimations(R.style.ActionSheetDialogAnimation);
-        if (dialogWindow != null) {
-            dialogWindow.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-            WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-            lp.x = 0; // 新位置X坐标
-            lp.y = 0; // 新位置Y坐标
-            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-            dialogWindow.setAttributes(lp);
-            dialog.show();
-        }
-    }*/
 }
