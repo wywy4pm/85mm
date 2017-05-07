@@ -63,5 +63,12 @@
         <meta-data
             android:name="com.arun.a85mm.configuration.GlideConfiguration"
             android:value="GlideModule" />
+
+        <activity
+            android:name=".activity.FragmentCommonActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
     </application>
+
 </manifest>

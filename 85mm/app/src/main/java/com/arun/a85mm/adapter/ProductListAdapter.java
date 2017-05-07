@@ -87,6 +87,9 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             } else {
                 imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
             }
+            if (imageHeight > 8192) {
+                imageHeight = 8192;
+            }
             if (bean.isCoverLoad) {
                 if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
                     headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
@@ -214,6 +217,9 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                     imageHeight = screenWidth;
                 } else {
                     imageHeight = (bean.height * screenWidth) / bean.width;
+                }
+                if (imageHeight > 8192) {
+                    imageHeight = 8192;
                 }
                 if (workListItemHolder.work_list_item_img.getLayoutParams() != null) {
                     workListItemHolder.work_list_item_img.getLayoutParams().height = imageHeight;

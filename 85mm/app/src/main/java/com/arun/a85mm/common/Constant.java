@@ -17,6 +17,9 @@ public class Constant {
 
     public static final String INTENT_WEB_URL = "'url";
 
+    public static final String INTENT_WORKS_LEFT_DATE = "left_date";
+    public static final String INTENT_WORKS_LEFT_START = "left_start";
+
     /**
      * data type
      */

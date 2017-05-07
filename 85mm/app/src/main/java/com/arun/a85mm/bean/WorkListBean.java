@@ -13,6 +13,7 @@ public class WorkListBean {
     public int coverHeight;
     public int coverWidth;
     public int totalImageNum;
+    public int downloadNum;
     public String authorName;
     public String authorHeadImg;
     public String authorPageUrl;
@@ -26,7 +27,7 @@ public class WorkListBean {
 
     public int browseNum;
     public String date;
-    public int downloadNum;
+    public int allDownloadNum;
     public int leftWorkNum;
     public int start;
     public int workNum;

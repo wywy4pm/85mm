@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.arun.a85mm.utils.DensityUtil;
+import com.arun.a85mm.R;
 import com.umeng.analytics.MobclickAgent;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -39,6 +39,15 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
         return v;
     }
 
+    public void setBack(View backView) {
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+
     @Override
     public SwipeBackLayout getSwipeBackLayout() {
         return mHelper.getSwipeBackLayout();
@@ -66,4 +75,11 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
         super.onPause();
         MobclickAgent.onPause(this);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+    }
+
 }

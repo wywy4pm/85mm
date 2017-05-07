@@ -47,12 +47,7 @@ public class WebViewActivity extends BaseActivity {
         titleText = (TextView) findViewById(R.id.title);
         //image_right = (ImageView) findViewById(R.id.image_right);
         webView = (WebView) findViewById(R.id.webView);
-        image_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        setBack(image_back);
     }
 
     private void initWebView() {
@@ -63,12 +58,6 @@ public class WebViewActivity extends BaseActivity {
                 webView.postUrl(url, null);
             }
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
     private void loadWebView(WebView webView) {

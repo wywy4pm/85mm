@@ -1,10 +1,7 @@
 package com.arun.a85mm.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,8 +18,6 @@ import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +36,10 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     private boolean isHaveMore = true;
     private String userId;
     private String lastWorkDate;
-    //private boolean isSaveImage;
     private static final String TAG = "CommunityFragment";
     private ImageView next_group_img;
-    private int currentGroupPosition;
-    private boolean isSingleExpand;
-    private int count = 0;
+    //private int currentGroupPosition;
+    //private boolean isSingleExpand;
     private CommunityAdapter communityAdapter;
 
     @Override
@@ -62,15 +55,18 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
         not_network_text = (TextView) findViewById(R.id.not_network_text);
         not_network_btn = (TextView) findViewById(R.id.not_network_btn);
         next_group_img = (ImageView) findViewById(R.id.next_group_img);
-        communityAdapter = new CommunityAdapter(getActivity(), worksList);
+        communityAdapter = new CommunityAdapter(getActivity(), worksList, true);
         expandableListView.setAdapter(communityAdapter);
-        expandableListView.setGroupIndicator(null);
+        communityAdapter.setOnImageClick(this);
         swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshData();
             }
         });
+        setExpandableListViewCommon(expandableListView, next_group_img, worksList);
+
+        /*expandableListView.setGroupIndicator(null);
         expandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -88,7 +84,6 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                             }
                         }
                     }
-
                 }
 
                 int currentGroupAllPosition = getCurrentGroupAllPosition(currentGroupPosition);
@@ -132,7 +127,6 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                 }
             }
         });
-        communityAdapter.setOnImageClick(this);
         next_group_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +138,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                 next_group_img.setVisibility(View.GONE);
                 isSingleExpand = false;
             }
-        });
+        });*/
     }
 
     @Override
@@ -156,8 +150,9 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
 
     private void refreshData() {
         currentGroupPosition = 0;
-        collapseGroup();
         isSingleExpand = false;
+        collapseGroup(expandableListView, worksList);
+
         next_group_img.setVisibility(View.GONE);
         setHaveMore(true);
         if (NetUtils.isConnected(getActivity())) {
@@ -172,32 +167,6 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                 swipeToLoadLayout.setRefreshing(false);
             }
             showNetWorkErrorView(expandableListView);
-        }
-    }
-
-    private int getCurrentGroupAllPosition(int groupPosition) {
-        int currentGroupAllPosition = 0;
-        if (worksList != null && worksList.size() > 0) {
-            for (int i = 0; i < worksList.size(); i++) {
-                if (i < groupPosition) {
-                    if (worksList.get(i).isExpand) {
-                        currentGroupAllPosition += worksList.get(i).totalImageNum;
-                    } else {
-                        currentGroupAllPosition += 1;
-                    }
-                }
-            }
-        }
-        return currentGroupAllPosition;
-    }
-
-    private void collapseGroup() {
-        if (worksList != null && worksList.size() > 0) {
-            for (int i = 0; i < worksList.size(); i++) {
-                if (expandableListView.isGroupExpanded(i)) {
-                    expandableListView.collapseGroup(i);
-                }
-            }
         }
     }
 
@@ -251,7 +220,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                             workList.get(i).date = goodsListBean.date;
                             workList.get(i).browseNum = goodsListBean.browseNum;
                             workList.get(i).workNum = goodsListBean.workNum;
-                            workList.get(i).downloadNum = goodsListBean.downloadNum;
+                            workList.get(i).allDownloadNum = goodsListBean.downloadNum;
                         }
                         if (i == workList.size() - 1) {
                             workList.get(i).isBottom = true;
@@ -309,31 +278,6 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
         communityAdapter.notifyDataSetChanged();
     }
 
-    private void preLoadChildFirstImage(final List<WorkListBean> workList) {
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                if (workList != null && workList.size() > 0) {
-                    for (int i = 0; i < workList.size(); i++) {
-                        WorkListBean workListBean = workList.get(i);
-                        //int coverHeight = (workListBean.coverHeight * screenWidth) / workListBean.coverWidth;
-                        Glide.with(getActivity()).load(workListBean.coverUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
-                        if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
-                            WorkListItemBean bean = workList.get(i).workDetail.get(0);
-                            if (bean != null) {
-                                if (bean.width > 0) {
-                                    //int imageHeight = (bean.height * screenWidth) / bean.width;
-                                    Glide.with(getActivity()).load(bean.imageUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
-                                    Log.d("TAG", "imageUrl = " + bean.imageUrl);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-
     @Override
     public void onRefreshComplete() {
         setLoading(false);
@@ -344,7 +288,10 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
 
     @Override
     public void onError(String error, String tag) {
-
+        if (swipeToLoadLayout.isRefreshing()) {
+            swipeToLoadLayout.setRefreshing(false);
+        }
+        showNetWorkErrorView(expandableListView);
     }
 
     @Override
@@ -369,4 +316,11 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
         DialogHelper.showBottomSourceLink(getActivity(), sourceUrl);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (communityPresenter != null) {
+            communityPresenter.detachView();
+        }
+    }
 }

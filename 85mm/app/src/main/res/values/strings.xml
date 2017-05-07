@@ -2,4 +2,11 @@
     <string name="app_name">85mm</string>
     <string name="text_not_network">请检查网络连接是否正常</string>
     <string name="text_exit_app">再按一次返回键退出</string>
+    <string name="works_all_count">收录作品：%1$d</string>
+    <string name="works_browse_count">浏览人数：%1$d</string>
+    <string name="works_download_count_all">下载次数：%1$d</string>
+    <string name="works_download_count_one">%1$d次下载</string>
+
+    <string name="query_one_day_left_works">查看 %1$s 剩余 %2$d 套作品 ></string>
+    <string name="one_day_left_works_title">%1$s   (%2$d套作品)</string>
 </resources>

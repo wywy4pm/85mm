@@ -1,12 +1,10 @@
 package com.arun.a85mm.utils;
 
 import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -25,13 +23,11 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -317,8 +313,9 @@ public class DeviceUtils {
      * @return
      */
     public static int getMobileSDK() {
-        return Build.VERSION.SDK_INT;
+        return android.os.Build.VERSION.SDK_INT;
     }
+
 
     /**
      * 获取手机当前IP地址

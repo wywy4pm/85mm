@@ -3,23 +3,27 @@ package com.arun.a85mm.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.WorkListBean;
+import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
@@ -37,6 +41,9 @@ public abstract class BaseFragment extends Fragment {
     public boolean isLoading;
     public int screenWidth;
     public String deviceId;
+    public int currentGroupPosition;
+    public boolean isSingleExpand;
+    public EventStatisticsHelper eventStatisticsHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -51,18 +58,24 @@ public abstract class BaseFragment extends Fragment {
                 inflater = inflater.cloneInContext(contextThemeWrapper);
             }
             rootView = inflater.inflate(layoutId, null);
+
+            initCommon();
+
             initView();
             initData();
-
         } else {
             ViewGroup parent = (ViewGroup) rootView.getParent();
             if (parent != null) {
                 parent.removeView(rootView);
             }
         }
+        return rootView;
+    }
+
+    private void initCommon() {
         screenWidth = DensityUtil.getScreenWidth(getActivity());
         deviceId = DeviceUtils.getMobileIMEI(getActivity());
-        return rootView;
+        eventStatisticsHelper = new EventStatisticsHelper(getActivity());
     }
 
     public void setLoading(boolean isLoading) {
@@ -121,22 +134,130 @@ public abstract class BaseFragment extends Fragment {
         });
     }
 
-    public void setAbListViewScrollListener(final AbsListView absListView) {
-        absListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+    public void setExpandableListViewCommon(final ExpandableListView expandableListView, final ImageView next_group_img, final List<WorkListBean> worksList) {
+
+        expandableListView.setGroupIndicator(null);
+        expandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                synchronized (BaseFragment.this) {
-                    if (view.getLastVisiblePosition() >= view.getCount() - 1) {
-                        if (!isLoading) {
-                            setLoadMore();
-                        }
-                    }
-                }
+
             }
 
             @Override
             public void onScroll(AbsListView listView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                //分页处理
+                if (listView.getCount() > 5) {
+                    synchronized (BaseFragment.this) {
+                        if (listView.getLastVisiblePosition() >= listView.getCount() - 6) {
+                            if (!isLoading) {
+                                setLoadMore();
+                            }
+                        }
+                    }
+                }
 
+                int currentGroupAllPosition = getCurrentGroupAllPosition(worksList, currentGroupPosition);
+                int lastVisiblePosition = listView.getLastVisiblePosition();
+                int currentChildCount = 0;
+                if (worksList != null && worksList.size() > 0) {
+                    if (worksList.get(currentGroupPosition) != null && worksList.get(currentGroupPosition).workDetail != null) {
+                        currentChildCount = worksList.get(currentGroupPosition).workDetail.size();
+                    }
+                    //int currentRangeMin = currentGroupAllPosition;
+                    int currentRangeMax = currentGroupAllPosition + currentChildCount;
+                    if (isSingleExpand && lastVisiblePosition >= currentGroupAllPosition && currentChildCount > 4) {
+                        if (currentChildCount > visibleItemCount && lastVisiblePosition <= currentRangeMax) {
+                            next_group_img.setVisibility(View.VISIBLE);
+                        } else {
+                            if (currentChildCount <= visibleItemCount) {
+                                next_group_img.setVisibility(View.VISIBLE);
+                            } else {
+                                next_group_img.setVisibility(View.GONE);
+                                isSingleExpand = false;
+                            }
+                        }
+                    }
+                } else {
+                    next_group_img.setVisibility(View.GONE);
+                    isSingleExpand = false;
+                }
+            }
+        });
+
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                isSingleExpand = true;
+                currentGroupPosition = groupPosition;
+                if (worksList.get(groupPosition) != null && worksList.get(groupPosition).workDetail != null && worksList.get(groupPosition).totalImageNum > 5) {
+                    if (groupPosition < worksList.size() - 1) {
+                        //Log.d(TAG, "currentGroupPosition = " + currentGroupPosition);
+                        next_group_img.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+        next_group_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentGroupPosition < worksList.size()) {
+                    //Log.d(TAG, "currentPosition = " + (currentGroupPosition + 1));
+                    int currentPosition = currentGroupPosition + 1;
+                    expandableListView.setSelectedGroup(currentPosition);
+                }
+                next_group_img.setVisibility(View.GONE);
+                isSingleExpand = false;
+            }
+        });
+    }
+
+    public int getCurrentGroupAllPosition(List<WorkListBean> worksList, int groupPosition) {
+        int currentGroupAllPosition = 0;
+        if (worksList != null && worksList.size() > 0) {
+            for (int i = 0; i < worksList.size(); i++) {
+                if (i < groupPosition) {
+                    if (worksList.get(i).isExpand) {
+                        currentGroupAllPosition += worksList.get(i).totalImageNum;
+                    } else {
+                        currentGroupAllPosition += 1;
+                    }
+                }
+            }
+        }
+        return currentGroupAllPosition;
+    }
+
+    public void collapseGroup(ExpandableListView expandableListView, List<WorkListBean> worksList) {
+        if (worksList != null && worksList.size() > 0) {
+            for (int i = 0; i < worksList.size(); i++) {
+                if (expandableListView.isGroupExpanded(i)) {
+                    expandableListView.collapseGroup(i);
+                }
+            }
+        }
+    }
+
+    public void preLoadChildFirstImage(final List<WorkListBean> workList) {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                if (workList != null && workList.size() > 0) {
+                    for (int i = 0; i < workList.size(); i++) {
+                        WorkListBean workListBean = workList.get(i);
+                        //int coverHeight = (workListBean.coverHeight * screenWidth) / workListBean.coverWidth;
+                        Glide.with(getActivity()).load(workListBean.coverUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                        if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
+                            WorkListItemBean bean = workList.get(i).workDetail.get(0);
+                            if (bean != null) {
+                                if (bean.width > 0) {
+                                    //int imageHeight = (bean.height * screenWidth) / bean.width;
+                                    Glide.with(getActivity()).load(bean.imageUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                                    Log.d("TAG", "imageUrl = " + bean.imageUrl);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         });
     }
@@ -162,4 +283,12 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void initView();
 
     protected abstract void initData();
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.detachView();
+        }
+    }
 }

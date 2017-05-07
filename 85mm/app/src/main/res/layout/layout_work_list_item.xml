@@ -77,4 +77,12 @@
             android:layout_centerVertical="true"
             android:src="@mipmap/icon_home_more" />
     </RelativeLayout>
+
+    <include
+        android:id="@+id/layout_works_more"
+        layout="@layout/layout_works_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/work_list_item_author"
+        android:visibility="gone" />
 </RelativeLayout>
