@@ -187,7 +187,7 @@ public class LeftWorksFragment extends BaseFragment implements CommunityAdapter.
 
     @Override
     public void onCoverClick(String coverUrl, int width, int height) {
-        ((MainActivity) getActivity()).saveImageShowTop(coverUrl, width, height);
+        //((MainActivity) getActivity()).saveImageShowTop(coverUrl, width, height);
     }
 
     @Override
