@@ -54,6 +54,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
+        <activity
+            android:name=".activity.FragmentCommonActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="58fefdadc895760f91001ff3" />
@@ -63,12 +69,6 @@
         <meta-data
             android:name="com.arun.a85mm.configuration.GlideConfiguration"
             android:value="GlideModule" />
-
-        <activity
-            android:name=".activity.FragmentCommonActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

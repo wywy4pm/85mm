@@ -253,7 +253,6 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     @Override
     public void onRefreshComplete() {
-        //isFirstLoad = false;
         setLoading(false);
         if (swipeToLoadLayout != null) {
             swipeToLoadLayout.setRefreshing(false);
@@ -276,10 +275,9 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     @Override
     public void onCoverClick(String coverUrl, int width, int height) {
-        /*if (saveImageHelper != null && showTopHandler != null) {
-            saveImageHelper.saveImageShowTop(getActivity(), coverUrl, width, height, showTopHandler, ((MainActivity) getActivity()).isSaveImage());
-        }*/
-        ((MainActivity) getActivity()).saveImageShowTop(coverUrl, width, height);
+        if (getActivity() != null && getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).saveImageShowTop(coverUrl, width, height);
+        }
     }
 
     /*//获取可视第一个group的position
@@ -300,7 +298,6 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
 
     @Override
     public void onMoreLinkClick(String sourceUrl) {
-        //showBottomDialog(sourceUrl);
         DialogHelper.showBottomSourceLink(getActivity(), sourceUrl);
     }
 

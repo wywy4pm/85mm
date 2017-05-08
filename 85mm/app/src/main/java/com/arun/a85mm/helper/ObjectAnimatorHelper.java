@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
+import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.utils.DensityUtil;
@@ -36,6 +37,8 @@ public class ObjectAnimatorHelper {
     public void showTopToastView(final Activity activity, final TextView toastView, String showData) {
         if (activity instanceof MainActivity) {
             ((MainActivity) activity).setShowingTop(true);
+        } else if (activity instanceof BaseActivity) {
+            ((BaseActivity) activity).setShowingTop(true);
         }
 
         StatusBarUtils.setStatusBar(activity, true);
@@ -85,6 +88,8 @@ public class ObjectAnimatorHelper {
                 toastView.setVisibility(View.GONE);
                 if (activity instanceof MainActivity) {
                     ((MainActivity) activity).setShowingTop(false);
+                } else if (activity instanceof BaseActivity) {
+                    ((BaseActivity) activity).setShowingTop(false);
                 }
                 StatusBarUtils.setStatusBar(activity, false);
                 if (waitShowTops != null && waitShowTops.size() > 0) {

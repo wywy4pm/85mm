@@ -19,15 +19,6 @@ import java.io.File;
 
 public class SaveImageHelper {
 
-    /*public SaveImageCallBack saveImageCallBack;
-
-    public interface SaveImageCallBack {
-        void setSaveImage(boolean isSaveImage);
-    }
-
-    public void setSaveImageCallBack(SaveImageCallBack saveImageCallBack) {
-        this.saveImageCallBack = saveImageCallBack;*/
-
     public void saveImageShowTop(final Context context, final String imageUrl, final int width, final int height,
                                  final ShowTopHandler showTopHandler, final boolean isShowingTop) {
         //异步

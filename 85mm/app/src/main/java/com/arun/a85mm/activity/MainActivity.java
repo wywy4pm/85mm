@@ -76,10 +76,22 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        //objectAnimatorHelper = new ObjectAnimatorHelper();
-        initToastView();
         viewPager.setCurrentItem(1);
 
+        setSaveImage();
+    }
+
+    private void initData() {
+        productionFragment = new ProductionFragment();
+        CommunityFragment communityFragment = new CommunityFragment();
+        ArticleFragment articleFragment = ArticleFragment.newIntense();
+        list.add(productionFragment);
+        list.add(communityFragment);
+        list.add(articleFragment);
+    }
+
+    private void setSaveImage() {
+        initToastView();
         saveImageHelper = new SaveImageHelper();
         showTopHandler = new ShowTopHandler(this);
         objectAnimatorHelper = new ObjectAnimatorHelper();
@@ -94,15 +106,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initData() {
-        productionFragment = new ProductionFragment();
-        CommunityFragment communityFragment = new CommunityFragment();
-        ArticleFragment articleFragment = ArticleFragment.newIntense();
-        list.add(productionFragment);
-        list.add(communityFragment);
-        list.add(articleFragment);
-    }
-
     public void saveImageShowTop(String coverUrl, int width, int height) {
         if (saveImageHelper != null && showTopHandler != null) {
             saveImageHelper.saveImageShowTop(this, coverUrl, width, height, showTopHandler, isShowingTop);
@@ -110,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showTopToastView(ShowTopBean showTopBean) {
-        if (showTopBean != null) {
+        if (showTopBean != null && objectAnimatorHelper != null) {
             objectAnimatorHelper.managerShowTopView(this, toastView, showTopBean);
         }
     }
@@ -118,10 +121,6 @@ public class MainActivity extends AppCompatActivity {
     public void setShowingTop(boolean isShowingTop) {
         this.isShowingTop = isShowingTop;
     }
-
-    /*public boolean isSaveImage() {
-        return isSaveImage;
-    }*/
 
     @Override
     protected void onDestroy() {

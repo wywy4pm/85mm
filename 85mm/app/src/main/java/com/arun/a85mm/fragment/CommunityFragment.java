@@ -308,7 +308,9 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
         /*if (saveImageHelper != null && showTopHandler != null) {
             saveImageHelper.saveImageShowTop(getActivity(), coverUrl, width, height, showTopHandler, isSaveImage);
         }*/
-        ((MainActivity) getActivity()).saveImageShowTop(coverUrl, width, height);
+        if (getActivity() != null && getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).saveImageShowTop(coverUrl, width, height);
+        }
     }
 
     @Override

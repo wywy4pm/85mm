@@ -3,13 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:fitsSystemWindows="true"
     tools:context="com.arun.a85mm.activity.FragmentCommonActivity">
+
+    <include
+        android:id="@+id/layout_status_place"
+        layout="@layout/layout_status_place" />
 
     <include
         android:id="@+id/layout_title_bar"
         layout="@layout/layout_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/layout_status_place"
         android:visibility="gone" />
 
     <FrameLayout

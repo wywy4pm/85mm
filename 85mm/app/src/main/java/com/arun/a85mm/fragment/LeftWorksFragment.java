@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.adapter.CommunityAdapter;
@@ -187,7 +188,9 @@ public class LeftWorksFragment extends BaseFragment implements CommunityAdapter.
 
     @Override
     public void onCoverClick(String coverUrl, int width, int height) {
-        //((MainActivity) getActivity()).saveImageShowTop(coverUrl, width, height);
+        if (getActivity() != null && getActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).saveImageShowTop(coverUrl, width, height);
+        }
     }
 
     @Override

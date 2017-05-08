@@ -55,6 +55,7 @@ public class FragmentCommonActivity extends BaseActivity {
             initFragment(type, map);
         }
         initView();
+        setSaveImage();
     }
 
     private void initView() {
