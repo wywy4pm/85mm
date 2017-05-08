@@ -20,7 +20,7 @@ public class ArticleFragmentPresenter extends BasePresenter<CommonView> {
         super(context);
     }
 
-    public void getArticleListData(final int pageNum) {
+    public void getArticleListData(final int pageNum, String uid, String deviceId) {
         Subscriber<ArticleListResponse> subscriber = new Subscriber<ArticleListResponse>() {
             @Override
             public void onCompleted() {
@@ -56,6 +56,6 @@ public class ArticleFragmentPresenter extends BasePresenter<CommonView> {
         };
 
         addSubscriber(subscriber);
-        RetrofitInit.getApi().getArticleList(pageNum).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);
+        RetrofitInit.getApi().getArticleList(pageNum, uid, deviceId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);
     }
 }

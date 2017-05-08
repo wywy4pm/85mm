@@ -17,22 +17,24 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.helper.EventStatisticsHelper;
+import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
-
 /**
  * Created by wy on 2017/4/13.
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements EventListener {
     protected Activity thisInstance;
     protected View rootView;
     private LayoutInflater inflater;
@@ -40,6 +42,7 @@ public abstract class BaseFragment extends Fragment {
     private View no_network;
     public boolean isLoading;
     public int screenWidth;
+    public String userId;
     public String deviceId;
     public int currentGroupPosition;
     public boolean isSingleExpand;
@@ -76,6 +79,7 @@ public abstract class BaseFragment extends Fragment {
         screenWidth = DensityUtil.getScreenWidth(getActivity());
         deviceId = DeviceUtils.getMobileIMEI(getActivity());
         eventStatisticsHelper = new EventStatisticsHelper(getActivity());
+        userId = SharedPreferencesUtils.getUid(getActivity());
     }
 
     public void setLoading(boolean isLoading) {
@@ -260,6 +264,13 @@ public abstract class BaseFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onEvent(List<ActionBean> actionList) {
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.recordUserAction(getActivity(), actionList);
+        }
     }
 
     public void setLoadMore() {

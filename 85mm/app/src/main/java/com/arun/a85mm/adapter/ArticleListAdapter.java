@@ -12,6 +12,9 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.ArticleDetailActivity;
 import com.arun.a85mm.bean.ArticleListResponse;
+import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.helper.EventStatisticsHelper;
+import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.utils.DensityUtil;
 import com.bumptech.glide.Glide;
 
@@ -25,14 +28,10 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
 
     private WeakReference<Context> contexts;
     private List<ArticleListResponse.ArticleListBean> articles;
-    private static OnImageClickCallBack onImageClickCallBack;
+    private EventListener eventListener;
 
-    public void setOnImageClickCallBack(OnImageClickCallBack onImageClickCallBack) {
-        ArticleListAdapter.onImageClickCallBack = onImageClickCallBack;
-    }
-
-    public interface OnImageClickCallBack {
-        void onClickImage(View view, float x, float y, String url);
+    public void setEventListener(EventListener eventListener) {
+        this.eventListener = eventListener;
     }
 
     public ArticleListAdapter(Context context, List<ArticleListResponse.ArticleListBean> articles) {
@@ -50,7 +49,9 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ArticleHolder) {
             ArticleHolder articleHolder = (ArticleHolder) holder;
-            articleHolder.setData(contexts.get(), articles.get(position));
+            if (articles.get(position) != null) {
+                articleHolder.setData(contexts.get(), articles.get(position), eventListener);
+            }
         }
     }
 
@@ -74,7 +75,11 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
             this.article_detail = (TextView) itemView.findViewById(R.id.article_detail);
         }
 
-        private void setData(final Context context, final ArticleListResponse.ArticleListBean articleListBean) {
+        private void setData(final Context context, final ArticleListResponse.ArticleListBean articleListBean, final EventListener eventListener) {
+            //浏览文章
+            if (eventListener != null) {
+                eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.ARTICLE_BROWSE, articleListBean.id, ""));
+            }
             if (article_image.getLayoutParams() != null) {
                 article_image.getLayoutParams().height = (int) (DensityUtil.getScreenWidth(context) * 0.5);
             }
@@ -84,16 +89,18 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //点击进入文章详情
+                    if (eventListener != null) {
+                        eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.ARTICLE_BROWSE, articleListBean.id, ""));
+                    }
                     int[] location = new int[2];
                     v.getLocationOnScreen(location);
                     int x = location[0];
                     int y = location[1];
                     //onImageClickCallBack.onClickImage(v, x, y, articleListBean.headImage);
-                    ArticleDetailActivity.startArticleDetailActivity(context, articleListBean.id,x, y, articleListBean.headImage);
+                    ArticleDetailActivity.startArticleDetailActivity(context, articleListBean.id, x, y, articleListBean.headImage);
                 }
             });
         }
     }
-
-
 }

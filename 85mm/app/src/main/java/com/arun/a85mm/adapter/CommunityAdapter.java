@@ -20,7 +20,10 @@ import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.EventStatisticsHelper;
+import com.arun.a85mm.listener.EventListener;
+import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.bumptech.glide.Glide;
@@ -55,16 +58,14 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
 
     public OnImageClick onImageClick;
 
-    public interface OnImageClick {
-        void onCountClick(int groupPosition);
-
-        void onCoverClick(String coverUrl, int width, int height);
-
-        void onMoreLinkClick(String sourceUrl);
-    }
-
     public void setOnImageClick(OnImageClick onImageClick) {
         this.onImageClick = onImageClick;
+    }
+
+    public EventListener eventListener;
+
+    public void setEventListener(EventListener eventListener) {
+        this.eventListener = eventListener;
     }
 
     @Override
@@ -73,6 +74,10 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         WorkListHeadHolder workListHeadHolder = new WorkListHeadHolder(view);
         final WorkListHeadHolder headHolder = workListHeadHolder;
         final WorkListBean bean = workList.get(groupPosition);
+        //作品浏览
+        if (eventListener != null) {
+            eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_BROWSE, bean.workId, ""));
+        }
 
         if (isCommunity) {
             if (bean.isTitle) {
@@ -183,7 +188,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 if (bean.isExpand) {
                     finalWorkListHeadHolder.rippleView.setRippleDuration(300);
                     if (onImageClick != null) {
-                        onImageClick.onCoverClick(bean.coverUrl, screenWidth, finalImageHeight);
+                        onImageClick.onCoverClick(bean.workId, bean.coverUrl, screenWidth, finalImageHeight);
                     }
                 } else {
                     headHolder.work_list_cover_count.setVisibility(View.GONE);
@@ -194,6 +199,10 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     }
                     if (bean.isBottom) {
                         headHolder.layout_works_more.setVisibility(View.GONE);
+                    }
+                    //作品点击展开
+                    if (eventListener != null) {
+                        eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_CLICK_EXPAND, bean.workId, ""));
                     }
                 }
             }
@@ -325,7 +334,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             public void onClick(View v) {
                 finalWorkListItemHolder.rippleView.setRippleDuration(300);
                 if (onImageClick != null) {
-                    onImageClick.onCoverClick(bean.imageUrl, screenWidth, finalSaveImageHeight);
+                    onImageClick.onCoverClick(workList.get(groupPosition).workId, bean.imageUrl, screenWidth, finalSaveImageHeight);
                 }
             }
         });

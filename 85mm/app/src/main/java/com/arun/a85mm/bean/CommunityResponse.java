@@ -8,6 +8,7 @@ import java.util.List;
 public class CommunityResponse {
 
     public int code;
+    public String uid;
     public List<GoodsListBean> goodsList;
 
     public static class GoodsListBean {
@@ -21,29 +22,5 @@ public class CommunityResponse {
 
         public List<WorkListBean> workList;
 
-        /*public static class WorkListBean {
-
-            public String authorHeadImg;
-            public String authorName;
-            public String authorPageUrl;
-            public int coverHeight;
-            public String coverUrl;
-            public int coverWidth;
-            public String createTime;
-            public int downloadNum;
-            public String sourceLogo;
-            public String sourceSite;
-            public String sourceUrl;
-            public int totalImageNum;
-            public int workId;
-            public String workTitle;
-            public List<WorkDetailBean> workDetail;
-
-            public static class WorkDetailBean {
-                public int height;
-                public String imageUrl;
-                public int width;
-            }
-        }*/
     }
 }

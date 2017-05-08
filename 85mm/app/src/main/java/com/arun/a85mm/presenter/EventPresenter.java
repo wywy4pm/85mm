@@ -3,6 +3,7 @@ package com.arun.a85mm.presenter;
 import android.content.Context;
 import android.util.Log;
 
+import com.arun.a85mm.bean.ActionRequest;
 import com.arun.a85mm.bean.CommonResponse;
 import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.retrofit.RetrofitInit;
@@ -19,7 +20,7 @@ public class EventPresenter extends BasePresenter {
         super(context);
     }
 
-    public void recordUserAction(String uid, String deviceId, String appVersion, String osVersion, String deviceModel, String actionListJson) {
+    public void recordUserAction(ActionRequest actionRequest) {
         Subscriber<CommonResponse> subscriber = new Subscriber<CommonResponse>() {
             @Override
             public void onCompleted() {
@@ -42,7 +43,7 @@ public class EventPresenter extends BasePresenter {
             }
         };
         addSubscriber(subscriber);
-        RetrofitInit.getApi().recordUserAction(uid, deviceId, appVersion, osVersion, deviceModel, actionListJson)
+        RetrofitInit.getApi().recordUserAction(actionRequest)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);
     }
 }

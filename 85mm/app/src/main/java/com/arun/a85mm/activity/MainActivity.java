@@ -5,18 +5,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ShowTopBean;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.fragment.ArticleFragment;
 import com.arun.a85mm.fragment.CommunityFragment;
 import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.handler.ShowTopHandler;
+import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
+import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.utils.DensityUtil;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -39,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private SaveImageHelper saveImageHelper;
     private ShowTopHandler showTopHandler;
     private ObjectAnimatorHelper objectAnimatorHelper;
+    private EventStatisticsHelper eventStatisticsHelper;
     //private ObjectAnimatorHelper objectAnimatorHelper;
 
     @Override
@@ -77,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         viewPager.setCurrentItem(1);
-
         setSaveImage();
+        eventStatisticsHelper = new EventStatisticsHelper(this);
     }
 
     private void initData() {
@@ -106,8 +112,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void saveImageShowTop(String coverUrl, int width, int height) {
+    public void saveImageShowTop(String workId, String coverUrl, int width, int height) {
         if (saveImageHelper != null && showTopHandler != null) {
+            if (!TextUtils.isEmpty(workId)) {
+                onActionEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_IMAGE_DOWNLOAD, workId, ""));
+            }
             saveImageHelper.saveImageShowTop(this, coverUrl, width, height, showTopHandler, isShowingTop);
         }
     }
@@ -120,6 +129,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void setShowingTop(boolean isShowingTop) {
         this.isShowingTop = isShowingTop;
+    }
+
+    public void onActionEvent(List<ActionBean> actionList) {
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.recordUserAction(this, actionList);
+        }
     }
 
     @Override
@@ -140,4 +155,5 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }

@@ -14,6 +14,7 @@ import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.ShootRefreshView;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView;
 
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         articleListAdapter = new ArticleListAdapter(getActivity(), articles);
+        articleListAdapter.setEventListener(this);
         recyclerView.setAdapter(articleListAdapter);
         setRecyclerViewScrollListener(recyclerView);
         swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -75,7 +77,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
             hideNetWorkErrorView(recyclerView);
             if (articleFragmentPresenter != null) {
                 setLoading(true);
-                articleFragmentPresenter.getArticleListData(currentPageNum);
+                articleFragmentPresenter.getArticleListData(currentPageNum, userId, deviceId);
             }
         } else {
             if (swipeToLoadLayout.isRefreshing()) {
@@ -89,7 +91,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
         if (articleFragmentPresenter != null) {
             setLoading(true);
             currentPageNum += 1;
-            articleFragmentPresenter.getArticleListData(currentPageNum);
+            articleFragmentPresenter.getArticleListData(currentPageNum, userId, deviceId);
         }
     }
 
@@ -108,6 +110,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
     @Override
     public void refresh(ArticleListResponse data) {
         if (data != null && data.articleList != null && data.articleList.size() > 0) {
+            SharedPreferencesUtils.saveUid(getActivity(), data.uid);
             articles.clear();
             articles.addAll(data.articleList);
             articleListAdapter.notifyDataSetChanged();

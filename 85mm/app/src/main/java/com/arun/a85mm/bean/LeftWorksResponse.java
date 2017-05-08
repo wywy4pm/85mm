@@ -15,5 +15,6 @@ public class LeftWorksResponse {
 
     public int start;
     public int code;
+    public String uid;
     public List<WorkListBean> workList;
 }

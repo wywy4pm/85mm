@@ -16,6 +16,7 @@ import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.helper.DialogHelper;
+import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.CommunityPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
@@ -29,7 +30,7 @@ import java.util.Map;
 /**
  * Created by WY on 2017/5/7.
  */
-public class LeftWorksFragment extends BaseFragment implements CommunityAdapter.OnImageClick, CommonView<LeftWorksResponse> {
+public class LeftWorksFragment extends BaseFragment implements OnImageClick, CommonView<LeftWorksResponse> {
 
     public ExpandableListView expandableListView;
     public SwipeToLoadLayout swipeToLoadLayout;
@@ -187,9 +188,9 @@ public class LeftWorksFragment extends BaseFragment implements CommunityAdapter.
     }
 
     @Override
-    public void onCoverClick(String coverUrl, int width, int height) {
+    public void onCoverClick(String workId, String coverUrl, int width, int height) {
         if (getActivity() != null && getActivity() instanceof BaseActivity) {
-            ((BaseActivity) getActivity()).saveImageShowTop(coverUrl, width, height);
+            ((BaseActivity) getActivity()).saveImageShowTop(workId, coverUrl, width, height);
         }
     }
 

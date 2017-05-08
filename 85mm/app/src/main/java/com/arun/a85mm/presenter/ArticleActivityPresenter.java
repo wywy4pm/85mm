@@ -15,13 +15,13 @@ import rx.schedulers.Schedulers;
 /**
  * Created by WY on 2017/4/14.
  */
-public class ArticleActivityPresenter extends BasePresenter<CommonView>{
+public class ArticleActivityPresenter extends BasePresenter<CommonView> {
 
     public ArticleActivityPresenter(Context context) {
         super(context);
     }
 
-    public void getArticleDetailsData(String articleId) {
+    public void getArticleDetailsData(String articleId, String uid, String deviceId) {
         Subscriber<ArticleDetailResponse> subscriber = new Subscriber<ArticleDetailResponse>() {
             @Override
             public void onCompleted() {
@@ -49,6 +49,6 @@ public class ArticleActivityPresenter extends BasePresenter<CommonView>{
         };
 
         addSubscriber(subscriber);
-        RetrofitInit.getApi().getArticleDetail(articleId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);
+        RetrofitInit.getApi().getArticleDetail(articleId, uid, deviceId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);
     }
 }

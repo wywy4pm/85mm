@@ -3,12 +3,16 @@ package com.arun.a85mm.helper;
 import android.content.Context;
 
 import com.arun.a85mm.bean.ActionBean;
+import com.arun.a85mm.bean.ActionRequest;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.presenter.EventPresenter;
 import com.arun.a85mm.utils.AppUtils;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.GsonUtils;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.MvpView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,16 +31,23 @@ public class EventStatisticsHelper implements MvpView {
      * 用户行为记录 actionList
      */
     public void recordUserAction(Context context, List<ActionBean> actionList) {
-        String uid = "";
+        String uid = SharedPreferencesUtils.getUid(context);
         String deviceId = DeviceUtils.getMobileIMEI(context);
         String appVersion = AppUtils.getAppVersion(context);
         String osVersion = String.valueOf(DeviceUtils.getMobileSDK());
         String deviceModel = DeviceUtils.getMobileModel();
-        String actionListJson = GsonUtils.toJson(actionList);
+
+        ActionRequest actionRequest = new ActionRequest(uid, deviceId, appVersion, osVersion, deviceModel, actionList);
         if (presenter != null) {
-            presenter.recordUserAction(uid, deviceId, appVersion, osVersion, deviceModel, actionListJson);
+            presenter.recordUserAction(actionRequest);
         }
-        //recordUserAction(uid, deviceId, appVersion, osVersion, deviceModel, actionListJson);
+    }
+
+    public static List<ActionBean> createOneActionList(int actionType, String resourceId, String remark) {
+        List<ActionBean> actionList = new ArrayList<>();
+        ActionBean actionBean = new ActionBean(actionType, resourceId, "");
+        actionList.add(actionBean);
+        return actionList;
     }
 
 

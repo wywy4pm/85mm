@@ -1,6 +1,7 @@
 package com.arun.a85mm.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
@@ -8,14 +9,18 @@ import android.widget.ImageView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.adapter.ProductListAdapter;
+import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.helper.DialogHelper;
+import com.arun.a85mm.listener.EventListener;
+import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.ProductFragmentPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView;
 
 import java.util.ArrayList;
@@ -24,7 +29,7 @@ import java.util.List;
 /**
  * Created by WY on 2017/4/14.
  */
-public class ProductionFragment extends BaseFragment implements ProductListAdapter.OnImageClick, CommonView<ProductListResponse> {
+public class ProductionFragment extends BaseFragment implements OnImageClick, CommonView<ProductListResponse> {
 
     private SwipeToLoadLayout swipeToLoadLayout;
     private ExpandableListView expandableListView;
@@ -32,12 +37,9 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     private List<WorkListBean> workLists = new ArrayList<>();
     private ProductFragmentPresenter productFragmentPresenter;
     private boolean isHaveMore = true;
-    private String userId;
     private String lastWorkId;
     private static final String TAG = "ProductionFragment";
     private ImageView next_group_img;
-   /* private int currentGroupPosition;
-    private boolean isSingleExpand;*/
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
         productListAdapter = new ProductListAdapter(getActivity(), workLists);
         expandableListView.setAdapter(productListAdapter);
         productListAdapter.setOnImageClick(this);
+        productListAdapter.setEventListener(this);
         swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -59,79 +62,6 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
             }
         });
         setExpandableListViewCommon(expandableListView, next_group_img, workLists);
-        /*expandableListView.setGroupIndicator(null);
-        expandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView listView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                //分页处理
-                if (listView.getCount() > 5) {
-                    synchronized (ProductionFragment.this) {
-                        if (listView.getLastVisiblePosition() == listView.getCount() - 6) {
-                            if (!isLoading) {
-                                setLoadMore();
-                            }
-                        }
-                    }
-                }
-
-                int currentGroupAllPosition = getCurrentGroupAllPosition(currentGroupPosition);
-                int lastVisiblePosition = listView.getLastVisiblePosition();
-                int currentChildCount = 0;
-                if (workLists != null && workLists.size() > 0) {
-                    if (workLists.get(currentGroupPosition) != null && workLists.get(currentGroupPosition).workDetail != null) {
-                        currentChildCount = workLists.get(currentGroupPosition).workDetail.size();
-                    }
-                    //int currentRangeMin = currentGroupAllPosition;
-                    int currentRangeMax = currentGroupAllPosition + currentChildCount;
-                    if (isSingleExpand && lastVisiblePosition >= currentGroupAllPosition && currentChildCount > 4) {
-                        if (currentChildCount > visibleItemCount && lastVisiblePosition <= currentRangeMax) {
-                            next_group_img.setVisibility(View.VISIBLE);
-                        } else {
-                            if (currentChildCount <= visibleItemCount) {
-                                next_group_img.setVisibility(View.VISIBLE);
-                            } else {
-                                next_group_img.setVisibility(View.GONE);
-                                isSingleExpand = false;
-                            }
-                        }
-                    }
-                } else {
-                    next_group_img.setVisibility(View.GONE);
-                    isSingleExpand = false;
-                }
-            }
-        });
-
-        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                isSingleExpand = true;
-                currentGroupPosition = groupPosition;
-                if (workLists.get(groupPosition) != null && workLists.get(groupPosition).workDetail != null && workLists.get(groupPosition).totalImageNum > 5) {
-                    if (groupPosition < workLists.size() - 1) {
-                        Log.d(TAG, "currentGroupPosition = " + currentGroupPosition);
-                        next_group_img.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        });
-        next_group_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentGroupPosition < workLists.size()) {
-                    Log.d(TAG, "currentPosition = " + (currentGroupPosition + 1));
-                    int currentPosition = currentGroupPosition + 1;
-                    expandableListView.setSelectedGroup(currentPosition);
-                }
-                next_group_img.setVisibility(View.GONE);
-                isSingleExpand = false;
-            }
-        });*/
     }
 
     @Override
@@ -180,6 +110,7 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     @Override
     public void refresh(ProductListResponse data) {
         if (data != null && data.workList != null && data.workList.size() > 0) {
+            SharedPreferencesUtils.saveUid(getActivity(), data.uid);
             workLists.clear();
             formatData(data.workList);
         }
@@ -274,9 +205,9 @@ public class ProductionFragment extends BaseFragment implements ProductListAdapt
     }
 
     @Override
-    public void onCoverClick(String coverUrl, int width, int height) {
+    public void onCoverClick(String workId, String coverUrl, int width, int height) {
         if (getActivity() != null && getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).saveImageShowTop(coverUrl, width, height);
+            ((MainActivity) getActivity()).saveImageShowTop(workId, coverUrl, width, height);
         }
     }
 

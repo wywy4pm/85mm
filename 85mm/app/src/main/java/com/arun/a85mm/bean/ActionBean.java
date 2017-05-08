@@ -5,6 +5,12 @@ package com.arun.a85mm.bean;
  */
 public class ActionBean {
     public int actionType;
-    public int resourceId;
+    public String resourceId;
     public String remark;
+
+    public ActionBean(int actionType, String resourceId, String remark) {
+        this.actionType = actionType;
+        this.resourceId = resourceId;
+        this.remark = remark;
+    }
 }

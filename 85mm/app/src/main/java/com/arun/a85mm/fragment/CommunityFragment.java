@@ -13,10 +13,12 @@ import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.helper.DialogHelper;
+import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.CommunityPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView;
 
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ import java.util.List;
 /**
  * Created by WY on 2017/4/14.
  */
-public class CommunityFragment extends BaseFragment implements CommonView<CommunityResponse>, CommunityAdapter.OnImageClick {
+public class CommunityFragment extends BaseFragment implements CommonView<CommunityResponse>, OnImageClick {
     public ExpandableListView expandableListView;
     public SwipeToLoadLayout swipeToLoadLayout;
     public ImageView not_network_image;
@@ -34,12 +36,9 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     private List<WorkListBean> worksList = new ArrayList<>();
     private CommunityPresenter communityPresenter;
     private boolean isHaveMore = true;
-    private String userId;
     private String lastWorkDate;
     private static final String TAG = "CommunityFragment";
     private ImageView next_group_img;
-    //private int currentGroupPosition;
-    //private boolean isSingleExpand;
     private CommunityAdapter communityAdapter;
 
     @Override
@@ -58,6 +57,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
         communityAdapter = new CommunityAdapter(getActivity(), worksList, true);
         expandableListView.setAdapter(communityAdapter);
         communityAdapter.setOnImageClick(this);
+        communityAdapter.setEventListener(this);
         swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -65,80 +65,6 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
             }
         });
         setExpandableListViewCommon(expandableListView, next_group_img, worksList);
-
-        /*expandableListView.setGroupIndicator(null);
-        expandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView listView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                //分页处理
-                if (listView.getCount() > 5) {
-                    synchronized (CommunityFragment.this) {
-                        if (listView.getLastVisiblePosition() >= listView.getCount() - 6) {
-                            if (!isLoading) {
-                                setLoadMore();
-                            }
-                        }
-                    }
-                }
-
-                int currentGroupAllPosition = getCurrentGroupAllPosition(currentGroupPosition);
-                int lastVisiblePosition = listView.getLastVisiblePosition();
-                int currentChildCount = 0;
-                if (worksList != null && worksList.size() > 0) {
-                    if (worksList.get(currentGroupPosition) != null && worksList.get(currentGroupPosition).workDetail != null) {
-                        currentChildCount = worksList.get(currentGroupPosition).workDetail.size();
-                    }
-                    //int currentRangeMin = currentGroupAllPosition;
-                    int currentRangeMax = currentGroupAllPosition + currentChildCount;
-                    if (isSingleExpand && lastVisiblePosition >= currentGroupAllPosition && currentChildCount > 4) {
-                        if (currentChildCount > visibleItemCount && lastVisiblePosition <= currentRangeMax) {
-                            next_group_img.setVisibility(View.VISIBLE);
-                        } else {
-                            if (currentChildCount <= visibleItemCount) {
-                                next_group_img.setVisibility(View.VISIBLE);
-                            } else {
-                                next_group_img.setVisibility(View.GONE);
-                                isSingleExpand = false;
-                            }
-                        }
-                    }
-                } else {
-                    next_group_img.setVisibility(View.GONE);
-                    isSingleExpand = false;
-                }
-            }
-        });
-
-        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                isSingleExpand = true;
-                currentGroupPosition = groupPosition;
-                if (worksList.get(groupPosition) != null && worksList.get(groupPosition).workDetail != null && worksList.get(groupPosition).totalImageNum > 5) {
-                    if (groupPosition < worksList.size() - 1) {
-                        Log.d(TAG, "currentGroupPosition = " + currentGroupPosition);
-                        next_group_img.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        });
-        next_group_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentGroupPosition < worksList.size()) {
-                    Log.d(TAG, "currentPosition = " + (currentGroupPosition + 1));
-                    int currentPosition = currentGroupPosition + 1;
-                    expandableListView.setSelectedGroup(currentPosition);
-                }
-                next_group_img.setVisibility(View.GONE);
-                isSingleExpand = false;
-            }
-        });*/
     }
 
     @Override
@@ -196,6 +122,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     @Override
     public void refresh(CommunityResponse data) {
         if (data != null && data.goodsList != null && data.goodsList.size() > 0) {
+            SharedPreferencesUtils.saveUid(getActivity(), data.uid);
             worksList.clear();
             formatData(data.goodsList);
         }
@@ -304,12 +231,9 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     }
 
     @Override
-    public void onCoverClick(String coverUrl, int width, int height) {
-        /*if (saveImageHelper != null && showTopHandler != null) {
-            saveImageHelper.saveImageShowTop(getActivity(), coverUrl, width, height, showTopHandler, isSaveImage);
-        }*/
+    public void onCoverClick(String workId,String coverUrl, int width, int height) {
         if (getActivity() != null && getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).saveImageShowTop(coverUrl, width, height);
+            ((MainActivity) getActivity()).saveImageShowTop(workId,coverUrl, width, height);
         }
     }
 

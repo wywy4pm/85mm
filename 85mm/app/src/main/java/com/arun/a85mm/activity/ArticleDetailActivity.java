@@ -41,7 +41,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
     private String url = "";
     private int startX = 0;
     private int startY = 0;
-    private int articleId;
+    private String articleId;
     /*private TextView article_title;
     private RelativeLayout article_author;
     private ImageView author_head_image;
@@ -52,7 +52,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
     private ArticleDetailResponse.ArticleBean articleBean;
     private List<ArticleDetailBean> articleDetails = new ArrayList<>();
 
-    public static void startArticleDetailActivity(Context context, int articleId, int x, int y, String headImageUrl) {
+    public static void startArticleDetailActivity(Context context, String articleId, int x, int y, String headImageUrl) {
         Intent intent = new Intent(context, ArticleDetailActivity.class);
         intent.putExtra(Constant.INTENT_ARTICLE_ID, articleId);
         intent.putExtra(Constant.INTENT_ARTICLE_IMAGE_POSITIONX, x);
@@ -68,7 +68,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
         setContentView(R.layout.activity_article_detail);
         if (getIntent() != null) {
             if (getIntent().getExtras() != null) {
-                articleId = getIntent().getExtras().getInt(Constant.INTENT_ARTICLE_ID);
+                articleId = getIntent().getExtras().getString(Constant.INTENT_ARTICLE_ID);
                 url = getIntent().getExtras().getString(Constant.INTENT_ARTICLE_HEAD_IMAGE);
                 startX = getIntent().getExtras().getInt(Constant.INTENT_ARTICLE_IMAGE_POSITIONX);
                 startY = getIntent().getExtras().getInt(Constant.INTENT_ARTICLE_IMAGE_POSITIONY);
@@ -164,7 +164,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
 
     private void requestData() {
         if (articleActivityPresenter != null) {
-            articleActivityPresenter.getArticleDetailsData(String.valueOf(articleId));
+            articleActivityPresenter.getArticleDetailsData(articleId, userId, deviceId);
         }
     }
 
