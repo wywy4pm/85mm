@@ -75,7 +75,7 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
     public void saveImageShowTop(String workId, String coverUrl, int width, int height) {
         if (saveImageHelper != null && showTopHandler != null) {
             if (!TextUtils.isEmpty(workId)) {
-                onActionEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_IMAGE_DOWNLOAD, workId, ""));
+                onActionEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_IMAGE_DOWNLOAD, workId, coverUrl));
             }
             saveImageHelper.saveImageShowTop(this, coverUrl, width, height, showTopHandler, isShowingTop);
         }

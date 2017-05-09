@@ -45,7 +45,7 @@ public class EventStatisticsHelper implements MvpView {
 
     public static List<ActionBean> createOneActionList(int actionType, String resourceId, String remark) {
         List<ActionBean> actionList = new ArrayList<>();
-        ActionBean actionBean = new ActionBean(actionType, resourceId, "");
+        ActionBean actionBean = new ActionBean(actionType, resourceId, remark);
         actionList.add(actionBean);
         return actionList;
     }
