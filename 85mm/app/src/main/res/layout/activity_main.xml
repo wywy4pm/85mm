@@ -48,6 +48,17 @@
         app:tl_textUnselectColor="@color/charcoalgrey"
         app:tl_textsize="15sp" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/layout_status_place"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/icon_home_more" />
+
     <View
         android:id="@+id/line"
         android:layout_width="match_parent"

@@ -2,6 +2,7 @@ package com.arun.a85mm.fragment;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,6 +56,7 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     @Override
     protected void initView() {
         expandableListView = (ExpandableListView) rootView.findViewById(R.id.swipe_target);
+        expandableListView.setFriction((float) (ViewConfiguration.getScrollFriction() * 0.1));
         swipeToLoadLayout = (SwipeToLoadLayout) rootView.findViewById(R.id.swipeToLoad);
         not_network_image = (ImageView) rootView.findViewById(R.id.not_network_image);
         not_network_text = (TextView) rootView.findViewById(R.id.not_network_text);

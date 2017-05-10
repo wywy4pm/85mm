@@ -15,4 +15,6 @@ public class WorkListItemBean {
     public String authorHeadImg;
     public String authorPageUrl;
     public String sourceUrl;
+
+    public boolean isLoad;
 }
