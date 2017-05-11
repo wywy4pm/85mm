@@ -21,7 +21,6 @@ import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
-import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.utils.DensityUtil;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -45,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private ShowTopHandler showTopHandler;
     private ObjectAnimatorHelper objectAnimatorHelper;
     private EventStatisticsHelper eventStatisticsHelper;
-    //private ObjectAnimatorHelper objectAnimatorHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     public void saveImageShowTop(String workId, String coverUrl, int width, int height) {
         if (saveImageHelper != null && showTopHandler != null) {
             if (!TextUtils.isEmpty(workId)) {
-                onActionEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_IMAGE_DOWNLOAD, workId, coverUrl));
+                onActionEvent(EventConstant.WORK_IMAGE_DOWNLOAD, EventStatisticsHelper.createOneActionList(EventConstant.WORK_IMAGE_DOWNLOAD, workId, coverUrl));
             }
             saveImageHelper.saveImageShowTop(this, coverUrl, width, height, showTopHandler, isShowingTop);
         }
@@ -131,15 +129,18 @@ public class MainActivity extends AppCompatActivity {
         this.isShowingTop = isShowingTop;
     }
 
-    public void onActionEvent(List<ActionBean> actionList) {
+    public void onActionEvent(int type, List<ActionBean> actionList) {
         if (eventStatisticsHelper != null) {
-            eventStatisticsHelper.recordUserAction(this, actionList);
+            eventStatisticsHelper.recordUserAction(this, type, actionList);
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.detachView();
+        }
     }
 
     @Override

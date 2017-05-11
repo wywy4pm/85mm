@@ -1,7 +1,6 @@
 package com.arun.a85mm.fragment;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.ExpandableListView;
@@ -10,12 +9,10 @@ import android.widget.ImageView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.adapter.ProductListAdapter;
-import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.helper.DialogHelper;
-import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.ProductFragmentPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
@@ -230,8 +227,8 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     }*/
 
     @Override
-    public void onMoreLinkClick(String sourceUrl) {
-        DialogHelper.showBottomSourceLink(getActivity(), sourceUrl);
+    public void onMoreLinkClick(String workId, String sourceUrl) {
+        DialogHelper.showBottomSourceLink(getActivity(), sourceUrl, workId, eventStatisticsHelper);
     }
 
     public void setHaveMore(boolean isHaveMore) {

@@ -20,6 +20,7 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.utils.DensityUtil;
@@ -266,10 +267,11 @@ public abstract class BaseFragment extends Fragment implements EventListener {
         });
     }
 
+
     @Override
     public void onEvent(List<ActionBean> actionList) {
         if (eventStatisticsHelper != null) {
-            eventStatisticsHelper.recordUserAction(getActivity(), actionList);
+            eventStatisticsHelper.recordUserAction(getActivity(), EventConstant.DEFAULT, actionList);
         }
     }
 

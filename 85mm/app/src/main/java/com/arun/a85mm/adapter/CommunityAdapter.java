@@ -256,7 +256,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             public boolean onLongClick(View v) {
                 finalWorkListHeadHolder.rippleView.setRippleDuration(0);
                 if (onImageClick != null) {
-                    onImageClick.onMoreLinkClick(bean.sourceUrl);
+                    onImageClick.onMoreLinkClick(bean.workId,bean.sourceUrl);
                     Log.d("TAG", "onMoreLinkClick = " + bean.sourceUrl);
                 }
                 return false;
@@ -352,7 +352,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(bean.sourceUrl);
+                        onImageClick.onMoreLinkClick(bean.workId,bean.sourceUrl);
                     }
                 }
             });
@@ -360,7 +360,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(bean.sourceUrl);
+                        onImageClick.onMoreLinkClick(bean.workId,bean.sourceUrl);
                     }
                 }
             });
@@ -415,7 +415,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             public boolean onLongClick(View v) {
                 finalWorkListItemHolder.rippleView.setRippleDuration(0);
                 if (onImageClick != null) {
-                    onImageClick.onMoreLinkClick(bean.sourceUrl);
+                    onImageClick.onMoreLinkClick(bean.workId,bean.sourceUrl);
                 }
                 return false;
             }
