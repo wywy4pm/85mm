@@ -62,8 +62,8 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
         not_network_text = (TextView) rootView.findViewById(R.id.not_network_text);
         not_network_btn = (TextView) rootView.findViewById(R.id.not_network_btn);
         next_group_img = (ImageView) rootView.findViewById(R.id.next_group_img);
-
         communityAdapter = new CommunityAdapter(getActivity(), workLists, false);
+        communityAdapter.setEventListener(this);
         expandableListView.setAdapter(communityAdapter);
         communityAdapter.setOnImageClick(this);
         swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.arun.a85mm.R;
-import com.arun.a85mm.common.Constant;
 
 public class MoreSettingActivity extends BaseActivity {
 
