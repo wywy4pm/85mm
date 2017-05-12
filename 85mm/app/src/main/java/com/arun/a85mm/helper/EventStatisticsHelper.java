@@ -1,13 +1,10 @@
 package com.arun.a85mm.helper;
 
 import android.content.Context;
-import android.os.Message;
 
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ActionRequest;
-import com.arun.a85mm.bean.ShowTopBean;
-import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.presenter.EventPresenter;
 import com.arun.a85mm.utils.AppUtils;
@@ -57,15 +54,21 @@ public class EventStatisticsHelper implements EventView {
     }
 
     @Override
-    public void eventSuccess(int type) {
+    public void eventSuccess() {
+
+    }
+
+    @Override
+    public void eventDone(int type) {
         if (context instanceof MainActivity) {
-            if (type == EventConstant.WORK_REPORT) {
-                ((MainActivity) context).showTop("举报提交成功");
+           /* if (type == EventConstant.WORK_REPORT) {
+                ((MainActivity) context).showTop("操作成功");
             } else if (type == EventConstant.WORK_BAD_COMMNET) {
-                ((MainActivity) context).showTop("差评提交成功");
+                ((MainActivity) context).showTop("操作成功");
             } else if (type == EventConstant.WORK_REPEAT) {
-                ((MainActivity) context).showTop("重复提交成功");
-            }
+                ((MainActivity) context).showTop("操作成功");
+            }*/
+            ((MainActivity) context).showTop("操作成功");
         }
     }
 

@@ -50,7 +50,6 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     @Override
     protected void initView() {
         expandableListView = (ExpandableListView) findViewById(R.id.swipe_target);
-        expandableListView.setFriction((float) (ViewConfiguration.getScrollFriction() * 0.1));
         swipeToLoadLayout = (SwipeToLoadLayout) findViewById(R.id.swipeToLoad);
         not_network_image = (ImageView) findViewById(R.id.not_network_image);
         not_network_text = (TextView) findViewById(R.id.not_network_text);

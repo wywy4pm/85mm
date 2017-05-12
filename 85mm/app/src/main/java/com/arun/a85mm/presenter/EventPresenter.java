@@ -6,9 +6,8 @@ import android.util.Log;
 import com.arun.a85mm.bean.ActionRequest;
 import com.arun.a85mm.bean.CommonResponse;
 import com.arun.a85mm.common.ErrorCode;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.retrofit.RetrofitInit;
-import com.arun.a85mm.view.CommonView;
-import com.arun.a85mm.view.CommonView2;
 import com.arun.a85mm.view.EventView;
 
 import rx.Subscriber;
@@ -41,8 +40,13 @@ public class EventPresenter extends BasePresenter<EventView> {
                     Log.d("TAG", "code = " + commonResponse.code);
                     if (commonResponse.code == ErrorCode.SUCCESS) {
                         Log.d("TAG", "recordUserAction Success");
-                        if(getMvpView() != null){
-                            getMvpView().eventSuccess(type);
+                        if (getMvpView() != null) {
+                            if (type == EventConstant.WORK_REPORT || type == EventConstant.WORK_BAD_COMMNET
+                                    || type == EventConstant.WORK_REPEAT) {
+                                getMvpView().eventDone(type);
+                            }
+                        } else {
+                            getMvpView().eventSuccess();
                         }
                     }
                 }

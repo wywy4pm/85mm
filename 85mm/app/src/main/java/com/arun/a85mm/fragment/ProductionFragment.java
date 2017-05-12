@@ -48,7 +48,6 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     protected void initView() {
         swipeToLoadLayout = (SwipeToLoadLayout) findViewById(R.id.swipeToLoad);
         expandableListView = (ExpandableListView) findViewById(R.id.swipe_target);
-        expandableListView.setFriction((float) (ViewConfiguration.getScrollFriction() * 0.1));
         next_group_img = (ImageView) findViewById(R.id.next_group_img);
         productListAdapter = new ProductListAdapter(getActivity(), workLists);
         expandableListView.setAdapter(productListAdapter);

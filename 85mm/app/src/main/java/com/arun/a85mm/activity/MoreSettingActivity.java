@@ -52,6 +52,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
 
         layout_share.setOnClickListener(this);
         layout_clear.setOnClickListener(this);
+        setTitle("更多");
         setBack();
         setCommonShow();
     }
@@ -72,7 +73,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
 
     private void clearCache() {
         DataCleanManager.clearImageAllCache(this);
-        cache_size.setText(DataCleanManager.getCacheSize(this));
+        cache_size.setText(DataCleanManager.getImageCacheSize(this));
         showTop("清除缓存成功");
     }
 

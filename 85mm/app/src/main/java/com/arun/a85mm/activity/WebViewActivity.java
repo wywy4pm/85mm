@@ -68,6 +68,8 @@ public class WebViewActivity extends BaseActivity {
         webSettings.setAppCacheEnabled(true);
         webSettings.setSaveFormData(false);
         webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setUseWideViewPort(true);
+        webSettings.setLoadWithOverviewMode(true);
         // webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         /* Enable zooming */
         webSettings.setSupportZoom(false);
