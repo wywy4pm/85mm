@@ -67,7 +67,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void showShare() {
-        
+
     }
 
     private void clearCache() {

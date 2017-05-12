@@ -1,6 +1,7 @@
 package com.arun.a85mm.activity;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -15,6 +16,7 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.bean.ShowTopBean;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.fragment.ArticleFragment;
 import com.arun.a85mm.fragment.CommunityFragment;
@@ -122,6 +124,17 @@ public class MainActivity extends AppCompatActivity implements CommonView2 {
         if (toastView.getLayoutParams() != null && topCommonView.getLayoutParams() != null) {
             toastView.getLayoutParams().height = DensityUtil.getStatusHeight(this);
             topCommonView.getLayoutParams().height = DensityUtil.getStatusHeight(this);
+        }
+    }
+
+    public void showTop(String showData) {
+        if (showTopHandler != null) {
+            Message message = new Message();
+            message.what = Constant.WHAT_SHOW_TOP;
+            message.obj = new ShowTopBean(isShowingTop, showData);
+            if (showTopHandler != null) {
+                showTopHandler.sendMessage(message);
+            }
         }
     }
 

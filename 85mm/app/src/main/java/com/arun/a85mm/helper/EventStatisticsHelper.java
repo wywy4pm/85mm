@@ -3,6 +3,7 @@ package com.arun.a85mm.helper;
 import android.content.Context;
 import android.os.Message;
 
+import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ActionRequest;
 import com.arun.a85mm.bean.ShowTopBean;
@@ -22,11 +23,13 @@ import java.util.List;
  */
 public class EventStatisticsHelper implements EventView {
     private EventPresenter presenter;
+    private Context context;
 
     @SuppressWarnings("unchecked")
     public EventStatisticsHelper(Context context) {
         presenter = new EventPresenter(context);
         presenter.attachView(this);
+        this.context = context;
     }
 
     public static List<ActionBean> createOneActionList(int actionType, String resourceId, String remark) {
@@ -55,13 +58,14 @@ public class EventStatisticsHelper implements EventView {
 
     @Override
     public void eventSuccess(int type) {
-        if (type == EventConstant.WORK_REPORT) {
-            /*Message message = new Message();
-            message.what = Constant.WHAT_SHOW_TOP;
-            message.obj = new ShowTopBean(isShowingTop, "举报成功");
-            if (showTopHandler != null) {
-                showTopHandler.sendMessage(message);
-            }*/
+        if (context instanceof MainActivity) {
+            if (type == EventConstant.WORK_REPORT) {
+                ((MainActivity) context).showTop("举报提交成功");
+            } else if (type == EventConstant.WORK_BAD_COMMNET) {
+                ((MainActivity) context).showTop("差评提交成功");
+            } else if (type == EventConstant.WORK_REPEAT) {
+                ((MainActivity) context).showTop("重复提交成功");
+            }
         }
     }
 
