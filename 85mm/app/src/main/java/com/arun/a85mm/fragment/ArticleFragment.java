@@ -110,7 +110,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
     @Override
     public void refresh(ArticleListResponse data) {
         if (data != null && data.articleList != null && data.articleList.size() > 0) {
-            SharedPreferencesUtils.saveUid(getActivity(), data.uid);
+            //SharedPreferencesUtils.saveUid(getActivity(), data.uid);
             articles.clear();
             articles.addAll(data.articleList);
             articleListAdapter.notifyDataSetChanged();

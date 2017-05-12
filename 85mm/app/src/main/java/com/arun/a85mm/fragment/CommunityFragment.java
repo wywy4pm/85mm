@@ -124,7 +124,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     @Override
     public void refresh(CommunityResponse data) {
         if (data != null && data.goodsList != null && data.goodsList.size() > 0) {
-            SharedPreferencesUtils.saveUid(getActivity(), data.uid);
+            //SharedPreferencesUtils.saveUid(getActivity(), data.uid);
             worksList.clear();
             formatData(data.goodsList);
         }

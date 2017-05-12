@@ -7,11 +7,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ActionBean;
+import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.fragment.ArticleFragment;
@@ -21,14 +23,21 @@ import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
+import com.arun.a85mm.presenter.SettingPresenter;
+import com.arun.a85mm.utils.ACache;
+import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DensityUtil;
+import com.arun.a85mm.utils.DeviceUtils;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
+import com.arun.a85mm.view.CommonView2;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CommonView2 {
 
     private RelativeLayout activity_main;
     private SlidingTabLayout tabLayout;
@@ -44,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private ShowTopHandler showTopHandler;
     private ObjectAnimatorHelper objectAnimatorHelper;
     private EventStatisticsHelper eventStatisticsHelper;
+    private SettingPresenter settingPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +102,11 @@ public class MainActivity extends AppCompatActivity {
         list.add(productionFragment);
         list.add(communityFragment);
         list.add(articleFragment);
+        if (settingPresenter == null) {
+            settingPresenter = new SettingPresenter(this);
+            settingPresenter.attachView(this);
+            settingPresenter.queryConfig(DeviceUtils.getMobileIMEI(this));
+        }
     }
 
     private void setSaveImage() {
@@ -135,9 +150,30 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void moreClick(View view) {
+        MoreSettingActivity.jumpToMoreSettingActivity(this);
+    }
+
+    @Override
+    public void refresh(Object data) {
+        if (data instanceof ConfigResponse) {
+            ConfigResponse config = (ConfigResponse) data;
+            SharedPreferencesUtils.saveUid(this, config.uid);
+            CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_CONFIG, (Serializable) config.copyWrite);
+        }
+    }
+
+    @Override
+    public void onError(String error, String tag) {
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (settingPresenter != null) {
+            settingPresenter.detachView();
+        }
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.detachView();
         }
@@ -156,5 +192,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
 }

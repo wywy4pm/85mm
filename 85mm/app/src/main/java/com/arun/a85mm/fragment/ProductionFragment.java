@@ -109,7 +109,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     @Override
     public void refresh(ProductListResponse data) {
         if (data != null && data.workList != null && data.workList.size() > 0) {
-            SharedPreferencesUtils.saveUid(getActivity(), data.uid);
+            //SharedPreferencesUtils.saveUid(getActivity(), data.uid);
             workLists.clear();
             formatData(data.workList);
         }

@@ -1,14 +1,17 @@
 package com.arun.a85mm.activity;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ShowTopBean;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.EventStatisticsHelper;
@@ -38,6 +41,7 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
     private EventStatisticsHelper eventStatisticsHelper;
     private TextView topCommonView;
     private TextView toastView;
+    private ImageView image_back;
     public String userId;
     public String deviceId;
 
@@ -62,6 +66,23 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
         eventStatisticsHelper = new EventStatisticsHelper(this);
     }
 
+    public void setCommonShow() {
+        initToastView();
+        showTopHandler = new ShowTopHandler(this);
+        objectAnimatorHelper = new ObjectAnimatorHelper();
+    }
+
+    public void showTop(String showData) {
+        if (showTopHandler != null) {
+            Message message = new Message();
+            message.what = Constant.WHAT_SHOW_TOP;
+            message.obj = new ShowTopBean(isShowingTop, showData);
+            if (showTopHandler != null) {
+                showTopHandler.sendMessage(message);
+            }
+        }
+    }
+
     private void initToastView() {
         toastView = (TextView) findViewById(R.id.toastView);
         topCommonView = (TextView) findViewById(R.id.topCommonView);
@@ -81,7 +102,7 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
     }
 
     public void showTopToastView(ShowTopBean showTopBean) {
-        if (showTopBean != null) {
+        if (showTopBean != null && objectAnimatorHelper != null) {
             objectAnimatorHelper.managerShowTopView(this, toastView, showTopBean);
         }
     }
@@ -92,7 +113,7 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
 
     public void onActionEvent(int type, List<ActionBean> actionList) {
         if (eventStatisticsHelper != null) {
-            eventStatisticsHelper.recordUserAction(this, type,actionList);
+            eventStatisticsHelper.recordUserAction(this, type, actionList);
         }
     }
 
@@ -117,6 +138,13 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
                 onBackPressed();
             }
         });
+    }
+
+    public void setBack() {
+        image_back = (ImageView) findViewById(R.id.image_back);
+        if (image_back != null) {
+            setBack(image_back);
+        }
     }
 
     @Override

@@ -7,4 +7,5 @@ public class RetrofitUrl {
     public static final String WORKS_GOODS = "/works/goods";
     public static final String USER_ACTION = "/user/action";
     public static final String WORKS_ONE_DAY_LEFT = "/works/onedayGoods";
+    public static final String CONFIG_QUERY = "/config/query";
 }
