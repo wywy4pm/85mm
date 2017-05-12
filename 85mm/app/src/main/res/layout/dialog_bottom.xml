@@ -13,7 +13,58 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="15dp"
-        android:text="原文链接"
+        android:text="查看原文"
+        android:textColor="@color/charcoalgrey"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/plain" />
+
+    <TextView
+        android:id="@+id/btn_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="举报  (广告、低俗)"
+        android:textColor="@color/charcoalgrey"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/plain" />
+
+    <TextView
+        android:id="@+id/btn_bad_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="差评"
+        android:textColor="@color/charcoalgrey"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/plain" />
+
+    <TextView
+        android:id="@+id/btn_repeat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="重复"
         android:textColor="@color/charcoalgrey"
         android:textSize="15sp" />
 

@@ -197,8 +197,8 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     }
 
     @Override
-    public void onMoreLinkClick(String sourceUrl) {
-        DialogHelper.showBottomSourceLink(getActivity(), sourceUrl);
+    public void onMoreLinkClick(String workId,String sourceUrl) {
+        DialogHelper.showBottomSourceLink(getActivity(), sourceUrl,workId,eventStatisticsHelper);
     }
 
     @Override

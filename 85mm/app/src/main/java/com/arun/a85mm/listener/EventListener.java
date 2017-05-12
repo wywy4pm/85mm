@@ -9,5 +9,7 @@ import java.util.List;
  */
 
 public interface EventListener {
+
     void onEvent(List<ActionBean> actionList);
+
 }

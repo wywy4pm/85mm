@@ -9,5 +9,5 @@ public interface OnImageClick {
 
     void onCoverClick(String workId,String coverUrl, int width, int height);
 
-    void onMoreLinkClick(String sourceUrl);
+    void onMoreLinkClick(String workId,String sourceUrl);
 }

@@ -14,7 +14,6 @@ import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
-import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -75,7 +74,7 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
     public void saveImageShowTop(String workId, String coverUrl, int width, int height) {
         if (saveImageHelper != null && showTopHandler != null) {
             if (!TextUtils.isEmpty(workId)) {
-                onActionEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_IMAGE_DOWNLOAD, workId, coverUrl));
+                onActionEvent(EventConstant.WORK_IMAGE_DOWNLOAD, EventStatisticsHelper.createOneActionList(EventConstant.WORK_IMAGE_DOWNLOAD, workId, coverUrl));
             }
             saveImageHelper.saveImageShowTop(this, coverUrl, width, height, showTopHandler, isShowingTop);
         }
@@ -91,9 +90,9 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
         this.isShowingTop = isShowingTop;
     }
 
-    public void onActionEvent(List<ActionBean> actionList) {
+    public void onActionEvent(int type, List<ActionBean> actionList) {
         if (eventStatisticsHelper != null) {
-            eventStatisticsHelper.recordUserAction(this, actionList);
+            eventStatisticsHelper.recordUserAction(this, type,actionList);
         }
     }
 
@@ -152,5 +151,13 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
     public void onBackPressed() {
         finish();
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.detachView();
+        }
     }
 }
