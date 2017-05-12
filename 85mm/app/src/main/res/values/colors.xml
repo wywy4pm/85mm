@@ -170,4 +170,8 @@
 
     <color name="light_yellow">#FFC125</color>
 
+    <color name="tab_select">#303030</color>
+
+    <color name="tab_un_select">#808080</color>
+
 </resources>

@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/icon_home_more" />
+            android:src="@mipmap/ic_home_more" />
     </RelativeLayout>
 
     <include

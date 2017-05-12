@@ -57,7 +57,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:src="@mipmap/icon_home_more" />
+        android:src="@mipmap/ic_home_more" />
 
     <View
         android:id="@+id/line"

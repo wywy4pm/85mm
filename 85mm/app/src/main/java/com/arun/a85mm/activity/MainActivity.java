@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout activity_main;
     private SlidingTabLayout tabLayout;
     private ViewPager viewPager;
-    private String[] titles = new String[]{"最新", "精选", "文章"};
+    private String[] titles = new String[]{"最新", "最热", "文章"};
     private List<Fragment> list = new ArrayList<>();
     private TextView topCommonView;
     private TextView toastView;
