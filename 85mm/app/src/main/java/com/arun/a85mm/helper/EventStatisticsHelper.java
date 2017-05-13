@@ -61,13 +61,6 @@ public class EventStatisticsHelper implements EventView {
     @Override
     public void eventDone(int type) {
         if (context instanceof MainActivity) {
-           /* if (type == EventConstant.WORK_REPORT) {
-                ((MainActivity) context).showTop("操作成功");
-            } else if (type == EventConstant.WORK_BAD_COMMNET) {
-                ((MainActivity) context).showTop("操作成功");
-            } else if (type == EventConstant.WORK_REPEAT) {
-                ((MainActivity) context).showTop("操作成功");
-            }*/
             ((MainActivity) context).showTop("操作成功");
         }
     }

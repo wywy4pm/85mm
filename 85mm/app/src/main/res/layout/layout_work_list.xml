@@ -9,8 +9,7 @@
         android:id="@+id/rippleView"
         rv_centered="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:rv_color="@color/white">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/work_list_cover_img"

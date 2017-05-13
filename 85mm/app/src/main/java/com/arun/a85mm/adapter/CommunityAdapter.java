@@ -3,6 +3,7 @@ package com.arun.a85mm.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,15 +72,15 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         WorkListHeadHolder workListHeadHolder = null;
-        /*convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_goods_list, parent, false);
-        workListHeadHolder = new WorkListHeadHolder(convertView);*/
-        if (convertView == null) {
+        convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_goods_list, parent, false);
+        workListHeadHolder = new WorkListHeadHolder(convertView);
+        /*if (convertView == null) {
             convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_goods_list, parent, false);
             workListHeadHolder = new WorkListHeadHolder(convertView);
             convertView.setTag(workListHeadHolder);
         } else {
             workListHeadHolder = (WorkListHeadHolder) convertView.getTag();
-        }
+        }*/
 
         final WorkListHeadHolder headHolder = workListHeadHolder;
         final WorkListBean bean = workList.get(groupPosition);
@@ -131,7 +132,9 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
                     headHolder.itemImageView.getLayoutParams().height = imageHeight;
                 }
-                Glide.with(contexts.get()).load(bean.coverUrl).centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                Glide.with(contexts.get()).load(bean.coverUrl).centerCrop()
+                        .placeholder(bean.backgroundColor).error(bean.backgroundColor)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .override(screenWidth, imageHeight).into(headHolder.work_list_cover_img);
 
                 if (!bean.isExpand) {
@@ -152,6 +155,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 }
                 final int finalImageHeight = imageHeight;
                 Glide.with(contexts.get()).load(bean.coverUrl).centerCrop()
+                        .placeholder(bean.backgroundColor).error(bean.backgroundColor)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -189,7 +193,9 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             workListHeadHolder.rippleView.setRippleDuration(300);
         }
         final WorkListHeadHolder finalWorkListHeadHolder = workListHeadHolder;
-
+        if (bean.backgroundColor > 0) {
+            workListHeadHolder.rippleView.setRippleColor(bean.backgroundColor);
+        }
         final int finalImageHeight = imageHeight;
         workListHeadHolder.rippleView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,6 +226,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                             headHolder.itemImageView.getLayoutParams().height = finalImageHeight;
                         }
                         Glide.with(contexts.get()).load(bean.coverUrl).centerCrop()
+                                .placeholder(bean.backgroundColor).error(bean.backgroundColor)
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
                             @Override
                             public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -270,15 +277,15 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         WorkListItemHolder workListItemHolder = null;
-        /*convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list_item, parent, false);
-        workListItemHolder = new WorkListItemHolder(convertView);*/
-        if (convertView == null) {
+        convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list_item, parent, false);
+        workListItemHolder = new WorkListItemHolder(convertView);
+        /*if (convertView == null) {
             convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list_item, parent, false);
             workListItemHolder = new WorkListItemHolder(convertView);
             convertView.setTag(workListItemHolder);
         } else {
             workListItemHolder = (WorkListItemHolder) convertView.getTag();
-        }
+        }*/
         final WorkListBean workGroup = workList.get(groupPosition);
         final List<WorkListItemBean> workListBean = workGroup.workDetail;
         final WorkListItemBean bean = workListBean.get(childPosition);
@@ -302,6 +309,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     workListItemHolder.work_list_item_img.getLayoutParams().height = imageHeight;
                 }
                 Glide.with(contexts.get()).load(bean.imageUrl).centerCrop()
+                        .placeholder(bean.backgroundColor).error(bean.backgroundColor)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -385,6 +393,9 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             workListItemHolder.work_list_item_title.setVisibility(View.GONE);
             workListItemHolder.work_list_item_author.setVisibility(View.GONE);
         }
+        if (bean.backgroundColor > 0) {
+            workListItemHolder.rippleView.setRippleColor(bean.backgroundColor);
+        }
         final int finalSaveImageHeight = imageHeight;
         workListItemHolder.rippleView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -397,6 +408,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 } else {
                     finalWorkListItemHolder.rippleView.setRippleDuration(0);
                     Glide.with(contexts.get()).load(bean.imageUrl).centerCrop()
+                            .placeholder(bean.backgroundColor).error(bean.backgroundColor)
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
                         @Override
                         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {

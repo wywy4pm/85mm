@@ -8,6 +8,7 @@ public class WorkListItemBean {
     public String imageUrl;
     public int height;
     public int width;
+    public int backgroundColor;
 
     public String workId;
     public String workTitle;

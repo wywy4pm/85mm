@@ -17,6 +17,7 @@ import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.helper.DialogHelper;
+import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.CommunityPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
@@ -115,8 +116,10 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     private void formatData(List<WorkListBean> workList) {
         for (int i = 0; i < workList.size(); i++) {
             if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
+                workList.get(i).backgroundColor = RandomColorHelper.getRandomColor();
                 if (workList.get(i).workDetail.size() <= 30) {
                     for (int j = 0; j < workList.get(i).workDetail.size(); j++) {
+                        workList.get(i).workDetail.get(j).backgroundColor = RandomColorHelper.getRandomColor();
                         if (j == workList.get(i).workDetail.size() - 1) {
                             if (workList.get(i).workDetail.get(j) != null) {
                                 workList.get(i).workDetail.get(j).authorHeadImg = workList.get(i).authorHeadImg;
@@ -129,6 +132,7 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
                     }
                 } else if (workList.get(i).workDetail.size() > 30) {
                     for (int j = 0; j < 30; j++) {
+                        workList.get(i).workDetail.get(j).backgroundColor = RandomColorHelper.getRandomColor();
                         if (j == 29) {
                             if (workList.get(i).workDetail.get(j) != null) {
                                 workList.get(i).workDetail.get(j).authorHeadImg = workList.get(i).authorHeadImg;

@@ -8,8 +8,7 @@
         android:id="@+id/rippleView"
         rv_centered="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:rv_color="@color/white">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/work_list_item_img"
