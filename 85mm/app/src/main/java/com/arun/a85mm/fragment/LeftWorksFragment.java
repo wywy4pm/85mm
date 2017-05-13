@@ -145,6 +145,9 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
                     }
                 }
             } else {
+                if (workList.get(i) != null) {
+                    workList.get(i).backgroundColor = RandomColorHelper.getRandomColor();
+                }
                 List<WorkListItemBean> items = new ArrayList<>();
                 WorkListItemBean itemBean = new WorkListItemBean();
                 itemBean.authorHeadImg = workList.get(i).authorHeadImg;

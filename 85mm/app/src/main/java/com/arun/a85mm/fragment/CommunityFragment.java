@@ -188,6 +188,9 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                                 }
                             }
                         } else {
+                            if (workList.get(i) != null) {
+                                workList.get(i).backgroundColor = RandomColorHelper.getRandomColor();
+                            }
                             List<WorkListItemBean> items = new ArrayList<>();
                             WorkListItemBean itemBean = new WorkListItemBean();
                             itemBean.authorHeadImg = workList.get(i).authorHeadImg;

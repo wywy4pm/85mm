@@ -141,7 +141,7 @@ public abstract class BaseFragment extends Fragment implements EventListener {
     }
 
     public void setExpandableListViewCommon(final ExpandableListView expandableListView, final ImageView next_group_img, final List<WorkListBean> worksList) {
-        expandableListView.setFriction((float) (ViewConfiguration.getScrollFriction() * 0.4));
+        expandableListView.setFriction((float) (ViewConfiguration.getScrollFriction() * 0.3));
         expandableListView.setGroupIndicator(null);
         expandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
