@@ -28,6 +28,7 @@ import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.presenter.SettingPresenter;
 import com.arun.a85mm.utils.ACache;
 import com.arun.a85mm.utils.CacheUtils;
+import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements CommonView2 {
         setContentView(R.layout.activity_main);
         initData();
         initView();
+        DataCleanManager.clearOver50MBSize(this);
     }
 
     private void initView() {

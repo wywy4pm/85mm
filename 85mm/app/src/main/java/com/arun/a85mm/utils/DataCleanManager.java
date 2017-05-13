@@ -96,7 +96,11 @@ public class DataCleanManager {
     private static void deleteFilesByDirectory(File directory) {
         if (directory != null && directory.exists() && directory.isDirectory()) {
             for (File item : directory.listFiles()) {
-                item.delete();
+                if (item.isFile()) {
+                    item.delete();
+                } else if (item.isDirectory()) {
+                    deleteFilesByDirectory(item);
+                }
             }
         }
     }
@@ -140,12 +144,8 @@ public class DataCleanManager {
         return "";
     }
 
-    public static void clearMoreCache(Context context) {
-        File cacheFile = context.getCacheDir();
-        long imageSize = getFolderSize(cacheFile);
-        if (imageSize > SIZE_50_MB) {
-            deleteFilesByDirectory(cacheFile);
-        }
+    public static void clearOver50MBSize(Context context) {
+        clearOver50MBSize(new File(context.getCacheDir() + File.separator + InternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR));
     }
 
     /**
@@ -202,6 +202,31 @@ public class DataCleanManager {
             e.printStackTrace();
         }
         return size;
+    }
+
+    private static void clearOver50MBSize(File file) {
+        try {
+            File[] fileList = file.listFiles();
+            long size = 0;
+            for (int i = fileList.length - 1; i >= 0; i--) {
+                if (size <= SIZE_50_MB) {//倒序查询50m大小
+                    // 如果下面还有文件
+                    if (fileList[i].isDirectory()) {
+                        size = size + getFolderSize(fileList[i]);
+                    } else {
+                        size = size + fileList[i].length();
+                    }
+                } else { //超过50m则删除所有剩余
+                    if (fileList[i].isFile()) {
+                        fileList[i].delete();
+                    } else if (fileList[i].isDirectory()) {
+                        deleteFilesByDirectory(fileList[i]);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
