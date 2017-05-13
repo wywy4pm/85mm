@@ -15,8 +15,6 @@ import android.widget.TextView;
 import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.WebViewActivity;
-import com.arun.a85mm.bean.ActionBean;
-import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.EventConstant;
@@ -65,9 +63,8 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
 
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         WorkListHeadHolder workListHeadHolder = null;
-        /*View view = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list, parent, false);
-        workListHeadHolder = new WorkListHeadHolder(view);*/
-
+        /*convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list, parent, false);
+        workListHeadHolder = new WorkListHeadHolder(convertView);*/
         if (convertView == null) {
             convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list, parent, false);
             workListHeadHolder = new WorkListHeadHolder(convertView);
@@ -97,8 +94,8 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                     headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
                     headHolder.itemView.getLayoutParams().height = imageHeight;
                 }
-                Glide.with(contexts.get()).load(bean.coverUrl).centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headHolder.work_list_cover_img);
+                Glide.with(contexts.get()).load(bean.coverUrl).centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .override(screenWidth, imageHeight).into(headHolder.work_list_cover_img);
 
                 if (!bean.isExpand) {
                     headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
@@ -145,7 +142,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                         bean.isCoverLoad = true;
                         return false;
                     }
-                }).into(headHolder.work_list_cover_img);
+                }).override(screenWidth, imageHeight).into(headHolder.work_list_cover_img);
             }
         }
 
@@ -210,7 +207,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                                 bean.isCoverLoad = true;
                                 return false;
                             }
-                        }).into(headHolder.work_list_cover_img);
+                        }).override(screenWidth, finalImageHeight).into(headHolder.work_list_cover_img);
                     }
                 }
             }
@@ -220,7 +217,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             public boolean onLongClick(View v) {
                 finalWorkListHeadHolder.rippleView.setRippleDuration(0);
                 if (onImageClick != null) {
-                    onImageClick.onMoreLinkClick(bean.workId,bean.sourceUrl);
+                    onImageClick.onMoreLinkClick(bean.workId, bean.sourceUrl);
                     Log.d("TAG", "onMoreLinkClick = " + bean.sourceUrl);
                 }
                 return false;
@@ -232,8 +229,8 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         WorkListItemHolder workListItemHolder = null;
-        /*View view = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list_item, parent, false);
-        workListItemHolder = new WorkListItemHolder(view);*/
+        /*convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list_item, parent, false);
+        workListItemHolder = new WorkListItemHolder(convertView);*/
         if (convertView == null) {
             convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list_item, parent, false);
             workListItemHolder = new WorkListItemHolder(convertView);
@@ -274,7 +271,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                         bean.isLoad = true;
                         return false;
                     }
-                }).into(finalWorkListItemHolder.work_list_item_img);
+                }).override(screenWidth, imageHeight).into(finalWorkListItemHolder.work_list_item_img);
 
                 if (workListBean.size() > 1) {
                     new Handler().post(new Runnable() {
@@ -315,7 +312,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(bean.workId,bean.sourceUrl);
+                        onImageClick.onMoreLinkClick(bean.workId, bean.sourceUrl);
                     }
                 }
             });
@@ -323,7 +320,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(bean.workId,bean.sourceUrl);
+                        onImageClick.onMoreLinkClick(bean.workId, bean.sourceUrl);
                     }
                 }
             });
@@ -354,7 +351,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                             bean.isLoad = true;
                             return false;
                         }
-                    }).into(finalWorkListItemHolder.work_list_item_img);
+                    }).override(screenWidth, finalSaveImageHeight).into(finalWorkListItemHolder.work_list_item_img);
                 }
             }
         });
@@ -363,7 +360,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             public boolean onLongClick(View v) {
                 finalWorkListItemHolder.rippleView.setRippleDuration(0);
                 if (onImageClick != null) {
-                    onImageClick.onMoreLinkClick(bean.workId,bean.sourceUrl);
+                    onImageClick.onMoreLinkClick(bean.workId, bean.sourceUrl);
                 }
                 return false;
             }

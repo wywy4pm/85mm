@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
@@ -140,7 +141,7 @@ public abstract class BaseFragment extends Fragment implements EventListener {
     }
 
     public void setExpandableListViewCommon(final ExpandableListView expandableListView, final ImageView next_group_img, final List<WorkListBean> worksList) {
-
+        expandableListView.setFriction((float) (ViewConfiguration.getScrollFriction() * 0.2));
         expandableListView.setGroupIndicator(null);
         expandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -151,9 +152,9 @@ public abstract class BaseFragment extends Fragment implements EventListener {
             @Override
             public void onScroll(AbsListView listView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 //分页处理
-                if (listView.getCount() > 5) {
+                if (listView.getCount() > 9) {
                     synchronized (BaseFragment.this) {
-                        if (listView.getLastVisiblePosition() >= listView.getCount() - 6) {
+                        if (listView.getLastVisiblePosition() >= listView.getCount() - 9) {
                             if (!isLoading) {
                                 setLoadMore();
                             }

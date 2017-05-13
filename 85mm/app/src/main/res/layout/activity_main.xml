@@ -36,6 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_status_place"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         android:paddingBottom="5dp"
         android:paddingTop="10dp"
         app:tl_indicator_anim_duration="100"
@@ -53,10 +55,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/layout_status_place"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
         android:onClick="moreClick"
         android:src="@mipmap/ic_home_more" />
 

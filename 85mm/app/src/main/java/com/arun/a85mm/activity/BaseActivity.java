@@ -42,6 +42,7 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
     private TextView topCommonView;
     private TextView toastView;
     private ImageView image_back;
+    private TextView titleView;
     public String userId;
     public String deviceId;
 
@@ -144,6 +145,13 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
         image_back = (ImageView) findViewById(R.id.image_back);
         if (image_back != null) {
             setBack(image_back);
+        }
+    }
+
+    public void setTitle(String title) {
+        titleView = (TextView) findViewById(R.id.title);
+        if (titleView != null) {
+            titleView.setText(title);
         }
     }
 
