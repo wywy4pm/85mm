@@ -238,7 +238,8 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         } else {
             workListItemHolder = (WorkListItemHolder) convertView.getTag();
         }
-        final List<WorkListItemBean> workListBean = works.get(groupPosition).workDetail;
+        final WorkListBean workGroup = works.get(groupPosition);
+        final List<WorkListItemBean> workListBean = workGroup.workDetail;
         final WorkListItemBean bean = workListBean.get(childPosition);
         int detailSize = works.get(groupPosition).workDetail.size();
         final WorkListItemHolder finalWorkListItemHolder = workListItemHolder;
@@ -312,7 +313,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(bean.workId, bean.sourceUrl);
+                        onImageClick.onMoreLinkClick(workGroup.workId, bean.sourceUrl);
                     }
                 }
             });
@@ -320,7 +321,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(bean.workId, bean.sourceUrl);
+                        onImageClick.onMoreLinkClick(workGroup.workId, bean.sourceUrl);
                     }
                 }
             });
@@ -360,7 +361,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             public boolean onLongClick(View v) {
                 finalWorkListItemHolder.rippleView.setRippleDuration(0);
                 if (onImageClick != null) {
-                    onImageClick.onMoreLinkClick(bean.workId, bean.sourceUrl);
+                    onImageClick.onMoreLinkClick(workGroup.workId, bean.sourceUrl);
                 }
                 return false;
             }

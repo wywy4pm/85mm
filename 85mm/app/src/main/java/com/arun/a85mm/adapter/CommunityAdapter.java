@@ -279,7 +279,8 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         } else {
             workListItemHolder = (WorkListItemHolder) convertView.getTag();
         }
-        final List<WorkListItemBean> workListBean = workList.get(groupPosition).workDetail;
+        final WorkListBean workGroup = workList.get(groupPosition);
+        final List<WorkListItemBean> workListBean = workGroup.workDetail;
         final WorkListItemBean bean = workListBean.get(childPosition);
         int detailSize = workList.get(groupPosition).workDetail.size();
         final WorkListItemHolder finalWorkListItemHolder = workListItemHolder;
@@ -353,7 +354,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(bean.workId, bean.sourceUrl);
+                        onImageClick.onMoreLinkClick(workGroup.workId, bean.sourceUrl);
                     }
                 }
             });
@@ -361,7 +362,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(bean.workId, bean.sourceUrl);
+                        onImageClick.onMoreLinkClick(workGroup.workId, bean.sourceUrl);
                     }
                 }
             });
@@ -416,7 +417,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             public boolean onLongClick(View v) {
                 finalWorkListItemHolder.rippleView.setRippleDuration(0);
                 if (onImageClick != null) {
-                    onImageClick.onMoreLinkClick(bean.workId, bean.sourceUrl);
+                    onImageClick.onMoreLinkClick(workGroup.workId, bean.sourceUrl);
                 }
                 return false;
             }
