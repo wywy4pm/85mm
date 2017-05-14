@@ -24,6 +24,7 @@ public class WorkListBean {
     public List<WorkListItemBean> workDetail;
     public boolean isExpand;
     public boolean isCoverLoad;
+    public int backgroundColor;
 
     public int browseNum;
     public String date;

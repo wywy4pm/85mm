@@ -14,6 +14,7 @@ import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.helper.DialogHelper;
+import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.CommunityPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
@@ -143,6 +144,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                 if (goodsListBean != null && goodsListBean.workList != null && goodsListBean.workList.size() > 0) {
                     List<WorkListBean> workList = goodsListBean.workList;
                     for (int i = 0; i < workList.size(); i++) {
+                        workList.get(i).backgroundColor = RandomColorHelper.getRandomColor();
                         if (i == 0) {
                             workList.get(i).isTitle = true;
                             workList.get(i).date = goodsListBean.date;
@@ -160,6 +162,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                         if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
                             if (workList.get(i).workDetail.size() <= 30) {
                                 for (int j = 0; j < workList.get(i).workDetail.size(); j++) {
+                                    workList.get(i).workDetail.get(j).backgroundColor = RandomColorHelper.getRandomColor();
                                     if (j == workList.get(i).workDetail.size() - 1) {
                                         if (workList.get(i).workDetail.get(j) != null) {
                                             workList.get(i).workDetail.get(j).authorHeadImg = workList.get(i).authorHeadImg;
@@ -172,6 +175,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                                 }
                             } else if (workList.get(i).workDetail.size() > 30) {
                                 for (int j = 0; j < 30; j++) {
+                                    workList.get(i).workDetail.get(j).backgroundColor = RandomColorHelper.getRandomColor();
                                     if (j == 29) {
                                         if (workList.get(i).workDetail.get(j) != null) {
                                             workList.get(i).workDetail.get(j).authorHeadImg = workList.get(i).authorHeadImg;
@@ -184,6 +188,9 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                                 }
                             }
                         } else {
+                            if (workList.get(i) != null) {
+                                workList.get(i).backgroundColor = RandomColorHelper.getRandomColor();
+                            }
                             List<WorkListItemBean> items = new ArrayList<>();
                             WorkListItemBean itemBean = new WorkListItemBean();
                             itemBean.authorHeadImg = workList.get(i).authorHeadImg;
@@ -232,15 +239,15 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     }
 
     @Override
-    public void onCoverClick(String workId,String coverUrl, int width, int height) {
+    public void onCoverClick(String workId, String coverUrl, int width, int height) {
         if (getActivity() != null && getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).saveImageShowTop(workId,coverUrl, width, height);
+            ((MainActivity) getActivity()).saveImageShowTop(workId, coverUrl, width, height);
         }
     }
 
     @Override
-    public void onMoreLinkClick(String workId,String sourceUrl) {
-        DialogHelper.showBottomSourceLink(getActivity(), sourceUrl,workId,eventStatisticsHelper);
+    public void onMoreLinkClick(String workId, String sourceUrl) {
+        DialogHelper.showBottomSourceLink(getActivity(), sourceUrl, workId, eventStatisticsHelper);
     }
 
     @Override

@@ -174,4 +174,12 @@
 
     <color name="tab_un_select">#808080</color>
 
+    <!--7种背景色，随机取-->
+    <color name="work_bg_color_1">#D6B5BC</color>
+    <color name="work_bg_color_2">#F0D6BD</color>
+    <color name="work_bg_color_3">#FFE6D7</color>
+    <color name="work_bg_color_4">#DEE6CE</color>
+    <color name="work_bg_color_5">#F7F6C5</color>
+    <color name="work_bg_color_6">#D6E6B5</color>
+    <color name="work_bg_color_7">#73BD8C</color>
 </resources>
