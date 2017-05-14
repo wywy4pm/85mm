@@ -49,6 +49,7 @@ public abstract class BaseFragment extends Fragment implements EventListener {
     public int currentGroupPosition;
     public boolean isSingleExpand;
     public EventStatisticsHelper eventStatisticsHelper;
+    private Runnable runnable;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -244,6 +245,33 @@ public abstract class BaseFragment extends Fragment implements EventListener {
     }
 
     public void preLoadChildFirstImage(final List<WorkListBean> workList) {
+        if (runnable == null) {
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (workList != null && workList.size() > 0) {
+                        for (int i = 0; i < workList.size(); i++) {
+                            WorkListBean workListBean = workList.get(i);
+                            //int coverHeight = (workListBean.coverHeight * screenWidth) / workListBean.coverWidth;
+                            if (getActivity() != null) {
+                                Glide.with(getActivity()).load(workListBean.coverUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                            }
+                            if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
+                                WorkListItemBean bean = workList.get(i).workDetail.get(0);
+                                if (bean != null) {
+                                    if (bean.width > 0) {
+                                        //int imageHeight = (bean.height * screenWidth) / bean.width;
+                                        Glide.with(getActivity()).load(bean.imageUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                                        Log.d("TAG", "imageUrl = " + bean.imageUrl);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            new Handler().post(runnable);
+        }
         new Handler().post(new Runnable() {
             @Override
             public void run() {
@@ -251,7 +279,9 @@ public abstract class BaseFragment extends Fragment implements EventListener {
                     for (int i = 0; i < workList.size(); i++) {
                         WorkListBean workListBean = workList.get(i);
                         //int coverHeight = (workListBean.coverHeight * screenWidth) / workListBean.coverWidth;
-                        Glide.with(getActivity()).load(workListBean.coverUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                        if (getActivity() != null) {
+                            Glide.with(getActivity()).load(workListBean.coverUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                        }
                         if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
                             WorkListItemBean bean = workList.get(i).workDetail.get(0);
                             if (bean != null) {
@@ -303,6 +333,9 @@ public abstract class BaseFragment extends Fragment implements EventListener {
         super.onDestroy();
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.detachView();
+        }
+        if(runnable != null){
+            new Thread().stop();
         }
     }
 }
