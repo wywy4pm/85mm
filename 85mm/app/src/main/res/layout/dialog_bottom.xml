@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:gravity="center"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/btn_link"
@@ -74,6 +73,40 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:background="@color/plain" />
+
+    <TextView
+        android:id="@+id/btn_image_seq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="图片显示有问题"
+        android:textColor="@color/charcoalgrey"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/plain" />
+
+    <!--<TextView
+        android:id="@+id/btn_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="审核专用"
+        android:textColor="@color/charcoalgrey"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/plain" />-->
 
     <TextView
         android:id="@+id/btn_cancel"

@@ -57,6 +57,26 @@ public class DialogHelper {
                 dialog.cancel();
             }
         });
+
+        root.findViewById(R.id.btn_image_seq).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (helper != null) {
+                    helper.recordUserAction(context, EventConstant.WORK_SHOW_SEQ, EventStatisticsHelper.createOneActionList(EventConstant.WORK_REPEAT, workId, ""));
+                }
+                dialog.cancel();
+            }
+        });
+
+        /*root.findViewById(R.id.btn_check).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (helper != null) {
+                    helper.recordUserAction(context, EventConstant, EventStatisticsHelper.createOneActionList(EventConstant.WORK_REPEAT, workId, ""));
+                }
+                dialog.cancel();
+            }
+        });*/
         root.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -13,4 +13,6 @@ public class EventConstant {
     public static final int WORK_REPORT = 3001;
     public static final int WORK_BAD_COMMNET = 3002;
     public static final int WORK_REPEAT = 3003;
+    public static final int WORK_SHOW_SEQ = 3004;
+
 }

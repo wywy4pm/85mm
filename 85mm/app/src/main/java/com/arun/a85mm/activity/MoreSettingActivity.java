@@ -11,9 +11,11 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.ConfigAdapter;
+import com.arun.a85mm.helper.ShareHelper;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.StatusBarUtils;
+import com.umeng.socialize.UMShareAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +70,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void showShare() {
-
+        ShareHelper.openShare(this);
     }
 
     private void clearCache() {
@@ -87,5 +89,11 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                 clearCache();
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }
