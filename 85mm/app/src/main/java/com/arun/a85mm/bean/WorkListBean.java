@@ -1,12 +1,13 @@
 package com.arun.a85mm.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by wy on 2017/5/5.
  */
 
-public class WorkListBean {
+public class WorkListBean implements Serializable{
     public String workId;
     public String workTitle;
     public String coverUrl;

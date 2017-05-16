@@ -1,24 +1,36 @@
 package com.arun.a85mm.activity;
 
 import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.ConfigResponse;
+import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
+import com.arun.a85mm.presenter.SettingPresenter;
+import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DensityUtil;
-import com.arun.a85mm.utils.StatusBarUtils;
+import com.arun.a85mm.utils.DeviceUtils;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
+import com.arun.a85mm.view.CommonView2;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
-public class SplashActivity extends AppCompatActivity {
+import java.io.Serializable;
+
+public class SplashActivity extends AppCompatActivity implements CommonView2 {
     public ImageView cover_Image;
     public TextView text_author;
     public LinearLayout layout_author;
@@ -26,6 +38,8 @@ public class SplashActivity extends AppCompatActivity {
     public TextView text_slogan;
     public RelativeLayout activity_splash;
     public int screenHeight;
+    private SettingPresenter settingPresenter;
+    private ProductListResponse response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +50,6 @@ public class SplashActivity extends AppCompatActivity {
         }
         initView();
         initData();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showAnimator();
-            }
-        }, 200);
     }
 
     private void initView() {
@@ -55,10 +63,16 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        if (settingPresenter == null) {
+            settingPresenter = new SettingPresenter(this);
+            settingPresenter.attachView(this);
+            settingPresenter.queryConfig(DeviceUtils.getMobileIMEI(this));
+            settingPresenter.getProductListData(SharedPreferencesUtils.getUid(this), DeviceUtils.getMobileIMEI(this), "'");
+        }
     }
 
     private void showAnimator() {
-        final int durationTranslate = 700;
+        final int durationTranslate = 800;
         final int durationAlpha = 500;
 
         final float firstStartOffsetY = 0;
@@ -97,6 +111,13 @@ public class SplashActivity extends AppCompatActivity {
 
                             @Override
                             public void onAnimationEnd(Animator animation) {
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        MainActivity.jumpToMain(SplashActivity.this, response);
+                                        SplashActivity.this.finish();
+                                    }
+                                }, 3000);
                             }
 
                             @Override
@@ -127,5 +148,59 @@ public class SplashActivity extends AppCompatActivity {
             public void onAnimationRepeat(Animator animation) {
             }
         });
+    }
+
+    @Override
+    public void refresh(Object data) {
+        if (data instanceof ConfigResponse) {
+            ConfigResponse config = (ConfigResponse) data;
+            SharedPreferencesUtils.saveUid(this, config.uid);
+            CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_CONFIG, (Serializable) config.copyWrite);
+            if (config.guidePage != null) {
+                final ConfigResponse.GuidePageBean bean = config.guidePage;
+                Glide.with(this).load(bean.imageUrl)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .placeholder(R.color.splash_bg)
+                        .error(R.color.splash_bg)
+                        .centerCrop()
+                        .crossFade()
+                        .listener(new RequestListener<String, GlideDrawable>() {
+                            @Override
+                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                showAnimator();
+                                return false;
+                            }
+                        })
+                        .into(cover_Image);
+                text_author.setText(bean.author);
+                cover_Image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        WebViewActivity.jumpToWebViewActivity(SplashActivity.this, bean.linkUrl);
+                    }
+                });
+            }
+        } else if (data instanceof ProductListResponse) {
+            response = (ProductListResponse) data;
+        }
+    }
+
+    @Override
+    public void onError(String error, String tag) {
+        Toast.makeText(this, "网络异常", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (settingPresenter != null) {
+            settingPresenter.detachView();
+        }
     }
 }

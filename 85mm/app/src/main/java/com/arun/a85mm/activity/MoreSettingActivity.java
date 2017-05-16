@@ -70,7 +70,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void showShare() {
-        ShareHelper.openShare(this, "85mm", "我在85mm等你。来85mm，这里都是人像摄影爱好者", "", "");
+        ShareHelper.openShare(this, "85mm", "我在85mm等你。这里都是人像摄影爱好者", "http://www.baidu.com", "");
     }
 
     private void clearCache() {

@@ -2,7 +2,6 @@ package com.arun.a85mm.fragment;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 
@@ -19,7 +18,6 @@ import com.arun.a85mm.presenter.ProductFragmentPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
-import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView;
 
 import java.util.ArrayList;
@@ -39,6 +37,15 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     private String lastWorkId;
     private static final String TAG = "ProductionFragment";
     private ImageView next_group_img;
+    private ProductListResponse response;
+
+    public static ProductionFragment newInstance(ProductListResponse response) {
+        ProductionFragment productionFragment = new ProductionFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(MainActivity.KEY_RESPONSE, response);
+        productionFragment.setArguments(bundle);
+        return productionFragment;
+    }
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -67,6 +74,9 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     protected void initData() {
         productFragmentPresenter = new ProductFragmentPresenter(getActivity());
         productFragmentPresenter.attachView(this);
+        if (getArguments() != null) {
+            response = (ProductListResponse) getArguments().getSerializable(MainActivity.KEY_RESPONSE);
+        }
         refreshData();
     }
 
@@ -82,7 +92,15 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
             if (productFragmentPresenter != null) {
                 setLoading(true);
                 lastWorkId = "";
-                productFragmentPresenter.getProductListData(userId, deviceId, lastWorkId);
+                if (response == null) {
+                    productFragmentPresenter.getProductListData(userId, deviceId, lastWorkId);
+                } else {
+                    if (response.workList != null && response.workList.size() > 0) {
+                        workLists.clear();
+                        formatData(response.workList);
+                        response = null;
+                    }
+                }
             }
         } else {
             if (swipeToLoadLayout.isRefreshing()) {

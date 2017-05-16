@@ -10,8 +10,7 @@
         android:id="@+id/cover_Image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/splash_bg"
-        android:scaleType="centerCrop" />
+        android:background="@color/splash_bg" />
 
     <LinearLayout
         android:id="@+id/layout_author"

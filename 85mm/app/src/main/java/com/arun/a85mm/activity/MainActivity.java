@@ -1,5 +1,8 @@
 package com.arun.a85mm.activity;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -14,7 +17,7 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ActionBean;
-import com.arun.a85mm.bean.ConfigResponse;
+import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
@@ -25,22 +28,15 @@ import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
-import com.arun.a85mm.presenter.SettingPresenter;
-import com.arun.a85mm.utils.ACache;
-import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.DensityUtil;
-import com.arun.a85mm.utils.DeviceUtils;
-import com.arun.a85mm.utils.SharedPreferencesUtils;
-import com.arun.a85mm.view.CommonView2;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements CommonView2 {
+public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout activity_main;
     private SlidingTabLayout tabLayout;
@@ -56,7 +52,14 @@ public class MainActivity extends AppCompatActivity implements CommonView2 {
     private ShowTopHandler showTopHandler;
     private ObjectAnimatorHelper objectAnimatorHelper;
     private EventStatisticsHelper eventStatisticsHelper;
-    private SettingPresenter settingPresenter;
+    public static final String KEY_RESPONSE = "productListResponse";
+
+    public static void jumpToMain(Context context, ProductListResponse response) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(KEY_RESPONSE, response);
+        context.startActivity(intent);
+        ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,17 +103,16 @@ public class MainActivity extends AppCompatActivity implements CommonView2 {
     }
 
     private void initData() {
-        productionFragment = new ProductionFragment();
+        ProductListResponse response = null;
+        if (getIntent() != null) {
+            response = (ProductListResponse) getIntent().getExtras().getSerializable(KEY_RESPONSE);
+        }
+        productionFragment = ProductionFragment.newInstance(response);
         CommunityFragment communityFragment = new CommunityFragment();
         ArticleFragment articleFragment = ArticleFragment.newIntense();
         list.add(productionFragment);
         list.add(communityFragment);
         list.add(articleFragment);
-        if (settingPresenter == null) {
-            settingPresenter = new SettingPresenter(this);
-            settingPresenter.attachView(this);
-            settingPresenter.queryConfig(DeviceUtils.getMobileIMEI(this));
-        }
     }
 
     private void setSaveImage() {
@@ -170,25 +172,8 @@ public class MainActivity extends AppCompatActivity implements CommonView2 {
     }
 
     @Override
-    public void refresh(Object data) {
-        if (data instanceof ConfigResponse) {
-            ConfigResponse config = (ConfigResponse) data;
-            SharedPreferencesUtils.saveUid(this, config.uid);
-            CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_CONFIG, (Serializable) config.copyWrite);
-        }
-    }
-
-    @Override
-    public void onError(String error, String tag) {
-
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (settingPresenter != null) {
-            settingPresenter.detachView();
-        }
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.detachView();
         }
