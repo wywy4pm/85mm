@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_splash"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.arun.a85mm.activity.SplashActivity">
+
+    <ImageView
+        android:id="@+id/cover_Image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/splash_bg"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:id="@+id/layout_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/text_slogan"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/text_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="摄影：毛毛虫"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/splash_ic_right" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/image_85mm"
+        android:layout_width="56dp"
+        android:layout_height="35dp"
+        android:layout_above="@+id/text_slogan"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:src="@mipmap/splash_85mm" />
+
+    <TextView
+        android:id="@+id/text_slogan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="45dp"
+        android:gravity="center"
+        android:text="只为爱好人像摄影的你"
+        android:textColor="@color/splash_slogan_light"
+        android:textSize="15sp" />
+</RelativeLayout>

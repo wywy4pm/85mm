@@ -10,4 +10,14 @@ public class ConfigResponse {
     public int code;
     public String uid;
     public List<String> copyWrite;
+
+    public GuidePageBean guidePage;
+
+    public static class GuidePageBean {
+
+        public String author;
+        public String linkUrl;
+        public String imageUrl;
+        public String nextImageUrl;
+    }
 }

@@ -182,4 +182,7 @@
     <color name="work_bg_color_5">#F7F6C5</color>
     <color name="work_bg_color_6">#D6E6B5</color>
     <color name="work_bg_color_7">#73BD8C</color>
+
+    <color name="splash_bg">#282828</color>
+    <color name="splash_slogan_light">#e4e4e4</color>
 </resources>
