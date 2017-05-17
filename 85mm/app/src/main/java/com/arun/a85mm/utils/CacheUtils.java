@@ -14,6 +14,7 @@ public class CacheUtils {
     private static ACache aCache;
     public static final String KEY_STRING_CONFIG = "string_config";
     public static final String KEY_OBJECT_CONFIG = "object_config";
+    public static final String KEY_OBJECT_PRODUCT_RESPONSE = "object_product_response";
 
     private static void newInstance(Context context) {
         synchronized (CacheUtils.class) {

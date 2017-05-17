@@ -32,7 +32,9 @@ public class SettingPresenter extends BasePresenter<CommonView2> {
 
             @Override
             public void onError(Throwable e) {
-
+                if (getMvpView() != null) {
+                    getMvpView().onError(e.toString(), null);
+                }
             }
 
             @SuppressWarnings("unchecked")
@@ -56,15 +58,10 @@ public class SettingPresenter extends BasePresenter<CommonView2> {
         Subscriber<ProductListResponse> subscriber = new Subscriber<ProductListResponse>() {
             @Override
             public void onCompleted() {
-
             }
 
             @Override
             public void onError(Throwable e) {
-                if (getMvpView() != null) {
-                    getMvpView().onError(e.toString(), null);
-                }
-
             }
 
             @SuppressWarnings("unchecked")
@@ -79,6 +76,7 @@ public class SettingPresenter extends BasePresenter<CommonView2> {
         };
 
         addSubscriber(subscriber);
-        RetrofitInit.getApi().getWorksList(userId, deviceId, lastWorkId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);
+        RetrofitInit.getApi().getWorksList(userId, deviceId, lastWorkId)
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);
     }
 }

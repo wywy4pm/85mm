@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.ConfigAdapter;
 import com.arun.a85mm.helper.ShareHelper;
+import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.StatusBarUtils;
@@ -70,7 +71,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void showShare() {
-        ShareHelper.openShare(this, "85mm", "我在85mm等你。这里都是人像摄影爱好者", "http://www.baidu.com", "");
+        ShareWindow.show(this, "85mm", "我在85mm等你。这里都是人像摄影爱好者", "http://www.baidu.com", "");
     }
 
     private void clearCache() {

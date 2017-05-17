@@ -33,7 +33,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -44,15 +43,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".activity.ArticleDetailActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -129,6 +125,10 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <service
+            android:name=".service.ProductListCacheService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

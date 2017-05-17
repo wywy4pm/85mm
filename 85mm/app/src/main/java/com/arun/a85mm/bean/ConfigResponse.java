@@ -1,5 +1,6 @@
 package com.arun.a85mm.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,13 +12,13 @@ public class ConfigResponse {
     public String uid;
     public List<String> copyWrite;
 
-    public GuidePageBean guidePage;
+    public List<GuidePageBean> guidePage;
 
-    public static class GuidePageBean {
+    public static class GuidePageBean implements Serializable{
 
         public String author;
         public String linkUrl;
         public String imageUrl;
-        public String nextImageUrl;
+        public long date;
     }
 }

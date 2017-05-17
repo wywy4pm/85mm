@@ -16,8 +16,10 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
+import com.arun.a85mm.helper.ProductListCacheManager;
 import com.arun.a85mm.presenter.SettingPresenter;
 import com.arun.a85mm.utils.CacheUtils;
+import com.arun.a85mm.utils.DateUtils;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -29,6 +31,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class SplashActivity extends AppCompatActivity implements CommonView2 {
     public ImageView cover_Image;
@@ -39,7 +42,8 @@ public class SplashActivity extends AppCompatActivity implements CommonView2 {
     public RelativeLayout activity_splash;
     public int screenHeight;
     private SettingPresenter settingPresenter;
-    private ProductListResponse response;
+
+    private boolean isJumpToWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +70,9 @@ public class SplashActivity extends AppCompatActivity implements CommonView2 {
         if (settingPresenter == null) {
             settingPresenter = new SettingPresenter(this);
             settingPresenter.attachView(this);
-            settingPresenter.queryConfig(DeviceUtils.getMobileIMEI(this));
             settingPresenter.getProductListData(SharedPreferencesUtils.getUid(this), DeviceUtils.getMobileIMEI(this), "'");
         }
+        showSplash();
     }
 
     private void showAnimator() {
@@ -114,7 +118,9 @@ public class SplashActivity extends AppCompatActivity implements CommonView2 {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        MainActivity.jumpToMain(SplashActivity.this, response);
+                                        if (!isJumpToWebView) {
+                                            MainActivity.jumpToMain(SplashActivity.this);
+                                        }
                                         SplashActivity.this.finish();
                                     }
                                 }, 3000);
@@ -156,44 +162,89 @@ public class SplashActivity extends AppCompatActivity implements CommonView2 {
             ConfigResponse config = (ConfigResponse) data;
             SharedPreferencesUtils.saveUid(this, config.uid);
             CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_CONFIG, (Serializable) config.copyWrite);
-            if (config.guidePage != null) {
-                final ConfigResponse.GuidePageBean bean = config.guidePage;
-                Glide.with(this).load(bean.imageUrl)
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .placeholder(R.color.splash_bg)
-                        .error(R.color.splash_bg)
-                        .centerCrop()
-                        .crossFade()
-                        .listener(new RequestListener<String, GlideDrawable>() {
-                            @Override
-                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                showAnimator();
-                                return false;
-                            }
-                        })
-                        .into(cover_Image);
-                text_author.setText(bean.author);
-                cover_Image.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        WebViewActivity.jumpToWebViewActivity(SplashActivity.this, bean.linkUrl);
-                    }
-                });
+            if (config.guidePage != null && config.guidePage.size() == 2) {
+                CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE, (Serializable) config.guidePage);
+            }
+            if (config.guidePage != null && config.guidePage.size() > 0 && config.guidePage.get(0) != null) {
+                show(config.guidePage.get(0));
+            } else {
+                errorIn();
             }
         } else if (data instanceof ProductListResponse) {
-            response = (ProductListResponse) data;
+            ProductListCacheManager.setProductListResponse((ProductListResponse) data);
         }
+    }
+
+    private void show(final ConfigResponse.GuidePageBean bean) {
+        Glide.with(this).load(bean.imageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .placeholder(R.color.splash_bg)
+                .error(R.color.splash_bg)
+                .centerCrop()
+                .crossFade()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        errorIn();
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        showAnimator();
+                        return false;
+                    }
+                })
+                .into(cover_Image);
+        text_author.setText(bean.author);
+        cover_Image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isJumpToWebView = true;
+                WebViewActivity.jumpToWebViewActivity(SplashActivity.this, bean.linkUrl, String.valueOf(true));
+            }
+        });
     }
 
     @Override
     public void onError(String error, String tag) {
-        Toast.makeText(this, "网络异常", Toast.LENGTH_SHORT).show();
-        finish();
+        errorIn();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void showSplash() {
+        if (CacheUtils.getObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE) != null
+                && CacheUtils.getObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE) instanceof List) {
+            List<ConfigResponse.GuidePageBean> list = (List<ConfigResponse.GuidePageBean>)
+                    CacheUtils.getObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE);
+            if (list.size() == 2) {
+                ConfigResponse.GuidePageBean first = list.get(0);
+                ConfigResponse.GuidePageBean second = list.get(1);
+                if (DateUtils.isToday(first.date)) {
+                    show(first);
+                } else if (DateUtils.isToday(second.date)) {
+                    show(second);
+                } else {
+                    if (settingPresenter != null) {
+                        settingPresenter.queryConfig(DeviceUtils.getMobileIMEI(this));
+                    }
+                }
+            }
+        } else {
+            if (settingPresenter != null) {
+                settingPresenter.queryConfig(DeviceUtils.getMobileIMEI(this));
+            }
+        }
+    }
+
+    private void errorIn() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.jumpToMain(SplashActivity.this);
+                finish();
+            }
+        }, 1000);
     }
 
     @Override

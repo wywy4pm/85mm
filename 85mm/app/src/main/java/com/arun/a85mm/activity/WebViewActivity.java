@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
@@ -24,11 +25,25 @@ public class WebViewActivity extends BaseActivity {
     private String url;
     private ImageView image_back;
     private TextView titleText;
-    //private ImageView image_right;
+    private boolean isFromSplash;
 
     public static void jumpToWebViewActivity(Context context, String webUrl) {
         Intent intent = new Intent(context, WebViewActivity.class);
         intent.putExtra(Constant.INTENT_WEB_URL, webUrl);
+        context.startActivity(intent);
+        ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+    }
+
+    public static void jumpToWebViewActivity(Context context, String webUrl, String... args) {
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.putExtra(Constant.INTENT_WEB_URL, webUrl);
+        if (args != null && args.length > 0) {
+            if (args.length == 1) {
+                if (Constant.STRING_TRUE.equals(args[0])) {
+                    intent.putExtra(Constant.STRING_TRUE, true);
+                }
+            }
+        }
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
@@ -38,8 +53,15 @@ public class WebViewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
         StatusBarUtils.setStatusBarColor(this, R.color.white);
+        initData();
         initView();
         initWebView();
+    }
+
+    private void initData() {
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            isFromSplash = getIntent().getExtras().getBoolean(Constant.STRING_TRUE);
+        }
     }
 
     private void initView() {
@@ -47,7 +69,19 @@ public class WebViewActivity extends BaseActivity {
         titleText = (TextView) findViewById(R.id.title);
         //image_right = (ImageView) findViewById(R.id.image_right);
         webView = (WebView) findViewById(R.id.webView);
-        setBack(image_back);
+        if (!isFromSplash) {
+            setBack(image_back);
+        } else {
+            //setSwipeBackEnable(false);
+            image_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainActivity.jumpToMain(WebViewActivity.this);
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    finish();
+                }
+            });
+        }
     }
 
     private void initWebView() {
@@ -93,4 +127,15 @@ public class WebViewActivity extends BaseActivity {
         webView.setWebChromeClient(webChromeClient);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (isFromSplash) {
+                MainActivity.jumpToMain(this);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                finish();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }
