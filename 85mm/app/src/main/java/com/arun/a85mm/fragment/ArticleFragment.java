@@ -141,4 +141,5 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
     public void setHaveMore(boolean isHaveMore) {
         this.isHaveMore = isHaveMore;
     }
+
 }

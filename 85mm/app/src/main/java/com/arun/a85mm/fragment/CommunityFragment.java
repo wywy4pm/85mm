@@ -257,4 +257,5 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
             communityPresenter.detachView();
         }
     }
+
 }

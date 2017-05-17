@@ -13,7 +13,7 @@
     <color name="background_color">#EEEEEE</color>
 
     <color name="white">#FFFFFFFF</color>
-
+    <color name="white70">#B3FFFFFF</color>
     <color name="white95">#F3FFFFFF</color>//透明度95%
     <color name="white80">#CCFFFFFF</color>//透明度80%
     <color name="white60">#66FFFFFF</color>//透明度60%
