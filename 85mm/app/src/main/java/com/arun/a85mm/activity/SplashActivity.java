@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -122,7 +123,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView2 {
                                         }
                                         SplashActivity.this.finish();
                                     }
-                                }, 3000);
+                                }, 1000);
                             }
 
                             @Override
@@ -252,5 +253,13 @@ public class SplashActivity extends AppCompatActivity implements CommonView2 {
         if (settingPresenter != null) {
             settingPresenter.detachView();
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

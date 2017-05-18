@@ -72,7 +72,7 @@ public class WebViewActivity extends BaseActivity {
         if (!isFromSplash) {
             setBack(image_back);
         } else {
-            //setSwipeBackEnable(false);
+            setSwipeBackEnable(false);
             image_back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
