@@ -1,6 +1,7 @@
 package com.arun.a85mm.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.ExpandableListView;
@@ -13,6 +14,7 @@ import com.arun.a85mm.adapter.CommunityAdapter;
 import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.helper.CommunityListCacheManager;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.listener.OnImageClick;
@@ -42,6 +44,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     private static final String TAG = "CommunityFragment";
     private ImageView next_group_img;
     private CommunityAdapter communityAdapter;
+    private CommunityResponse response;
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -73,10 +76,14 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     protected void initData() {
         communityPresenter = new CommunityPresenter(getActivity());
         communityPresenter.attachView(this);
+        response = CommunityListCacheManager.getCommunityResponse();
         refreshData();
     }
 
+    private long requestTime;
+
     private void refreshData() {
+        requestTime = System.currentTimeMillis();
         currentGroupPosition = 0;
         isSingleExpand = false;
         collapseGroup(expandableListView, worksList);
@@ -88,7 +95,15 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
             if (communityPresenter != null) {
                 setLoading(true);
                 lastWorkDate = "";
-                communityPresenter.getWorksGoods(userId, deviceId, lastWorkDate);
+                if (response == null) {
+                    communityPresenter.getWorksGoods(userId, deviceId, lastWorkDate);
+                } else {
+                    if (response.goodsList != null && response.goodsList.size() > 0) {
+                        worksList.clear();
+                        formatData(response.goodsList);
+                        response = null;
+                    }
+                }
             }
         } else {
             if (swipeToLoadLayout.isRefreshing()) {
@@ -124,10 +139,10 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     @Override
     public void refresh(CommunityResponse data) {
         if (data != null && data.goodsList != null && data.goodsList.size() > 0) {
-            //SharedPreferencesUtils.saveUid(getActivity(), data.uid);
             worksList.clear();
             formatData(data.goodsList);
         }
+        Log.d("TAG", "system time refresh = " + (System.currentTimeMillis() - requestTime));
     }
 
     @Override

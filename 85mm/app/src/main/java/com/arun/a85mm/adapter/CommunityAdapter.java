@@ -27,6 +27,7 @@ import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
+import com.arun.a85mm.utils.GlideRoundTransform;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -142,7 +143,9 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     headHolder.layout_source.setVisibility(View.VISIBLE);
 
                     headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
-                    Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop().into(headHolder.source_logo);
+                    Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
+                            .transform(new GlideRoundTransform(contexts.get(), 2))
+                            .into(headHolder.source_logo);
                     headHolder.create_time.setText(resources.getString(R.string.works_download_count_one, bean.downloadNum));
                 } else {
                     headHolder.work_list_cover_count.setVisibility(View.GONE);
@@ -174,7 +177,9 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                             headHolder.layout_source.setVisibility(View.VISIBLE);
 
                             headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
-                            Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop().into(headHolder.source_logo);
+                            Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
+                                    .transform(new GlideRoundTransform(contexts.get(), 2))
+                                    .into(headHolder.source_logo);
                             headHolder.create_time.setText(resources.getString(R.string.works_download_count_one, bean.downloadNum));
                         } else {
                             headHolder.work_list_cover_count.setVisibility(View.GONE);
@@ -245,7 +250,9 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                                     headHolder.layout_source.setVisibility(View.VISIBLE);
 
                                     headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
-                                    Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop().into(headHolder.source_logo);
+                                    Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
+                                            .transform(new GlideRoundTransform(contexts.get(), 2))
+                                            .into(headHolder.source_logo);
                                     headHolder.create_time.setText(resources.getString(R.string.works_download_count_one, bean.downloadNum));
                                 } else {
                                     headHolder.work_list_cover_count.setVisibility(View.GONE);

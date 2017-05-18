@@ -3,6 +3,7 @@ package com.arun.a85mm.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.common.ErrorCode;
@@ -54,8 +55,8 @@ public class SettingPresenter extends BasePresenter<CommonView2> {
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);
     }
 
-    public void getProductListData(String userId, String deviceId, final String lastWorkId) {
-        Subscriber<ProductListResponse> subscriber = new Subscriber<ProductListResponse>() {
+    public void getWorksGoods(String userId, String deviceId, final String lastDate) {
+        Subscriber<CommunityResponse> subscriber = new Subscriber<CommunityResponse>() {
             @Override
             public void onCompleted() {
             }
@@ -66,17 +67,17 @@ public class SettingPresenter extends BasePresenter<CommonView2> {
 
             @SuppressWarnings("unchecked")
             @Override
-            public void onNext(ProductListResponse productListResponse) {
+            public void onNext(CommunityResponse communityResponse) {
                 if (getMvpView() != null) {
-                    if (productListResponse != null && productListResponse.code == ErrorCode.SUCCESS) {
-                        getMvpView().refresh(productListResponse);
+                    if (communityResponse != null && communityResponse.code == ErrorCode.SUCCESS) {
+                        getMvpView().refresh(communityResponse);
                     }
                 }
             }
         };
 
         addSubscriber(subscriber);
-        RetrofitInit.getApi().getWorksList(userId, deviceId, lastWorkId)
+        RetrofitInit.getApi().getWorksGoods(userId, deviceId, lastDate)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);
     }
 }

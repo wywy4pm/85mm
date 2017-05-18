@@ -67,11 +67,11 @@
 
         <TextView
             android:id="@+id/work_list_cover_count"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_margin="8dp"
+            android:layout_margin="12dp"
             android:background="@drawable/shape_gray_circle"
             android:gravity="center"
             android:maxLength="3"

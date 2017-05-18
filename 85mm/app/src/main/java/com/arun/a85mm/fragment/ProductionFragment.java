@@ -12,7 +12,6 @@ import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.helper.DialogHelper;
-import com.arun.a85mm.helper.ProductListCacheManager;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.ProductFragmentPresenter;
@@ -86,15 +85,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
             if (productFragmentPresenter != null) {
                 setLoading(true);
                 lastWorkId = "";
-                ProductListResponse response = ProductListCacheManager.getProductListResponse();
-                if (response == null) {
-                    productFragmentPresenter.getProductListData(userId, deviceId, lastWorkId);
-                } else {
-                    if (response.workList != null && response.workList.size() > 0) {
-                        workLists.clear();
-                        formatData(response.workList);
-                    }
-                }
+                productFragmentPresenter.getProductListData(userId, deviceId, lastWorkId);
             }
         } else {
             if (swipeToLoadLayout.isRefreshing()) {

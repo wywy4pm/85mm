@@ -10,13 +10,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.ConfigResponse;
-import com.arun.a85mm.bean.ProductListResponse;
+import com.arun.a85mm.helper.CommunityListCacheManager;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
-import com.arun.a85mm.helper.ProductListCacheManager;
 import com.arun.a85mm.presenter.SettingPresenter;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DateUtils;
@@ -70,7 +69,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView2 {
         if (settingPresenter == null) {
             settingPresenter = new SettingPresenter(this);
             settingPresenter.attachView(this);
-            settingPresenter.getProductListData(SharedPreferencesUtils.getUid(this), DeviceUtils.getMobileIMEI(this), "'");
+            settingPresenter.getWorksGoods(SharedPreferencesUtils.getUid(this), DeviceUtils.getMobileIMEI(this), "");
         }
         showSplash();
     }
@@ -170,8 +169,8 @@ public class SplashActivity extends AppCompatActivity implements CommonView2 {
             } else {
                 errorIn();
             }
-        } else if (data instanceof ProductListResponse) {
-            ProductListCacheManager.setProductListResponse((ProductListResponse) data);
+        } else if (data instanceof CommunityResponse) {
+            CommunityListCacheManager.setProductListResponse((CommunityResponse) data);
         }
     }
 
