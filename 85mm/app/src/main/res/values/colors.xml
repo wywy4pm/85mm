@@ -22,11 +22,14 @@
     <color name="black">#000000</color>
     <color name="inner_black">#222222</color>
 
-    <color name="black30">#4C000000</color>//透明度30%
+    <color name="black0">#00000000</color>//透明度0%
+    <color name="black30">#3C000000</color>//透明度30%
 
     <color name="black40">#66000000</color>//透明度40%
 
-    <color name="black90">#E6000000</color>//透明度90%
+    <color name="black50">#80000000</color>//透明度50%
+
+    <color name="black90">#000000</color>//透明度90%
 
     <color name="black80">#CC000000</color>//透明度80%
 

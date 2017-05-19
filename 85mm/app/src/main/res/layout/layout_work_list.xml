@@ -19,6 +19,14 @@
 
     </com.andexert.library.RippleView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/gradient_black_bottom">
+
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/layout_source"
         android:layout_width="wrap_content"
