@@ -19,26 +19,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginTop="10dp"
-                android:background="@color/plain" />
-
             <RelativeLayout
                 android:id="@+id/layout_share"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"
-                android:padding="8dp">
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="center"
-                    android:text="分享给好友" />
+                    android:text="分享"
+                    android:textColor="@color/charcoalgrey"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -46,7 +41,9 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@+id/image_right"
-                    android:text="好人有好报喔" />
+                    android:text="好人有好报喔"
+                    android:textColor="@color/text_right_tips"
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/image_right"
@@ -54,36 +51,32 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_look_more" />
+                    android:src="@mipmap/ic_right" />
             </RelativeLayout>
 
             <View
                 android:id="@+id/line_share_bottom"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/plain" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginTop="10dp"
-                android:background="@color/plain" />
+                android:layout_marginLeft="10dp"
+                android:background="@color/line_divide" />
 
             <RelativeLayout
                 android:id="@+id/layout_clear"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"
-                android:onClick="onClick"
-                android:padding="8dp">
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
+                android:onClick="onClick">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="center"
-                    android:text="清除缓存" />
+                    android:text="清除缓存"
+                    android:textColor="@color/charcoalgrey"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/cache_size"
@@ -92,7 +85,9 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@+id/image_clear_right"
-                    android:text="" />
+                    android:text=""
+                    android:textColor="@color/text_right_tips"
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/image_clear_right"
@@ -100,21 +95,76 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_look_more" />
+                    android:src="@mipmap/ic_right" />
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/plain" />
+                android:layout_height="10dp"
+                android:background="@color/area_divide" />
 
-            <com.arun.a85mm.widget.ListViewForScrollView
+            <!--<include layout="@layout/layout_more_detail" />-->
+
+            <ImageView
+                android:id="@+id/more_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/area_divide" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="22dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="欢迎添加微信:hello85mm"
+                    android:textColor="@color/more_detail"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="点击复制"
+                    android:textColor="@color/more_yellow"
+                    android:textSize="14sp"
+                    android:onClick="copyWeChat"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=",联系我们"
+                    android:textColor="@color/more_detail" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="129dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="29dp"
+                android:background="@drawable/shape_jump_to_wechat"
+                android:gravity="center"
+                android:text="打开微信"
+                android:textColor="@color/open_wechat"
+                android:onClick="openWeChat"
+                android:textSize="15sp" />
+            <!--<com.arun.a85mm.widget.ListViewForScrollView
                 android:id="@+id/configListView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:divider="@null"
-                android:scrollbars="none" />
+                android:scrollbars="none"
+                android:visibility="gone" />-->
 
         </LinearLayout>
     </ScrollView>

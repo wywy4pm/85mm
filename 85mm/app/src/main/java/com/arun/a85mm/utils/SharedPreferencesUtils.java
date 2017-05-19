@@ -9,7 +9,9 @@ import android.text.TextUtils;
  */
 public class SharedPreferencesUtils {
     private static final String PATH_USER = "user";
+    private static final String PATH_CONFIG = "config";
     private static final String KEY_USER_UID = "uid";
+    private static final String KEY_MORE_IMAGE = "more_image";
 
     public static void saveUid(Context context, String uid) {
         if (!TextUtils.isEmpty(uid) && TextUtils.isEmpty(SharedPreferencesUtils.getUid(context))) {
@@ -33,6 +35,26 @@ public class SharedPreferencesUtils {
         String uid = "";
         if (preferences != null) {
             uid = preferences.getString(KEY_USER_UID, "");
+        }
+        return uid;
+    }
+
+    public static void setMoreImage(Context context, String imageUrl) {
+        SharedPreferences preferences = context.getSharedPreferences(PATH_CONFIG, Context.MODE_PRIVATE);
+        if (preferences != null) {
+            SharedPreferences.Editor editor = preferences.edit();
+            if (editor != null) {
+                editor.putString(KEY_MORE_IMAGE, imageUrl);
+                editor.apply();
+            }
+        }
+    }
+
+    public static String getMoreImage(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(PATH_CONFIG, Context.MODE_PRIVATE);
+        String uid = "";
+        if (preferences != null) {
+            uid = preferences.getString(KEY_MORE_IMAGE, "");
         }
         return uid;
     }

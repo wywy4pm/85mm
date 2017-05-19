@@ -161,6 +161,10 @@ public class MainActivity extends AppCompatActivity {
         this.isShowingTop = isShowingTop;
     }
 
+    public boolean getShowingTop() {
+        return isShowingTop;
+    }
+
     public void onActionEvent(int type, List<ActionBean> actionList) {
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.recordUserAction(this, type, actionList);

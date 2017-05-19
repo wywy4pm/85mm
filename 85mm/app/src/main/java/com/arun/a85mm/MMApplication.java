@@ -20,7 +20,7 @@ public class MMApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Config.DEBUG = true;
+        //Config.DEBUG = true;
         UMShareAPI.get(this);
     }
 }

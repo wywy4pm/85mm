@@ -1,7 +1,6 @@
 package com.arun.a85mm.activity;
 
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ShowTopBean;
-import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.EventStatisticsHelper;
@@ -69,19 +67,12 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
 
     public void setCommonShow() {
         initToastView();
-        showTopHandler = new ShowTopHandler(this);
         objectAnimatorHelper = new ObjectAnimatorHelper();
     }
 
     public void showTop(String showData) {
-        if (showTopHandler != null) {
-            Message message = new Message();
-            message.what = Constant.WHAT_SHOW_TOP;
-            message.obj = new ShowTopBean(isShowingTop, showData);
-            if (showTopHandler != null) {
-                showTopHandler.sendMessage(message);
-            }
-        }
+        ShowTopBean showTopBean = new ShowTopBean(isShowingTop, showData);
+        showTopToastView(showTopBean);
     }
 
     private void initToastView() {
@@ -110,6 +101,10 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
 
     public void setShowingTop(boolean isShowingTop) {
         this.isShowingTop = isShowingTop;
+    }
+
+    public boolean getShowingTop() {
+        return isShowingTop;
     }
 
     public void onActionEvent(int type, List<ActionBean> actionList) {

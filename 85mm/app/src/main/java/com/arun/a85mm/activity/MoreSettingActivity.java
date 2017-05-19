@@ -5,16 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
-import com.arun.a85mm.adapter.ConfigAdapter;
 import com.arun.a85mm.helper.ShareHelper;
-import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DataCleanManager;
+import com.arun.a85mm.utils.OtherAppStartUtils;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
+import com.arun.a85mm.utils.SystemServiceUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.socialize.UMShareAPI;
 
 import java.util.ArrayList;
@@ -25,9 +28,10 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     private RelativeLayout layout_share;
     private RelativeLayout layout_clear;
     private TextView cache_size;
-    private ListView configListView;
-    private ConfigAdapter configAdapter;
+    //private ListView configListView;
+    //private ConfigAdapter configAdapter;
     private List<String> texts = new ArrayList<>();
+    private ImageView more_detail;
 
     public static void jumpToMoreSettingActivity(Context context) {
         Intent intent = new Intent(context, MoreSettingActivity.class);
@@ -48,9 +52,10 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         layout_share = (RelativeLayout) findViewById(R.id.layout_share);
         layout_clear = (RelativeLayout) findViewById(R.id.layout_clear);
         cache_size = (TextView) findViewById(R.id.cache_size);
-        configListView = (ListView) findViewById(R.id.configListView);
+        more_detail = (ImageView) findViewById(R.id.more_detail);
+        /*configListView = (ListView) findViewById(R.id.configListView);
         configAdapter = new ConfigAdapter(this, texts);
-        configListView.setAdapter(configAdapter);
+        configListView.setAdapter(configAdapter);*/
 
         layout_share.setOnClickListener(this);
         layout_clear.setOnClickListener(this);
@@ -62,21 +67,32 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     @SuppressWarnings("unchecked")
     private void initData() {
         cache_size.setText(DataCleanManager.getImageCacheSize(this));
-        Object object = CacheUtils.getObject(this, CacheUtils.KEY_OBJECT_CONFIG);
+        /*Object object = CacheUtils.getObject(this, CacheUtils.KEY_OBJECT_CONFIG);
         if (object != null && object instanceof List) {
             texts.addAll((List<String>) object);
-        }
-        configAdapter.notifyDataSetChanged();
+        }*/
+        String moreImageUrl = SharedPreferencesUtils.getMoreImage(this);
+        Glide.with(this).load(moreImageUrl).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(more_detail);
+        //configAdapter.notifyDataSetChanged();
     }
 
     private void showShare() {
-        ShareHelper.openShare(this, "85mm", "我在85mm等你。这里都是人像摄影爱好者", "http://www.baidu.com", "");
+        ShareHelper.openShare(this, getString(R.string.share_title), getString(R.string.share_description), getString(R.string.share_url), "");
     }
 
     private void clearCache() {
         DataCleanManager.clearImageAllCache(this);
         cache_size.setText(DataCleanManager.getImageCacheSize(this));
         showTop("清除缓存成功");
+    }
+
+    public void openWeChat(View view) {
+        OtherAppStartUtils.jumpToWeChat(this);
+    }
+
+    public void copyWeChat(View view) {
+        SystemServiceUtils.copyText(this, getString(R.string.wechat_num));
+        showTop("复制成功");
     }
 
     @Override

@@ -9,4 +9,8 @@
 
     <string name="query_one_day_left_works">查看 %1$s 剩余 %2$d 套作品 ></string>
     <string name="one_day_left_works_title">%1$s   (%2$d套作品)</string>
+    <string name="share_title">85mm</string>
+    <string name="share_description">我在85mm等你。这里都是人像摄影爱好者</string>
+    <string name="share_url">http://a.app.qq.com/o/simple.jsp?pkgname=com.arun.a85mm</string>
+    <string name="wechat_num">hello85mm</string>
 </resources>

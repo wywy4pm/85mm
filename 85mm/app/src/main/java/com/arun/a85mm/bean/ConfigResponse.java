@@ -10,6 +10,7 @@ public class ConfigResponse {
     public int code;
     public String uid;
     public List<String> copyWrite;
+    public String morePageImage;
 
     public GuidePageBean guidePage;
 

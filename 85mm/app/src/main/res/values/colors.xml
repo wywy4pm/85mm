@@ -185,4 +185,11 @@
 
     <color name="splash_bg">#282828</color>
     <color name="splash_slogan_light">#e4e4e4</color>
+
+    <color name="text_right_tips">#999999</color>
+    <color name="line_divide">#f0f0f0</color>
+    <color name="area_divide">#f7f7f7</color>
+    <color name="more_yellow">#f7bd0e</color>
+    <color name="more_detail">#323232</color>
+    <color name="open_wechat">#3f3f3f</color>
 </resources>

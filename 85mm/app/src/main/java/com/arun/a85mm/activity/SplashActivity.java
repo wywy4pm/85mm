@@ -155,7 +155,8 @@ public class SplashActivity extends AppCompatActivity implements CommonView2 {
         if (data instanceof ConfigResponse) {
             ConfigResponse config = (ConfigResponse) data;
             SharedPreferencesUtils.saveUid(this, config.uid);
-            CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_CONFIG, (Serializable) config.copyWrite);
+            //CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_CONFIG, (Serializable) config.copyWrite);
+            SharedPreferencesUtils.setMoreImage(this, config.morePageImage);
             if (config.guidePage != null) {
                 final ConfigResponse.GuidePageBean bean = config.guidePage;
                 Glide.with(this).load(bean.imageUrl)

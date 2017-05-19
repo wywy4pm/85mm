@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="53dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="15dp"
+        android:src="@mipmap/ic_more_85mm" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="85mm"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="71dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/black" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:text="只为人像摄影爱好者"
+        android:textColor="@color/more_yellow"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:lineSpacingExtra="0dp"
+        android:text="85mm，在人像摄影中有“黄金焦段”一说"
+        android:textColor="@color/more_detail" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="0dp"
+        android:text="于是我们以此为名"
+        android:textColor="@color/more_detail" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:lineSpacingExtra="0dp"
+        android:text="我们期望更多的人一起来感受和分享人像摄影的美"
+        android:textColor="@color/more_detail" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="0dp"
+        android:text="我们并不期待你是职业摄影师"
+        android:textColor="@color/more_detail" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="0dp"
+        android:text="我们期望你和我们一样是人像摄影的爱好者"
+        android:textColor="@color/more_detail" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="0dp"
+        android:text="无论你手上拿的是单反还是手机"
+        android:textColor="@color/more_detail" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:lineSpacingExtra="0dp"
+        android:text="我们开发设计这款app都是自发自愿用的业余时间"
+        android:textColor="@color/more_detail" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="0dp"
+        android:text="我们觉得分享美本身是件快乐自足的事"
+        android:textColor="@color/more_detail" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="0dp"
+        android:text="这种美或纯净，或动人，或魅惑，或平凡"
+        android:textColor="@color/more_detail" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="27dp"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="0dp"
+        android:text="欢迎更多的伙伴加入进来"
+        android:textColor="@color/more_detail" />
+
+</LinearLayout>
