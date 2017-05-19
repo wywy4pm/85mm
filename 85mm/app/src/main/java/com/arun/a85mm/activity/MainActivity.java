@@ -52,11 +52,10 @@ public class MainActivity extends AppCompatActivity {
     private ShowTopHandler showTopHandler;
     private ObjectAnimatorHelper objectAnimatorHelper;
     private EventStatisticsHelper eventStatisticsHelper;
-    public static final String KEY_RESPONSE = "productListResponse";
+    //public static final String KEY_RESPONSE = "productListResponse";
 
-    public static void jumpToMain(Context context, ProductListResponse response) {
+    public static void jumpToMain(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra(KEY_RESPONSE, response);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
@@ -103,11 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        ProductListResponse response = null;
-        if (getIntent() != null) {
-            response = (ProductListResponse) getIntent().getExtras().getSerializable(KEY_RESPONSE);
-        }
-        productionFragment = ProductionFragment.newInstance(response);
+        productionFragment = ProductionFragment.newInstance();
         CommunityFragment communityFragment = new CommunityFragment();
         ArticleFragment articleFragment = ArticleFragment.newIntense();
         list.add(productionFragment);

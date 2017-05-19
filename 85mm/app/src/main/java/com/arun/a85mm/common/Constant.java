@@ -20,6 +20,9 @@ public class Constant {
     public static final String INTENT_WORKS_LEFT_DATE = "left_date";
     public static final String INTENT_WORKS_LEFT_START = "left_start";
 
+    public static final String STRING_TRUE = "true";
+    public static final String STRING_FALSE = "'false";
+
     /**
      * data type
      */

@@ -37,13 +37,9 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     private String lastWorkId;
     private static final String TAG = "ProductionFragment";
     private ImageView next_group_img;
-    private ProductListResponse response;
 
-    public static ProductionFragment newInstance(ProductListResponse response) {
+    public static ProductionFragment newInstance() {
         ProductionFragment productionFragment = new ProductionFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(MainActivity.KEY_RESPONSE, response);
-        productionFragment.setArguments(bundle);
         return productionFragment;
     }
 
@@ -74,9 +70,6 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     protected void initData() {
         productFragmentPresenter = new ProductFragmentPresenter(getActivity());
         productFragmentPresenter.attachView(this);
-        if (getArguments() != null) {
-            response = (ProductListResponse) getArguments().getSerializable(MainActivity.KEY_RESPONSE);
-        }
         refreshData();
     }
 
@@ -92,15 +85,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
             if (productFragmentPresenter != null) {
                 setLoading(true);
                 lastWorkId = "";
-                if (response == null) {
-                    productFragmentPresenter.getProductListData(userId, deviceId, lastWorkId);
-                } else {
-                    if (response.workList != null && response.workList.size() > 0) {
-                        workLists.clear();
-                        formatData(response.workList);
-                        response = null;
-                    }
-                }
+                productFragmentPresenter.getProductListData(userId, deviceId, lastWorkId);
             }
         } else {
             if (swipeToLoadLayout.isRefreshing()) {

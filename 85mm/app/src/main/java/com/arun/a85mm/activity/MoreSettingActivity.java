@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.helper.ShareHelper;
+import com.arun.a85mm.helper.ShareWindow;
+import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.OtherAppStartUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -77,7 +79,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void showShare() {
-        ShareHelper.openShare(this, getString(R.string.share_title), getString(R.string.share_description), getString(R.string.share_url), "");
+        ShareWindow.show(this, getString(R.string.share_title), getString(R.string.share_description), getString(R.string.share_url), "");
     }
 
     private void clearCache() {
