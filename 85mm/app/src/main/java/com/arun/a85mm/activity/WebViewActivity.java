@@ -3,12 +3,14 @@ package com.arun.a85mm.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.CookieManager;
+import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -89,7 +91,7 @@ public class WebViewActivity extends BaseActivity {
         if (getIntent().getExtras() != null) {
             url = getIntent().getExtras().getString(Constant.INTENT_WEB_URL);
             if (!TextUtils.isEmpty(url)) {
-                webView.postUrl(url, null);
+                webView.loadUrl(url);
             }
         }
     }
@@ -124,6 +126,7 @@ public class WebViewActivity extends BaseActivity {
                 titleText.setText(title);
             }
         };
+        webView.setDownloadListener(new MyWebViewDownLoadListener());
         webView.setWebChromeClient(webChromeClient);
     }
 
@@ -137,5 +140,21 @@ public class WebViewActivity extends BaseActivity {
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private class MyWebViewDownLoadListener implements DownloadListener {
+
+        @Override
+        public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype,
+                                    long contentLength) {
+            Log.i("tag", "url=" + url);
+            Log.i("tag", "userAgent=" + userAgent);
+            Log.i("tag", "contentDisposition=" + contentDisposition);
+            Log.i("tag", "mimetype=" + mimetype);
+            Log.i("tag", "contentLength=" + contentLength);
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        }
     }
 }
