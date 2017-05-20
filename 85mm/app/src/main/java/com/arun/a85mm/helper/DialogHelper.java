@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.WebViewActivity;
@@ -23,6 +24,8 @@ public class DialogHelper {
         final Dialog dialog = new Dialog(context, R.style.ActionSheetDialogStyle);
         LinearLayout root = (LinearLayout) LayoutInflater.from(context).inflate(
                 R.layout.dialog_bottom, null);
+        TextView workIdView = (TextView) root.findViewById(R.id.text_works_id);
+        workIdView.setText(String.valueOf("ID：" + workId));
         root.findViewById(R.id.btn_link).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

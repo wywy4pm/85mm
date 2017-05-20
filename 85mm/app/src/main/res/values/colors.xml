@@ -131,6 +131,8 @@
 
     <color name="pickerview_bg_topbar">#f5f5f5</color>
 
+    <color name="bg_line">#f5f5f5</color>
+
     <color name="pickerview_topbar_title">#000000</color>
 
     <color name="pickerview_wheelview_textcolor_out">#767676</color>

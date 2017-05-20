@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -65,7 +65,7 @@ public class ArticleDetailAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ImageHolder) {
             ImageHolder imageHolder = (ImageHolder) holder;
-            imageHolder.setData(contexts.get(), articleDetails.get(position));
+            imageHolder.setData(contexts.get(), articleDetails.get(position), position);
         } else if (holder instanceof BigTitleHolder) {
             BigTitleHolder bigTitleHolder = (BigTitleHolder) holder;
             bigTitleHolder.setData(articleDetails.get(position));
@@ -112,21 +112,19 @@ public class ArticleDetailAdapter extends RecyclerView.Adapter {
         public ImageHolder(Context context, View rootView) {
             super(rootView);
             item_fullImage = (ImageView) rootView.findViewById(R.id.item_fullImage);
-            if (item_fullImage.getLayoutParams() != null) {
-                item_fullImage.getLayoutParams().height = (int) (DensityUtil.getScreenWidth(context) * 0.6);
-            }
 
         }
 
-        private void setData(Context context, ArticleDetailBean bean) {
-            /*if (item_fullImage.getLayoutParams() != null) {
-                if (getAdapterPosition() == 0) {
-                    ((RelativeLayout.LayoutParams) item_fullImage.getLayoutParams()).setMargins(0, 0, 0, 0);
+        private void setData(Context context, ArticleDetailBean bean, int position) {
+            if (item_fullImage.getLayoutParams() != null) {
+                if (position == 0) {
+                    item_fullImage.getLayoutParams().height = (int) (DensityUtil.getScreenWidth(context) * 0.6);
+                    Glide.with(context).load(bean.imageUrl).centerCrop().into(item_fullImage);
                 } else {
-                    ((RelativeLayout.LayoutParams) item_fullImage.getLayoutParams()).setMargins(0, DensityUtil.dp2px(context, 12), 0, 0);
+                    item_fullImage.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+                    Glide.with(context).load(bean.imageUrl).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(item_fullImage);
                 }
-            }*/
-            Glide.with(context).load(bean.imageUrl).centerCrop().into(item_fullImage);
+            }
         }
     }
 

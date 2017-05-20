@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ActionBean;
-import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
@@ -30,6 +29,7 @@ import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.DensityUtil;
+import com.arun.a85mm.utils.TextViewUtils;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout activity_main;
     private SlidingTabLayout tabLayout;
     private ViewPager viewPager;
+    //private int[] titleIds = new int[]{R.string.main_tab_1, R.string.main_tab_2, R.string.main_tab_3};
     private String[] titles = new String[]{"最新", "最热", "文章"};
     private List<Fragment> list = new ArrayList<>();
     private TextView topCommonView;
@@ -93,9 +94,29 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselect(int position) {
-
             }
         });
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                for (int i = 0; i < tabLayout.getTabCount(); i++) {
+                    if (i == position) {
+                        TextViewUtils.setTextBold(tabLayout.getTitleView(i), true);
+                    } else {
+                        TextViewUtils.setTextBold(tabLayout.getTitleView(i), false);
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+        TextViewUtils.setTextBold(tabLayout.getTitleView(1), true);
         viewPager.setCurrentItem(1);
         setSaveImage();
         eventStatisticsHelper = new EventStatisticsHelper(this);

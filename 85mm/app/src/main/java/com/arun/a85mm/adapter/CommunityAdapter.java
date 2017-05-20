@@ -3,7 +3,6 @@ package com.arun.a85mm.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -103,6 +102,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
 
             if (!bean.isExpand && bean.isBottom) {
                 headHolder.layout_works_more.setVisibility(View.VISIBLE);
+                headHolder.bg_line.setVisibility(View.VISIBLE);
                 headHolder.query_more_works.setText(resources.getString(R.string.query_one_day_left_works, bean.date, bean.leftWorkNum));
                 headHolder.query_more_works.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -112,10 +112,12 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 });
             } else {
                 headHolder.layout_works_more.setVisibility(View.GONE);
+                headHolder.bg_line.setVisibility(View.GONE);
             }
         } else {
             headHolder.layout_work_title.setVisibility(View.GONE);
             headHolder.layout_works_more.setVisibility(View.GONE);
+            headHolder.bg_line.setVisibility(View.GONE);
         }
 
         int imageHeight = 0;
@@ -141,15 +143,17 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 if (!bean.isExpand) {
                     headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
                     headHolder.layout_source.setVisibility(View.VISIBLE);
+                    headHolder.shadow.setVisibility(View.VISIBLE);
 
                     headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
                     Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
-                            .transform(new GlideRoundTransform(contexts.get(), 2))
+                            .transform(new GlideRoundTransform(contexts.get(), 5))
                             .into(headHolder.source_logo);
                     headHolder.create_time.setText(resources.getString(R.string.works_download_count_one, bean.downloadNum));
                 } else {
                     headHolder.work_list_cover_count.setVisibility(View.GONE);
                     headHolder.layout_source.setVisibility(View.GONE);
+                    headHolder.shadow.setVisibility(View.GONE);
                 }
             } else {
                 if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemImageView.getLayoutParams() != null) {
@@ -175,15 +179,17 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                         if (!bean.isExpand) {
                             headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
                             headHolder.layout_source.setVisibility(View.VISIBLE);
+                            headHolder.shadow.setVisibility(View.VISIBLE);
 
                             headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
                             Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
-                                    .transform(new GlideRoundTransform(contexts.get(), 2))
+                                    .transform(new GlideRoundTransform(contexts.get(), 5))
                                     .into(headHolder.source_logo);
                             headHolder.create_time.setText(resources.getString(R.string.works_download_count_one, bean.downloadNum));
                         } else {
                             headHolder.work_list_cover_count.setVisibility(View.GONE);
                             headHolder.layout_source.setVisibility(View.GONE);
+                            headHolder.shadow.setVisibility(View.GONE);
                         }
                         bean.isCoverLoad = true;
                         return false;
@@ -214,12 +220,14 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     if (bean.isCoverLoad) {
                         headHolder.work_list_cover_count.setVisibility(View.GONE);
                         headHolder.layout_source.setVisibility(View.GONE);
+                        headHolder.shadow.setVisibility(View.GONE);
                         bean.isExpand = true;
                         if (onImageClick != null) {
                             onImageClick.onCountClick(groupPosition);
                         }
                         if (bean.isBottom) {
                             headHolder.layout_works_more.setVisibility(View.GONE);
+                            headHolder.bg_line.setVisibility(View.GONE);
                         }
                         //作品点击展开
                         if (eventListener != null) {
@@ -248,15 +256,17 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                                 if (!bean.isExpand) {
                                     headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
                                     headHolder.layout_source.setVisibility(View.VISIBLE);
+                                    headHolder.shadow.setVisibility(View.VISIBLE);
 
                                     headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
                                     Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
-                                            .transform(new GlideRoundTransform(contexts.get(), 2))
+                                            .transform(new GlideRoundTransform(contexts.get(), 5))
                                             .into(headHolder.source_logo);
                                     headHolder.create_time.setText(resources.getString(R.string.works_download_count_one, bean.downloadNum));
                                 } else {
                                     headHolder.work_list_cover_count.setVisibility(View.GONE);
                                     headHolder.layout_source.setVisibility(View.GONE);
+                                    headHolder.shadow.setVisibility(View.GONE);
                                 }
                                 bean.isCoverLoad = true;
                                 return false;
@@ -345,6 +355,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         if (childPosition == detailSize - 1) {
             workListItemHolder.work_list_item_title.setVisibility(View.VISIBLE);
             workListItemHolder.work_list_item_author.setVisibility(View.VISIBLE);
+            workListItemHolder.bg_line.setVisibility(View.VISIBLE);
             workListItemHolder.work_list_item_title.setText(bean.workTitle);
             workListItemHolder.author_name.setText(bean.authorName);
 
@@ -384,6 +395,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             if (isCommunity) {
                 if (workList.get(groupPosition).isBottom) {
                     workListItemHolder.layout_works_more.setVisibility(View.VISIBLE);
+                    workListItemHolder.bg_line.setVisibility(View.VISIBLE);
                     workListItemHolder.layout_works_more.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -394,11 +406,13 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     workListItemHolder.layout_works_more.setVisibility(View.GONE);
                 }
             } else {
+                workListItemHolder.bg_line.setVisibility(View.GONE);
                 workListItemHolder.layout_works_more.setVisibility(View.GONE);
             }
         } else {
             workListItemHolder.work_list_item_title.setVisibility(View.GONE);
             workListItemHolder.work_list_item_author.setVisibility(View.GONE);
+            workListItemHolder.bg_line.setVisibility(View.GONE);
         }
         if (bean.backgroundColor > 0) {
             workListItemHolder.rippleView.setRippleColor(bean.backgroundColor);
@@ -469,6 +483,8 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         public RelativeLayout itemImageView;
         private RelativeLayout layout_work_title;
         private RelativeLayout layout_works_more;
+        private RelativeLayout shadow;
+        private View bg_line;
 
         public WorkListHeadHolder(View rootView) {
             this.works_date = (TextView) rootView.findViewById(R.id.works_date);
@@ -485,6 +501,8 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             this.itemImageView = (RelativeLayout) rootView.findViewById(R.id.itemImageView);
             this.layout_work_title = (RelativeLayout) rootView.findViewById(R.id.layout_work_title);
             this.layout_works_more = (RelativeLayout) rootView.findViewById(R.id.layout_works_more);
+            this.shadow = (RelativeLayout) rootView.findViewById(R.id.shadow);
+            this.bg_line = rootView.findViewById(R.id.bg_line);
         }
 
     }
@@ -498,6 +516,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         private TextView author_name;
         private ImageView author_more;
         private RelativeLayout layout_works_more;
+        private View bg_line;
 
         private WorkListItemHolder(View rootView) {
             rippleView = (RippleView) rootView.findViewById(R.id.rippleView);
@@ -508,6 +527,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             author_name = (TextView) rootView.findViewById(R.id.author_name);
             author_more = (ImageView) rootView.findViewById(R.id.author_more);
             layout_works_more = (RelativeLayout) rootView.findViewById(R.id.layout_works_more);
+            bg_line = rootView.findViewById(R.id.bg_line);
         }
     }
 

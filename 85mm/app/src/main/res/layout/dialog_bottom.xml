@@ -6,15 +6,31 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
         android:id="@+id/btn_link"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="查看原文"
-        android:textColor="@color/charcoalgrey"
-        android:textSize="15sp" />
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="查看原文"
+            android:textColor="@color/charcoalgrey"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/text_works_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:textColor="@color/lightgrey"
+            android:textSize="12sp" />
+    </LinearLayout>
+
 
     <View
         android:layout_width="match_parent"
@@ -23,15 +39,30 @@
         android:layout_marginRight="30dp"
         android:background="@color/plain" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/btn_report"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="举报  (广告、低俗)"
-        android:textColor="@color/charcoalgrey"
-        android:textSize="15sp" />
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="举报"
+            android:textColor="@color/charcoalgrey"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="作品是广告，作品低俗"
+            android:textColor="@color/lightgrey"
+            android:textSize="12sp" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -40,15 +71,30 @@
         android:layout_marginRight="30dp"
         android:background="@color/plain" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/btn_bad_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="差评"
-        android:textColor="@color/charcoalgrey"
-        android:textSize="15sp" />
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="差评"
+            android:textColor="@color/charcoalgrey"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="作品质量低下"
+            android:textColor="@color/lightgrey"
+            android:textSize="12sp" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -57,15 +103,30 @@
         android:layout_marginRight="30dp"
         android:background="@color/plain" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/btn_repeat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="重复"
-        android:textColor="@color/charcoalgrey"
-        android:textSize="15sp" />
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="和其他作品重复"
+            android:textColor="@color/charcoalgrey"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="作品此前已经出现过"
+            android:textColor="@color/lightgrey"
+            android:textSize="12sp" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -74,15 +135,30 @@
         android:layout_marginRight="30dp"
         android:background="@color/plain" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/btn_image_seq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="图片显示有问题"
-        android:textColor="@color/charcoalgrey"
-        android:textSize="15sp" />
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="图片显示有问题"
+            android:textColor="@color/charcoalgrey"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="加载不出来等"
+            android:textColor="@color/lightgrey"
+            android:textSize="12sp" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

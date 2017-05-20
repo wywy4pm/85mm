@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -43,8 +42,8 @@
         android:layout_below="@+id/work_list_item_title"
         android:background="@color/white"
         android:paddingBottom="8dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:paddingTop="8dp"
         android:visibility="gone">
 
@@ -84,4 +83,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/work_list_item_author"
         android:visibility="gone" />
+
+    <View
+        android:id="@+id/bg_line"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_below="@+id/layout_works_more"
+        android:background="@color/bg_line"
+        android:visibility="gone" />
+
 </RelativeLayout>

@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:orientation="horizontal"
-    android:padding="10dp">
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/image_back"
@@ -12,6 +11,7 @@
         android:layout_height="22dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:layout_margin="10dp"
         android:src="@mipmap/title_back" />
 
     <TextView
@@ -19,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_margin="10dp"
         android:layout_toLeftOf="@+id/image_right"
         android:layout_toRightOf="@+id/image_back"
         android:ellipsize="end"
@@ -26,7 +27,7 @@
         android:maxLines="1"
         android:text=""
         android:textColor="@color/charcoalgrey"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
     <ImageView
@@ -35,7 +36,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_margin="10dp"
         android:visibility="invisible" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/title"
+        android:background="@color/background_color" />
 </RelativeLayout>

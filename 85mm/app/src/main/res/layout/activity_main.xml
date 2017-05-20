@@ -36,19 +36,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_status_place"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingTop="10dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="12dp"
+        android:paddingBottom="7dp"
         app:tl_indicator_anim_duration="100"
         app:tl_indicator_anim_enable="true"
         app:tl_indicator_bounce_enable="true"
-        app:tl_indicator_color="@color/light_yellow"
-        app:tl_indicator_height="3dp"
-        app:tl_indicator_width="10dp"
-        app:tl_textSelectColor="@color/charcoalgrey"
-        app:tl_textUnselectColor="@color/charcoalgrey"
-        app:tl_textsize="15sp" />
+        app:tl_indicator_color="@color/more_yellow"
+        app:tl_indicator_height="2dp"
+        app:tl_indicator_width="12dp"
+        app:tl_textSelectColor="@color/tab_select"
+        app:tl_textUnselectColor="@color/tab_un_select"
+        app:tl_textsize="16sp" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -56,9 +55,9 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/layout_status_place"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="13dp"
         android:onClick="moreClick"
         android:src="@mipmap/ic_home_more" />
 
@@ -67,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_below="@+id/tabLayout"
-        android:background="@color/plain" />
+        android:background="@color/background_color" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
