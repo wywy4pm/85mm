@@ -10,9 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
-import com.arun.a85mm.helper.ShareHelper;
 import com.arun.a85mm.helper.ShareWindow;
-import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.OtherAppStartUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -61,7 +59,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
 
         layout_share.setOnClickListener(this);
         layout_clear.setOnClickListener(this);
-        setTitle("更多");
+        setTitle("欢迎你，我们的第" + SharedPreferencesUtils.getUid(this) + "号用户");
         setBack();
         setCommonShow();
     }
