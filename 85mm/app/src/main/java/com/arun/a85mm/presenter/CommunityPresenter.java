@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.LeftWorksResponse;
 import com.arun.a85mm.common.ErrorCode;
+import com.arun.a85mm.fragment.CommunityFragment;
+import com.arun.a85mm.fragment.LeftWorksFragment;
 import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.retrofit.RetrofitInit;
 import com.arun.a85mm.view.CommonView;
@@ -50,7 +52,7 @@ public class CommunityPresenter extends BasePresenter<CommonView> {
                             getMvpView().refreshMore(communityResponse);
                         }
                     } else {
-                        ((ProductionFragment) getMvpView()).setHaveMore(false);
+                        ((CommunityFragment) getMvpView()).setHaveMore(false);
                     }
                 }
             }
@@ -88,7 +90,7 @@ public class CommunityPresenter extends BasePresenter<CommonView> {
                             getMvpView().refreshMore(leftWorksResponse);
                         }
                     } else {
-                        ((ProductionFragment) getMvpView()).setHaveMore(false);
+                        ((LeftWorksFragment) getMvpView()).setHaveMore(false);
                     }
                 }
             }

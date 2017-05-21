@@ -29,6 +29,7 @@ public class WorkListBean implements Serializable{
 
     public int browseNum;
     public String date;
+    public String searchDate;
     public int allDownloadNum;
     public int leftWorkNum;
     public int start;

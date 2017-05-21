@@ -90,6 +90,7 @@
         android:layout_height="10dp"
         android:layout_below="@+id/layout_works_more"
         android:background="@color/bg_line"
+        android:clickable="false"
         android:visibility="gone" />
 
 </RelativeLayout>

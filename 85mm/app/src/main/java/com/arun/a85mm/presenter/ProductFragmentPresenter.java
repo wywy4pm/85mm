@@ -36,21 +36,26 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView> {
                 if (getMvpView() != null) {
                     getMvpView().onError(e.toString(), null);
                 }
-
             }
 
             @SuppressWarnings("unchecked")
             @Override
             public void onNext(ProductListResponse productListResponse) {
                 if (getMvpView() != null) {
-                    if (productListResponse != null && productListResponse.code == ErrorCode.SUCCESS) {
-                        if (TextUtils.isEmpty(lastWorkId)) {
-                            getMvpView().refresh(productListResponse);
+                    if (productListResponse != null) {
+                        if (productListResponse.code == ErrorCode.SUCCESS) {
+                            if (TextUtils.isEmpty(lastWorkId)) {
+                                getMvpView().refresh(productListResponse);
+                            } else {
+                                getMvpView().refreshMore(productListResponse);
+                            }
+                        } else if (productListResponse.code == ErrorCode.NO_DATA) {
+                            ((ProductionFragment) getMvpView()).setHaveMore(false);
                         } else {
-                            getMvpView().refreshMore(productListResponse);
+                            getMvpView().onError(String.valueOf(productListResponse.code), null);
                         }
                     } else {
-                        ((ProductionFragment) getMvpView()).setHaveMore(false);
+                        getMvpView().onError("", null);
                     }
                 }
             }

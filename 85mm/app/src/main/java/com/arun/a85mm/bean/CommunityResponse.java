@@ -15,6 +15,7 @@ public class CommunityResponse {
 
         public int browseNum;
         public String date;
+        public String searchDate;
         public int downloadNum;
         public int leftWorkNum;
         public int start;

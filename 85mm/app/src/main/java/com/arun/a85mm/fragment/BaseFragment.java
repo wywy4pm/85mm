@@ -27,6 +27,7 @@ import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
+import com.arun.a85mm.view.MvpView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
 
@@ -36,7 +37,7 @@ import java.util.List;
  * Created by wy on 2017/4/13.
  */
 
-public abstract class BaseFragment extends Fragment implements EventListener {
+public abstract class BaseFragment extends Fragment implements EventListener, MvpView {
     protected Activity thisInstance;
     protected View rootView;
     private LayoutInflater inflater;
@@ -304,6 +305,11 @@ public abstract class BaseFragment extends Fragment implements EventListener {
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.recordUserAction(getActivity(), EventConstant.DEFAULT, actionList);
         }
+    }
+
+    @Override
+    public void onError(String error, String tag) {
+
     }
 
     public void setLoadMore() {

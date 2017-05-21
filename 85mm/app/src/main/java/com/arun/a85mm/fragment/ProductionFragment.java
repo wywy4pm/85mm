@@ -127,9 +127,6 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
 
     @Override
     public void onError(String error, String tag) {
-        if (swipeToLoadLayout.isRefreshing()) {
-            swipeToLoadLayout.setRefreshing(false);
-        }
         showNetWorkErrorView(expandableListView);
     }
 

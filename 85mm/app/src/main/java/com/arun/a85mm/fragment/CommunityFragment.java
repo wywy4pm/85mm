@@ -3,7 +3,6 @@ package com.arun.a85mm.fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +21,6 @@ import com.arun.a85mm.presenter.CommunityPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
-import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView;
 
 import java.util.ArrayList;
@@ -170,6 +168,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                         if (i == workList.size() - 1) {
                             workList.get(i).isBottom = true;
                             workList.get(i).date = goodsListBean.date;
+                            workList.get(i).searchDate = goodsListBean.searchDate;
                             workList.get(i).start = goodsListBean.start;
                             workList.get(i).leftWorkNum = goodsListBean.leftWorkNum;
                         }
@@ -238,9 +237,6 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
 
     @Override
     public void onError(String error, String tag) {
-        if (swipeToLoadLayout.isRefreshing()) {
-            swipeToLoadLayout.setRefreshing(false);
-        }
         showNetWorkErrorView(expandableListView);
     }
 

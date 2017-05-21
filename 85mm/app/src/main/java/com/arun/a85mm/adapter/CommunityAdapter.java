@@ -102,7 +102,12 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
 
             if (!bean.isExpand && bean.isBottom) {
                 headHolder.layout_works_more.setVisibility(View.VISIBLE);
-                headHolder.bg_line.setVisibility(View.VISIBLE);
+                if (groupPosition == workList.size() - 1) {
+                    headHolder.bg_line.setVisibility(View.GONE);
+                } else {
+                    headHolder.bg_line.setVisibility(View.VISIBLE);
+                }
+
                 headHolder.query_more_works.setText(resources.getString(R.string.query_one_day_left_works, bean.date, bean.leftWorkNum));
                 headHolder.query_more_works.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -355,7 +360,12 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         if (childPosition == detailSize - 1) {
             workListItemHolder.work_list_item_title.setVisibility(View.VISIBLE);
             workListItemHolder.work_list_item_author.setVisibility(View.VISIBLE);
-            workListItemHolder.bg_line.setVisibility(View.VISIBLE);
+            if (groupPosition == workList.size() - 1) {
+                workListItemHolder.bg_line.setVisibility(View.GONE);
+            } else {
+                workListItemHolder.bg_line.setVisibility(View.VISIBLE);
+            }
+            //workListItemHolder.bg_line.setVisibility(View.VISIBLE);
             workListItemHolder.work_list_item_title.setText(bean.workTitle);
             workListItemHolder.author_name.setText(bean.authorName);
 
@@ -395,7 +405,12 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             if (isCommunity) {
                 if (workList.get(groupPosition).isBottom) {
                     workListItemHolder.layout_works_more.setVisibility(View.VISIBLE);
-                    workListItemHolder.bg_line.setVisibility(View.VISIBLE);
+                    if (groupPosition == workList.size() - 1) {
+                        workListItemHolder.bg_line.setVisibility(View.GONE);
+                    } else {
+                        workListItemHolder.bg_line.setVisibility(View.VISIBLE);
+                    }
+
                     workListItemHolder.layout_works_more.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -462,7 +477,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         String title = resources.getString(R.string.one_day_left_works_title, bean.date, bean.leftWorkNum);
 
         Map<String, String> map = new HashMap<>();
-        map.put(Constant.INTENT_WORKS_LEFT_DATE, bean.date);
+        map.put(Constant.INTENT_WORKS_LEFT_DATE, bean.searchDate);
         map.put(Constant.INTENT_WORKS_LEFT_START, String.valueOf(bean.start));
         FragmentCommonActivity.jumpToFragmentCommonActivity(contexts.get(),
                 FragmentCommonActivity.FRAGMENT_LEFT_WORKS, title, map);
