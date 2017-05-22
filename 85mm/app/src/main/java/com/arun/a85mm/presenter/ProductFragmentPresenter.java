@@ -3,15 +3,15 @@ package com.arun.a85mm.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.arun.a85mm.bean.ProductListResponse;
+import com.arun.a85mm.bean.CommonApiResponse;
+import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.fragment.ProductionFragment;
-import com.arun.a85mm.retrofit.RetrofitInit;
+import com.arun.a85mm.listener.RequestListenerImpl;
+import com.arun.a85mm.model.ProductModel;
 import com.arun.a85mm.view.CommonView;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import java.util.List;
 
 /**
  * Created by wy on 2017/4/18.
@@ -23,7 +23,30 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView> {
     }
 
     public void getProductListData(String userId, String deviceId, final String lastWorkId) {
-        Subscriber<ProductListResponse> subscriber = new Subscriber<ProductListResponse>() {
+        addSubscriber(ProductModel.getInstance()
+                .getWorksList(userId, deviceId, lastWorkId, new RequestListenerImpl(getMvpView()) {
+
+                    @Override
+                    public void onSuccess(CommonApiResponse data) {
+                        if (getMvpView() != null) {
+                            if (data != null) {
+                                if (data.code == ErrorCode.SUCCESS) {
+                                    if (TextUtils.isEmpty(lastWorkId)) {
+                                        getMvpView().refresh(data.workList);
+                                    } else {
+                                        getMvpView().refreshMore(data.workList);
+                                    }
+                                } else if (data.code == ErrorCode.NO_DATA) {
+                                    ((ProductionFragment) getMvpView()).setHaveMore(false);
+                                } else {
+                                    getMvpView().onError(data.code, null);
+                                }
+                            }
+                        }
+                    }
+                }));
+
+        /*Subscriber<ProductListResponse> subscriber = new Subscriber<ProductListResponse>() {
             @Override
             public void onCompleted() {
                 if (getMvpView() != null) {
@@ -34,7 +57,7 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView> {
             @Override
             public void onError(Throwable e) {
                 if (getMvpView() != null) {
-                    getMvpView().onError(e.toString(), null);
+                    getMvpView().onError(ErrorCode.NETWORK_ERROR, null);
                 }
             }
 
@@ -52,16 +75,14 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView> {
                         } else if (productListResponse.code == ErrorCode.NO_DATA) {
                             ((ProductionFragment) getMvpView()).setHaveMore(false);
                         } else {
-                            getMvpView().onError(String.valueOf(productListResponse.code), null);
+                            getMvpView().onError(productListResponse.code, null);
                         }
-                    } else {
-                        getMvpView().onError("", null);
                     }
                 }
             }
         };
 
         addSubscriber(subscriber);
-        RetrofitInit.getApi().getWorksList(userId, deviceId, lastWorkId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);
+        RetrofitInit.getApi().getWorksList(userId, deviceId, lastWorkId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);*/
     }
 }

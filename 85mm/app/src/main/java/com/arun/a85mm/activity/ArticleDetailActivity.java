@@ -28,12 +28,13 @@ import com.arun.a85mm.utils.FullyLinearLayoutManager;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.CommonView;
+import com.arun.a85mm.view.CommonView2;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArticleDetailActivity extends BaseActivity implements CommonView<ArticleDetailResponse> {
+public class ArticleDetailActivity extends BaseActivity implements CommonView2<ArticleDetailResponse.ArticleBean> {
 
     private RelativeLayout layout_detail;
     private ArticleActivityPresenter articleActivityPresenter;
@@ -161,7 +162,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
         animator.setDuration(1000).start();
     }
 
-
     private void requestData() {
         if (articleActivityPresenter != null) {
             articleActivityPresenter.getArticleDetailsData(articleId, userId, deviceId);
@@ -169,9 +169,9 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
     }
 
     @Override
-    public void refresh(ArticleDetailResponse data) {
-        if (data != null && data.article != null) {
-            articleBean = data.article;
+    public void refresh(ArticleDetailResponse.ArticleBean data) {
+        if (data != null) {
+            articleBean = data;
             if (articleBean.contentComponents != null && articleBean.contentComponents.size() > 0 && articleBean.contentComponents.get(0) != null) {//添加头图
                 ArticleDetailBean articleDetailBean = new ArticleDetailBean();
                 articleDetailBean.componentType = Constant.ARTICLE_TYPE_FULL_IMAGE;
@@ -198,16 +198,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
         }
     }
 
-    @Override
-    public void refreshMore(ArticleDetailResponse data) {
-
-    }
-
-    @Override
-    public void onRefreshComplete() {
-
-    }
-
     /*private void loadViewData() {
         if (articleBean != null) {
             if (head_image != null && head_image.getLayoutParams() != null) {
@@ -223,14 +213,8 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
             } else {
                 article_author.setVisibility(View.GONE);
             }
-
         }
     }*/
-
-    @Override
-    public void onError(String error, String tag) {
-
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -242,4 +226,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView<Ar
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
 }

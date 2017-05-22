@@ -3,6 +3,7 @@ package com.arun.a85mm.activity;
 import android.animation.Animator;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.helper.CommunityListCacheManager;
@@ -24,6 +26,7 @@ import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView2;
+import com.arun.a85mm.view.CommonView3;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -33,7 +36,7 @@ import com.bumptech.glide.request.target.Target;
 import java.io.Serializable;
 import java.util.List;
 
-public class SplashActivity extends AppCompatActivity implements CommonView2 {
+public class SplashActivity extends AppCompatActivity implements CommonView3 {
     public ImageView cover_Image;
     public TextView text_author;
     public LinearLayout layout_author;
@@ -156,23 +159,31 @@ public class SplashActivity extends AppCompatActivity implements CommonView2 {
         });
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void refresh(Object data) {
-        if (data instanceof ConfigResponse) {
-            ConfigResponse config = (ConfigResponse) data;
-            SharedPreferencesUtils.saveUid(this, config.uid);
-            SharedPreferencesUtils.setMoreImage(this, config.morePageImage);
-            CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_CONFIG, (Serializable) config.copyWrite);
-            if (config.guidePage != null && config.guidePage.size() == 2) {
-                CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE, (Serializable) config.guidePage);
+    public void refresh(int type, Object data) {
+        if (type == SettingPresenter.TYPE_CONFIG) {
+            if (data instanceof CommonApiResponse) {
+                CommonApiResponse config = (CommonApiResponse) data;
+                SharedPreferencesUtils.saveUid(this, config.uid);
+                SharedPreferencesUtils.setMoreImage(this, config.morePageImage);
+                //CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_CONFIG, (Serializable) config.copyWrite);
+                if (config.guidePage != null && config.guidePage instanceof List) {
+                    List<ConfigResponse.GuidePageBean> list = (List<ConfigResponse.GuidePageBean>) config.guidePage;
+                    if (list.size() == 2) {
+                        CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE, (Serializable) config.guidePage);
+                    }
+                    if (list.size() > 0 && list.get(0) != null) {
+                        show(list.get(0));
+                    } else {
+                        errorIn();
+                    }
+                }
             }
-            if (config.guidePage != null && config.guidePage.size() > 0 && config.guidePage.get(0) != null) {
-                show(config.guidePage.get(0));
-            } else {
-                errorIn();
+        } else if (type == SettingPresenter.TYPE_WORKS) {
+            if (data instanceof CommonApiResponse) {
+                CommunityListCacheManager.setCommonApiResponse((CommonApiResponse) data);
             }
-        } else if (data instanceof CommunityResponse) {
-            CommunityListCacheManager.setProductListResponse((CommunityResponse) data);
         }
     }
 
@@ -208,8 +219,18 @@ public class SplashActivity extends AppCompatActivity implements CommonView2 {
     }
 
     @Override
-    public void onError(String error, String tag) {
+    public void onError(int errorType, String errorMsg) {
+
+    }
+
+    @Override
+    public void onError(int errorType, @StringRes int errorMsg) {
         errorIn();
+    }
+
+    @Override
+    public void onRefreshComplete() {
+
     }
 
     @SuppressWarnings("unchecked")

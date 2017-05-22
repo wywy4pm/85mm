@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.os.Handler;
+import android.support.annotation.ColorRes;
+import android.support.annotation.IntegerRes;
 import android.view.View;
 import android.widget.TextView;
 
@@ -28,13 +30,13 @@ public class ObjectAnimatorHelper {
 
     public void managerShowTopView(final Activity activity, final TextView toastView, ShowTopBean showTopBean) {
         if (!showTopBean.isShowingTop) {
-            showTopToastView(activity, toastView, showTopBean.showData);
+            showTopToastView(activity, toastView, showTopBean.showData, showTopBean.backgroundResId);
         } else {
             waitShowTops.add(showTopBean.showData);
         }
     }
 
-    public void showTopToastView(final Activity activity, final TextView toastView, String showData) {
+    public void showTopToastView(final Activity activity, final TextView toastView, String showData, @ColorRes int backgroundResId) {
         if (activity instanceof MainActivity) {
             ((MainActivity) activity).setShowingTop(true);
         } else if (activity instanceof BaseActivity) {
@@ -44,6 +46,9 @@ public class ObjectAnimatorHelper {
         StatusBarUtils.setStatusBar(activity, true);
         toastView.setVisibility(View.VISIBLE);
         toastView.setText(showData);
+        if (backgroundResId > 0) {
+            toastView.setBackgroundResource(backgroundResId);
+        }
         startAnimator = ObjectAnimator.ofFloat(toastView, "translationY", -DensityUtil.getStatusHeight(activity), 0);
         startAnimator.addListener(new Animator.AnimatorListener() {
             @Override
@@ -94,7 +99,7 @@ public class ObjectAnimatorHelper {
                 StatusBarUtils.setStatusBar(activity, false);
                 if (waitShowTops != null && waitShowTops.size() > 0) {
                     String nextShowData = waitShowTops.get(0);
-                    showTopToastView(activity, toastView, nextShowData);
+                    showTopToastView(activity, toastView, nextShowData, 0);
                     waitShowTops.remove(0);
                 }
             }

@@ -12,6 +12,7 @@ import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.adapter.CommunityAdapter;
+import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.LeftWorksResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
@@ -32,7 +33,7 @@ import java.util.Map;
 /**
  * Created by WY on 2017/5/7.
  */
-public class LeftWorksFragment extends BaseFragment implements OnImageClick, CommonView<LeftWorksResponse> {
+public class LeftWorksFragment extends BaseFragment implements OnImageClick, CommonView<CommonApiResponse> {
 
     public ExpandableListView expandableListView;
     public SwipeToLoadLayout swipeToLoadLayout;
@@ -203,24 +204,36 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     }
 
     @Override
-    public void onMoreLinkClick(String workId,String sourceUrl) {
-        DialogHelper.showBottomSourceLink(getActivity(), sourceUrl,workId,eventStatisticsHelper);
+    public void onMoreLinkClick(String workId, String sourceUrl) {
+        DialogHelper.showBottomSourceLink(getActivity(), sourceUrl, workId, eventStatisticsHelper);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void refresh(LeftWorksResponse data) {
-        if (data != null && data.workList != null && data.workList.size() > 0) {
-            start = data.start;
-            workLists.clear();
-            formatData(data.workList);
+    public void refresh(CommonApiResponse data) {
+        if (data != null && data.workList != null) {
+            if (data.workList instanceof List) {
+                List<WorkListBean> list = (List<WorkListBean>) data.workList;
+                if (list.size() > 0) {
+                    start = data.start;
+                    workLists.clear();
+                    formatData(list);
+                }
+            }
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void refreshMore(LeftWorksResponse data) {
-        if (data != null && data.workList != null && data.workList.size() > 0) {
-            start = data.start;
-            formatData(data.workList);
+    public void refreshMore(CommonApiResponse data) {
+        if (data != null && data.workList != null) {
+            if (data.workList instanceof List) {
+                List<WorkListBean> list = (List<WorkListBean>) data.workList;
+                if (list.size() > 0) {
+                    start = data.start;
+                    formatData(list);
+                }
+            }
         }
     }
 
@@ -236,11 +249,8 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
         }
     }
 
-    @Override
+    /*@Override
     public void onError(String error, String tag) {
-        if (swipeToLoadLayout.isRefreshing()) {
-            swipeToLoadLayout.setRefreshing(false);
-        }
         showNetWorkErrorView(expandableListView);
-    }
+    }*/
 }

@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by WY on 2017/4/14.
  */
-public class ProductionFragment extends BaseFragment implements OnImageClick, CommonView<ProductListResponse> {
+public class ProductionFragment extends BaseFragment implements OnImageClick, CommonView<List<WorkListBean>> {
 
     private SwipeToLoadLayout swipeToLoadLayout;
     private ExpandableListView expandableListView;
@@ -110,25 +110,25 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     }
 
     @Override
-    public void refresh(ProductListResponse data) {
-        if (data != null && data.workList != null && data.workList.size() > 0) {
+    public void refresh(List<WorkListBean> data) {
+        if (data != null  && data.size() > 0) {
             //SharedPreferencesUtils.saveUid(getActivity(), data.uid);
             workLists.clear();
-            formatData(data.workList);
+            formatData(data);
         }
     }
 
     @Override
-    public void refreshMore(ProductListResponse data) {
-        if (data != null && data.workList != null && data.workList.size() > 0) {
-            formatData(data.workList);
+    public void refreshMore(List<WorkListBean> data) {
+        if (data != null && data.size() > 0) {
+            formatData(data);
         }
     }
 
-    @Override
+    /*@Override
     public void onError(String error, String tag) {
         showNetWorkErrorView(expandableListView);
-    }
+    }*/
 
     private void formatData(List<WorkListBean> workList) {
         for (int i = 0; i < workList.size(); i++) {

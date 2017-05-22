@@ -17,4 +17,9 @@
     <string name="main_tab_1">最新</string>
     <string name="main_tab_2">最热</string>
     <string name="main_tab_3">文章</string>
+
+    <!--网络请求异常情况-->
+    <string name="net_error">网络异常</string>
+    <string name="net_error_system">系统异常</string>
+    <string name="net_error_data_format">数据解析异常</string>
 </resources>

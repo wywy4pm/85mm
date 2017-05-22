@@ -96,7 +96,6 @@ public class RetrofitInit {
     }
 
     public static <T> T createApi(Class<T> mClass) {
-
         return retrofit.create(mClass);
     }
 

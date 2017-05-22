@@ -24,7 +24,7 @@ import java.util.List;
  * Created by wy on 2017/4/13.
  */
 
-public class ArticleFragment extends BaseFragment implements CommonView<ArticleListResponse> {
+public class ArticleFragment extends BaseFragment implements CommonView<List<ArticleListResponse.ArticleListBean>> {
 
     private SwipeToLoadLayout swipeToLoadLayout;
     private RecyclerView recyclerView;
@@ -108,34 +108,29 @@ public class ArticleFragment extends BaseFragment implements CommonView<ArticleL
     }
 
     @Override
-    public void refresh(ArticleListResponse data) {
-        if (data != null && data.articleList != null && data.articleList.size() > 0) {
+    public void refresh(List<ArticleListResponse.ArticleListBean> data) {
+        if (data != null && data.size() > 0) {
             //SharedPreferencesUtils.saveUid(getActivity(), data.uid);
             articles.clear();
-            articles.addAll(data.articleList);
+            articles.addAll(data);
             articleListAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
-    public void refreshMore(ArticleListResponse data) {
-        if (data != null && data.articleList != null && data.articleList.size() > 0) {
-            articles.addAll(data.articleList);
+    public void refreshMore(List<ArticleListResponse.ArticleListBean> data) {
+        if (data != null && data.size() > 0) {
+            articles.addAll(data);
             articleListAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void onRefreshComplete() {
+        setLoading(false);
         if (swipeToLoadLayout != null) {
-            setLoading(false);
             swipeToLoadLayout.setRefreshing(false);
         }
-    }
-
-    @Override
-    public void onError(String error, String tag) {
-
     }
 
     public void setHaveMore(boolean isHaveMore) {

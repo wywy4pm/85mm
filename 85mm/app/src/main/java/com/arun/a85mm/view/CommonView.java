@@ -7,6 +7,4 @@ public interface CommonView<T> extends MvpView {
     void refresh(T data);
 
     void refreshMore(T data);
-
-    void onRefreshComplete();
 }

@@ -1,6 +1,7 @@
 package com.arun.a85mm.activity;
 
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,9 +16,11 @@ import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
+import com.arun.a85mm.helper.ShowTopToastHelper;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
+import com.arun.a85mm.view.MvpView;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
@@ -30,7 +33,7 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivityHelper;
 /**
  * Created by WY on 2017/4/15.
  */
-public class BaseActivity extends AppCompatActivity implements SwipeBackActivityBase {
+public abstract class BaseActivity extends AppCompatActivity implements SwipeBackActivityBase, MvpView {
     private SwipeBackActivityHelper mHelper;
     private boolean isShowingTop;
     private SaveImageHelper saveImageHelper;
@@ -190,5 +193,20 @@ public class BaseActivity extends AppCompatActivity implements SwipeBackActivity
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.detachView();
         }
+    }
+
+    @Override
+    public void onError(int errorType, String errorMsg) {
+
+    }
+
+    @Override
+    public void onError(int errorType, @StringRes int errorMsg) {
+        ShowTopToastHelper.showTopToastView(this, getString(errorMsg), R.color.red);
+    }
+
+    @Override
+    public void onRefreshComplete() {
+
     }
 }

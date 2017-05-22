@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.adapter.CommunityAdapter;
+import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
@@ -29,7 +30,7 @@ import java.util.List;
 /**
  * Created by WY on 2017/4/14.
  */
-public class CommunityFragment extends BaseFragment implements CommonView<CommunityResponse>, OnImageClick {
+public class CommunityFragment extends BaseFragment implements CommonView<List<CommunityResponse.GoodsListBean>>, OnImageClick {
     public ExpandableListView expandableListView;
     public SwipeToLoadLayout swipeToLoadLayout;
     public ImageView not_network_image;
@@ -42,7 +43,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     private static final String TAG = "CommunityFragment";
     private ImageView next_group_img;
     private CommunityAdapter communityAdapter;
-    private CommunityResponse response;
+    private CommonApiResponse response;
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -74,12 +75,13 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     protected void initData() {
         communityPresenter = new CommunityPresenter(getActivity());
         communityPresenter.attachView(this);
-        response = CommunityListCacheManager.getCommunityResponse();
+        response = CommunityListCacheManager.getCommonApiResponse();
         refreshData();
     }
 
     private long requestTime;
 
+    @SuppressWarnings("unchecked")
     private void refreshData() {
         requestTime = System.currentTimeMillis();
         currentGroupPosition = 0;
@@ -96,10 +98,12 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
                 if (response == null) {
                     communityPresenter.getWorksGoods(userId, deviceId, lastWorkDate);
                 } else {
-                    if (response.goodsList != null && response.goodsList.size() > 0) {
-                        worksList.clear();
-                        formatData(response.goodsList);
-                        response = null;
+                    if (response.goodsList != null) {
+                        if (response.goodsList instanceof List) {
+                            List<CommunityResponse.GoodsListBean> goodsList = (List<CommunityResponse.GoodsListBean>) response.goodsList;
+                            worksList.clear();
+                            formatData(goodsList);
+                        }
                     }
                 }
             }
@@ -135,18 +139,18 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
     }
 
     @Override
-    public void refresh(CommunityResponse data) {
-        if (data != null && data.goodsList != null && data.goodsList.size() > 0) {
+    public void refresh(List<CommunityResponse.GoodsListBean> data) {
+        if (data != null && data.size() > 0) {
             worksList.clear();
-            formatData(data.goodsList);
+            formatData(data);
         }
         Log.d("TAG", "system time refresh = " + (System.currentTimeMillis() - requestTime));
     }
 
     @Override
-    public void refreshMore(CommunityResponse data) {
-        if (data != null && data.goodsList != null && data.goodsList.size() > 0) {
-            formatData(data.goodsList);
+    public void refreshMore(List<CommunityResponse.GoodsListBean> data) {
+        if (data != null && data.size() > 0) {
+            formatData(data);
         }
     }
 
@@ -235,10 +239,10 @@ public class CommunityFragment extends BaseFragment implements CommonView<Commun
         }
     }
 
-    @Override
+    /*@Override
     public void onError(String error, String tag) {
-        showNetWorkErrorView(expandableListView);
-    }
+        super.onError(error, tag);
+    }*/
 
     @Override
     public void onCountClick(int groupPosition) {

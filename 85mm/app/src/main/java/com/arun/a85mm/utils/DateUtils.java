@@ -5,7 +5,7 @@ package com.arun.a85mm.utils;
  */
 
 public class DateUtils {
-    public static final int HOUR_24 = 24 * 60 * 1000;
+    public static final int HOUR_24 = 24 * 60 * 60 * 1000;
 
     public static boolean isToday(long currentDayStartTime) {
         boolean isToady = false;

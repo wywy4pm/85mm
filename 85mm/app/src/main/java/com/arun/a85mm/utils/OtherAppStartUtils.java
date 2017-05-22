@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.arun.a85mm.R;
 import com.arun.a85mm.helper.ShowTopToastHelper;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class OtherAppStartUtils {
             intent.setComponent(cmp);
             context.startActivity(intent);
         } else {
-            ShowTopToastHelper.showTopToastView(context, "您暂未安装或不支持微信");
+            ShowTopToastHelper.showTopToastView(context, "您暂未安装或不支持微信", 0);
             //Toast.makeText(context, "您暂未安装或不支持微信", Toast.LENGTH_SHORT).show();
         }
     }

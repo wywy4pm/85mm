@@ -1,6 +1,7 @@
 package com.arun.a85mm.helper;
 
 import android.content.Context;
+import android.support.annotation.StringRes;
 
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.bean.ActionBean;
@@ -66,7 +67,17 @@ public class EventStatisticsHelper implements EventView {
     }
 
     @Override
-    public void onError(String error, String tag) {
+    public void onError(int errorType, String errorMsg) {
+
+    }
+
+    @Override
+    public void onError(int errorType, @StringRes int errorMsg) {
+
+    }
+
+    @Override
+    public void onRefreshComplete() {
 
     }
 

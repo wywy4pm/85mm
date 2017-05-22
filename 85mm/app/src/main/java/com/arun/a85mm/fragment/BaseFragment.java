@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.EventStatisticsHelper;
+import com.arun.a85mm.helper.ShowTopToastHelper;
 import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
@@ -308,8 +310,13 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
     }
 
     @Override
-    public void onError(String error, String tag) {
+    public void onError(int errorType, String errorMsg) {
 
+    }
+
+    @Override
+    public void onError(int errorType, @StringRes int errorMsg) {
+        ShowTopToastHelper.showTopToastView(getActivity(), getString(errorMsg), R.color.red);
     }
 
     public void setLoadMore() {
