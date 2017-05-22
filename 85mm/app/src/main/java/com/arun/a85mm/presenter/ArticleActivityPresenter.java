@@ -34,7 +34,7 @@ public class ArticleActivityPresenter extends BasePresenter<CommonView2> {
                     public void onSuccess(CommonApiResponse data) {
                         if (getMvpView() != null) {
                             if (data != null && data.code == ErrorCode.SUCCESS) {
-                                getMvpView().refresh(data.article);
+                                getMvpView().refresh(data.body);
                             }
                         }
                     }

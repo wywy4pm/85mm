@@ -33,9 +33,9 @@ public class ArticleFragmentPresenter extends BasePresenter<CommonView> {
                         if (getMvpView() != null) {
                             if (data != null && data.code == ErrorCode.SUCCESS) {
                                 if (pageNum == 1) {
-                                    getMvpView().refresh(data.articleList);
+                                    getMvpView().refresh(data.body);
                                 } else if (pageNum > 1) {
-                                    getMvpView().refreshMore(data.articleList);
+                                    getMvpView().refreshMore(data.body);
                                 }
                             } else {
                                 ((ArticleFragment) getMvpView()).setHaveMore(false);

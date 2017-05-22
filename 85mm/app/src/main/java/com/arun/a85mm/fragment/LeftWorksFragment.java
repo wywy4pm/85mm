@@ -211,9 +211,9 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     @SuppressWarnings("unchecked")
     @Override
     public void refresh(CommonApiResponse data) {
-        if (data != null && data.workList != null) {
-            if (data.workList instanceof List) {
-                List<WorkListBean> list = (List<WorkListBean>) data.workList;
+        if (data != null && data.body != null) {
+            if (data.body instanceof List) {
+                List<WorkListBean> list = (List<WorkListBean>) data.body;
                 if (list.size() > 0) {
                     start = data.start;
                     workLists.clear();
@@ -226,9 +226,9 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     @SuppressWarnings("unchecked")
     @Override
     public void refreshMore(CommonApiResponse data) {
-        if (data != null && data.workList != null) {
-            if (data.workList instanceof List) {
-                List<WorkListBean> list = (List<WorkListBean>) data.workList;
+        if (data != null && data.body != null) {
+            if (data.body instanceof List) {
+                List<WorkListBean> list = (List<WorkListBean>) data.body;
                 if (list.size() > 0) {
                     start = data.start;
                     formatData(list);

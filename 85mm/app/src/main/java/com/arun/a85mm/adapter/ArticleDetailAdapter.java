@@ -17,7 +17,7 @@ import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -106,23 +106,24 @@ public class ArticleDetailAdapter extends RecyclerView.Adapter {
     }
 
     public static class ImageHolder extends RecyclerView.ViewHolder {
-        public View rootView;
         public ImageView item_fullImage;
 
         public ImageHolder(Context context, View rootView) {
             super(rootView);
             item_fullImage = (ImageView) rootView.findViewById(R.id.item_fullImage);
-
         }
 
         private void setData(Context context, ArticleDetailBean bean, int position) {
             if (item_fullImage.getLayoutParams() != null) {
                 if (position == 0) {
                     item_fullImage.getLayoutParams().height = (int) (DensityUtil.getScreenWidth(context) * 0.6);
-                    Glide.with(context).load(bean.imageUrl).centerCrop().into(item_fullImage);
+                    Glide.with(context).load(bean.imageUrl).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(item_fullImage);
                 } else {
-                    item_fullImage.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
-                    Glide.with(context).load(bean.imageUrl).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(item_fullImage);
+                    int imageHeight = (bean.imageHeight * DensityUtil.getScreenWidth(context)) / bean.imageWidth;
+                    item_fullImage.getLayoutParams().height = imageHeight;
+                    item_fullImage.getLayoutParams().width = DensityUtil.getScreenWidth(context);
+                    Glide.with(context).load(bean.imageUrl)
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(item_fullImage);
                 }
             }
         }

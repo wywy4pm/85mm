@@ -168,10 +168,10 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                 SharedPreferencesUtils.saveUid(this, config.uid);
                 SharedPreferencesUtils.setMoreImage(this, config.morePageImage);
                 //CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_CONFIG, (Serializable) config.copyWrite);
-                if (config.guidePage != null && config.guidePage instanceof List) {
-                    List<ConfigResponse.GuidePageBean> list = (List<ConfigResponse.GuidePageBean>) config.guidePage;
+                if (config.body != null && config.body instanceof List) {
+                    List<ConfigResponse.GuidePageBean> list = (List<ConfigResponse.GuidePageBean>) config.body;
                     if (list.size() == 2) {
-                        CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE, (Serializable) config.guidePage);
+                        CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE, (Serializable) config.body);
                     }
                     if (list.size() > 0 && list.get(0) != null) {
                         show(list.get(0));

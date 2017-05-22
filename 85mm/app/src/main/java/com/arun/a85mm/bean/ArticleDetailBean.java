@@ -23,5 +23,7 @@ public class ArticleDetailBean {
     public String author;
     public String authorHeadImg;
     public String createTime;
+    public int imageHeight;
+    public int imageWidth;
 
 }

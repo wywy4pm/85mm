@@ -37,9 +37,9 @@ public class CommunityPresenter extends BasePresenter<CommonView> {
                         if (getMvpView() != null) {
                             if (data != null && data.code == ErrorCode.SUCCESS) {
                                 if (TextUtils.isEmpty(lastDate)) {
-                                    getMvpView().refresh(data.goodsList);
+                                    getMvpView().refresh(data.body);
                                 } else {
-                                    getMvpView().refreshMore(data.goodsList);
+                                    getMvpView().refreshMore(data.body);
                                 }
                             } else {
                                 ((CommunityFragment) getMvpView()).setHaveMore(false);

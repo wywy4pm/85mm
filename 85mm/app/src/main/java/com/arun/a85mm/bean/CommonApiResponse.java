@@ -10,13 +10,13 @@ public class CommonApiResponse<T> {
     public int start;
     public int code;
     public String uid;
-    public List<String> copyWrite;
-
     public String morePageImage;
     public T body;
+
+    /*public List<String> copyWrite;
     public T goodsList;
     public T workList;
     public T guidePage;
     public T article;
-    public T articleList;
+    public T articleList;*/
 }

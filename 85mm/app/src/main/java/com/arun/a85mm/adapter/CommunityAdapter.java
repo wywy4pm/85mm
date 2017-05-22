@@ -109,7 +109,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 }
 
                 headHolder.query_more_works.setText(resources.getString(R.string.query_one_day_left_works, bean.date, bean.leftWorkNum));
-                headHolder.query_more_works.setOnClickListener(new View.OnClickListener() {
+                headHolder.layout_works_more.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         jumpToLeftWorks(bean);
@@ -518,6 +518,11 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             this.layout_works_more = (RelativeLayout) rootView.findViewById(R.id.layout_works_more);
             this.shadow = (RelativeLayout) rootView.findViewById(R.id.shadow);
             this.bg_line = rootView.findViewById(R.id.bg_line);
+            bg_line.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
         }
 
     }

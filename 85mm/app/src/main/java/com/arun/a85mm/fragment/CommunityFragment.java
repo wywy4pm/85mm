@@ -98,9 +98,9 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
                 if (response == null) {
                     communityPresenter.getWorksGoods(userId, deviceId, lastWorkDate);
                 } else {
-                    if (response.goodsList != null) {
-                        if (response.goodsList instanceof List) {
-                            List<CommunityResponse.GoodsListBean> goodsList = (List<CommunityResponse.GoodsListBean>) response.goodsList;
+                    if (response.body != null) {
+                        if (response.body instanceof List) {
+                            List<CommunityResponse.GoodsListBean> goodsList = (List<CommunityResponse.GoodsListBean>) response.body;
                             worksList.clear();
                             formatData(goodsList);
                         }
