@@ -133,10 +133,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:onClick="copyWeChat"
                     android:text="点击复制"
                     android:textColor="@color/more_yellow"
                     android:textSize="14sp"
-                    android:onClick="copyWeChat"
                     android:textStyle="bold" />
 
 
@@ -154,9 +154,9 @@
                 android:layout_marginBottom="29dp"
                 android:background="@drawable/shape_jump_to_wechat"
                 android:gravity="center"
+                android:onClick="openWeChat"
                 android:text="打开微信"
                 android:textColor="@color/open_wechat"
-                android:onClick="openWeChat"
                 android:textSize="15sp" />
             <!--<com.arun.a85mm.widget.ListViewForScrollView
                 android:id="@+id/configListView"

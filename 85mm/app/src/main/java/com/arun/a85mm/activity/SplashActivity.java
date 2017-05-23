@@ -1,6 +1,8 @@
 package com.arun.a85mm.activity;
 
 import android.animation.Animator;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.StringRes;
@@ -20,10 +22,13 @@ import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.helper.CommunityListCacheManager;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
 import com.arun.a85mm.presenter.SettingPresenter;
+import com.arun.a85mm.utils.ACache;
+import com.arun.a85mm.utils.BitmapUtils;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DateUtils;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
+import com.arun.a85mm.utils.IOUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView2;
 import com.arun.a85mm.view.CommonView3;
@@ -33,7 +38,11 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.List;
 
 public class SplashActivity extends AppCompatActivity implements CommonView3 {
@@ -164,9 +173,17 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
     public void refresh(int type, Object data) {
         if (type == SettingPresenter.TYPE_CONFIG) {
             if (data instanceof CommonApiResponse) {
-                CommonApiResponse config = (CommonApiResponse) data;
+                final CommonApiResponse config = (CommonApiResponse) data;
                 SharedPreferencesUtils.saveUid(this, config.uid);
                 SharedPreferencesUtils.setMoreImage(this, config.morePageImage);
+                new Thread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                CacheUtils.saveBitmap(SplashActivity.this, CacheUtils.KEY_BITMAP_CONFIG, BitmapUtils.createBitmapByUrl(config.morePageImage));
+                            }
+                        }
+                ).start();
                 //CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_CONFIG, (Serializable) config.copyWrite);
                 if (config.body != null && config.body instanceof List) {
                     List<ConfigResponse.GuidePageBean> list = (List<ConfigResponse.GuidePageBean>) config.body;

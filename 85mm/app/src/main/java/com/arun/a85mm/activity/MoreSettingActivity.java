@@ -3,6 +3,7 @@ package com.arun.a85mm.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.helper.ShareWindow;
+import com.arun.a85mm.utils.ACache;
+import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.OtherAppStartUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -18,6 +21,7 @@ import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.utils.SystemServiceUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.Target;
 import com.umeng.socialize.UMShareAPI;
 
 import java.util.ArrayList;
@@ -67,12 +71,12 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     @SuppressWarnings("unchecked")
     private void initData() {
         cache_size.setText(DataCleanManager.getImageCacheSize(this));
-        /*Object object = CacheUtils.getObject(this, CacheUtils.KEY_OBJECT_CONFIG);
-        if (object != null && object instanceof List) {
-            texts.addAll((List<String>) object);
-        }*/
-        String moreImageUrl = SharedPreferencesUtils.getMoreImage(this);
-        Glide.with(this).load(moreImageUrl).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(more_detail);
+        /*String moreImageUrl = SharedPreferencesUtils.getMoreImage(this);
+        Glide.with(this).load(moreImageUrl).diskCacheStrategy(DiskCacheStrategy.SOURCE).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(more_detail);*/
+        Bitmap bitmap = CacheUtils.getBitmap(this, CacheUtils.KEY_BITMAP_CONFIG);
+        if (bitmap != null) {
+            more_detail.setImageBitmap(bitmap);
+        }
         //configAdapter.notifyDataSetChanged();
     }
 

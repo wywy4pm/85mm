@@ -1,6 +1,7 @@
 package com.arun.a85mm.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ public class CacheUtils {
     public static final String KEY_STRING_CONFIG = "string_config";
     public static final String KEY_OBJECT_CONFIG = "object_config";
     public static final String KEY_OBJECT_PRODUCT_RESPONSE = "object_product_response";
+    public static final String KEY_BITMAP_CONFIG = "bitmap_config";
 
     private static void newInstance(Context context) {
         synchronized (CacheUtils.class) {
@@ -48,7 +50,9 @@ public class CacheUtils {
         newInstance(context);
         if (aCache != null) {
             if (data != null) {
-                aCache.put(key, data);
+                if (!TextUtils.isEmpty(key)) {
+                    aCache.put(key, data);
+                }
             }
         }
     }
@@ -62,5 +66,27 @@ public class CacheUtils {
             }
         }
         return data;
+    }
+
+    public static void saveBitmap(Context context, String key, Bitmap bitmap) {
+        newInstance(context);
+        if (aCache != null) {
+            if (bitmap != null) {
+                if (!TextUtils.isEmpty(key)) {
+                    aCache.put(key, bitmap);
+                }
+            }
+        }
+    }
+
+    public static Bitmap getBitmap(Context context, String key) {
+        newInstance(context);
+        Bitmap bitmap = null;
+        if (aCache != null) {
+            if (!TextUtils.isEmpty(key)) {
+                bitmap = aCache.getAsBitmap(key);
+            }
+        }
+        return bitmap;
     }
 }
