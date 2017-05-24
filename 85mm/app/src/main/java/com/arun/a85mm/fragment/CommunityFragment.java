@@ -220,10 +220,12 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
                             workList.get(i).workDetail = items;
                         }
                         if (i == workList.size() - 1) {
-                            lastWorkDate = workList.get(i).date;
+                            lastWorkDate = goodsListBean.searchDate;
                         }
                     }
-                    preLoadChildFirstImage(workList);
+                    if (NetUtils.isWifi(getActivity())) {
+                        preLoadChildFirstImage(workList);
+                    }
                     worksList.addAll(workList);
                 }
             }

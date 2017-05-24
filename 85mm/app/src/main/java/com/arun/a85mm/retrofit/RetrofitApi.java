@@ -43,10 +43,12 @@ public interface RetrofitApi {
     Observable<CommonApiResponse<List<WorkListBean>>> getWorksList(@Query("uid") String uid, @Query("deviceId") String deviceId, @Query("lastWorkId") String lastWorkId);
 
     @GET(RetrofitUrl.WORKS_GOODS)
-    Observable<CommonApiResponse<List<CommunityResponse.GoodsListBean>>> getWorksGoods(@Query("uid") String uid, @Query("deviceId") String deviceId, @Query("lastDate") String lastDate);
+    Observable<CommonApiResponse<List<CommunityResponse.GoodsListBean>>> getWorksGoods(@Query("uid") String uid, @Query("deviceId") String deviceId, @Query("lastDate") String lastDate,
+                                                                                       @Query("appVersion") String appVersion, @Query("osType") String osType);
 
     @GET(RetrofitUrl.WORKS_ONE_DAY_LEFT)
-    Observable<CommonApiResponse<List<WorkListBean>>> getWorksOneDayLeft(@Query("uid") String uid, @Query("deviceId") String deviceId, @Query("date") String date, @Query("start") int start);
+    Observable<CommonApiResponse<List<WorkListBean>>> getWorksOneDayLeft(@Query("uid") String uid, @Query("deviceId") String deviceId, @Query("date") String date, @Query("start") int start,
+                                                                         @Query("appVersion") String appVersion, @Query("osType") String osType);
 
     @Headers({"Content-Type:application/json;charset=UTF-8"})
     @POST(RetrofitUrl.USER_ACTION)

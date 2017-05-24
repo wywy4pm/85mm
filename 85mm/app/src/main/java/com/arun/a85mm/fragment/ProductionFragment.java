@@ -111,7 +111,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
 
     @Override
     public void refresh(List<WorkListBean> data) {
-        if (data != null  && data.size() > 0) {
+        if (data != null && data.size() > 0) {
             //SharedPreferencesUtils.saveUid(getActivity(), data.uid);
             workLists.clear();
             formatData(data);
@@ -179,8 +179,9 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
                 lastWorkId = workList.get(i).workId;
             }
         }
-
-        preLoadChildFirstImage(workList);
+        if (NetUtils.isWifi(getActivity())) {
+            preLoadChildFirstImage(workList);
+        }
 
         workLists.addAll(workList);
         productListAdapter.notifyDataSetChanged();

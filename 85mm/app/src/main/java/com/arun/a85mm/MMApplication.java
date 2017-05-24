@@ -2,6 +2,7 @@ package com.arun.a85mm;
 
 import android.app.Application;
 
+import com.arun.a85mm.helper.AppHelper;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
@@ -22,5 +23,6 @@ public class MMApplication extends Application {
         super.onCreate();
         //Config.DEBUG = true;
         UMShareAPI.get(this);
+        AppHelper.getInstance().setAppConfig(getApplicationContext());
     }
 }

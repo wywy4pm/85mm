@@ -160,8 +160,9 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
                 workList.get(i).workDetail = items;
             }
         }
-
-        preLoadChildFirstImage(workList);
+        if (NetUtils.isWifi(getActivity())) {
+            preLoadChildFirstImage(workList);
+        }
 
         workLists.addAll(workList);
         communityAdapter.notifyDataSetChanged();

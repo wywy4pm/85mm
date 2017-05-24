@@ -2,6 +2,8 @@ package com.arun.a85mm.bean;
 
 import android.content.Context;
 
+import com.arun.a85mm.R;
+import com.arun.a85mm.model.ArticleModel;
 import com.arun.a85mm.utils.AppUtils;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -25,5 +27,6 @@ public class AppBean {
         appVersion = AppUtils.getAppVersion(context);
         osVersion = String.valueOf(DeviceUtils.getMobileSDK());
         deviceModel = DeviceUtils.getMobileModel();
+        osType = context.getString(R.string.android);
     }
 }

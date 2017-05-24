@@ -24,6 +24,7 @@ import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.arun.a85mm.utils.GlideRoundTransform;
+import com.arun.a85mm.utils.NetUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -294,15 +295,17 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                     }
                 }).override(screenWidth, imageHeight).into(finalWorkListItemHolder.work_list_item_img);
 
-                if (workListBean.size() > 1) {
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (int i = 1; i < workListBean.size(); i++) {
-                                Glide.with(contexts.get()).load(workListBean.get(i).imageUrl).downloadOnly(workListBean.get(i).width, workListBean.get(i).height);
+                if (NetUtils.isWifi(contexts.get())) {
+                    if (workListBean.size() > 1) {
+                        new Handler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (int i = 1; i < workListBean.size(); i++) {
+                                    Glide.with(contexts.get()).load(workListBean.get(i).imageUrl).downloadOnly(workListBean.get(i).width, workListBean.get(i).height);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         }

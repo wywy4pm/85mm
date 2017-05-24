@@ -1,6 +1,8 @@
 package com.arun.a85mm.model;
 
+import com.arun.a85mm.bean.AppBean;
 import com.arun.a85mm.bean.ProductListResponse;
+import com.arun.a85mm.helper.AppHelper;
 import com.arun.a85mm.listener.CommonRequestListener;
 import com.arun.a85mm.retrofit.RetrofitInit;
 
@@ -28,11 +30,13 @@ public class ProductModel extends BaseModel {
     }
 
     public Subscriber getWorksGoods(String userId, String deviceId, String lastDate, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().getWorksGoods(userId, deviceId, lastDate), listener);
+        AppBean appBean = AppHelper.getInstance().getAppConfig();
+        return request(RetrofitInit.getApi().getWorksGoods(userId, deviceId, lastDate, appBean.appVersion, appBean.osType), listener);
     }
 
     public Subscriber getWorksOneDayLeft(String userId, String deviceId, String date, int start, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().getWorksOneDayLeft(userId, deviceId, date, start), listener);
+        AppBean appBean = AppHelper.getInstance().getAppConfig();
+        return request(RetrofitInit.getApi().getWorksOneDayLeft(userId, deviceId, date, start, appBean.appVersion, appBean.osType), listener);
     }
 
 }

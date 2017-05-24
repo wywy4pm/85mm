@@ -42,7 +42,7 @@ public class EventPresenter extends BasePresenter<EventView> {
                         Log.d("TAG", "recordUserAction Success");
                         if (getMvpView() != null) {
                             if (type == EventConstant.WORK_REPORT || type == EventConstant.WORK_BAD_COMMNET
-                                    || type == EventConstant.WORK_REPEAT) {
+                                    || type == EventConstant.WORK_REPEAT || type == EventConstant.WORK_SHOW_SEQ) {
                                 getMvpView().eventDone(type);
                             }
                         } else {

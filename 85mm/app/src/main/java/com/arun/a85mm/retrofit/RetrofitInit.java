@@ -1,23 +1,16 @@
 package com.arun.a85mm.retrofit;
 
-import android.text.TextUtils;
-
+import com.arun.a85mm.bean.AppBean;
 import com.arun.a85mm.common.Constant;
-import com.arun.a85mm.utils.AppUtils;
-import com.arun.a85mm.utils.DeviceUtils;
+import com.arun.a85mm.helper.AppHelper;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.BufferedSink;
-import okio.GzipSink;
-import okio.Okio;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -71,21 +64,30 @@ public class RetrofitInit {
         }
     }*/
 
-    /*Interceptor passportInterceptor = new Interceptor() {
-        @Override public Response intercept(Chain chain) throws IOException {
-            Request originalRequest = chain.request();
-            Request authorised = originalRequest.newBuilder()
-                    .addHeader("appVersion", AppUtils.getAppVersion())
-                    .addHeader("osType",)
-                    .build();
-            return chain.proceed(authorised);
-        }
-    };*/
-
     public static OkHttpClient getClient() {
         if (client == null) {
+
+            Interceptor interceptor = new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    String appVersion = "1.0.0";
+                    String osType = "android";
+                    if (getAppBean() != null) {
+                        appVersion = getAppBean().appVersion;
+                        osType = getAppBean().osType;
+                    }
+                    Request originalRequest = chain.request();
+                    Request authorised = originalRequest.newBuilder()
+                            .addHeader("appVersion", appVersion)
+                            .addHeader("osType", osType)
+                            .build();
+                    return chain.proceed(authorised);
+                }
+            };
+
             client = new OkHttpClient
                     .Builder()
+                    .addInterceptor(interceptor)
                     .connectTimeout(10, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
@@ -110,6 +112,10 @@ public class RetrofitInit {
 
     public static <T> T createApi(Class<T> mClass) {
         return retrofit.create(mClass);
+    }
+
+    private static AppBean getAppBean() {
+        return AppHelper.getInstance().getAppConfig();
     }
 
 }
