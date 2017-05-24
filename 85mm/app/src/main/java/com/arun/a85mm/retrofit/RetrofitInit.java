@@ -1,6 +1,10 @@
 package com.arun.a85mm.retrofit;
 
+import android.text.TextUtils;
+
 import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.utils.AppUtils;
+import com.arun.a85mm.utils.DeviceUtils;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -29,8 +33,7 @@ public class RetrofitInit {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-
-    static class GzipRequsetInterceptor implements Interceptor {
+    /*static class GzipRequsetInterceptor implements Interceptor {
 
         @Override
         public Response intercept(Chain chain) throws IOException {
@@ -66,8 +69,18 @@ public class RetrofitInit {
                 }
             };
         }
+    }*/
 
-    }
+    /*Interceptor passportInterceptor = new Interceptor() {
+        @Override public Response intercept(Chain chain) throws IOException {
+            Request originalRequest = chain.request();
+            Request authorised = originalRequest.newBuilder()
+                    .addHeader("appVersion", AppUtils.getAppVersion())
+                    .addHeader("osType",)
+                    .build();
+            return chain.proceed(authorised);
+        }
+    };*/
 
     public static OkHttpClient getClient() {
         if (client == null) {
