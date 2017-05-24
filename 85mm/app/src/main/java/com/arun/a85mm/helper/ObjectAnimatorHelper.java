@@ -3,12 +3,14 @@ package com.arun.a85mm.helper;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.ColorRes;
 import android.support.annotation.IntegerRes;
 import android.view.View;
 import android.widget.TextView;
 
+import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.bean.ShowTopBean;
@@ -48,6 +50,8 @@ public class ObjectAnimatorHelper {
         toastView.setText(showData);
         if (backgroundResId > 0) {
             toastView.setBackgroundResource(backgroundResId);
+        } else {
+            toastView.setBackgroundResource(R.color.black);
         }
         startAnimator = ObjectAnimator.ofFloat(toastView, "translationY", -DensityUtil.getStatusHeight(activity), 0);
         startAnimator.addListener(new Animator.AnimatorListener() {
