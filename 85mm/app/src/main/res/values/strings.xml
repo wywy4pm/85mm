@@ -22,4 +22,6 @@
     <string name="net_error">网络异常</string>
     <string name="net_error_system">系统异常</string>
     <string name="net_error_data_format">数据解析异常</string>
+
+    <string name="android">android</string>
 </resources>

@@ -3,10 +3,10 @@ package com.arun.a85mm.helper;
 import android.content.Context;
 import android.support.annotation.StringRes;
 
+import com.arun.a85mm.R;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ActionRequest;
-import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.presenter.EventPresenter;
 import com.arun.a85mm.utils.AppUtils;
 import com.arun.a85mm.utils.DeviceUtils;
@@ -47,8 +47,9 @@ public class EventStatisticsHelper implements EventView {
         String appVersion = AppUtils.getAppVersion(context);
         String osVersion = String.valueOf(DeviceUtils.getMobileSDK());
         String deviceModel = DeviceUtils.getMobileModel();
+        String osType = context.getString(R.string.android);
 
-        ActionRequest actionRequest = new ActionRequest(uid, deviceId, appVersion, osVersion, deviceModel, actionList);
+        ActionRequest actionRequest = new ActionRequest(uid, deviceId, appVersion, osVersion, deviceModel, osType, actionList);
         if (presenter != null) {
             presenter.recordUserAction(type, actionRequest);
         }
