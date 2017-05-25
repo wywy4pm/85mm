@@ -93,9 +93,9 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
         if (NetUtils.isConnected(getActivity())) {
             hideNetWorkErrorView(expandableListView);
             if (communityPresenter != null) {
-                setLoading(true);
                 lastWorkDate = "";
                 if (response == null) {
+                    setLoading(true);
                     communityPresenter.getWorksGoods(userId, deviceId, lastWorkDate);
                 } else {
                     if (response.body != null) {
@@ -103,6 +103,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
                             List<CommunityResponse.GoodsListBean> goodsList = (List<CommunityResponse.GoodsListBean>) response.body;
                             worksList.clear();
                             formatData(goodsList);
+                            response = null;
                         }
                     }
                 }
