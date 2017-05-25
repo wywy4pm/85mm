@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -28,6 +29,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -216,34 +218,43 @@ public class DeviceUtils {
      * @return
      */
     public static String getMobileIMEI(Context context) {
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        return tm.getDeviceId();
-        /*try {
-            TelephonyManager tm = (TelephonyManager) context.getSystemService(((Application) context).TELEPHONY_SERVICE);
-            String deviceId = "";
-            if (Constant.EMPTY_DEVICEID.equals(tm.getDeviceId())) {
-                //todo
-                try {
-                    File file = new File(PathUtils.getUUIDSavePath());
-//                file.delete();
-                    if (!file.exists()) {//本地也没存储的话
-                        deviceId = UUID.randomUUID().toString();
-                        TextToFile(PathUtils.getUUIDSavePath(), deviceId);
-                    } else {//有本地存储的话去取本地存储
-                        deviceId = readFile(PathUtils.getUUIDSavePath());
-                    }
-                } catch (Exception e) {
-                    deviceId = Constant.EMPTY_DEVICEID;
-                }
-            } else {
-                deviceId = tm.getDeviceId();
-            }
-            return URLEncoder.encode(deviceId);
-
-        } catch (Exception e) {
+        try {
+            TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            return tm.getDeviceId();
+        }catch (Exception e){
             e.printStackTrace();
-            return " ";
-        }*/
+            return getDeviceId();
+        }
+    }
+
+    public static String getDeviceId() {
+        String serial = null;
+
+        String m_szDevIDShort = "35" +
+                Build.BOARD.length() % 10 + Build.BRAND.length() % 10 +
+
+                Build.CPU_ABI.length() % 10 + Build.DEVICE.length() % 10 +
+
+                Build.DISPLAY.length() % 10 + Build.HOST.length() % 10 +
+
+                Build.ID.length() % 10 + Build.MANUFACTURER.length() % 10 +
+
+                Build.MODEL.length() % 10 + Build.PRODUCT.length() % 10 +
+
+                Build.TAGS.length() % 10 + Build.TYPE.length() % 10 +
+
+                Build.USER.length() % 10; //13 位
+
+        try {
+            serial = android.os.Build.class.getField("SERIAL").get(null).toString();
+            //API>=9 使用serial号
+            return new UUID(m_szDevIDShort.hashCode(), serial.hashCode()).toString();
+        } catch (Exception exception) {
+            //serial需要一个初始化
+            serial = "serial"; // 随便一个初始化
+        }
+        //使用硬件信息拼凑出来的15位号码
+        return new UUID(m_szDevIDShort.hashCode(), serial.hashCode()).toString();
     }
 
     /**
