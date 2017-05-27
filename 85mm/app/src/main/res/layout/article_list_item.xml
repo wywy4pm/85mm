@@ -8,8 +8,8 @@
     <View
         android:id="@+id/divide"
         android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:background="@color/catlog" />
+        android:layout_height="10dp"
+        android:background="@color/bg_line" />
 
     <ImageView
         android:id="@+id/article_image"
@@ -21,25 +21,26 @@
         android:id="@+id/article_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="16dp"
         android:ellipsize="end"
-        android:textColor="@color/black"
+        android:lineSpacingExtra="2dp"
+        android:textColor="@color/charcoalgrey"
         android:textSize="18sp"
-        android:lineSpacingExtra="4dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/article_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         android:layout_marginTop="5dp"
         android:ellipsize="end"
-        android:lineSpacingExtra="4dp"
-        android:textColor="@color/gray"
-        android:textSize="12sp" />
+        android:lineSpacingExtra="5dp"
+        android:maxLines="3"
+        android:textColor="@color/article_list_brief"
+        android:textSize="15sp" />
 </LinearLayout>

@@ -49,9 +49,12 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
     private TextView author_name;
     private TextView article_create_time;*/
     private RecyclerView recyclerView;
+    private ImageView back;
     private ArticleDetailAdapter articleDetailAdapter;
     private ArticleDetailResponse.ArticleBean articleBean;
     private List<ArticleDetailBean> articleDetails = new ArrayList<>();
+    private boolean isAnimEndLoadUnSuccess = true;
+    private ImageView imageView;
 
     public static void startArticleDetailActivity(Context context, String articleId, int x, int y, String headImageUrl) {
         Intent intent = new Intent(context, ArticleDetailActivity.class);
@@ -88,6 +91,8 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
         author_name = (TextView) findViewById(R.id.author_name);
         article_create_time = (TextView) findViewById(R.id.article_create_time);*/
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        back = (ImageView) findViewById(R.id.back);
+        setBack(back);
         FullyLinearLayoutManager layoutManager = new FullyLinearLayoutManager(this);
         //recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(layoutManager);
@@ -126,7 +131,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
     }
 
     private void showHeadTranslateAnimation() {
-        final ImageView imageView = new ImageView(this);
+        imageView = new ImageView(this);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(DensityUtil.getScreenWidth(this), (int) (DensityUtil.getScreenWidth(this) * 0.6));
         imageView.setLayoutParams(params);
         imageView.setX(startX);
@@ -143,10 +148,11 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                //loadViewData();
-                articleDetailAdapter = new ArticleDetailAdapter(ArticleDetailActivity.this, articleDetails);
-                recyclerView.setAdapter(articleDetailAdapter);
-                layout_detail.removeView(imageView);
+                if (articleDetails != null && articleDetails.size() > 0) {
+                    setLoadSuccessView();
+                } else {
+                    isAnimEndLoadUnSuccess = false;
+                }
             }
 
             @Override
@@ -166,6 +172,13 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
         if (articleActivityPresenter != null) {
             articleActivityPresenter.getArticleDetailsData(articleId, userId, deviceId);
         }
+    }
+
+    private void setLoadSuccessView() {
+        articleDetailAdapter = new ArticleDetailAdapter(ArticleDetailActivity.this, articleDetails);
+        recyclerView.setAdapter(articleDetailAdapter);
+        layout_detail.removeView(imageView);
+        back.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -193,8 +206,10 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
                 articleDetailBean.createTime = articleBean.createTime;
                 articleDetails.add(articleDetailBean);
             }
-
             articleDetails.addAll(articleBean.contentComponents);
+            if (!isAnimEndLoadUnSuccess) {
+                setLoadSuccessView();
+            }
         }
     }
 

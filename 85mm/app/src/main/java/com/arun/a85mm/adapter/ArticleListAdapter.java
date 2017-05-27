@@ -81,7 +81,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
                 eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.ARTICLE_BROWSE, articleListBean.id, ""));
             }
             if (article_image.getLayoutParams() != null) {
-                article_image.getLayoutParams().height = (int) (DensityUtil.getScreenWidth(context) * 0.5);
+                article_image.getLayoutParams().height = (int) (DensityUtil.getScreenWidth(context) * 0.56);
             }
             Glide.with(context).load(articleListBean.headImage).centerCrop().into(article_image);
             article_title.setText(articleListBean.title);

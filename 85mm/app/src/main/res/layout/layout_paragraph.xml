@@ -8,10 +8,11 @@
         android:id="@+id/item_paragraph"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
-        android:layout_marginRight="18dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:lineSpacingExtra="5dp"
-        android:textSize="16sp" />
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        android:lineSpacingExtra="11dp"
+        android:textColor="@color/article_detail_paragraph"
+        android:textSize="17sp" />
 </RelativeLayout>

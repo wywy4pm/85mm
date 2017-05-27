@@ -116,7 +116,7 @@ public class ArticleDetailAdapter extends RecyclerView.Adapter {
         private void setData(Context context, ArticleDetailBean bean, int position) {
             if (item_fullImage.getLayoutParams() != null) {
                 if (position == 0) {
-                    item_fullImage.getLayoutParams().height = (int) (DensityUtil.getScreenWidth(context) * 0.6);
+                    item_fullImage.getLayoutParams().height = (int) (DensityUtil.getScreenWidth(context) * 0.56);
                     Glide.with(context).load(bean.imageUrl).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(item_fullImage);
                 } else {
                     int imageHeight = (bean.imageHeight * DensityUtil.getScreenWidth(context)) / bean.imageWidth;
