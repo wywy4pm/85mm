@@ -16,6 +16,8 @@ import com.arun.a85mm.view.EventView;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.http.PUT;
+
 /**
  * Created by WY on 2017/5/7.
  */
@@ -30,6 +32,13 @@ public class EventStatisticsHelper implements EventView {
         this.context = context;
     }
 
+    public static List<ActionBean> createOneActionList(int actionType) {
+        List<ActionBean> actionList = new ArrayList<>();
+        ActionBean actionBean = new ActionBean(actionType, "", "");
+        actionList.add(actionBean);
+        return actionList;
+    }
+
     public static List<ActionBean> createOneActionList(int actionType, String resourceId, String remark) {
         List<ActionBean> actionList = new ArrayList<>();
         ActionBean actionBean = new ActionBean(actionType, resourceId, remark);
@@ -37,6 +46,10 @@ public class EventStatisticsHelper implements EventView {
         return actionList;
     }
 
+
+    public void recordUserAction(Context context, int type) {
+        recordUserAction(context, type, createOneActionList(type));
+    }
 
     /**
      * 用户行为记录 actionList

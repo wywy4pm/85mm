@@ -11,6 +11,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.utils.ACache;
 import com.arun.a85mm.utils.CacheUtils;
@@ -81,16 +83,19 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void showShare() {
-        ShareWindow.show(this, getString(R.string.share_title), getString(R.string.share_description), getString(R.string.share_url), "");
+        onActionEvent(EventConstant.BTN_SHARE);
+        ShareWindow.show(this, getString(R.string.share_title), getString(R.string.share_description), getString(R.string.share_url), "",eventStatisticsHelper);
     }
 
     private void clearCache() {
+        onActionEvent(EventConstant.BTN_CLEAR_CACHE);
         DataCleanManager.clearImageAllCache(this);
         cache_size.setText(DataCleanManager.getImageCacheSize(this));
         showTop("清除缓存成功");
     }
 
     public void openWeChat(View view) {
+        onActionEvent(EventConstant.BTN_OPEN_WECHAT);
         OtherAppStartUtils.jumpToWeChat(this);
     }
 

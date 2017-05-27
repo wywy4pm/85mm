@@ -78,7 +78,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         final WorkListBean bean = works.get(groupPosition);
         //作品浏览
         if (eventListener != null) {
-            eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_BROWSE, bean.workId, ""));
+            eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_BROWSE_NEWEST, bean.workId, ""));
         }
 
         int imageHeight = 0;

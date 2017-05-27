@@ -68,6 +68,12 @@
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="58fefdadc895760f91001ff3" />
+
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="4eb879ce5a804c74a4f30370a639eca3">
+        </meta-data>
+
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="85mm" />
@@ -125,10 +131,10 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <service
+        <!--<service
             android:name=".service.ProductListCacheService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"/>-->
     </application>
 
 </manifest>

@@ -11,6 +11,7 @@ import com.arun.a85mm.adapter.ProductListAdapter;
 import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.listener.OnImageClick;
@@ -57,12 +58,13 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         expandableListView.setAdapter(productListAdapter);
         productListAdapter.setOnImageClick(this);
         productListAdapter.setEventListener(this);
-        swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
+        /*swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshData();
             }
-        });
+        });*/
+        setRefresh(swipeToLoadLayout);
         setExpandableListViewCommon(expandableListView, next_group_img, workLists);
     }
 

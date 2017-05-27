@@ -32,6 +32,7 @@ import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.TextViewUtils;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
+import com.umeng.message.PushAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PushAgent.getInstance(this).onAppStart();
         initData();
         initView();
         DataCleanManager.clearOver50MBSize(this);
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         activity_main = (RelativeLayout) findViewById(R.id.activity_main);
         tabLayout = (SlidingTabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
+        eventStatisticsHelper = new EventStatisticsHelper(this);
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public int getCount() {
@@ -103,6 +106,17 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+                int type = -1;
+                if (position == 0) {
+                    type = EventConstant.TAB_NEWEST;
+                } else if (position == 1) {
+                    type = EventConstant.TAB_HOTEST;
+                } else if (position == 2) {
+                    type = EventConstant.TAB_ARTICLE;
+                }
+                if (eventStatisticsHelper != null) {
+                    eventStatisticsHelper.recordUserAction(MainActivity.this, type, EventStatisticsHelper.createOneActionList(type));
+                }
                 for (int i = 0; i < tabLayout.getTabCount(); i++) {
                     if (i == position) {
                         TextViewUtils.setTextBold(tabLayout.getTitleView(i), true);
@@ -119,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
         TextViewUtils.setTextBold(tabLayout.getTitleView(1), true);
         viewPager.setCurrentItem(1);
         setSaveImage();
-        eventStatisticsHelper = new EventStatisticsHelper(this);
     }
 
     private void initData() {
@@ -188,6 +201,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void moreClick(View view) {
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.recordUserAction(MainActivity.this, EventConstant.TAB_MORE, EventStatisticsHelper.createOneActionList(EventConstant.TAB_MORE));
+        }
         MoreSettingActivity.jumpToMoreSettingActivity(this);
     }
 

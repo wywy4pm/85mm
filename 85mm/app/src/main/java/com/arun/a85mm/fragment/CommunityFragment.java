@@ -62,12 +62,13 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
         expandableListView.setAdapter(communityAdapter);
         communityAdapter.setOnImageClick(this);
         communityAdapter.setEventListener(this);
-        swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
+        /*swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshData();
             }
-        });
+        });*/
+        setRefresh(swipeToLoadLayout);
         setExpandableListViewCommon(expandableListView, next_group_img, worksList);
     }
 

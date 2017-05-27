@@ -54,12 +54,13 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
         articleListAdapter.setEventListener(this);
         recyclerView.setAdapter(articleListAdapter);
         setRecyclerViewScrollListener(recyclerView);
-        swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
+        /*swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshData();
             }
-        });
+        });*/
+        setRefresh(swipeToLoadLayout);
 
     }
 

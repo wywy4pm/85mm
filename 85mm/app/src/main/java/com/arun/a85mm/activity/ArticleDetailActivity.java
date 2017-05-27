@@ -195,6 +195,11 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
             if (!TextUtils.isEmpty(articleBean.title)) {//添加大标题
                 ArticleDetailBean articleDetailBean = new ArticleDetailBean();
                 articleDetailBean.componentType = Constant.ARTICLE_TYPE_BIG_TITLE;
+
+
+
+
+
                 articleDetailBean.text = articleBean.title;
                 articleDetails.add(articleDetailBean);
             }

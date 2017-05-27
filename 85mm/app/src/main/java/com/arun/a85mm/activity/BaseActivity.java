@@ -22,6 +22,7 @@ import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.MvpView;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
     private SaveImageHelper saveImageHelper;
     private ShowTopHandler showTopHandler;
     private ObjectAnimatorHelper objectAnimatorHelper;
-    private EventStatisticsHelper eventStatisticsHelper;
+    public EventStatisticsHelper eventStatisticsHelper;
     private TextView topCommonView;
     private TextView toastView;
     private ImageView image_back;
@@ -50,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PushAgent.getInstance(this).onAppStart();
         mHelper = new SwipeBackActivityHelper(this);
         mHelper.onActivityCreate();
         initCommon();
@@ -58,6 +60,7 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
     private void initCommon() {
         deviceId = DeviceUtils.getMobileIMEI(this);
         userId = SharedPreferencesUtils.getUid(this);
+        eventStatisticsHelper = new EventStatisticsHelper(this);
     }
 
     public void setSaveImage() {
@@ -65,7 +68,6 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
         saveImageHelper = new SaveImageHelper();
         showTopHandler = new ShowTopHandler(this);
         objectAnimatorHelper = new ObjectAnimatorHelper();
-        eventStatisticsHelper = new EventStatisticsHelper(this);
     }
 
     public void setCommonShow() {
@@ -113,6 +115,12 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
     public void onActionEvent(int type, List<ActionBean> actionList) {
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.recordUserAction(this, type, actionList);
+        }
+    }
+
+    public void onActionEvent(int type) {
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.recordUserAction(this, type, EventStatisticsHelper.createOneActionList(type));
         }
     }
 

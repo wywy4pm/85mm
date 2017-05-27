@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.common.EventConstant;
 
 /**
  * Created by wy on 2017/5/17.
@@ -18,7 +19,7 @@ import com.arun.a85mm.R;
 
 public class ShareWindow {
 
-    public static void show(final Activity context, final String title, final String description, final String shareUrl, final String shareImageUrl) {
+    public static void show(final Activity context, final String title, final String description, final String shareUrl, final String shareImageUrl, final EventStatisticsHelper helper) {
         final Dialog dialog = new Dialog(context, R.style.ActionSheetDialogStyle);
         final LinearLayout root = (LinearLayout) LayoutInflater.from(context).inflate(
                 R.layout.layout_share_board, null);
@@ -26,6 +27,9 @@ public class ShareWindow {
         root.findViewById(R.id.layout_wechat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (helper != null) {
+                    helper.recordUserAction(context, EventConstant.SHARE_WECHAT);
+                }
                 ShareHelper.share(context, root.findViewById(R.id.layout_wechat), title, description, shareUrl, shareImageUrl);
                 dialog.cancel();
             }
@@ -34,6 +38,9 @@ public class ShareWindow {
         root.findViewById(R.id.layout_pengyouquan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (helper != null) {
+                    helper.recordUserAction(context, EventConstant.SHARE_PENGYOUQUAN);
+                }
                 ShareHelper.share(context, root.findViewById(R.id.layout_pengyouquan), title, description, shareUrl, shareImageUrl);
                 dialog.cancel();
             }
@@ -42,6 +49,9 @@ public class ShareWindow {
         root.findViewById(R.id.layout_sina).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (helper != null) {
+                    helper.recordUserAction(context, EventConstant.SHARE_SINA);
+                }
                 ShareHelper.share(context, root.findViewById(R.id.layout_sina), title, description, shareUrl, shareImageUrl);
                 dialog.cancel();
             }
@@ -50,6 +60,9 @@ public class ShareWindow {
         root.findViewById(R.id.layout_qq).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (helper != null) {
+                    helper.recordUserAction(context, EventConstant.SHARE_QQ);
+                }
                 ShareHelper.share(context, root.findViewById(R.id.layout_qq), title, description, shareUrl, shareImageUrl);
                 dialog.cancel();
             }

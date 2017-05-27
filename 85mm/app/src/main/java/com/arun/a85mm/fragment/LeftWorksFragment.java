@@ -67,12 +67,13 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
         communityAdapter.setEventListener(this);
         expandableListView.setAdapter(communityAdapter);
         communityAdapter.setOnImageClick(this);
-        swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
+        /*swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshData();
             }
-        });
+        });*/
+        setRefresh(swipeToLoadLayout);
         setExpandableListViewCommon(expandableListView, next_group_img, workLists);
     }
 

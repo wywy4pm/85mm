@@ -26,6 +26,8 @@ import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ShowTopToastHelper;
 import com.arun.a85mm.listener.EventListener;
+import com.arun.a85mm.refresh.OnRefreshListener;
+import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -301,11 +303,29 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
         });
     }
 
+    public void setRefresh(SwipeToLoadLayout swipeToLoadLayout) {
+        if (swipeToLoadLayout != null) {
+            swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    onActionEvent(EventConstant.PULL_TO_REFRESH);
+                    reloadData();
+                }
+            });
+        }
+    }
+
 
     @Override
     public void onEvent(List<ActionBean> actionList) {
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.recordUserAction(getActivity(), EventConstant.DEFAULT, actionList);
+        }
+    }
+
+    public void onActionEvent(int type) {
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.recordUserAction(getActivity(), type);
         }
     }
 
