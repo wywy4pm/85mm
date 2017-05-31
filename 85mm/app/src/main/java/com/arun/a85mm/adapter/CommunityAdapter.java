@@ -88,9 +88,9 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         //作品浏览
         if (eventListener != null) {
             int type = -1;
-            if(isCommunity){
+            if (isCommunity) {
                 type = EventConstant.WORK_BROWSE_HOTEST;
-            }else {
+            } else {
                 type = EventConstant.WORK_BROWSE_ONEDAY;
             }
             eventListener.onEvent(EventStatisticsHelper.createOneActionList(type, bean.workId, ""));
@@ -532,6 +532,11 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
                 }
             });
+            layout_work_title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
         }
 
     }
@@ -557,6 +562,11 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             author_more = (ImageView) rootView.findViewById(R.id.author_more);
             layout_works_more = (RelativeLayout) rootView.findViewById(R.id.layout_works_more);
             bg_line = rootView.findViewById(R.id.bg_line);
+            bg_line.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
         }
     }
 

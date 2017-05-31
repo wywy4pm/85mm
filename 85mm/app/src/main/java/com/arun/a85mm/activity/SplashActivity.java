@@ -177,7 +177,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
             if (data instanceof CommonApiResponse) {
                 final CommonApiResponse config = (CommonApiResponse) data;
                 SharedPreferencesUtils.saveUid(this, config.uid);
-                SharedPreferencesUtils.setMoreImage(this, config.morePageImage);
+                //SharedPreferencesUtils.setMoreImage(this, config.morePageImage);
                 new Thread(
                         new Runnable() {
                             @Override

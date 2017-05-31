@@ -56,4 +56,7 @@ public interface RetrofitApi {
 
     @GET(RetrofitUrl.CONFIG_QUERY)
     Observable<CommonApiResponse<List<ConfigResponse.GuidePageBean>>> queryConfig(@Query("deviceId") String deviceId);
+
+    @GET(RetrofitUrl.USER_DEVICE_TOKEN)
+    Observable<CommonApiResponse> postDeviceToken(@Query("uid") String uid, @Query("deviceId") String deviceId, @Query("deviceToken") String deviceToken);
 }

@@ -436,6 +436,11 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             author_name = (TextView) rootView.findViewById(R.id.author_name);
             author_more = (ImageView) rootView.findViewById(R.id.author_more);
             bg_line = rootView.findViewById(R.id.bg_line);
+            bg_line.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
         }
     }
 
