@@ -14,6 +14,7 @@ public class EventConstant {
     public static final int WORK_BAD_COMMNET = 3002;
     public static final int WORK_REPEAT = 3003;
     public static final int WORK_SHOW_SEQ = 3004;
+    public static final int WORK_SCALE_OVER = 3005;
 
 
     public static final int TAB_NEWEST = 0011;

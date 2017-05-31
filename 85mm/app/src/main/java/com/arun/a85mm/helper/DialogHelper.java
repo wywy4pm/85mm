@@ -42,6 +42,16 @@ public class DialogHelper {
                 dialog.cancel();
             }
         });
+
+        root.findViewById(R.id.btn_scale).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (helper != null) {
+                    helper.recordUserAction(context, EventConstant.WORK_SCALE_OVER, EventStatisticsHelper.createOneActionList(EventConstant.WORK_SCALE_OVER, workId, ""));
+                }
+                dialog.cancel();
+            }
+        });
         root.findViewById(R.id.btn_bad_comment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +75,7 @@ public class DialogHelper {
             @Override
             public void onClick(View v) {
                 if (helper != null) {
-                    helper.recordUserAction(context, EventConstant.WORK_SHOW_SEQ, EventStatisticsHelper.createOneActionList(EventConstant.WORK_REPEAT, workId, ""));
+                    helper.recordUserAction(context, EventConstant.WORK_SHOW_SEQ, EventStatisticsHelper.createOneActionList(EventConstant.WORK_SHOW_SEQ, workId, ""));
                 }
                 dialog.cancel();
             }

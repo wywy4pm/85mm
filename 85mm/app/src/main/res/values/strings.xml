@@ -24,4 +24,12 @@
     <string name="net_error_data_format">数据解析异常</string>
 
     <string name="android">android</string>
+
+    <string name="read_origin">查看原文</string>
+    <string name="report">举报</string>
+    <string name="scale_over">尺度有点大</string>
+    <string name="bad_comment">差评</string>
+    <string name="repeat">和其他作品重复</string>
+    <string name="show_seq">图片显示有问题</string>
+    <string name="cancel">取消</string>
 </resources>

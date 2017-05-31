@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="查看原文"
+            android:text="@string/read_origin"
             android:textColor="@color/charcoalgrey"
             android:textSize="15sp" />
 
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="举报"
+            android:text="@string/report"
             android:textColor="@color/charcoalgrey"
             android:textSize="15sp" />
 
@@ -60,6 +60,38 @@
             android:layout_marginTop="4dp"
             android:gravity="center"
             android:text="作品是广告，作品低俗"
+            android:textColor="@color/lightgrey"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/plain" />
+
+    <LinearLayout
+        android:id="@+id/btn_scale"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/scale_over"
+            android:textColor="@color/charcoalgrey"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="色情"
             android:textColor="@color/lightgrey"
             android:textSize="12sp" />
     </LinearLayout>
@@ -82,7 +114,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="差评"
+            android:text="@string/bad_comment"
             android:textColor="@color/charcoalgrey"
             android:textSize="15sp" />
 
@@ -114,7 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="和其他作品重复"
+            android:text="@string/repeat"
             android:textColor="@color/charcoalgrey"
             android:textSize="15sp" />
 
@@ -146,7 +178,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="图片显示有问题"
+            android:text="@string/show_seq"
             android:textColor="@color/charcoalgrey"
             android:textSize="15sp" />
 
@@ -190,7 +222,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="15dp"
-        android:text="取消"
+        android:text="@string/cancel"
         android:textColor="@color/charcoalgrey"
         android:textSize="15sp" />
 
