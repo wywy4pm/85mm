@@ -188,18 +188,13 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
             if (articleBean.contentComponents != null && articleBean.contentComponents.size() > 0 && articleBean.contentComponents.get(0) != null) {//添加头图
                 ArticleDetailBean articleDetailBean = new ArticleDetailBean();
                 articleDetailBean.componentType = Constant.ARTICLE_TYPE_FULL_IMAGE;
-                articleDetailBean.imageUrl = articleBean.contentComponents.get(0).imageUrl;
+                articleDetailBean.imageUrl = url;
                 articleDetails.add(articleDetailBean);
-                articleBean.contentComponents.remove(0);//去除多余头图
+                //articleBean.contentComponents.remove(0);//去除多余头图
             }
             if (!TextUtils.isEmpty(articleBean.title)) {//添加大标题
                 ArticleDetailBean articleDetailBean = new ArticleDetailBean();
                 articleDetailBean.componentType = Constant.ARTICLE_TYPE_BIG_TITLE;
-
-
-
-
-
                 articleDetailBean.text = articleBean.title;
                 articleDetails.add(articleDetailBean);
             }
