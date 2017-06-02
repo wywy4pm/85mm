@@ -53,7 +53,7 @@ public class SaveImageHelper {
                         if (writtenToDisk) {
                             showData = "图片已保存至" + FileUtils.DIR_IMAGE_SAVE + File.separator + fileName;
                         } else {
-                            showData = "图片保存失败";
+                            showData = "图片保存失败，请开启sd卡存储权限";
                         }
                         Message message = new Message();
                         message.what = Constant.WHAT_SHOW_TOP;

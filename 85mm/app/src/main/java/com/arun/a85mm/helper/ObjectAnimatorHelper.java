@@ -28,13 +28,13 @@ public class ObjectAnimatorHelper {
 
     private ObjectAnimator startAnimator;
     private ObjectAnimator endAnimator;
-    private List<String> waitShowTops = new ArrayList<>();
+    private List<ShowTopBean> waitShowTops = new ArrayList<>();
 
     public void managerShowTopView(final Activity activity, final TextView toastView, ShowTopBean showTopBean) {
         if (!showTopBean.isShowingTop) {
             showTopToastView(activity, toastView, showTopBean.showData, showTopBean.backgroundResId);
         } else {
-            waitShowTops.add(showTopBean.showData);
+            waitShowTops.add(showTopBean);
         }
     }
 
@@ -102,8 +102,8 @@ public class ObjectAnimatorHelper {
                 }
                 StatusBarUtils.setStatusBar(activity, false);
                 if (waitShowTops != null && waitShowTops.size() > 0) {
-                    String nextShowData = waitShowTops.get(0);
-                    showTopToastView(activity, toastView, nextShowData, 0);
+                    ShowTopBean nextShow = waitShowTops.get(0);
+                    showTopToastView(activity, toastView, nextShow.showData, nextShow.backgroundResId);
                     waitShowTops.remove(0);
                 }
             }
