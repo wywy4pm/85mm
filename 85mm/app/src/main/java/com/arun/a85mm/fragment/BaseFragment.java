@@ -202,7 +202,8 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
                 if (velocityY <= -9000) {
                     if (System.currentTimeMillis()
                             - SharedPreferencesUtils.getConfigLong(getActivity(), SharedPreferencesUtils.KEY_HIDE_READ_TIPS)
-                            > 24 * 60 * 60 * 1000) {
+                            > 24 * 60 * 60 * 1000
+                            && SharedPreferencesUtils.getConfigInt(getActivity(), SharedPreferencesUtils.KEY_HIDE_READ_ENABLED) == 0) {
                         showHideReadTips();
                     }
                 }

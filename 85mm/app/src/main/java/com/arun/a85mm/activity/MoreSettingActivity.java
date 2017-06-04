@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.SwitchCompat;
 import android.view.MotionEvent;
 import android.view.View;
@@ -78,6 +79,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                 //阻止手指离开时onTouch方法的继续执行
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (hideReadEnable == 1) {//有隐藏已读权限
+                        switchView.setChecked(!switchView.isChecked());
                         if (morePresenter != null) {
                             morePresenter.setHideReadStatus(userId, switchView.isChecked() ? 1 : 0);
                         }
@@ -172,16 +174,15 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void refresh(int type, Object data) {
         if (type == MorePresenter.TYPE_HIDE_READ) {
-            int isOpen = 0;
-            if (switchView.isChecked()) {
-                switchView.setChecked(false);
-                isOpen = 0;
-            } else {
-                switchView.setChecked(true);
-                isOpen = 1;
-            }
+            int isOpen = switchView.isChecked() ? 1 : 0;
             SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_OPENED, isOpen);
         }
+    }
+
+    @Override
+    public void onError(int errorType, @StringRes int errorMsg) {
+        super.onError(errorType, errorMsg);
+        switchView.setChecked(!switchView.isChecked());
     }
 
     @Override

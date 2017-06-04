@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.content.Context;
 
 import com.umeng.message.PushAgent;
-import com.umeng.message.UmengAdHandler;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
@@ -14,7 +13,20 @@ import com.umeng.message.entity.UMessage;
  */
 
 public class PushHelper {
+
     public static void setPushNotification(PushAgent mPushAgent) {
+
+        UmengMessageHandler umengAdHandler = new UmengMessageHandler() {
+
+            @Override
+            public Notification getNotification(Context context, UMessage uMessage) {
+
+                return super.getNotification(context, uMessage);
+            }
+        };
+        mPushAgent.setMessageHandler(umengAdHandler);
+
+
         UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
             @Override
             public void dealWithCustomAction(Context context, UMessage msg) {
@@ -22,13 +34,5 @@ public class PushHelper {
             }
         };
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
-
-        /*UmengMessageHandler umengAdHandler = new UmengMessageHandler() {
-            @Override
-            public Notification getNotification(Context context, UMessage uMessage) {
-                return super.getNotification(context, uMessage);
-            }
-        };
-        mPushAgent.setMessageHandler(umengAdHandler);*/
     }
 }
