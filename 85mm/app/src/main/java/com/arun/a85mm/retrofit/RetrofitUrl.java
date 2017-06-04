@@ -20,4 +20,6 @@ public class RetrofitUrl {
     public static final String CONFIG_QUERY = CONFIG + V1 + "/query";
 
     public static final String USER_DEVICE_TOKEN = USER + "/addToken";
+
+    public static final String USER_HIDE_SWITCH = USER + "/readSwitch";
 }

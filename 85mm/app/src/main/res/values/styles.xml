@@ -7,6 +7,14 @@
     <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/catlog</item>
         <item name="colorPrimaryDark">@color/catlog</item>
+
+        <!-- Active thumb color & Active track color(30% transparency) switch 打开时的拇指按钮的颜色 轨迹颜色默认为30%这个颜色 -->
+        <item name="colorControlActivated">@color/more_yellow</item>
+        <!-- Inactive thumb color switch关闭时的拇指按钮的颜色 -->
+        <!--<item name="colorSwitchThumbNormal">@color/more_yellow</item>-->
+        <!-- Inactive track color(30% transparency) switch关闭时的轨迹的颜色  30%这个颜色 -->
+        <!--<item name="android:colorForeground">@color/more_yellow</item>-->
+
     </style>
 
     <style name="AppTheme" parent="@style/BaseTheme">
@@ -37,5 +45,18 @@
     <style name="ActionSheetDialogAnimation" parent="@android:style/Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
         <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+
+    <style name="CustomDialog" parent="@android:style/Theme.Dialog">
+        <!-- 背景颜色及透明程度 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 是否有标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否模糊 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 </resources>

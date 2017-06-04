@@ -10,19 +10,23 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.dialog.ContactDialog;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ShowTopToastHelper;
 import com.arun.a85mm.listener.EventListener;
@@ -54,6 +58,9 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
     public int currentGroupPosition;
     public boolean isSingleExpand;
     public EventStatisticsHelper eventStatisticsHelper;
+    private RelativeLayout layout_hide_read_tips;
+    private ImageView hide_read_tips_close;
+    private ContactDialog contactDialog;
     //private Runnable runnable;
 
     @Override
@@ -118,6 +125,46 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
         }
     }
 
+    public void setHideReadTips() {
+        layout_hide_read_tips = (RelativeLayout) findViewById(R.id.layout_hide_read_tips);
+        hide_read_tips_close = (ImageView) findViewById(R.id.hide_read_tips_close);
+        if (hide_read_tips_close != null) {
+            hide_read_tips_close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hideHideReadTips();
+                }
+            });
+        }
+    }
+
+    private void showHideReadTips() {
+        if (layout_hide_read_tips != null) {
+            layout_hide_read_tips.setVisibility(View.VISIBLE);
+            layout_hide_read_tips.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showHideReadDialog();
+                }
+            });
+            SharedPreferencesUtils.setConfigLong(getActivity(), SharedPreferencesUtils.KEY_HIDE_READ_TIPS, System.currentTimeMillis());
+        }
+    }
+
+    private void showHideReadDialog() {
+        if (contactDialog == null) {
+            contactDialog = new ContactDialog(getActivity(), R.style.CustomDialog);
+            contactDialog.setCanceledOnTouchOutside(true);
+        }
+        contactDialog.show();
+    }
+
+    private void hideHideReadTips() {
+        if (layout_hide_read_tips != null) {
+            layout_hide_read_tips.setVisibility(View.GONE);
+        }
+    }
+
     public void setRecyclerViewScrollListener(RecyclerView recyclerView) {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -149,10 +196,28 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
     public void setExpandableListViewCommon(final ExpandableListView expandableListView, final ImageView next_group_img, final List<WorkListBean> worksList) {
         expandableListView.setFriction((float) (ViewConfiguration.getScrollFriction() * 0.4));
         expandableListView.setGroupIndicator(null);
+        final GestureDetector gestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                if (velocityY <= -9000) {
+                    if (System.currentTimeMillis()
+                            - SharedPreferencesUtils.getConfigLong(getActivity(), SharedPreferencesUtils.KEY_HIDE_READ_TIPS)
+                            > 24 * 60 * 60 * 1000) {
+                        showHideReadTips();
+                    }
+                }
+                return super.onFling(e1, e2, velocityX, velocityY);
+            }
+        });
+        expandableListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
         expandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-
             }
 
             @Override

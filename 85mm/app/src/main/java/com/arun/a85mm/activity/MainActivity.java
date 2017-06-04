@@ -29,6 +29,8 @@ import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.DensityUtil;
+import com.arun.a85mm.utils.OtherAppStartUtils;
+import com.arun.a85mm.utils.SystemServiceUtils;
 import com.arun.a85mm.utils.TextViewUtils;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         activity_main = (RelativeLayout) findViewById(R.id.activity_main);
         tabLayout = (SlidingTabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
+
         eventStatisticsHelper = new EventStatisticsHelper(this);
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -228,4 +231,5 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }

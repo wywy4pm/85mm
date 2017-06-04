@@ -1,7 +1,6 @@
 package com.arun.a85mm.retrofit;
 
 
-import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ActionRequest;
 import com.arun.a85mm.bean.ArticleDetailResponse;
 import com.arun.a85mm.bean.ArticleListResponse;
@@ -9,8 +8,6 @@ import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.CommonResponse;
 import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.ConfigResponse;
-import com.arun.a85mm.bean.LeftWorksResponse;
-import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.bean.WorkListBean;
 
 import java.util.List;
@@ -18,8 +15,6 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -59,4 +54,7 @@ public interface RetrofitApi {
 
     @GET(RetrofitUrl.USER_DEVICE_TOKEN)
     Observable<CommonApiResponse> postDeviceToken(@Query("uid") String uid, @Query("deviceId") String deviceId, @Query("deviceToken") String deviceToken);
+
+    @GET(RetrofitUrl.USER_HIDE_SWITCH)
+    Observable<CommonApiResponse> setHideReadStatus(@Query("uid") String uid, @Query("type") String type);
 }

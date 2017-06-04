@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_hide_read_tips"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:background="@color/main_text_hide_read">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="想隐藏已经看过的作品吗？"
+        android:textColor="@color/article_detail_paragraph"
+        android:textSize="15sp" />
+
+    <ImageView
+        android:id="@+id/hide_read_tips_close"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/close" />
+</RelativeLayout>

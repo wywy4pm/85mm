@@ -1,9 +1,7 @@
 package com.arun.a85mm.model;
 
-import com.arun.a85mm.helper.AppHelper;
 import com.arun.a85mm.listener.CommonRequestListener;
 import com.arun.a85mm.retrofit.RetrofitInit;
-import com.arun.a85mm.utils.SharedPreferencesUtils;
 
 import rx.Subscriber;
 
@@ -30,5 +28,9 @@ public class SettingModel extends BaseModel {
 
     public Subscriber postDeviceToken(String uid, String deviceId, String deviceToken, CommonRequestListener listener) {
         return request(RetrofitInit.getApi().postDeviceToken(uid, deviceId, deviceToken), listener);
+    }
+
+    public Subscriber setHideReadStatus(String uid, String type, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().setHideReadStatus(uid, type), listener);
     }
 }

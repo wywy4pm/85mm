@@ -5,7 +5,15 @@
     android:orientation="vertical">
 
     <include
+        android:id="@+id/layout_hide_read_tips"
+        layout="@layout/layout_hide_read_tips"
+        android:visibility="gone" />
+
+    <include
         layout="@layout/layout_refresh_expand_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layout_hide_read_tips"
         android:visibility="visible" />
 
     <include
@@ -15,11 +23,11 @@
 
     <ImageView
         android:id="@+id/next_group_img"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
+        android:layout_marginBottom="13dp"
         android:src="@mipmap/next_group"
-        android:visibility="gone" />
+        android:visibility="visible" />
 </RelativeLayout>

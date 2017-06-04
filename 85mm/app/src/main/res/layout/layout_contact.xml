@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/layout_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_dialog_contact"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:src="@mipmap/contact_wechat" />
+
+            <ImageView
+                android:id="@+id/contact_close"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="5dp"
+                android:src="@mipmap/close" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请联系微信:hello85mm"
+                android:textColor="@color/more_detail"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/text_copy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="点击复制"
+                android:textColor="@color/more_yellow"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/openWechat"
+            android:layout_width="129dp"
+            android:layout_height="31dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="29dp"
+            android:layout_marginTop="23dp"
+            android:background="@drawable/shape_jump_to_wechat"
+            android:gravity="center"
+            android:text="打开微信"
+            android:textColor="@color/open_wechat"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+</RelativeLayout>

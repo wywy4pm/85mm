@@ -1,8 +1,6 @@
 package com.arun.a85mm.activity;
 
 import android.animation.Animator;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.StringRes;
@@ -17,20 +15,16 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.CommonApiResponse;
-import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.helper.CommunityListCacheManager;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
 import com.arun.a85mm.presenter.SettingPresenter;
-import com.arun.a85mm.utils.ACache;
 import com.arun.a85mm.utils.BitmapUtils;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DateUtils;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
-import com.arun.a85mm.utils.IOUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
-import com.arun.a85mm.view.CommonView2;
 import com.arun.a85mm.view.CommonView3;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -39,11 +33,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.umeng.message.PushAgent;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.net.URL;
 import java.util.List;
 
 public class SplashActivity extends AppCompatActivity implements CommonView3 {
@@ -57,6 +47,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
     private SettingPresenter settingPresenter;
 
     private boolean isJumpToWebView;
+    private boolean isShowCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +168,10 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
             if (data instanceof CommonApiResponse) {
                 final CommonApiResponse config = (CommonApiResponse) data;
                 SharedPreferencesUtils.saveUid(this, config.uid);
-                //SharedPreferencesUtils.setMoreImage(this, config.morePageImage);
+                if (config.hideRead != null) {
+                    SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_ENABLED, config.hideRead.hideReadEnable);
+                    SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_OPENED, config.hideRead.hideReadOpen);
+                }
                 new Thread(
                         new Runnable() {
                             @Override
@@ -186,16 +180,17 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                             }
                         }
                 ).start();
-                //CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_CONFIG, (Serializable) config.copyWrite);
                 if (config.body != null && config.body instanceof List) {
                     List<ConfigResponse.GuidePageBean> list = (List<ConfigResponse.GuidePageBean>) config.body;
                     if (list.size() == 2) {
                         CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE, (Serializable) config.body);
                     }
-                    if (list.size() > 0 && list.get(0) != null) {
-                        show(list.get(0));
-                    } else {
-                        errorIn();
+                    if (!isShowCache) {
+                        if (list.size() > 0 && list.get(0) != null) {
+                            show(list.get(0));
+                        } else {
+                            errorIn();
+                        }
                     }
                 }
             }
@@ -263,12 +258,13 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                 ConfigResponse.GuidePageBean second = list.get(1);
                 if (DateUtils.isToday(first.date)) {
                     show(first);
+                    isShowCache = true;
                 } else if (DateUtils.isToday(second.date)) {
                     show(second);
-                } else {
-                    if (settingPresenter != null) {
-                        settingPresenter.queryConfig(DeviceUtils.getMobileIMEI(this));
-                    }
+                    isShowCache = true;
+                }
+                if (settingPresenter != null) {
+                    settingPresenter.queryConfig(DeviceUtils.getMobileIMEI(this));
                 }
             }
         } else {

@@ -13,6 +13,9 @@ public class SharedPreferencesUtils {
     private static final String KEY_USER_UID = "uid";
     public static final String KEY_DEVICE_TOKEN = "device_token";
     public static final String KEY_MORE_IMAGE = "more_image";
+    public static final String KEY_HIDE_READ_ENABLED = "hide_read_enabled";
+    public static final String KEY_HIDE_READ_OPENED = "hide_read_opened";
+    public static final String KEY_HIDE_READ_TIPS = "hide_read_tips";
 
     public static void saveUid(Context context, String uid) {
         if (!TextUtils.isEmpty(uid) && TextUtils.isEmpty(SharedPreferencesUtils.getUid(context))) {
@@ -76,6 +79,46 @@ public class SharedPreferencesUtils {
         String value = "";
         if (preferences != null) {
             value = preferences.getString(key, "");
+        }
+        return value;
+    }
+
+    public static void setConfigLong(Context context, String key, long value) {
+        SharedPreferences preferences = context.getSharedPreferences(PATH_CONFIG, Context.MODE_PRIVATE);
+        if (preferences != null) {
+            SharedPreferences.Editor editor = preferences.edit();
+            if (editor != null) {
+                editor.putLong(key, value);
+                editor.apply();
+            }
+        }
+    }
+
+    public static long getConfigLong(Context context, String key) {
+        SharedPreferences preferences = context.getSharedPreferences(PATH_CONFIG, Context.MODE_PRIVATE);
+        long value = 0;
+        if (preferences != null) {
+            value = preferences.getLong(key, 0);
+        }
+        return value;
+    }
+
+    public static void setConfigInt(Context context, String key, int value) {
+        SharedPreferences preferences = context.getSharedPreferences(PATH_CONFIG, Context.MODE_PRIVATE);
+        if (preferences != null) {
+            SharedPreferences.Editor editor = preferences.edit();
+            if (editor != null) {
+                editor.putInt(key, value);
+                editor.apply();
+            }
+        }
+    }
+
+    public static int getConfigInt(Context context, String key) {
+        SharedPreferences preferences = context.getSharedPreferences(PATH_CONFIG, Context.MODE_PRIVATE);
+        int value = 0;
+        if (preferences != null) {
+            value = preferences.getInt(key, 0);
         }
         return value;
     }

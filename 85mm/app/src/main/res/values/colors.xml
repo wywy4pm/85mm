@@ -197,6 +197,7 @@
     <color name="more_yellow">#f7bd0e</color>
     <color name="more_detail">#323232</color>
     <color name="open_wechat">#3f3f3f</color>
+    <color name="main_text_hide_read">#f9d156</color>
 
     <color name="article_list_brief">#666666</color>
     <color name="article_detail_paragraph">#4D4D4D</color>

@@ -20,6 +20,37 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/layout_hide_read"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="隐藏掉已经看过的作品"
+                    android:textColor="@color/charcoalgrey"
+                    android:textSize="15sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/switchView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/line_hide_read_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="10dp"
+                android:background="@color/line_divide" />
+
+            <RelativeLayout
                 android:id="@+id/layout_share"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
@@ -40,13 +71,13 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@+id/image_right"
+                    android:layout_toLeftOf="@+id/image_share_right"
                     android:text="好人有好报喔"
                     android:textColor="@color/text_right_tips"
                     android:textSize="12sp" />
 
                 <ImageView
-                    android:id="@+id/image_right"
+                    android:id="@+id/image_share_right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

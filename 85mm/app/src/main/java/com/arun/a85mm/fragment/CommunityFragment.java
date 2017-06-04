@@ -70,6 +70,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
         });*/
         setRefresh(swipeToLoadLayout);
         setExpandableListViewCommon(expandableListView, next_group_img, worksList);
+        setHideReadTips();
     }
 
     @Override

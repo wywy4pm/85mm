@@ -66,6 +66,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         });*/
         setRefresh(swipeToLoadLayout);
         setExpandableListViewCommon(expandableListView, next_group_img, workLists);
+        setHideReadTips();
     }
 
     @Override

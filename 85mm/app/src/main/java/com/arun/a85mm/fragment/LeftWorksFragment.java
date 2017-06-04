@@ -2,7 +2,6 @@ package com.arun.a85mm.fragment;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,10 +9,8 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
-import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.adapter.CommunityAdapter;
 import com.arun.a85mm.bean.CommonApiResponse;
-import com.arun.a85mm.bean.LeftWorksResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
@@ -21,7 +18,6 @@ import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.CommunityPresenter;
-import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
@@ -75,6 +71,7 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
         });*/
         setRefresh(swipeToLoadLayout);
         setExpandableListViewCommon(expandableListView, next_group_img, workLists);
+        setHideReadTips();
     }
 
     @SuppressWarnings("unchecked")
