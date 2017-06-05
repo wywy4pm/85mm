@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,7 +18,6 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.fragment.LeftWorksFragment;
 import com.arun.a85mm.fragment.OneWorkFragment;
 import com.arun.a85mm.helper.DialogHelper;
-import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.utils.StatusBarUtils;
 
 import java.io.Serializable;
@@ -31,6 +31,7 @@ public class FragmentCommonActivity extends BaseActivity {
     public static final String FRAGMENT_LEFT_WORKS = "fragment_left_works";
     public static final String FRAGMENT_ONE_WORK = "fragment_one_work";
     public String title;
+    private String type = "";
 
     public static void jumpToFragmentCommonActivity(Context context, String type, String title, Map<String, String> extras) {
         Intent intent = new Intent(context, FragmentCommonActivity.class);
@@ -52,7 +53,6 @@ public class FragmentCommonActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_common);
         StatusBarUtils.setStatusBarColor(this, R.color.white);
-        String type = "";
         Map<String, String> map = null;
         if (getIntent() != null) {
             type = getIntent().getExtras().getString(TYPE);
@@ -60,18 +60,25 @@ public class FragmentCommonActivity extends BaseActivity {
             map = (Map<String, String>) getIntent().getExtras().getSerializable(EXTRAS);
             initFragment(type, map);
         }
-        initView(type, map);
+        initView();
         setSaveImage();
     }
 
-    private void initView(String type, Map<String, String> map) {
+    private void initView() {
         RelativeLayout layout_title_bar = (RelativeLayout) findViewById(R.id.layout_title_bar);
         ImageView image_back = (ImageView) findViewById(R.id.image_back);
         TextView titleText = (TextView) findViewById(R.id.title);
         if (layout_title_bar != null) {
             if (!TextUtils.isEmpty(title)) {
                 layout_title_bar.setVisibility(View.VISIBLE);
-                setBack(image_back);
+                if (FRAGMENT_ONE_WORK.equals(type)) {
+                    setSwipeBackEnable(false);
+                    setBackToMain(image_back);
+                } else {
+                    setBack(image_back);
+                    setSwipeBackEnable(true);
+                }
+
                 if (titleText != null) {
                     titleText.setText(title);
                 }
@@ -132,6 +139,30 @@ public class FragmentCommonActivity extends BaseActivity {
             fragment = new OneWorkFragment();
         }
         return fragment;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (FRAGMENT_ONE_WORK.equals(type)) {
+                MainActivity.jumpToMain(FragmentCommonActivity.this, MainActivity.INTENT_TYPE_PUSH_BACK);
+                finish();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void setBackToMain(ImageView imageView) {
+        if (imageView != null) {
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainActivity.jumpToMain(FragmentCommonActivity.this, MainActivity.INTENT_TYPE_PUSH_BACK);
+                    finish();
+                }
+            });
+        }
     }
 
 }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ShowTopBean;
-import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.fragment.ArticleFragment;
 import com.arun.a85mm.fragment.CommunityFragment;
@@ -29,8 +27,6 @@ import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.DensityUtil;
-import com.arun.a85mm.utils.OtherAppStartUtils;
-import com.arun.a85mm.utils.SystemServiceUtils;
 import com.arun.a85mm.utils.TextViewUtils;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -56,12 +52,22 @@ public class MainActivity extends AppCompatActivity {
     private ShowTopHandler showTopHandler;
     private ObjectAnimatorHelper objectAnimatorHelper;
     private EventStatisticsHelper eventStatisticsHelper;
+    public static final int INTENT_TYPE_PUSH_BACK = 1;
     //public static final String KEY_RESPONSE = "productListResponse";
 
     public static void jumpToMain(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
-        ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        ((Activity) context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    public static void jumpToMain(Context context, int type) {
+        Intent intent = new Intent(context, MainActivity.class);
+        if (INTENT_TYPE_PUSH_BACK == type) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        context.startActivity(intent);
+        ((Activity) context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     @Override

@@ -125,6 +125,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                                     public void run() {
                                         if (!isJumpToWebView) {
                                             MainActivity.jumpToMain(SplashActivity.this);
+                                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                                         }
                                         SplashActivity.this.finish();
                                     }
@@ -279,6 +280,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
             @Override
             public void run() {
                 MainActivity.jumpToMain(SplashActivity.this);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
             }
         }, 1000);

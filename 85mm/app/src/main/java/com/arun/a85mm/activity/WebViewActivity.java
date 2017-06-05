@@ -79,7 +79,6 @@ public class WebViewActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     MainActivity.jumpToMain(WebViewActivity.this);
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                     finish();
                 }
             });
@@ -135,7 +134,6 @@ public class WebViewActivity extends BaseActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (isFromSplash) {
                 MainActivity.jumpToMain(this);
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 finish();
             }
         }
