@@ -381,6 +381,10 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
         }
     }
 
+    @Override
+    public void onRefreshComplete() {
+
+    }
 
     @Override
     public void onEvent(List<ActionBean> actionList) {

@@ -131,10 +131,8 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <!--<service
-            android:name=".service.ProductListCacheService"
-            android:enabled="true"
-            android:exported="true"/>-->
+        <service
+            android:name=".service.PushIntentService" />
     </application>
 
 </manifest>

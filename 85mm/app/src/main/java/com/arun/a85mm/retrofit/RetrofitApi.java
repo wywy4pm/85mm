@@ -18,6 +18,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 import rx.Observable;
@@ -57,4 +58,7 @@ public interface RetrofitApi {
 
     @GET(RetrofitUrl.USER_HIDE_SWITCH)
     Observable<CommonApiResponse> setHideReadStatus(@Query("uid") String uid, @Query("type") String type);
+
+    @GET(RetrofitUrl.WORKS_SINGLE_DETAIL + "/{workId}")
+    Observable<CommonApiResponse<WorkListBean>> getSingleWork(@Path("workId") String workId);
 }

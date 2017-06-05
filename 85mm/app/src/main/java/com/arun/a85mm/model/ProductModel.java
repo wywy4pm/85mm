@@ -39,4 +39,8 @@ public class ProductModel extends BaseModel {
         return request(RetrofitInit.getApi().getWorksOneDayLeft(userId, deviceId, date, start, appBean.appVersion, appBean.osType), listener);
     }
 
+    public Subscriber getSingleWork(String workId, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getSingleWork(workId), listener);
+    }
+
 }

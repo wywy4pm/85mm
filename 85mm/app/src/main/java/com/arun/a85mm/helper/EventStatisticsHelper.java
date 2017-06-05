@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.StringRes;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ActionRequest;
@@ -76,20 +77,22 @@ public class EventStatisticsHelper implements EventView {
 
     @Override
     public void eventDone(int type) {
+        String tips = "";
+        if (type == EventConstant.WORK_REPORT) {
+            tips = context.getString(R.string.report);
+        } else if (type == EventConstant.WORK_SCALE_OVER) {
+            tips = context.getString(R.string.scale_over);
+        } else if (type == EventConstant.WORK_BAD_COMMNET) {
+            tips = context.getString(R.string.bad_comment);
+        } else if (type == EventConstant.WORK_REPEAT) {
+            tips = context.getString(R.string.repeat);
+        } else if (type == EventConstant.WORK_SHOW_SEQ) {
+            tips = context.getString(R.string.show_seq);
+        }
         if (context instanceof MainActivity) {
-            String tips = "";
-            if (type == EventConstant.WORK_REPORT) {
-                tips = context.getString(R.string.report);
-            } else if (type == EventConstant.WORK_SCALE_OVER) {
-                tips = context.getString(R.string.scale_over);
-            } else if (type == EventConstant.WORK_BAD_COMMNET) {
-                tips = context.getString(R.string.bad_comment);
-            } else if (type == EventConstant.WORK_REPEAT) {
-                tips = context.getString(R.string.repeat);
-            } else if (type == EventConstant.WORK_SHOW_SEQ) {
-                tips = context.getString(R.string.show_seq);
-            }
             ((MainActivity) context).showTop("[" + tips + "]" + "操作成功");
+        } else if (context instanceof BaseActivity) {
+            ((BaseActivity) context).showTop("[" + tips + "]" + "操作成功");
         }
     }
 

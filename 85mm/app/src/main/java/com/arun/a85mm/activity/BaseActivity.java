@@ -1,6 +1,7 @@
 package com.arun.a85mm.activity;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ShowTopBean;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.EventStatisticsHelper;
@@ -20,6 +22,7 @@ import com.arun.a85mm.helper.ShowTopToastHelper;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
+import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.MvpView;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;

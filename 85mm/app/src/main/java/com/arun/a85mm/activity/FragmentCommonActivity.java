@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.fragment.LeftWorksFragment;
+import com.arun.a85mm.fragment.OneWorkFragment;
+import com.arun.a85mm.helper.DialogHelper;
+import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.utils.StatusBarUtils;
 
 import java.io.Serializable;
@@ -26,9 +29,7 @@ public class FragmentCommonActivity extends BaseActivity {
     public static final String TITLE = "title";
     public static final String EXTRAS = "extras";
     public static final String FRAGMENT_LEFT_WORKS = "fragment_left_works";
-    public RelativeLayout layout_title_bar;
-    public ImageView image_back;
-    public TextView titleText;
+    public static final String FRAGMENT_ONE_WORK = "fragment_one_work";
     public String title;
 
     public static void jumpToFragmentCommonActivity(Context context, String type, String title, Map<String, String> extras) {
@@ -37,6 +38,9 @@ public class FragmentCommonActivity extends BaseActivity {
         intent.putExtra(TITLE, title);
         if (extras != null) {
             intent.putExtra(EXTRAS, (Serializable) extras);
+        }
+        if (FRAGMENT_ONE_WORK.equals(type)) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
@@ -48,26 +52,46 @@ public class FragmentCommonActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_common);
         StatusBarUtils.setStatusBarColor(this, R.color.white);
+        String type = "";
+        Map<String, String> map = null;
         if (getIntent() != null) {
-            String type = getIntent().getExtras().getString(TYPE);
+            type = getIntent().getExtras().getString(TYPE);
             title = getIntent().getExtras().getString(TITLE);
-            Map<String, String> map = (Map<String, String>) getIntent().getExtras().getSerializable(EXTRAS);
+            map = (Map<String, String>) getIntent().getExtras().getSerializable(EXTRAS);
             initFragment(type, map);
         }
-        initView();
+        initView(type, map);
         setSaveImage();
     }
 
-    private void initView() {
-        layout_title_bar = (RelativeLayout) findViewById(R.id.layout_title_bar);
-        image_back = (ImageView) findViewById(R.id.image_back);
-        titleText = (TextView) findViewById(R.id.title);
-        if (!TextUtils.isEmpty(title)) {
-            layout_title_bar.setVisibility(View.VISIBLE);
-            setBack(image_back);
-            titleText.setText(title);
-        } else {
-            layout_title_bar.setVisibility(View.GONE);
+    private void initView(String type, Map<String, String> map) {
+        RelativeLayout layout_title_bar = (RelativeLayout) findViewById(R.id.layout_title_bar);
+        ImageView image_back = (ImageView) findViewById(R.id.image_back);
+        TextView titleText = (TextView) findViewById(R.id.title);
+        if (layout_title_bar != null) {
+            if (!TextUtils.isEmpty(title)) {
+                layout_title_bar.setVisibility(View.VISIBLE);
+                setBack(image_back);
+                if (titleText != null) {
+                    titleText.setText(title);
+                }
+            } else {
+                layout_title_bar.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void setShowBottomRight(final String linkUrl, final String workId) {
+        ImageView image_right = (ImageView) findViewById(R.id.image_right);
+        if (image_right != null) {
+            image_right.setVisibility(View.VISIBLE);
+            image_right.setImageResource(R.mipmap.ic_home_more);
+            image_right.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogHelper.showBottomSourceLink(FragmentCommonActivity.this, linkUrl, workId, eventStatisticsHelper);
+                }
+            });
         }
     }
 
@@ -104,6 +128,8 @@ public class FragmentCommonActivity extends BaseActivity {
         Fragment fragment = null;
         if (FRAGMENT_LEFT_WORKS.equals(type)) {
             fragment = new LeftWorksFragment();
+        } else if (FRAGMENT_ONE_WORK.equals(type)) {
+            fragment = new OneWorkFragment();
         }
         return fragment;
     }

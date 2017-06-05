@@ -164,14 +164,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showTop(String showData) {
-        if (showTopHandler != null) {
-            Message message = new Message();
-            message.what = Constant.WHAT_SHOW_TOP;
-            message.obj = new ShowTopBean(isShowingTop, showData);
-            if (showTopHandler != null) {
-                showTopHandler.sendMessage(message);
-            }
-        }
+        ShowTopBean showTopBean = new ShowTopBean(isShowingTop, showData);
+        showTopToastView(showTopBean);
     }
 
     public void saveImageShowTop(String workId, String coverUrl, int width, int height) {

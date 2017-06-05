@@ -14,12 +14,13 @@ public class RetrofitUrl {
     public static final String WORKS_LIST = WORKS + V1 + "/list";
     public static final String WORKS_GOODS = WORKS + V1 + "/goods";
     public static final String WORKS_ONE_DAY_LEFT = WORKS + V1 + "/onedayGoods";
+    public static final String WORKS_SINGLE_DETAIL = WORKS + "/single";
 
     public static final String USER_ACTION = USER + V1 + "/action";
+    public static final String USER_DEVICE_TOKEN = USER + "/addToken";
+    public static final String USER_HIDE_SWITCH = USER + "/readSwitch";
 
     public static final String CONFIG_QUERY = CONFIG + V1 + "/query";
 
-    public static final String USER_DEVICE_TOKEN = USER + "/addToken";
 
-    public static final String USER_HIDE_SWITCH = USER + "/readSwitch";
 }

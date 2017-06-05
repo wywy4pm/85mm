@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.arun.a85mm.helper.AppHelper;
 import com.arun.a85mm.helper.PushHelper;
 import com.arun.a85mm.presenter.DeviceTokenPresenter;
+import com.arun.a85mm.service.PushIntentService;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.umeng.message.IUmengRegisterCallback;
@@ -54,5 +55,6 @@ public class MMApplication extends Application {
             }
         });
         PushHelper.setPushNotification(mPushAgent);
+        //mPushAgent.setPushIntentServiceClass(PushIntentService.class);
     }
 }
