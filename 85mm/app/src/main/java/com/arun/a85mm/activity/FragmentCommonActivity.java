@@ -18,6 +18,7 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.fragment.LeftWorksFragment;
 import com.arun.a85mm.fragment.OneWorkFragment;
 import com.arun.a85mm.helper.DialogHelper;
+import com.arun.a85mm.utils.AppUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 
 import java.io.Serializable;
@@ -38,6 +39,19 @@ public class FragmentCommonActivity extends BaseActivity {
         intent.putExtra(TYPE, type);
         intent.putExtra(TITLE, title);
         if (extras != null) {
+            intent.putExtra(EXTRAS, (Serializable) extras);
+        }
+        context.startActivity(intent);
+        ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+    }
+
+    public static void jumpToFragmentCommonActivity(Context context, String type, Map<String, String> extras) {
+        Intent intent = new Intent(context, FragmentCommonActivity.class);
+        intent.putExtra(TYPE, type);
+        if (extras != null) {
+            String title = extras.get(TITLE);
+            intent.putExtra(TITLE, title);
+            //extras.remove(TITLE);
             intent.putExtra(EXTRAS, (Serializable) extras);
         }
         if (FRAGMENT_ONE_WORK.equals(type)) {

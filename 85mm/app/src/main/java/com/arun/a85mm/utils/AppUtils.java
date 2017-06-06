@@ -86,4 +86,25 @@ public class AppUtils {
         String allSignature = packageInfo.signatures[0].toCharsString();
         return allSignature;
     }
+
+    /**
+     * 方法描述：判断某一应用是否正在运行
+     * Created by cafeting on 2017/2/4.
+     * @param context     上下文
+     * @param packageName 应用的包名
+     * @return true 表示正在运行，false 表示没有运行
+     */
+    public static boolean isAppRunning(Context context, String packageName) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(100);
+        if (list.size() <= 0) {
+            return false;
+        }
+        for (ActivityManager.RunningTaskInfo info : list) {
+            if (info.baseActivity.getPackageName().equals(packageName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -25,6 +26,7 @@ import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
+import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.TextViewUtils;
@@ -34,6 +36,7 @@ import com.umeng.message.PushAgent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,12 +56,25 @@ public class MainActivity extends AppCompatActivity {
     private ObjectAnimatorHelper objectAnimatorHelper;
     private EventStatisticsHelper eventStatisticsHelper;
     public static final int INTENT_TYPE_PUSH_BACK = 1;
+    private static String type;
+    private static Map<String, String> map;
     //public static final String KEY_RESPONSE = "productListResponse";
 
     public static void jumpToMain(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    public static void jumpToMain(Context context, String type, Map<String, String> map) {
+        Intent intent = new Intent(context, MainActivity.class);
+        if (!TextUtils.isEmpty(type)) {
+            MainActivity.type = type;
+        }
+        if (map != null) {
+            MainActivity.map = map;
+        }
+        context.startActivity(intent);
     }
 
     public static void jumpToMain(Context context, int type) {
@@ -78,6 +94,23 @@ public class MainActivity extends AppCompatActivity {
         initData();
         initView();
         DataCleanManager.clearOver50MBSize(this);
+
+        if (!TextUtils.isEmpty(type) && map != null) {
+            jumpToOther();
+        }
+    }
+
+    private void jumpToOther() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (UrlJumpHelper.JUMP_APP_WORK_DETAIL.equals(type)) {
+                    FragmentCommonActivity.jumpToFragmentCommonActivity(MainActivity.this, FragmentCommonActivity.FRAGMENT_ONE_WORK, map);
+                }
+                type = "";
+                map = null;
+            }
+        }, 500);
     }
 
     private void initView() {

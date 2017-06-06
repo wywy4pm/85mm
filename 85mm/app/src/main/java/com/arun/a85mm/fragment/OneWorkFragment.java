@@ -83,6 +83,7 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
             }
             setAuthor(bean);
             imageAdapter.setWorkListBean(bean);
+            addCoverImage(bean);
             addImage(bean.workDetail);
         }
     }
@@ -91,6 +92,15 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
         author_name.setText(bean.authorName);
         Glide.with(this).load(bean.authorHeadImg).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).into(author_image);
         author_create_time.setText(bean.createTime);
+    }
+
+    private void addCoverImage(WorkListBean bean) {
+        WorkListItemBean itemBean = new WorkListItemBean();
+        itemBean.imageUrl = bean.coverUrl;
+        itemBean.width = bean.coverWidth;
+        itemBean.height = bean.coverHeight;
+        itemBean.backgroundColor = RandomColorHelper.getRandomColor();
+        workListItems.add(itemBean);
     }
 
     private void addImage(List<WorkListItemBean> list) {

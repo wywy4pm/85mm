@@ -18,6 +18,7 @@ import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.helper.CommunityListCacheManager;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
+import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.presenter.SettingPresenter;
 import com.arun.a85mm.utils.BitmapUtils;
 import com.arun.a85mm.utils.CacheUtils;
@@ -35,6 +36,7 @@ import com.umeng.message.PushAgent;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class SplashActivity extends AppCompatActivity implements CommonView3 {
     public ImageView cover_Image;
@@ -48,6 +50,8 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
 
     private boolean isJumpToWebView;
     private boolean isShowCache;
+    private String type;
+    private Map<String, String> map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
         screenHeight = DensityUtil.getScreenHeight(SplashActivity.this);
     }
 
+    @SuppressWarnings("unchecked")
     private void initData() {
         if (settingPresenter == null) {
             settingPresenter = new SettingPresenter(this);
@@ -78,6 +83,10 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
             settingPresenter.getWorksGoods(SharedPreferencesUtils.getUid(this), DeviceUtils.getMobileIMEI(this), "");
         }
         showSplash();
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            type = getIntent().getExtras().getString(UrlJumpHelper.KEY_JUMP_APP);
+            map = (Map<String, String>) getIntent().getExtras().getSerializable(UrlJumpHelper.KEY_JUMP_MAP);
+        }
     }
 
     private void showAnimator() {
@@ -124,7 +133,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                                     @Override
                                     public void run() {
                                         if (!isJumpToWebView) {
-                                            MainActivity.jumpToMain(SplashActivity.this);
+                                            MainActivity.jumpToMain(SplashActivity.this, type, map);
                                             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                                         }
                                         SplashActivity.this.finish();
@@ -279,7 +288,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                MainActivity.jumpToMain(SplashActivity.this);
+                MainActivity.jumpToMain(SplashActivity.this, type, map);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
             }
