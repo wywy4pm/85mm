@@ -3,6 +3,12 @@ package com.arun.a85mm;
 import android.app.Application;
 import android.text.TextUtils;
 
+import com.alibaba.sdk.android.oss.ClientConfiguration;
+import com.alibaba.sdk.android.oss.OSS;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.common.OSSLog;
+import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
 import com.arun.a85mm.helper.AppHelper;
 import com.arun.a85mm.helper.PushHelper;
 import com.arun.a85mm.presenter.DeviceTokenPresenter;
@@ -18,6 +24,17 @@ import com.umeng.socialize.UMShareAPI;
  * Created by WY on 2017/5/14.
  */
 public class MMApplication extends Application {
+
+    //OSS的Bucket
+    public static final String OSS_BUCKET = "";
+
+    //设置OSS数据中心域名或者cname域名
+    public static final String OSS_BUCKET_HOST_ID = "";
+    //Key
+    private static final String accessKey = "";
+    private static final String screctKey = "";
+
+    public static OSS oss;
 
     {
         PlatformConfig.setWeixin("wxaa1d1954f46301df", "979486cc1c9736c83f974421282c753e");
@@ -56,5 +73,21 @@ public class MMApplication extends Application {
         });
         PushHelper.setPushNotification(mPushAgent);
         //mPushAgent.setPushIntentServiceClass(PushIntentService.class);
+        //初始化OSS配置
+        initOSSConfig();
+    }
+
+    private void initOSSConfig() {
+        OSSCredentialProvider credentialProvider = new OSSPlainTextAKSKCredentialProvider(accessKey, screctKey);
+
+        ClientConfiguration conf = new ClientConfiguration();
+        conf.setConnectionTimeout(15 * 1000); // 连接超时，默认15秒
+        conf.setSocketTimeout(15 * 1000); // socket超时，默认15秒
+        conf.setMaxConcurrentRequest(5); // 最大并发请求书，默认5个
+        conf.setMaxErrorRetry(2); // 失败后最大重试次数，默认2次
+        if (BuildConfig.DEBUG) {
+            OSSLog.enableLog();
+        }
+        oss = new OSSClient(getApplicationContext(), OSS_BUCKET_HOST_ID, credentialProvider, conf);
     }
 }

@@ -74,4 +74,5 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile files('libs/open_sdk_r5781.jar')
     compile project(':PushSDK')
+    compile files('libs/aliyun-oss-sdk-android-2.3.0.jar')
 }
