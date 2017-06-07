@@ -86,7 +86,8 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
     private void initToastView() {
         toastView = (TextView) findViewById(R.id.toastView);
         topCommonView = (TextView) findViewById(R.id.topCommonView);
-        if (toastView.getLayoutParams() != null && topCommonView.getLayoutParams() != null) {
+        if (toastView != null && topCommonView != null
+                && toastView.getLayoutParams() != null && topCommonView.getLayoutParams() != null) {
             toastView.getLayoutParams().height = DensityUtil.getStatusHeight(this);
             topCommonView.getLayoutParams().height = DensityUtil.getStatusHeight(this);
         }

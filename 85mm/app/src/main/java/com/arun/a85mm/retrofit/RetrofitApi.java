@@ -8,6 +8,7 @@ import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.CommonResponse;
 import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.ConfigResponse;
+import com.arun.a85mm.bean.MessageItemBean;
 import com.arun.a85mm.bean.WorkListBean;
 
 import java.util.List;
@@ -61,4 +62,7 @@ public interface RetrofitApi {
 
     @GET(RetrofitUrl.WORKS_SINGLE_DETAIL + "/{workId}")
     Observable<CommonApiResponse<WorkListBean>> getSingleWork(@Path("workId") String workId);
+
+    @GET(RetrofitUrl.USER_MESSAGE_LIST)
+    Observable<CommonApiResponse<MessageItemBean>> getMessageList(@Query("uid") String uid, @Query("msgType") int msgType, @Query("lastMsgId") int lastMsgId);
 }

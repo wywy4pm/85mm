@@ -30,6 +30,31 @@
         android:id="@+id/layout_status_place"
         layout="@layout/layout_status_place" />
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/layout_status_place"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="13dp"
+        android:onClick="messageClick">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/message_center" />
+
+        <TextView
+            android:id="@+id/dot_new_message"
+            android:layout_width="9dp"
+            android:layout_height="9dp"
+            android:layout_gravity="right|top"
+            android:background="@drawable/circle_solid_new_message"
+            android:visibility="gone" />
+    </FrameLayout>
+
     <com.flyco.tablayout.SlidingTabLayout
         android:id="@+id/tabLayout"
         android:layout_width="wrap_content"
@@ -45,6 +70,7 @@
         app:tl_indicator_color="@color/more_yellow"
         app:tl_indicator_height="2dp"
         app:tl_indicator_width="12dp"
+        app:tl_tab_padding="15dp"
         app:tl_textSelectColor="@color/tab_select"
         app:tl_textUnselectColor="@color/tab_un_select"
         app:tl_textsize="16sp" />

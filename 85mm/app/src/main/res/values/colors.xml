@@ -201,4 +201,5 @@
 
     <color name="article_list_brief">#666666</color>
     <color name="article_detail_paragraph">#4D4D4D</color>
+    <color name="circle_solid_new">#e54b28</color>
 </resources>

@@ -12,10 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.adapter.CommonFragmentPagerAdapter;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.common.EventConstant;
@@ -29,6 +31,7 @@ import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.DensityUtil;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.utils.TextViewUtils;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -40,7 +43,6 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RelativeLayout activity_main;
     private SlidingTabLayout tabLayout;
     private ViewPager viewPager;
     //private int[] titleIds = new int[]{R.string.main_tab_1, R.string.main_tab_2, R.string.main_tab_3};
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int INTENT_TYPE_PUSH_BACK = 1;
     private static String type;
     private static Map<String, String> map;
+    private TextView dot_new_message;
     //public static final String KEY_RESPONSE = "productListResponse";
 
     public static void jumpToMain(Context context) {
@@ -92,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         PushAgent.getInstance(this).onAppStart();
         initData();
-        initView();
+        init();
+        setListener();
         DataCleanManager.clearOver50MBSize(this);
 
         if (!TextUtils.isEmpty(type) && map != null) {
@@ -113,13 +117,13 @@ public class MainActivity extends AppCompatActivity {
         }, 500);
     }
 
-    private void initView() {
-        activity_main = (RelativeLayout) findViewById(R.id.activity_main);
+    private void init() {
         tabLayout = (SlidingTabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-
+        dot_new_message = (TextView) findViewById(R.id.dot_new_message);
         eventStatisticsHelper = new EventStatisticsHelper(this);
-        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+        viewPager.setAdapter(new CommonFragmentPagerAdapter(getSupportFragmentManager(), list));
+        /*viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public int getCount() {
                 return list.size();
@@ -129,8 +133,15 @@ public class MainActivity extends AppCompatActivity {
             public Fragment getItem(int position) {
                 return list.get(position);
             }
-        });
+        });*/
+
         tabLayout.setViewPager(viewPager, titles);
+        TextViewUtils.setTextBold(tabLayout.getTitleView(1), true);
+        viewPager.setCurrentItem(1);
+        setSaveImage();
+    }
+
+    private void setListener() {
         tabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
@@ -172,9 +183,6 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
-        TextViewUtils.setTextBold(tabLayout.getTitleView(1), true);
-        viewPager.setCurrentItem(1);
-        setSaveImage();
     }
 
     private void initData() {
@@ -241,6 +249,20 @@ public class MainActivity extends AppCompatActivity {
             eventStatisticsHelper.recordUserAction(MainActivity.this, EventConstant.TAB_MORE, EventStatisticsHelper.createOneActionList(EventConstant.TAB_MORE));
         }
         MoreSettingActivity.jumpToMoreSettingActivity(this);
+    }
+
+    public void messageClick(View view) {
+        MessageCenterActivity.jumpToMessageCenter(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (SharedPreferencesUtils.getConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE) == 1) {
+            dot_new_message.setVisibility(View.VISIBLE);
+        } else {
+            dot_new_message.setVisibility(View.GONE);
+        }
     }
 
     @Override

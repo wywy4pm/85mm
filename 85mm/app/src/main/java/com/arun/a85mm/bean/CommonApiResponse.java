@@ -11,12 +11,16 @@ public class CommonApiResponse<T> {
     public String msg;
     public String morePageImage;
     public T body;
-    public HideReadBean hideRead;
 
-    /*public List<String> copyWrite;
-    public T goodsList;
-    public T workList;
-    public T guidePage;
-    public T article;
-    public T articleList;*/
+    public HideReadBean hideRead;
+    /**
+     * 是否有新消息，0：没有，1：有
+     */
+    public int hasNewMsg;
+
+    /**
+     * oss相关信息
+     */
+    public OssInfoBean ossInfo;
+
 }

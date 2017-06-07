@@ -19,6 +19,7 @@ public class RetrofitUrl {
     public static final String USER_ACTION = USER + V1 + "/action";
     public static final String USER_DEVICE_TOKEN = USER + "/addToken";
     public static final String USER_HIDE_SWITCH = USER + "/readSwitch";
+    public static final String USER_MESSAGE_LIST = USER + "/msgList";
 
     public static final String CONFIG_QUERY = CONFIG + V1 + "/query";
 

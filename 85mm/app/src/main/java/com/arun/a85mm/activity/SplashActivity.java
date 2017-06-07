@@ -182,6 +182,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                     SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_ENABLED, config.hideRead.hideReadEnable);
                     SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_OPENED, config.hideRead.hideReadOpen);
                 }
+                SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE, config.hasNewMsg);
                 new Thread(
                         new Runnable() {
                             @Override
