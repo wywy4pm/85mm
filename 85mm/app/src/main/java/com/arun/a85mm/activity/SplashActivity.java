@@ -80,7 +80,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
         if (settingPresenter == null) {
             settingPresenter = new SettingPresenter(this);
             settingPresenter.attachView(this);
-            settingPresenter.getWorksGoods(SharedPreferencesUtils.getUid(this), DeviceUtils.getMobileIMEI(this), "");
+            settingPresenter.getWorksGoods("");
         }
         showSplash();
         if (getIntent() != null && getIntent().getExtras() != null) {
@@ -275,12 +275,12 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                     isShowCache = true;
                 }
                 if (settingPresenter != null) {
-                    settingPresenter.queryConfig(DeviceUtils.getMobileIMEI(this));
+                    settingPresenter.queryConfig();
                 }
             }
         } else {
             if (settingPresenter != null) {
-                settingPresenter.queryConfig(DeviceUtils.getMobileIMEI(this));
+                settingPresenter.queryConfig();
             }
         }
     }

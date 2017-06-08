@@ -90,6 +90,7 @@ public class AppUtils {
     /**
      * 方法描述：判断某一应用是否正在运行
      * Created by cafeting on 2017/2/4.
+     *
      * @param context     上下文
      * @param packageName 应用的包名
      * @return true 表示正在运行，false 表示没有运行
@@ -104,6 +105,22 @@ public class AppUtils {
             if (info.baseActivity.getPackageName().equals(packageName)) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    /**
+     * 判断是否为debug模式
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isApkDebug(Context context) {
+        try {
+            ApplicationInfo info = context.getApplicationInfo();
+            return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }

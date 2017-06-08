@@ -25,9 +25,9 @@ public class ArticleActivityPresenter extends BasePresenter<CommonView2> {
         super(context);
     }
 
-    public void getArticleDetailsData(String articleId, String uid, String deviceId) {
+    public void getArticleDetailsData(String deviceId) {
         addSubscriber(ArticleModel.getInstance()
-                .getArticleDetailData(articleId, uid, deviceId, new RequestListenerImpl(getMvpView()) {
+                .getArticleDetailData(deviceId, new RequestListenerImpl(getMvpView()) {
 
                     @SuppressWarnings("unchecked")
                     @Override
@@ -39,34 +39,5 @@ public class ArticleActivityPresenter extends BasePresenter<CommonView2> {
                         }
                     }
                 }));
-
-        /*Subscriber<ArticleDetailResponse> subscriber = new Subscriber<ArticleDetailResponse>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if (getMvpView() != null) {
-                    getMvpView().onError(ErrorCode.NETWORK_ERROR, null);
-                }
-
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onNext(ArticleDetailResponse articleDetailResponse) {
-                if (getMvpView() != null) {
-                    if (articleDetailResponse != null && articleDetailResponse.code == ErrorCode.SUCCESS) {
-                        getMvpView().refresh(articleDetailResponse);
-                    }
-                }
-
-            }
-        };
-
-        addSubscriber(subscriber);
-        RetrofitInit.getApi().getArticleDetail(articleId, uid, deviceId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);*/
     }
 }

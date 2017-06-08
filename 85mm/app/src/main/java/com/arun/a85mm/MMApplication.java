@@ -61,8 +61,7 @@ public class MMApplication extends Application {
                     SharedPreferencesUtils.setConfigString(getApplicationContext(), SharedPreferencesUtils.KEY_DEVICE_TOKEN, deviceToken);
 
                     new DeviceTokenPresenter(getApplicationContext())
-                            .postDeviceToken(SharedPreferencesUtils.getUid(getApplicationContext()),
-                                    DeviceUtils.getMobileIMEI(getApplicationContext()), deviceToken);
+                            .postDeviceToken(deviceToken);
                 }
             }
 

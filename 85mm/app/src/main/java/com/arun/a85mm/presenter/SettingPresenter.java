@@ -34,9 +34,9 @@ public class SettingPresenter extends BasePresenter<CommonView3> {
         super(context);
     }
 
-    public void queryConfig(String deviceId) {
+    public void queryConfig() {
         addSubscriber(SettingModel.getInstance()
-                .queryConfig(deviceId, new RequestListenerImpl(getMvpView()) {
+                .queryConfig(new RequestListenerImpl(getMvpView()) {
 
                     @SuppressWarnings("unchecked")
                     @Override
@@ -50,40 +50,11 @@ public class SettingPresenter extends BasePresenter<CommonView3> {
                         }
                     }
                 }));
-
-        /*Subscriber<ConfigResponse> subscriber = new Subscriber<ConfigResponse>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if (getMvpView() != null) {
-                    getMvpView().onError(ErrorCode.NETWORK_ERROR, null);
-                }
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onNext(ConfigResponse configResponse) {
-                if (configResponse != null) {
-                    if (configResponse.code == ErrorCode.SUCCESS) {
-                        if (getMvpView() != null) {
-                            getMvpView().refresh(configResponse);
-                        }
-                    }
-                }
-            }
-        };
-        addSubscriber(subscriber);
-        RetrofitInit.getApi().queryConfig(deviceId)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);*/
     }
 
-    public void getWorksGoods(String userId, String deviceId, final String lastDate) {
+    public void getWorksGoods(final String lastDate) {
         addSubscriber(ProductModel.getInstance()
-                .getWorksGoods(userId, deviceId, lastDate, new RequestListenerImpl(getMvpView()) {
+                .getWorksGoods(lastDate, new RequestListenerImpl(getMvpView()) {
 
                     @SuppressWarnings("unchecked")
                     @Override
@@ -97,28 +68,5 @@ public class SettingPresenter extends BasePresenter<CommonView3> {
                         }
                     }
                 }));
-        /*Subscriber<CommunityResponse> subscriber = new Subscriber<CommunityResponse>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onNext(CommunityResponse communityResponse) {
-                if (getMvpView() != null) {
-                    if (communityResponse != null && communityResponse.code == ErrorCode.SUCCESS) {
-                        getMvpView().refresh(communityResponse);
-                    }
-                }
-            }
-        };
-
-        addSubscriber(subscriber);
-        RetrofitInit.getApi().getWorksGoods(userId, deviceId, lastDate)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);*/
     }
 }

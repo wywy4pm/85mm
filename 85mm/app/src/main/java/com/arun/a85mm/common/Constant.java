@@ -36,6 +36,9 @@ public class Constant {
     public static final String ARTICLE_TITLE_ALIGN_CENTER = "center";
     public static final String ARTICLE_TITLE_ALIGN_RIGHT = "right";
 
+    public static final String MESSAGE_LIST_TOP = "msg_top";
+    public static final String MESSAGE_LIST_IMAGE = "msg_img";
+
     /**
      * handler what
      */

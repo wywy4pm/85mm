@@ -20,6 +20,7 @@ public class AppBean {
     public String osVersion;
     public String deviceModel;
     public String osType;
+    public int isRelease;
 
     public AppBean(Context context) {
         uid = SharedPreferencesUtils.getUid(context);
@@ -28,5 +29,6 @@ public class AppBean {
         osVersion = String.valueOf(DeviceUtils.getMobileSDK());
         deviceModel = DeviceUtils.getMobileModel();
         osType = context.getString(R.string.android);
+        isRelease = AppUtils.isApkDebug(context) ? 0 : 1;
     }
 }

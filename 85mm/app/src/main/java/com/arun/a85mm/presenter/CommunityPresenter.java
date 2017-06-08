@@ -27,9 +27,9 @@ public class CommunityPresenter extends BasePresenter<CommonView> {
         super(context);
     }
 
-    public void getWorksGoods(String userId, String deviceId, final String lastDate) {
+    public void getWorksGoods(final String lastDate) {
         addSubscriber(ProductModel.getInstance()
-                .getWorksGoods(userId, deviceId, lastDate, new RequestListenerImpl(getMvpView()) {
+                .getWorksGoods(lastDate, new RequestListenerImpl(getMvpView()) {
 
                     @SuppressWarnings("unchecked")
                     @Override
@@ -47,46 +47,12 @@ public class CommunityPresenter extends BasePresenter<CommonView> {
                         }
                     }
                 }));
-        /*Subscriber<CommunityResponse> subscriber = new Subscriber<CommunityResponse>() {
-            @Override
-            public void onCompleted() {
-                if (getMvpView() != null) {
-                    getMvpView().onRefreshComplete();
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if (getMvpView() != null) {
-                    getMvpView().onError(ErrorCode.NETWORK_ERROR, null);
-                }
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onNext(CommunityResponse communityResponse) {
-                if (getMvpView() != null) {
-                    if (communityResponse != null && communityResponse.code == ErrorCode.SUCCESS) {
-                        if (TextUtils.isEmpty(lastDate)) {
-                            getMvpView().refresh(communityResponse);
-                        } else {
-                            getMvpView().refreshMore(communityResponse);
-                        }
-                    } else {
-                        ((CommunityFragment) getMvpView()).setHaveMore(false);
-                    }
-                }
-            }
-        };
-
-        addSubscriber(subscriber);
-        RetrofitInit.getApi().getWorksGoods(userId, deviceId, lastDate).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);*/
     }
 
-    public void getWorksLeft(String userId, String deviceId, final String date, int start, final boolean isPullRefresh) {
+    public void getWorksLeft(final String date, int start, final boolean isPullRefresh) {
 
         addSubscriber(ProductModel.getInstance()
-                .getWorksOneDayLeft(userId, deviceId, date, start, new RequestListenerImpl(getMvpView()) {
+                .getWorksOneDayLeft(date, start, new RequestListenerImpl(getMvpView()) {
 
                     @SuppressWarnings("unchecked")
                     @Override
@@ -104,39 +70,5 @@ public class CommunityPresenter extends BasePresenter<CommonView> {
                         }
                     }
                 }));
-        /*Subscriber<LeftWorksResponse> subscriber = new Subscriber<LeftWorksResponse>() {
-            @Override
-            public void onCompleted() {
-                if (getMvpView() != null) {
-                    getMvpView().onRefreshComplete();
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if (getMvpView() != null) {
-                    getMvpView().onError(ErrorCode.NETWORK_ERROR, null);
-                }
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onNext(LeftWorksResponse leftWorksResponse) {
-                if (getMvpView() != null) {
-                    if (leftWorksResponse != null && leftWorksResponse.code == ErrorCode.SUCCESS) {
-                        if (isPullRefresh) {
-                            getMvpView().refresh(leftWorksResponse);
-                        } else {
-                            getMvpView().refreshMore(leftWorksResponse);
-                        }
-                    } else {
-                        ((LeftWorksFragment) getMvpView()).setHaveMore(false);
-                    }
-                }
-            }
-        };
-
-        addSubscriber(subscriber);
-        RetrofitInit.getApi().getWorksOneDayLeft(userId, deviceId, date, start).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);*/
     }
 }

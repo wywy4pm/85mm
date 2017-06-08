@@ -88,7 +88,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
             if (productFragmentPresenter != null) {
                 setLoading(true);
                 lastWorkId = "";
-                productFragmentPresenter.getProductListData(userId, deviceId, lastWorkId);
+                productFragmentPresenter.getProductListData(lastWorkId);
             }
         } else {
             if (swipeToLoadLayout.isRefreshing()) {
@@ -108,7 +108,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     private void loadMore() {
         setLoading(true);
         if (productFragmentPresenter != null) {
-            productFragmentPresenter.getProductListData(userId, deviceId, lastWorkId);
+            productFragmentPresenter.getProductListData(lastWorkId);
         }
     }
 

@@ -4,7 +4,5 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/recyclerView"
-        layout="@layout/layout_refresh_recyclerview" />
+    <include layout="@layout/layout_refresh_recyclerview" />
 </RelativeLayout>

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.fragment.LeftWorksFragment;
 import com.arun.a85mm.fragment.OneWorkFragment;
+import com.arun.a85mm.fragment.SendMessageFragment;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.utils.AppUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
@@ -31,6 +32,7 @@ public class FragmentCommonActivity extends BaseActivity {
     public static final String EXTRAS = "extras";
     public static final String FRAGMENT_LEFT_WORKS = "fragment_left_works";
     public static final String FRAGMENT_ONE_WORK = "fragment_one_work";
+    public static final String FRAGMENT_SEND_MESSAGE = "fragment_send_message";
     public String title;
     private String type = "";
 
@@ -151,6 +153,8 @@ public class FragmentCommonActivity extends BaseActivity {
             fragment = new LeftWorksFragment();
         } else if (FRAGMENT_ONE_WORK.equals(type)) {
             fragment = new OneWorkFragment();
+        } else if (FRAGMENT_SEND_MESSAGE.equals(type)) {
+            fragment = new SendMessageFragment();
         }
         return fragment;
     }

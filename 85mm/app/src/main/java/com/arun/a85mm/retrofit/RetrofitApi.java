@@ -31,38 +31,36 @@ public interface RetrofitApi {
     Call<ResponseBody> downLoadImage(@Url String url);
 
     @GET(RetrofitUrl.ARTICLE_LIST)
-    Observable<CommonApiResponse<List<ArticleListResponse.ArticleListBean>>> getArticleList(@Query("pageNum") int pageNum, @Query("uid") String uid, @Query("deviceId") String deviceId);
+    Observable<CommonApiResponse<List<ArticleListResponse.ArticleListBean>>> getArticleList(@Query("pageNum") int pageNum);
 
     @GET(RetrofitUrl.ARTICLE_DETAIL)
-    Observable<CommonApiResponse<ArticleDetailResponse.ArticleBean>> getArticleDetail(@Query("id") String id, @Query("uid") String uid, @Query("deviceId") String deviceId);
+    Observable<CommonApiResponse<ArticleDetailResponse.ArticleBean>> getArticleDetail(@Query("id") String id);
 
     @GET(RetrofitUrl.WORKS_LIST)
-    Observable<CommonApiResponse<List<WorkListBean>>> getWorksList(@Query("uid") String uid, @Query("deviceId") String deviceId, @Query("lastWorkId") String lastWorkId);
+    Observable<CommonApiResponse<List<WorkListBean>>> getWorksList(@Query("lastWorkId") String lastWorkId);
 
     @GET(RetrofitUrl.WORKS_GOODS)
-    Observable<CommonApiResponse<List<CommunityResponse.GoodsListBean>>> getWorksGoods(@Query("uid") String uid, @Query("deviceId") String deviceId, @Query("lastDate") String lastDate,
-                                                                                       @Query("appVersion") String appVersion, @Query("osType") String osType);
+    Observable<CommonApiResponse<List<CommunityResponse.GoodsListBean>>> getWorksGoods(@Query("lastDate") String lastDate);
 
     @GET(RetrofitUrl.WORKS_ONE_DAY_LEFT)
-    Observable<CommonApiResponse<List<WorkListBean>>> getWorksOneDayLeft(@Query("uid") String uid, @Query("deviceId") String deviceId, @Query("date") String date, @Query("start") int start,
-                                                                         @Query("appVersion") String appVersion, @Query("osType") String osType);
+    Observable<CommonApiResponse<List<WorkListBean>>> getWorksOneDayLeft(@Query("date") String date, @Query("start") int start);
 
     @Headers({"Content-Type:application/json;charset=UTF-8"})
     @POST(RetrofitUrl.USER_ACTION)
     Observable<CommonResponse> recordUserAction(@Body ActionRequest actionRequest);
 
     @GET(RetrofitUrl.CONFIG_QUERY)
-    Observable<CommonApiResponse<List<ConfigResponse.GuidePageBean>>> queryConfig(@Query("deviceId") String deviceId);
+    Observable<CommonApiResponse<List<ConfigResponse.GuidePageBean>>> queryConfig();
 
     @GET(RetrofitUrl.USER_DEVICE_TOKEN)
-    Observable<CommonApiResponse> postDeviceToken(@Query("uid") String uid, @Query("deviceId") String deviceId, @Query("deviceToken") String deviceToken);
+    Observable<CommonApiResponse> postDeviceToken(@Query("deviceToken") String deviceToken);
 
     @GET(RetrofitUrl.USER_HIDE_SWITCH)
-    Observable<CommonApiResponse> setHideReadStatus(@Query("uid") String uid, @Query("type") String type);
+    Observable<CommonApiResponse> setHideReadStatus(@Query("type") String type);
 
     @GET(RetrofitUrl.WORKS_SINGLE_DETAIL + "/{workId}")
     Observable<CommonApiResponse<WorkListBean>> getSingleWork(@Path("workId") String workId);
 
     @GET(RetrofitUrl.USER_MESSAGE_LIST)
-    Observable<CommonApiResponse<MessageItemBean>> getMessageList(@Query("uid") String uid, @Query("msgType") int msgType, @Query("lastMsgId") int lastMsgId);
+    Observable<CommonApiResponse<List<MessageItemBean>>> getMessageList(@Query("uid") String uid,@Query("msgType") int msgType, @Query("lastMsgId") int lastMsgId);
 }

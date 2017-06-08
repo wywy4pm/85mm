@@ -19,9 +19,9 @@ public class DeviceTokenPresenter extends BasePresenter<CommonView2> {
         super(context);
     }
 
-    public void postDeviceToken(String uid, String deviceId, String deviceToken) {
+    public void postDeviceToken(String deviceToken) {
         addSubscriber(SettingModel.getInstance()
-                .postDeviceToken(uid, deviceId, deviceToken, new RequestListenerImpl(getMvpView()) {
+                .postDeviceToken(deviceToken, new RequestListenerImpl(getMvpView()) {
                     @Override
                     public void onSuccess(CommonApiResponse data) {
                         if (data != null && data.code == ErrorCode.SUCCESS) {

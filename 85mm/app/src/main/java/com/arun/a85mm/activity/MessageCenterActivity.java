@@ -53,8 +53,8 @@ public class MessageCenterActivity extends BaseActivity {
     }
 
     private void initFragment() {
-        MessageFragment receiveMessage = new MessageFragment();
-        MessageFragment sendMessage = new MessageFragment();
+        MessageFragment receiveMessage = MessageFragment.getInstance(0);
+        MessageFragment sendMessage = MessageFragment.getInstance(1);
         list.add(receiveMessage);
         list.add(sendMessage);
     }
@@ -111,6 +111,13 @@ public class MessageCenterActivity extends BaseActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+            }
+        });
+        image_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentCommonActivity.jumpToFragmentCommonActivity(MessageCenterActivity.this,
+                        FragmentCommonActivity.FRAGMENT_SEND_MESSAGE, "发私信", null);
             }
         });
     }

@@ -18,19 +18,18 @@ public class MessagePresenter extends BasePresenter<CommonView4> {
         super(context);
     }
 
-    public void getMessageList(String uid, int msgType, final String lastMsgId) {
+    public void getMessageList(String uid, int msgType, final int lastMsgId) {
         addSubscriber(MessageModel.getInstance()
-                .getMessageList(uid, msgType, Integer.parseInt(lastMsgId), new RequestListenerImpl(getMvpView()) {
-
+                .getMessageList(uid, msgType, lastMsgId, new RequestListenerImpl(getMvpView()) {
                     @SuppressWarnings("unchecked")
                     @Override
                     public void onSuccess(CommonApiResponse data) {
                         if (getMvpView() != null && data != null) {
                             if (data.code == ErrorCode.SUCCESS) {
-                                if (TextUtils.isEmpty(lastMsgId)) {
-                                    getMvpView().refresh(data);
+                                if (lastMsgId == 0) {
+                                    getMvpView().refresh(data.body);
                                 } else {
-                                    getMvpView().refreshMore(data);
+                                    getMvpView().refreshMore(data.body);
                                 }
                             }
                         }

@@ -18,9 +18,9 @@ public class MorePresenter extends BasePresenter<CommonView3> {
         super(context);
     }
 
-    public void setHideReadStatus(String uid, int type) {
+    public void setHideReadStatus( int type) {
         addSubscriber(SettingModel.getInstance()
-                .setHideReadStatus(uid, String.valueOf(type), new RequestListenerImpl(getMvpView()) {
+                .setHideReadStatus(String.valueOf(type), new RequestListenerImpl(getMvpView()) {
                     @Override
                     public void onSuccess(CommonApiResponse data) {
                         if (getMvpView() != null && data.code == ErrorCode.SUCCESS) {

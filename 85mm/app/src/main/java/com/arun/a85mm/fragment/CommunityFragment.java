@@ -98,7 +98,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
                 lastWorkDate = "";
                 if (response == null) {
                     setLoading(true);
-                    communityPresenter.getWorksGoods(userId, deviceId, lastWorkDate);
+                    communityPresenter.getWorksGoods(lastWorkDate);
                 } else {
                     if (response.body != null) {
                         if (response.body instanceof List) {
@@ -132,7 +132,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
     private void loadMore() {
         setLoading(true);
         if (communityPresenter != null) {
-            communityPresenter.getWorksGoods(userId, deviceId, lastWorkDate);
+            communityPresenter.getWorksGoods(lastWorkDate);
         }
     }
 

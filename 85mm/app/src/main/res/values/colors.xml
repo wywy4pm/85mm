@@ -202,4 +202,7 @@
     <color name="article_list_brief">#666666</color>
     <color name="article_detail_paragraph">#4D4D4D</color>
     <color name="circle_solid_new">#e54b28</color>
+
+    <color name="msg_head_common">#b3b3b3</color>
+    <color name="add_photo_stroke_color">#d3d6d6</color>
 </resources>

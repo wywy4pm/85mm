@@ -23,9 +23,9 @@ public class ArticleFragmentPresenter extends BasePresenter<CommonView> {
         super(context);
     }
 
-    public void getArticleListData(final int pageNum, String uid, String deviceId) {
+    public void getArticleListData(final int pageNum) {
         addSubscriber(ArticleModel.getInstance()
-                .getArticleListData(pageNum, uid, deviceId, new RequestListenerImpl(getMvpView()) {
+                .getArticleListData(pageNum, new RequestListenerImpl(getMvpView()) {
 
                     @SuppressWarnings("unchecked")
                     @Override
@@ -43,41 +43,5 @@ public class ArticleFragmentPresenter extends BasePresenter<CommonView> {
                         }
                     }
                 }));
-
-        /*Subscriber<ArticleListResponse> subscriber = new Subscriber<ArticleListResponse>() {
-            @Override
-            public void onCompleted() {
-                if (getMvpView() != null) {
-                    getMvpView().onRefreshComplete();
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if (getMvpView() != null) {
-                    getMvpView().onError(ErrorCode.NETWORK_ERROR, null);
-                }
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onNext(ArticleListResponse articleListResponse) {
-                if (getMvpView() != null) {
-                    if (articleListResponse != null && articleListResponse.code == ErrorCode.SUCCESS) {
-                        if (pageNum == 1) {
-                            getMvpView().refresh(articleListResponse);
-                        } else if (pageNum > 1) {
-                            getMvpView().refreshMore(articleListResponse);
-                        }
-                    } else {
-                        ((ArticleFragment) getMvpView()).setHaveMore(false);
-                    }
-                }
-
-            }
-        };
-
-        addSubscriber(subscriber);
-        RetrofitInit.getApi().getArticleList(pageNum, uid, deviceId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);*/
     }
 }

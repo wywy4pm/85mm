@@ -102,7 +102,7 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
             if (communityPresenter != null) {
                 setLoading(true);
                 start = originStart;
-                communityPresenter.getWorksLeft(userId, deviceId, date, start, true);
+                communityPresenter.getWorksLeft(date, start, true);
             }
         } else {
             if (swipeToLoadLayout.isRefreshing()) {
@@ -182,7 +182,7 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     private void loadMore() {
         setLoading(true);
         if (communityPresenter != null) {
-            communityPresenter.getWorksLeft(userId, deviceId, date, start, false);
+            communityPresenter.getWorksLeft(date, start, false);
         }
     }
 

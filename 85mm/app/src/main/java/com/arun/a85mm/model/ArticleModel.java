@@ -23,11 +23,11 @@ public class ArticleModel extends BaseModel {
         return instance;
     }
 
-    public Subscriber getArticleListData(int pageNum, String uid, String deviceId, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().getArticleList(pageNum, uid, deviceId), listener);
+    public Subscriber getArticleListData(int pageNum, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getArticleList(pageNum), listener);
     }
 
-    public Subscriber getArticleDetailData(String articleId, String uid, String deviceId, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().getArticleDetail(articleId, uid, deviceId), listener);
+    public Subscriber getArticleDetailData(String articleId, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getArticleDetail(articleId), listener);
     }
 }

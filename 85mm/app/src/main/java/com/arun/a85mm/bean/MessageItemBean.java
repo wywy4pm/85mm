@@ -20,6 +20,7 @@ public class MessageItemBean {
     public String content;
     public String receiver;
     public int msgId;
-    public List<WorkListItemBean> imageList;
+    public String sendTime;
+    public List<MessageItem> imageList;
 
 }

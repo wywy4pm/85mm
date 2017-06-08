@@ -81,7 +81,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                     if (hideReadEnable == 1) {//有隐藏已读权限
                         switchView.setChecked(!switchView.isChecked());
                         if (morePresenter != null) {
-                            morePresenter.setHideReadStatus(userId, switchView.isChecked() ? 1 : 0);
+                            morePresenter.setHideReadStatus(switchView.isChecked() ? 1 : 0);
                         }
                     } else {
                         showHideReadDialog();

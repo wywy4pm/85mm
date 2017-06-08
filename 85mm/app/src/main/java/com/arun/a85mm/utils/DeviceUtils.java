@@ -221,7 +221,7 @@ public class DeviceUtils {
         try {
             TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             return tm.getDeviceId();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return getDeviceId();
         }
@@ -398,21 +398,7 @@ public class DeviceUtils {
         return false;
     }*/
 
-    /**
-     * 判断是否为debug模式
-     *
-     * @param context
-     * @return
-     */
-    public static boolean isApkDebug(Context context) {
-        try {
-            ApplicationInfo info = context.getApplicationInfo();
-            return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-        } catch (Exception e) {
 
-        }
-        return false;
-    }
 
     public static String getPrice(float price) {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.

@@ -78,7 +78,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
             hideNetWorkErrorView(recyclerView);
             if (articleFragmentPresenter != null) {
                 setLoading(true);
-                articleFragmentPresenter.getArticleListData(currentPageNum, userId, deviceId);
+                articleFragmentPresenter.getArticleListData(currentPageNum);
             }
         } else {
             if (swipeToLoadLayout.isRefreshing()) {
@@ -92,7 +92,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
         if (articleFragmentPresenter != null) {
             setLoading(true);
             currentPageNum += 1;
-            articleFragmentPresenter.getArticleListData(currentPageNum, userId, deviceId);
+            articleFragmentPresenter.getArticleListData(currentPageNum);
         }
     }
 

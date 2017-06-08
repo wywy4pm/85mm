@@ -170,7 +170,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
 
     private void requestData() {
         if (articleActivityPresenter != null) {
-            articleActivityPresenter.getArticleDetailsData(articleId, userId, deviceId);
+            articleActivityPresenter.getArticleDetailsData(articleId);
         }
     }
 

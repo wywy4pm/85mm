@@ -70,16 +70,31 @@ public class RetrofitInit {
             Interceptor interceptor = new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
-                    String appVersion = "1.0.0";
+                    String appVersion = "";
+                    String deviceModel = "";
+                    String osVersion = "";
+                    String isRelease = "";
                     String osType = "android";
+                    String deviceId = "";
+                    String uid = "";
                     if (getAppBean() != null) {
                         appVersion = getAppBean().appVersion;
+                        deviceModel = getAppBean().deviceModel;
+                        osVersion = getAppBean().osVersion;
+                        isRelease = String.valueOf(getAppBean().isRelease);
                         osType = getAppBean().osType;
+                        deviceId = getAppBean().deviceId;
+                        uid = getAppBean().uid;
                     }
                     Request originalRequest = chain.request();
                     Request authorised = originalRequest.newBuilder()
                             .addHeader("appVersion", appVersion)
+                            .addHeader("deviceModel", deviceModel)
+                            .addHeader("osVersion", osVersion)
+                            .addHeader("isRelease", isRelease)
                             .addHeader("osType", osType)
+                            .addHeader("deviceId", deviceId)
+                            .addHeader("uid", uid)
                             .build();
                     return chain.proceed(authorised);
                 }

@@ -22,15 +22,15 @@ public class SettingModel extends BaseModel {
         return instance;
     }
 
-    public Subscriber queryConfig(String deviceId, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().queryConfig(deviceId), listener);
+    public Subscriber queryConfig(CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().queryConfig(), listener);
     }
 
-    public Subscriber postDeviceToken(String uid, String deviceId, String deviceToken, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().postDeviceToken(uid, deviceId, deviceToken), listener);
+    public Subscriber postDeviceToken(String deviceToken, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().postDeviceToken(deviceToken), listener);
     }
 
-    public Subscriber setHideReadStatus(String uid, String type, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().setHideReadStatus(uid, type), listener);
+    public Subscriber setHideReadStatus(String type, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().setHideReadStatus(type), listener);
     }
 }
