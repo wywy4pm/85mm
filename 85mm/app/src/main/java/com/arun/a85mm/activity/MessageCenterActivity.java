@@ -6,19 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.CommonFragmentPagerAdapter;
-import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.fragment.MessageFragment;
-import com.arun.a85mm.helper.EventStatisticsHelper;
-import com.arun.a85mm.refresh.ShootRefreshView;
-import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.utils.TextViewUtils;
 import com.flyco.tablayout.SlidingTabLayout;
@@ -116,8 +109,9 @@ public class MessageCenterActivity extends BaseActivity {
         image_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentCommonActivity.jumpToFragmentCommonActivity(MessageCenterActivity.this,
-                        FragmentCommonActivity.FRAGMENT_SEND_MESSAGE, "发私信", null);
+                SendMessageActivity.jumpToSendMessage(MessageCenterActivity.this, "");
+                /*FragmentCommonActivity.jumpToFragmentCommonActivity(MessageCenterActivity.this,
+                        FragmentCommonActivity.FRAGMENT_SEND_MESSAGE, "发私信", null);*/
             }
         });
     }

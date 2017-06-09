@@ -17,9 +17,7 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.fragment.LeftWorksFragment;
 import com.arun.a85mm.fragment.OneWorkFragment;
-import com.arun.a85mm.fragment.SendMessageFragment;
 import com.arun.a85mm.helper.DialogHelper;
-import com.arun.a85mm.utils.AppUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 
 import java.io.Serializable;
@@ -32,9 +30,10 @@ public class FragmentCommonActivity extends BaseActivity {
     public static final String EXTRAS = "extras";
     public static final String FRAGMENT_LEFT_WORKS = "fragment_left_works";
     public static final String FRAGMENT_ONE_WORK = "fragment_one_work";
-    public static final String FRAGMENT_SEND_MESSAGE = "fragment_send_message";
+    //public static final String FRAGMENT_SEND_MESSAGE = "fragment_send_message";
     public String title;
     private String type = "";
+    private Fragment fragment;
 
     public static void jumpToFragmentCommonActivity(Context context, String type, String title, Map<String, String> extras) {
         Intent intent = new Intent(context, FragmentCommonActivity.class);
@@ -148,13 +147,11 @@ public class FragmentCommonActivity extends BaseActivity {
     }
 
     private Fragment createFragment(String type) {
-        Fragment fragment = null;
+        fragment = null;
         if (FRAGMENT_LEFT_WORKS.equals(type)) {
             fragment = new LeftWorksFragment();
         } else if (FRAGMENT_ONE_WORK.equals(type)) {
             fragment = new OneWorkFragment();
-        } else if (FRAGMENT_SEND_MESSAGE.equals(type)) {
-            fragment = new SendMessageFragment();
         }
         return fragment;
     }
@@ -182,5 +179,4 @@ public class FragmentCommonActivity extends BaseActivity {
             });
         }
     }
-
 }

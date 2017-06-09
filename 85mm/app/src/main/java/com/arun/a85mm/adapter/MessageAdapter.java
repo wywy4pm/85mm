@@ -10,19 +10,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
-import com.arun.a85mm.activity.FragmentCommonActivity;
-import com.arun.a85mm.bean.ArticleDetailBean;
+import com.arun.a85mm.activity.SendMessageActivity;
 import com.arun.a85mm.bean.MessageItem;
 import com.arun.a85mm.common.Constant;
-import com.arun.a85mm.fragment.SendMessageFragment;
 import com.arun.a85mm.utils.DensityUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by wy on 2017/6/7.
@@ -110,10 +106,12 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageItem> {
                     btn_reply.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Map<String, String> map = new HashMap<>();
+                            /*Map<String, String> map = new HashMap<>();
                             map.put(SendMessageFragment.KEY_SEND_UID, bean.sender);
                             FragmentCommonActivity.jumpToFragmentCommonActivity(context,
-                                    FragmentCommonActivity.FRAGMENT_SEND_MESSAGE, "发私信", map);
+                                    FragmentCommonActivity.FRAGMENT_SEND_MESSAGE, "发私信", map);*/
+
+                            SendMessageActivity.jumpToSendMessage(context, bean.sender);
                         }
                     });
                 } else {//已发送

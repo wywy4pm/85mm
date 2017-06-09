@@ -6,6 +6,20 @@
     android:orientation="vertical">
 
     <ImageView
+        android:id="@+id/add_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/message_add_photo"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/image_picture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <ImageView
         android:id="@+id/photo_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,11 +27,4 @@
         android:layout_alignParentTop="true"
         android:src="@mipmap/photo_close"
         android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/add_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@mipmap/message_add_photo" />
 </RelativeLayout>
