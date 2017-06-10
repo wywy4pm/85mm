@@ -5,26 +5,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.UploadImageAdapter;
 import com.arun.a85mm.bean.UploadImageBean;
+import com.arun.a85mm.helper.OssUploadImageHelper;
 import com.arun.a85mm.listener.ImagePickerListener;
+import com.arun.a85mm.matisse.Matisse;
+import com.arun.a85mm.matisse.MimeType;
+import com.arun.a85mm.matisse.engine.impl.GlideEngine;
+import com.arun.a85mm.matisse.ui.MatisseActivity;
+import com.arun.a85mm.utils.FileUtils;
 import com.arun.a85mm.utils.InputUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.widget.GridViewForScrollView;
-import com.zhihu.matisse.Matisse;
-import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.engine.impl.GlideEngine;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class SendMessageActivity extends BaseActivity implements ImagePickerListener {
     private EditText reply_receiver;
@@ -74,7 +75,7 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
             reply_receiver.setText(uid);
             InputUtils.setInputEditEnd(reply_receiver);
         }
-        images.add(new UploadImageBean(false, ""));
+        images.add(new UploadImageBean(false, null));
         uploadImageAdapter.notifyDataSetChanged();
     }
 
@@ -97,9 +98,42 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == Activity.RESULT_OK) {
-            mSelected = Matisse.obtainResult(data);
+            /*mSelected = Matisse.obtainResult(data);
             Log.d("Matisse", "mSelected: " + mSelected);
-            //Glide.with(this).load(mSelected.get(0)).centerCrop().into(image);
+            if (mSelected != null && mSelected.size() > 0) {
+                for (int i = 0; i < mSelected.size(); i++) {
+                    UploadImageBean bean = new UploadImageBean(true, mSelected.get(i));
+                    images.add(bean);
+                }
+            }*/
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (getIntent() != null) {
+            mSelected = getIntent().getParcelableArrayListExtra(MatisseActivity.EXTRA_RESULT_SELECTION);
+            OssUploadImageHelper.uploadImage(FileUtils.getRealFilePathByUri(this, mSelected.get(0)));
+            /*for (int i = 0; i < mSelected.size(); i++) {
+                OssUploadImageHelper.uploadImage(mSelected.get(i).getPath());
+            }*/
+        }
+        if (mSelected != null && mSelected.size() > 0) {
+            if (images != null && images.size() > 0) {
+                images.remove(images.size() - 1);
+            }
+            for (int i = 0; i < mSelected.size(); i++) {
+                if (images.size() < 9) {
+                    UploadImageBean bean = new UploadImageBean(true, mSelected.get(i));
+                    images.add(bean);
+                }
+            }
+            if (images.size() < 9) {
+                images.add(new UploadImageBean(false, null));
+            }
+            uploadImageAdapter.notifyDataSetChanged();
         }
     }
 
@@ -109,7 +143,23 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     }
 
     @Override
-    public void removeSelect() {
+    public void removeSelect(int position) {
+        if (images != null && images.size() > 0 && position <= images.size() - 1) {
+            images.remove(position);
+            if (getSelectCount(images) == 8) {
+                images.add(new UploadImageBean(false, null));
+            }
+            uploadImageAdapter.notifyDataSetChanged();
+        }
+    }
 
+    private int getSelectCount(List<UploadImageBean> images) {
+        int count = 0;
+        for (int i = 0; i < images.size(); i++) {
+            if (images.get(i).isUpload) {
+                count += 1;
+            }
+        }
+        return count;
     }
 }

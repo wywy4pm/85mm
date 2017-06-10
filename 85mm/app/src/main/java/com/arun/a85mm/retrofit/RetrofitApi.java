@@ -16,6 +16,8 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -62,5 +64,9 @@ public interface RetrofitApi {
     Observable<CommonApiResponse<WorkListBean>> getSingleWork(@Path("workId") String workId);
 
     @GET(RetrofitUrl.USER_MESSAGE_LIST)
-    Observable<CommonApiResponse<List<MessageItemBean>>> getMessageList(@Query("uid") String uid,@Query("msgType") int msgType, @Query("lastMsgId") int lastMsgId);
+    Observable<CommonApiResponse<List<MessageItemBean>>> getMessageList(@Query("uid") String uid, @Query("msgType") int msgType, @Query("lastMsgId") int lastMsgId);
+
+   /* @FormUrlEncoded
+    @POST(RetrofitUrl.USER_ADD_MESSAGE)
+    Observable<CommonApiResponse> addMessage(@Field("sender") String sender, @Field("receiver") String receiver, @Field("content") String content);*/
 }

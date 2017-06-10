@@ -28,8 +28,11 @@ public class MMApplication extends Application {
     //OSS的Bucket
     public static final String OSS_BUCKET_NAME = "85mm";
 
+    //oss上传图片目录
+    public static final String OSS_UPLOAD_IMAGE_FOLDER = "images/";
+
     //设置OSS数据中心域名或者cname域名
-    public static final String OSS_BUCKET_ENDPOINT = "http://oss-cn-hangzhou.aliyuncs.com";
+    public static final String OSS_BUCKET_ENDPOINT = "http://oss-cn-hangzhou.aliyuncs.com/";
     //Key
     private static final String ACCESS_KEY_ID = "LTAI2NTBH0TVhoph";
     private static final String ACCESS_KEY_SECRET = "CF0bPVfcbFYY8SJqRUwHS4WBqMugrZ";

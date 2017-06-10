@@ -142,8 +142,13 @@
         <activity
             android:name=".activity.SendMessageActivity"
             android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
+        <activity android:name=".matisse.ui.MatisseActivity" />
+        <activity android:name=".matisse.internal.ui.AlbumPreviewActivity" />
+        <activity android:name=".matisse.internal.ui.SelectedPreviewActivity" />
 
     </application>
 </manifest>

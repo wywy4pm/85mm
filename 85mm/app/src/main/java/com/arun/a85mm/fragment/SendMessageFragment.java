@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -17,7 +16,6 @@ import com.arun.a85mm.bean.UploadImageBean;
 import com.arun.a85mm.listener.ImagePickerListener;
 import com.arun.a85mm.utils.InputUtils;
 import com.arun.a85mm.widget.GridViewForScrollView;
-import com.bumptech.glide.Glide;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
@@ -68,7 +66,7 @@ public class SendMessageFragment extends BaseFragment implements ImagePickerList
                 InputUtils.setInputEditEnd(reply_receiver);
             }
         }
-        images.add(new UploadImageBean(false, ""));
+        images.add(new UploadImageBean(false, null));
         uploadImageAdapter.notifyDataSetChanged();
     }
 
@@ -101,7 +99,7 @@ public class SendMessageFragment extends BaseFragment implements ImagePickerList
     }
 
     @Override
-    public void removeSelect() {
+    public void removeSelect(int position) {
 
     }
 }

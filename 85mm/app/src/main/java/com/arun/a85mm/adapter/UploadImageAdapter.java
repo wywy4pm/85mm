@@ -29,7 +29,7 @@ public class UploadImageAdapter extends BaseListAdapter<UploadImageBean> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         UploadImageHolder uploadImageHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.layout_upload_image, parent, false);
@@ -44,21 +44,24 @@ public class UploadImageAdapter extends BaseListAdapter<UploadImageBean> {
             uploadImageHolder.add_photo.setVisibility(View.GONE);
             uploadImageHolder.image_picture.setVisibility(View.VISIBLE);
 
-            Glide.with(context).load(bean.imageUrl).centerCrop().into(uploadImageHolder.image_picture);
+            Glide.with(context).load(bean.imageUri).centerCrop().into(uploadImageHolder.image_picture);
             uploadImageHolder.photo_close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (imagePickerListener != null) {
-                        imagePickerListener.removeSelect();
+                        imagePickerListener.removeSelect(position);
                     }
                 }
             });
+
+            convertView.setClickable(false);
         } else {
             uploadImageHolder.photo_close.setVisibility(View.GONE);
             uploadImageHolder.add_photo.setVisibility(View.VISIBLE);
             uploadImageHolder.image_picture.setVisibility(View.GONE);
 
-            uploadImageHolder.add_photo.setOnClickListener(new View.OnClickListener() {
+            convertView.setClickable(true);
+            convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (imagePickerListener != null) {

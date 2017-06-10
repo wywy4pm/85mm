@@ -1,15 +1,17 @@
 package com.arun.a85mm.bean;
 
+import android.net.Uri;
+
 /**
  * Created by wy on 2017/6/8.
  */
 
 public class UploadImageBean {
     public boolean isUpload;
-    public String imageUrl;
+    public Uri imageUri;
 
-    public UploadImageBean(boolean isUpload, String imageUrl) {
+    public UploadImageBean(boolean isUpload, Uri imageUri) {
         this.isUpload = isUpload;
-        this.imageUrl = imageUrl;
+        this.imageUri = imageUri;
     }
 }

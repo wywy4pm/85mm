@@ -6,5 +6,5 @@ package com.arun.a85mm.listener;
 
 public interface ImagePickerListener {
     void openImagePicker();
-    void removeSelect();
+    void removeSelect(int position);
 }
