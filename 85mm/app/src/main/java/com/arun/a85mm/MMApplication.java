@@ -12,8 +12,6 @@ import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvide
 import com.arun.a85mm.helper.AppHelper;
 import com.arun.a85mm.helper.PushHelper;
 import com.arun.a85mm.presenter.DeviceTokenPresenter;
-import com.arun.a85mm.service.PushIntentService;
-import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
@@ -29,7 +27,9 @@ public class MMApplication extends Application {
     public static final String OSS_BUCKET_NAME = "85mm";
 
     //oss上传图片目录
-    public static final String OSS_UPLOAD_IMAGE_FOLDER = "images";
+    public static final String OSS_UPLOAD_IMAGE_FOLDER = "images/";
+
+    public static final String IMAGE_URL_BASE = "http://resource.link365.cn/";
 
     //设置OSS数据中心域名或者cname域名
     public static final String OSS_BUCKET_ENDPOINT = "http://oss-cn-hangzhou.aliyuncs.com/";

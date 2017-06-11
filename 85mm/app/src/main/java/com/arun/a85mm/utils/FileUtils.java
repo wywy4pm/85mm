@@ -208,11 +208,23 @@ public class FileUtils {
         return data;
     }
 
-    public static String getFileType(String fileName) {
+    public static String getFileTypeByName(String fileName) {
         String type = "";
         if (!TextUtils.isEmpty(fileName)) {
             if (fileName.contains(".")) {
                 String[] strings = fileName.split(".", 2);
+                type = strings[1];
+            }
+        }
+        return type;
+    }
+
+    public static String getFileTypeByPath(String filePath) {
+        File file = new File(filePath);
+        String type = "";
+        if (!TextUtils.isEmpty(file.getName())) {
+            if (file.getName().contains(".")) {
+                String[] strings = file.getName().split("\\.", 2);
                 type = strings[1];
             }
         }

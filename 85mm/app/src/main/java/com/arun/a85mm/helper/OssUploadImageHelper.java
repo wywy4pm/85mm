@@ -1,5 +1,7 @@
 package com.arun.a85mm.helper;
 
+import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.sdk.android.oss.ClientException;
@@ -11,6 +13,8 @@ import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.arun.a85mm.MMApplication;
 import com.arun.a85mm.listener.UploadImageListener;
+import com.arun.a85mm.utils.FileUtils;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 
 /**
  * Created by wy on 2017/6/10.
@@ -18,15 +22,15 @@ import com.arun.a85mm.listener.UploadImageListener;
 
 public class OssUploadImageHelper {
 
-    public static void uploadImage(final String uploadFilePath, final UploadImageListener uploadImageListener) {
+    public static void uploadImage(Context context, final String uploadFilePath, final UploadImageListener uploadImageListener) {
         String uid = "";
-        if (AppHelper.getInstance().getAppConfig() != null) {
-            uid = AppHelper.getInstance().getAppConfig().uid;
+        if (!TextUtils.isEmpty(SharedPreferencesUtils.getUid(context))) {
+            uid = SharedPreferencesUtils.getUid(context);
         }
-
+        String fileType = FileUtils.getFileTypeByPath(uploadFilePath);
+        final String objectKey = MMApplication.OSS_UPLOAD_IMAGE_FOLDER + uid + "_" + System.currentTimeMillis() + "." + fileType;
         // 构造上传请求
-        PutObjectRequest put = new PutObjectRequest(MMApplication.OSS_BUCKET_NAME,
-                MMApplication.OSS_UPLOAD_IMAGE_FOLDER + uid + System.currentTimeMillis() + ".jpg", uploadFilePath);
+        PutObjectRequest put = new PutObjectRequest(MMApplication.OSS_BUCKET_NAME, objectKey, uploadFilePath);
         // 异步上传时可以设置进度回调
         put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
             @Override
@@ -41,10 +45,7 @@ public class OssUploadImageHelper {
                 Log.d("ETag", result.getETag());
                 Log.d("RequestId", result.getRequestId());*/
 
-                String imageUrl
-                        = MMApplication.OSS_BUCKET_ENDPOINT
-                        + MMApplication.OSS_UPLOAD_IMAGE_FOLDER
-                        + uploadFilePath;
+                String imageUrl = MMApplication.IMAGE_URL_BASE + objectKey;
 
                 if (uploadImageListener != null) {
                     uploadImageListener.uploadSuccess(imageUrl);

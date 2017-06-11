@@ -25,7 +25,6 @@ import com.arun.a85mm.utils.InputUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.widget.GridViewForScrollView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,32 +119,35 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
         if (getIntent() != null) {
             mSelected = getIntent().getParcelableArrayListExtra(MatisseActivity.EXTRA_RESULT_SELECTION);
             //File file = new File(FileUtils.getRealFilePathByUri(this, mSelected.get(0)));
-            for (int i = 0; i < mSelected.size(); i++) {
-                OssUploadImageHelper.uploadImage(
-                        FileUtils.getRealFilePathByUri(this, mSelected.get(i)),
-                        new UploadImageListener() {
-                            @Override
-                            public void uploadSuccess(String imageUrl) {
-                                uploadImages.add(imageUrl);
-                            }
-                        });
-            }
-        }
-        if (mSelected != null && mSelected.size() > 0) {
-            if (images != null && images.size() > 0) {
-                images.remove(images.size() - 1);
-            }
-            for (int i = 0; i < mSelected.size(); i++) {
-                if (images.size() < 9) {
-                    UploadImageBean bean = new UploadImageBean(true, mSelected.get(i), this);
-                    images.add(bean);
+            if(mSelected != null) {
+                for (int i = 0; i < mSelected.size(); i++) {
+                    OssUploadImageHelper.uploadImage(this,
+                            FileUtils.getRealFilePathByUri(this, mSelected.get(i)),
+                            new UploadImageListener() {
+                                @Override
+                                public void uploadSuccess(String imageUrl) {
+                                    uploadImages.add(imageUrl);
+                                }
+                            });
+                }
+                if (mSelected.size() > 0) {
+                    if (images != null && images.size() > 0) {
+                        images.remove(images.size() - 1);
+                    }
+                    for (int i = 0; i < mSelected.size(); i++) {
+                        if (images.size() < 9) {
+                            UploadImageBean bean = new UploadImageBean(true, mSelected.get(i), this);
+                            images.add(bean);
+                        }
+                    }
+                    if (images.size() < 9) {
+                        images.add(new UploadImageBean(false, null));
+                    }
+                    uploadImageAdapter.notifyDataSetChanged();
                 }
             }
-            if (images.size() < 9) {
-                images.add(new UploadImageBean(false, null));
-            }
-            uploadImageAdapter.notifyDataSetChanged();
         }
+
     }
 
     @Override
