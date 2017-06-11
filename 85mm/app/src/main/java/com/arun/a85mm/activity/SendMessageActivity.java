@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.arun.a85mm.adapter.UploadImageAdapter;
 import com.arun.a85mm.bean.UploadImageBean;
 import com.arun.a85mm.helper.OssUploadImageHelper;
 import com.arun.a85mm.listener.ImagePickerListener;
+import com.arun.a85mm.listener.UploadImageListener;
 import com.arun.a85mm.matisse.Matisse;
 import com.arun.a85mm.matisse.MimeType;
 import com.arun.a85mm.matisse.engine.impl.GlideEngine;
@@ -37,6 +39,8 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     private UploadImageAdapter uploadImageAdapter;
     private static final int REQUEST_CODE_CHOOSE = 1;
     private List<Uri> mSelected;
+    //存放需要上传服务器的imageUrl
+    private List<String> uploadImages = new ArrayList<>();
 
     public static void jumpToSendMessage(Context context, String uid) {
         Intent intent = new Intent(context, SendMessageActivity.class);
@@ -115,10 +119,17 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
         setIntent(intent);
         if (getIntent() != null) {
             mSelected = getIntent().getParcelableArrayListExtra(MatisseActivity.EXTRA_RESULT_SELECTION);
-            OssUploadImageHelper.uploadImage(FileUtils.getRealFilePathByUri(this, mSelected.get(0)));
-            /*for (int i = 0; i < mSelected.size(); i++) {
-                OssUploadImageHelper.uploadImage(mSelected.get(i).getPath());
-            }*/
+            //File file = new File(FileUtils.getRealFilePathByUri(this, mSelected.get(0)));
+            for (int i = 0; i < mSelected.size(); i++) {
+                OssUploadImageHelper.uploadImage(
+                        FileUtils.getRealFilePathByUri(this, mSelected.get(i)),
+                        new UploadImageListener() {
+                            @Override
+                            public void uploadSuccess(String imageUrl) {
+                                uploadImages.add(imageUrl);
+                            }
+                        });
+            }
         }
         if (mSelected != null && mSelected.size() > 0) {
             if (images != null && images.size() > 0) {
@@ -126,7 +137,7 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
             }
             for (int i = 0; i < mSelected.size(); i++) {
                 if (images.size() < 9) {
-                    UploadImageBean bean = new UploadImageBean(true, mSelected.get(i));
+                    UploadImageBean bean = new UploadImageBean(true, mSelected.get(i), this);
                     images.add(bean);
                 }
             }
@@ -145,6 +156,16 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     @Override
     public void removeSelect(int position) {
         if (images != null && images.size() > 0 && position <= images.size() - 1) {
+            UploadImageBean bean = images.get(position);
+            if (bean != null && !TextUtils.isEmpty(bean.imageUrl)) {
+                for (int i = 0; i < uploadImages.size(); i++) {
+                    if (bean.imageUrl.equals(uploadImages.get(i))) {
+                        uploadImages.remove(i);
+                        break;
+                    }
+                }
+            }
+
             images.remove(position);
             if (getSelectCount(images) == 8) {
                 images.add(new UploadImageBean(false, null));

@@ -10,6 +10,7 @@ import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.arun.a85mm.MMApplication;
+import com.arun.a85mm.listener.UploadImageListener;
 
 /**
  * Created by wy on 2017/6/10.
@@ -17,9 +18,15 @@ import com.arun.a85mm.MMApplication;
 
 public class OssUploadImageHelper {
 
-    public static void uploadImage(String uploadFilePath) {
+    public static void uploadImage(final String uploadFilePath, final UploadImageListener uploadImageListener) {
+        String uid = "";
+        if (AppHelper.getInstance().getAppConfig() != null) {
+            uid = AppHelper.getInstance().getAppConfig().uid;
+        }
+
         // 构造上传请求
-        PutObjectRequest put = new PutObjectRequest(MMApplication.OSS_BUCKET_NAME, MMApplication.OSS_UPLOAD_IMAGE_FOLDER, uploadFilePath);
+        PutObjectRequest put = new PutObjectRequest(MMApplication.OSS_BUCKET_NAME,
+                MMApplication.OSS_UPLOAD_IMAGE_FOLDER + uid + System.currentTimeMillis() + ".jpg", uploadFilePath);
         // 异步上传时可以设置进度回调
         put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
             @Override
@@ -30,9 +37,18 @@ public class OssUploadImageHelper {
         OSSAsyncTask task = MMApplication.oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
             @Override
             public void onSuccess(PutObjectRequest request, PutObjectResult result) {
-                Log.d("PutObject", "UploadSuccess");
+                /*Log.d("PutObject", "UploadSuccess");
                 Log.d("ETag", result.getETag());
-                Log.d("RequestId", result.getRequestId());
+                Log.d("RequestId", result.getRequestId());*/
+
+                String imageUrl
+                        = MMApplication.OSS_BUCKET_ENDPOINT
+                        + MMApplication.OSS_UPLOAD_IMAGE_FOLDER
+                        + uploadFilePath;
+
+                if (uploadImageListener != null) {
+                    uploadImageListener.uploadSuccess(imageUrl);
+                }
             }
 
             @Override

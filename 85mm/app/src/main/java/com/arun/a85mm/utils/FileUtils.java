@@ -207,4 +207,16 @@ public class FileUtils {
         }
         return data;
     }
+
+    public static String getFileType(String fileName) {
+        String type = "";
+        if (!TextUtils.isEmpty(fileName)) {
+            if (fileName.contains(".")) {
+                String[] strings = fileName.split(".", 2);
+                type = strings[1];
+            }
+        }
+        return type;
+    }
+
 }
