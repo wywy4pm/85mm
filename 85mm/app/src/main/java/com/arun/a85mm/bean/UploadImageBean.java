@@ -14,20 +14,17 @@ public class UploadImageBean {
     public boolean isUpload;
     public Uri imageUri;
     public String imageUrl;
+    public String key;
 
     public UploadImageBean(boolean isUpload, Uri imageUri) {
         this.isUpload = isUpload;
         this.imageUri = imageUri;
     }
 
-    public UploadImageBean(boolean isUpload, Uri imageUri, Context context) {
+    public UploadImageBean(boolean isUpload, Uri imageUri, String key) {
         this.isUpload = isUpload;
         this.imageUri = imageUri;
-        if (imageUri != null) {
-            imageUrl = MMApplication.OSS_BUCKET_ENDPOINT
-                    + MMApplication.OSS_UPLOAD_IMAGE_FOLDER
-                    + FileUtils.getRealFilePathByUri(context, imageUri);
-        }
+        this.key = key;
     }
 
 }

@@ -29,7 +29,7 @@ public class MMApplication extends Application {
     //oss上传图片目录
     public static final String OSS_UPLOAD_IMAGE_FOLDER = "images/";
 
-    public static final String IMAGE_URL_BASE = "http://resource.link365.cn/";
+    public static final String IMAGE_URL_BASE = "http://resources.link365.cn/";
 
     //设置OSS数据中心域名或者cname域名
     public static final String OSS_BUCKET_ENDPOINT = "http://oss-cn-hangzhou.aliyuncs.com/";

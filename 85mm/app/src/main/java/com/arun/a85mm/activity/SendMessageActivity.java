@@ -7,12 +7,15 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.UploadImageAdapter;
 import com.arun.a85mm.bean.UploadImageBean;
+import com.arun.a85mm.bean.request.MsgImgRequest;
 import com.arun.a85mm.helper.OssUploadImageHelper;
 import com.arun.a85mm.listener.ImagePickerListener;
 import com.arun.a85mm.listener.UploadImageListener;
@@ -20,15 +23,16 @@ import com.arun.a85mm.matisse.Matisse;
 import com.arun.a85mm.matisse.MimeType;
 import com.arun.a85mm.matisse.engine.impl.GlideEngine;
 import com.arun.a85mm.matisse.ui.MatisseActivity;
+import com.arun.a85mm.presenter.AddMessagePresenter;
 import com.arun.a85mm.utils.FileUtils;
-import com.arun.a85mm.utils.InputUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
+import com.arun.a85mm.view.CommonView3;
 import com.arun.a85mm.widget.GridViewForScrollView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SendMessageActivity extends BaseActivity implements ImagePickerListener {
+public class SendMessageActivity extends BaseActivity implements ImagePickerListener, CommonView3 {
     private EditText reply_receiver;
     private EditText reply_description;
     private GridViewForScrollView gridView;
@@ -39,7 +43,8 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     private static final int REQUEST_CODE_CHOOSE = 1;
     private List<Uri> mSelected;
     //存放需要上传服务器的imageUrl
-    private List<String> uploadImages = new ArrayList<>();
+    private List<MsgImgRequest> uploadImages = new ArrayList<>();
+    private AddMessagePresenter addMessagePresenter;
 
     public static void jumpToSendMessage(Context context, String uid) {
         Intent intent = new Intent(context, SendMessageActivity.class);
@@ -75,11 +80,20 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     private void initData() {
         if (getIntent() != null && getIntent().getExtras() != null) {
             String uid = getIntent().getExtras().getString(KEY_SEND_UID);
-            reply_receiver.setText(uid);
-            InputUtils.setInputEditEnd(reply_receiver);
+            if (TextUtils.isEmpty(uid)) {
+                reply_receiver.setEnabled(true);
+            } else {
+                reply_receiver.setEnabled(false);
+                reply_receiver.setText(uid);
+            }
+            //InputUtils.setInputEditEnd(reply_receiver);
         }
         images.add(new UploadImageBean(false, null));
         uploadImageAdapter.notifyDataSetChanged();
+        if (addMessagePresenter == null) {
+            addMessagePresenter = new AddMessagePresenter(this);
+            addMessagePresenter.attachView(this);
+        }
     }
 
     public void startPicturePicker() {
@@ -118,33 +132,40 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
         setIntent(intent);
         if (getIntent() != null) {
             mSelected = getIntent().getParcelableArrayListExtra(MatisseActivity.EXTRA_RESULT_SELECTION);
-            //File file = new File(FileUtils.getRealFilePathByUri(this, mSelected.get(0)));
-            if(mSelected != null) {
+
+            if (mSelected != null && mSelected.size() > 0) {
+                if (images != null && images.size() > 0) {
+                    images.remove(images.size() - 1);
+                }
                 for (int i = 0; i < mSelected.size(); i++) {
-                    OssUploadImageHelper.uploadImage(this,
-                            FileUtils.getRealFilePathByUri(this, mSelected.get(i)),
-                            new UploadImageListener() {
-                                @Override
-                                public void uploadSuccess(String imageUrl) {
-                                    uploadImages.add(imageUrl);
-                                }
-                            });
-                }
-                if (mSelected.size() > 0) {
-                    if (images != null && images.size() > 0) {
-                        images.remove(images.size() - 1);
-                    }
-                    for (int i = 0; i < mSelected.size(); i++) {
-                        if (images.size() < 9) {
-                            UploadImageBean bean = new UploadImageBean(true, mSelected.get(i), this);
-                            images.add(bean);
-                        }
-                    }
                     if (images.size() < 9) {
-                        images.add(new UploadImageBean(false, null));
+
+                        String key = String.valueOf(System.currentTimeMillis());
+                        UploadImageBean bean = new UploadImageBean(true, mSelected.get(i), key);
+                        images.add(bean);
+
+                        OssUploadImageHelper.uploadImage(this,
+                                FileUtils.getRealFilePathByUri(this, mSelected.get(i)),
+                                key,
+                                new UploadImageListener() {
+                                    @Override
+                                    public void uploadSuccess(String key, String imageUrl) {
+                                        MsgImgRequest item = new MsgImgRequest(imageUrl);
+                                        uploadImages.add(item);
+
+                                        for (int i = 0; i < images.size(); i++) {
+                                            if (!TextUtils.isEmpty(key) && key.equals(images.get(i).key)) {
+                                                images.get(i).imageUrl = imageUrl;
+                                            }
+                                        }
+                                    }
+                                });
                     }
-                    uploadImageAdapter.notifyDataSetChanged();
                 }
+                if (images.size() < 9) {
+                    images.add(new UploadImageBean(false, null));
+                }
+                uploadImageAdapter.notifyDataSetChanged();
             }
         }
 
@@ -161,9 +182,11 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
             UploadImageBean bean = images.get(position);
             if (bean != null && !TextUtils.isEmpty(bean.imageUrl)) {
                 for (int i = 0; i < uploadImages.size(); i++) {
-                    if (bean.imageUrl.equals(uploadImages.get(i))) {
-                        uploadImages.remove(i);
-                        break;
+                    if (uploadImages.get(i) != null) {
+                        if (bean.imageUrl.equals(uploadImages.get(i).imageUrl)) {
+                            uploadImages.remove(i);
+                            break;
+                        }
                     }
                 }
             }
@@ -184,5 +207,33 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
             }
         }
         return count;
+    }
+
+    public void sendMessage(View view) {
+        if (addMessagePresenter != null) {
+            if (TextUtils.isEmpty(reply_receiver.getText())) {
+                showTop("请填写收件人");
+                return;
+            } else if (TextUtils.isEmpty(reply_description.getText()) && (uploadImages == null || uploadImages.size() == 0)) {
+                showTop("请填写消息内容或图片");
+                return;
+            }
+            addMessagePresenter.addMessage(userId, reply_receiver.getText().toString(), reply_description.getText().toString(), uploadImages);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (addMessagePresenter != null) {
+            addMessagePresenter.detachView();
+        }
+    }
+
+    @Override
+    public void refresh(int type, Object data) {
+        //showTop("发送成功");
+        Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+        onBackPressed();
     }
 }

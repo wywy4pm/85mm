@@ -143,9 +143,10 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageItem> {
                         ((RelativeLayout.LayoutParams) item_fullImage.getLayoutParams()).setMargins(DensityUtil.dp2px(context, 12), 0, DensityUtil.dp2px(context, 12), 0);
                     }
                 }
-                int imageHeight = (bean.height * DensityUtil.getScreenWidth(context)) / bean.width;
+                int imageWidth = DensityUtil.getScreenWidth(context) - DensityUtil.dp2px(context, 12);
+                int imageHeight = (bean.height * imageWidth) / bean.width;
                 item_fullImage.getLayoutParams().height = imageHeight;
-                item_fullImage.getLayoutParams().width = DensityUtil.getScreenWidth(context);
+                item_fullImage.getLayoutParams().width = imageWidth;
                 Glide.with(context).load(bean.imageUrl)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(item_fullImage);
             }

@@ -3,7 +3,8 @@ package com.arun.a85mm.presenter;
 import android.content.Context;
 import android.util.Log;
 
-import com.arun.a85mm.bean.ActionRequest;
+import com.arun.a85mm.bean.CommonApiResponse;
+import com.arun.a85mm.bean.request.ActionRequest;
 import com.arun.a85mm.bean.CommonResponse;
 import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.common.EventConstant;
@@ -23,7 +24,7 @@ public class EventPresenter extends BasePresenter<EventView> {
     }
 
     public void recordUserAction(final int type, ActionRequest actionRequest) {
-        Subscriber<CommonResponse> subscriber = new Subscriber<CommonResponse>() {
+        Subscriber<CommonApiResponse> subscriber = new Subscriber<CommonApiResponse>() {
             @Override
             public void onCompleted() {
 
@@ -35,10 +36,10 @@ public class EventPresenter extends BasePresenter<EventView> {
             }
 
             @Override
-            public void onNext(CommonResponse commonResponse) {
-                if (commonResponse != null) {
-                    Log.d("TAG", "code = " + commonResponse.code);
-                    if (commonResponse.code == ErrorCode.SUCCESS) {
+            public void onNext(CommonApiResponse commonApiResponse) {
+                if (commonApiResponse != null) {
+                    Log.d("TAG", "code = " + commonApiResponse.code);
+                    if (commonApiResponse.code == ErrorCode.SUCCESS) {
                         Log.d("TAG", "recordUserAction Success");
                         if (getMvpView() != null) {
                             if (type == EventConstant.WORK_REPORT
@@ -48,8 +49,7 @@ public class EventPresenter extends BasePresenter<EventView> {
                                     || type == EventConstant.WORK_SHOW_SEQ) {
                                 getMvpView().eventDone(type);
                             }
-                        } else {
-                            getMvpView().eventSuccess();
+                            getMvpView().eventSuccess(commonApiResponse.hasNewMsg);
                         }
                     }
                 }

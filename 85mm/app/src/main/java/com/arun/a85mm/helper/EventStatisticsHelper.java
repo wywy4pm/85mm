@@ -7,18 +7,19 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.bean.ActionBean;
-import com.arun.a85mm.bean.ActionRequest;
+import com.arun.a85mm.bean.request.ActionRequest;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.event.UpdateMesDotEvent;
 import com.arun.a85mm.presenter.EventPresenter;
 import com.arun.a85mm.utils.AppUtils;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.EventView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.http.PUT;
 
 /**
  * Created by WY on 2017/5/7.
@@ -71,8 +72,11 @@ public class EventStatisticsHelper implements EventView {
     }
 
     @Override
-    public void eventSuccess() {
-
+    public void eventSuccess(int hasNewMsg) {
+        if (hasNewMsg == 1) {
+            SharedPreferencesUtils.setConfigInt(context, SharedPreferencesUtils.KEY_NEW_MESSAGE, hasNewMsg);
+            EventBus.getDefault().post(new UpdateMesDotEvent(hasNewMsg));
+        }
     }
 
     @Override

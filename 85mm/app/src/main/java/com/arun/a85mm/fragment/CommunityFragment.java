@@ -230,6 +230,24 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
                         preLoadChildFirstImage(workList);
                     }
                     worksList.addAll(workList);
+                } else if (goodsListBean != null) {
+                    WorkListBean bean = new WorkListBean();
+
+                    bean.isTitle = true;
+                    bean.date = goodsListBean.date;
+                    bean.browseNum = goodsListBean.browseNum;
+                    bean.workNum = goodsListBean.workNum;
+                    bean.allDownloadNum = goodsListBean.downloadNum;
+
+                    bean.isBottom = true;
+                    bean.date = goodsListBean.date;
+                    bean.searchDate = goodsListBean.searchDate;
+                    bean.start = goodsListBean.start;
+                    bean.leftWorkNum = goodsListBean.leftWorkNum;
+
+                    lastWorkDate = goodsListBean.searchDate;
+
+                    worksList.add(bean);
                 }
             }
         }

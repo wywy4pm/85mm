@@ -22,7 +22,7 @@ import com.arun.a85mm.utils.SharedPreferencesUtils;
 
 public class OssUploadImageHelper {
 
-    public static void uploadImage(Context context, final String uploadFilePath, final UploadImageListener uploadImageListener) {
+    public static void uploadImage(Context context, final String uploadFilePath, final String key, final UploadImageListener uploadImageListener) {
         String uid = "";
         if (!TextUtils.isEmpty(SharedPreferencesUtils.getUid(context))) {
             uid = SharedPreferencesUtils.getUid(context);
@@ -48,7 +48,7 @@ public class OssUploadImageHelper {
                 String imageUrl = MMApplication.IMAGE_URL_BASE + objectKey;
 
                 if (uploadImageListener != null) {
-                    uploadImageListener.uploadSuccess(imageUrl);
+                    uploadImageListener.uploadSuccess(key,imageUrl);
                 }
             }
 

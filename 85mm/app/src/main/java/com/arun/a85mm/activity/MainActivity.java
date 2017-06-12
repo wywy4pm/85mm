@@ -21,6 +21,7 @@ import com.arun.a85mm.adapter.CommonFragmentPagerAdapter;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.event.UpdateMesDotEvent;
 import com.arun.a85mm.fragment.ArticleFragment;
 import com.arun.a85mm.fragment.CommunityFragment;
 import com.arun.a85mm.fragment.ProductionFragment;
@@ -36,6 +37,10 @@ import com.arun.a85mm.utils.TextViewUtils;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.umeng.message.PushAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         PushAgent.getInstance(this).onAppStart();
+        EventBus.getDefault().register(this);
         initData();
         init();
         setListener();
@@ -253,6 +259,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void messageClick(View view) {
         MessageCenterActivity.jumpToMessageCenter(this);
+        dot_new_message.setVisibility(View.GONE);
+        SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE, 0);
     }
 
     @Override
@@ -265,12 +273,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateMsgDot(UpdateMesDotEvent event) {
+        if (event != null && event.hasNewMsg == 1) {
+            dot_new_message.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.detachView();
         }
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

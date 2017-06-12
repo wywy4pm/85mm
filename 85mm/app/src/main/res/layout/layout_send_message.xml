@@ -45,6 +45,7 @@
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:hint="请输入数字..."
+                    android:inputType="number"
                     android:textColor="@color/grey"
                     android:textColorHint="@color/lightgrey"
                     android:textSize="15sp" />
@@ -72,10 +73,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="13dp"
-                android:stretchMode="columnWidth"
-                android:verticalSpacing="5dp"
                 android:listSelector="@null"
-                android:numColumns="3" />
+                android:numColumns="3"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="5dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -93,7 +94,8 @@
                 android:gravity="center"
                 android:text="发送"
                 android:textColor="@color/area_divide"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:onClick="sendMessage"/>
 
         </LinearLayout>
     </ScrollView>

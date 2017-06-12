@@ -1,4 +1,6 @@
-package com.arun.a85mm.bean;
+package com.arun.a85mm.bean.request;
+
+import com.arun.a85mm.bean.ActionBean;
 
 import java.util.List;
 

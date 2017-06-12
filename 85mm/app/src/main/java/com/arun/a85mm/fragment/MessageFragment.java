@@ -71,7 +71,7 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
     private void requestData() {
         if (messagePresenter != null) {
             lastMsgId = 0;
-            messagePresenter.getMessageList("80", msgType, lastMsgId);
+            messagePresenter.getMessageList(userId, msgType, lastMsgId);
         }
     }
 
@@ -83,13 +83,14 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
     @Override
     public void setLoadMore() {
         if (messagePresenter != null) {
-            messagePresenter.getMessageList("'80", msgType, lastMsgId);
+            messagePresenter.getMessageList(userId, msgType, lastMsgId);
         }
     }
 
     @Override
     public void refresh(List<MessageItemBean> data) {
         if (data != null && data.size() > 0) {
+            messages.clear();
             formatData(data);
         }
     }

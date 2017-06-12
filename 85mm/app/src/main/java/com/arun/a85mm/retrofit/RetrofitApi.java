@@ -1,7 +1,7 @@
 package com.arun.a85mm.retrofit;
 
 
-import com.arun.a85mm.bean.ActionRequest;
+import com.arun.a85mm.bean.request.ActionRequest;
 import com.arun.a85mm.bean.ArticleDetailResponse;
 import com.arun.a85mm.bean.ArticleListResponse;
 import com.arun.a85mm.bean.CommonApiResponse;
@@ -10,14 +10,13 @@ import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.bean.MessageItemBean;
 import com.arun.a85mm.bean.WorkListBean;
+import com.arun.a85mm.bean.request.AddMessageRequest;
 
 import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -49,7 +48,7 @@ public interface RetrofitApi {
 
     @Headers({"Content-Type:application/json;charset=UTF-8"})
     @POST(RetrofitUrl.USER_ACTION)
-    Observable<CommonResponse> recordUserAction(@Body ActionRequest actionRequest);
+    Observable<CommonApiResponse> recordUserAction(@Body ActionRequest actionRequest);
 
     @GET(RetrofitUrl.CONFIG_QUERY)
     Observable<CommonApiResponse<List<ConfigResponse.GuidePageBean>>> queryConfig();
@@ -66,7 +65,7 @@ public interface RetrofitApi {
     @GET(RetrofitUrl.USER_MESSAGE_LIST)
     Observable<CommonApiResponse<List<MessageItemBean>>> getMessageList(@Query("uid") String uid, @Query("msgType") int msgType, @Query("lastMsgId") int lastMsgId);
 
-   /* @FormUrlEncoded
+    @Headers({"Content-Type:application/json;charset=UTF-8"})
     @POST(RetrofitUrl.USER_ADD_MESSAGE)
-    Observable<CommonApiResponse> addMessage(@Field("sender") String sender, @Field("receiver") String receiver, @Field("content") String content);*/
+    Observable<CommonApiResponse> addMessage(@Body AddMessageRequest addMessageRequest);
 }
