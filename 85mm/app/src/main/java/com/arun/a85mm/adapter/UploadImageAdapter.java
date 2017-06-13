@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.UploadImageBean;
@@ -41,7 +42,7 @@ public class UploadImageAdapter extends BaseListAdapter<UploadImageBean> {
         UploadImageBean bean = getItem(position);
         if (bean.isUpload) {
             uploadImageHolder.photo_close.setVisibility(View.VISIBLE);
-            uploadImageHolder.add_photo.setVisibility(View.GONE);
+            uploadImageHolder.layout_add_photo.setVisibility(View.GONE);
             uploadImageHolder.image_picture.setVisibility(View.VISIBLE);
 
             Glide.with(context).load(bean.imageUri).centerCrop().into(uploadImageHolder.image_picture);
@@ -57,7 +58,7 @@ public class UploadImageAdapter extends BaseListAdapter<UploadImageBean> {
             convertView.setClickable(false);
         } else {
             uploadImageHolder.photo_close.setVisibility(View.GONE);
-            uploadImageHolder.add_photo.setVisibility(View.VISIBLE);
+            uploadImageHolder.layout_add_photo.setVisibility(View.VISIBLE);
             uploadImageHolder.image_picture.setVisibility(View.GONE);
 
             convertView.setClickable(true);
@@ -78,11 +79,13 @@ public class UploadImageAdapter extends BaseListAdapter<UploadImageBean> {
         private ImageView photo_close;
         private ImageView add_photo;
         private ImageView image_picture;
+        private RelativeLayout layout_add_photo;
 
         private UploadImageHolder(View rootView) {
             this.photo_close = (ImageView) rootView.findViewById(R.id.photo_close);
             this.add_photo = (ImageView) rootView.findViewById(R.id.add_photo);
             this.image_picture = (ImageView) rootView.findViewById(R.id.image_picture);
+            this.layout_add_photo = (RelativeLayout) rootView.findViewById(R.id.layout_add_photo);
         }
     }
 }
