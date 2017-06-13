@@ -232,6 +232,14 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
                             }
                         }
                     }
+                } else {
+                    synchronized (BaseFragment.this) {
+                        if (listView.getLastVisiblePosition() >= listView.getCount() - 1) {
+                            if (!isLoading) {
+                                setLoadMore();
+                            }
+                        }
+                    }
                 }
 
                 int currentGroupAllPosition = getCurrentGroupAllPosition(worksList, currentGroupPosition);

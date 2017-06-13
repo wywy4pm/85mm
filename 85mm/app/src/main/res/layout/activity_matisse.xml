@@ -14,29 +14,62 @@
   limitations under the License.
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <!--<android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?colorPrimary"
+        android:layout_height="46dp"
+        android:background="@color/white"
         android:elevation="4dp"
-        android:theme="?toolbar">
+        android:visibility="gone"
+        app:contentInsetLeft="0dp"
+        app:contentInsetRight="0dp"
+        app:navigationIcon="@mipmap/title_back"
+        app:theme="@style/ToolbarTheme">
 
         <TextView
             android:id="@+id/selected_album"
             android:layout_width="wrap_content"
-            android:layout_height="?actionBarSize"
-            android:drawableRight="@drawable/ic_arrow_drop_down_white_24dp"
-            android:foreground="?selectableItemBackground"
+            android:layout_height="46dp"
+            android:drawablePadding="3dp"
+            android:drawableRight="@drawable/ic_arrow_drop"
             android:gravity="center"
             android:textColor="?attr/album.selected"
-            android:textSize="20sp" />
-    </android.support.v7.widget.Toolbar>
+            android:textSize="16sp" />
+    </android.support.v7.widget.Toolbar>-->
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/image_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:onClick="onClick"
+            android:src="@mipmap/title_back" />
+
+        <TextView
+            android:id="@+id/selected_album"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@+id/image_back"
+            android:drawablePadding="5dp"
+            android:drawableRight="@drawable/ic_arrow_drop"
+            android:gravity="center"
+            android:textColor="?attr/album.selected"
+            android:textSize="18sp" />
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/bottom_toolbar"
@@ -62,7 +95,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:foreground="?selectableItemBackground"
             android:padding="16dp"
             android:textColor="?attr/bottomToolbar.apply.color"
             android:textSize="17sp" />

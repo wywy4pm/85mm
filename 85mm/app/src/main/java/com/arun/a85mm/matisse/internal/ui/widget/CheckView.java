@@ -187,7 +187,7 @@ public class CheckView extends View {
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setAntiAlias(true);
             mBackgroundPaint.setStyle(Paint.Style.FILL);
-            mBackgroundPaint.setColor(Color.parseColor("#1E8AE8"));
+            mBackgroundPaint.setColor(Color.parseColor("#f7bd0e"));
         }
     }
 

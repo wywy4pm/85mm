@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr format="reference|color" name="album.count.color"/>
-    <attr format="reference" name="album.emptyView"/>
-    <attr format="reference|color" name="album.emptyView.color"/>
-    <attr format="reference|color" name="album.placeholder"/>
-    <attr format="reference|color" name="album.selected"/>
-    <attr format="reference|color" name="album.title.color"/>
-    <attr format="reference|color" name="bottomToolbar.apply.color"/>
-    <attr format="reference|color" name="bottomToolbar.bg"/>
-    <attr format="reference|color" name="bottomToolbar.preview.color"/>
-    <attr format="reference|color" name="capture.color"/>
-    <attr format="reference|color" name="item.placeholder"/>
-    <attr format="reference" name="listPopupWindowStyle"/>
-    <attr format="reference|color" name="page.bg"/>
-    <attr format="reference" name="toolbar"/>
+    <attr name="album.count.color" format="reference|color" />
+    <attr name="album.emptyView" format="reference" />
+    <attr name="album.emptyView.color" format="reference|color" />
+    <attr name="album.placeholder" format="reference|color" />
+    <attr name="album.selected" format="reference|color" />
+    <attr name="album.title.color" format="reference|color" />
+    <attr name="bottomToolbar.apply.color" format="reference|color" />
+    <attr name="bottomToolbar.bg" format="reference|color" />
+    <attr name="bottomToolbar.preview.color" format="reference|color" />
+    <attr name="capture.color" format="reference|color" />
+    <attr name="item.placeholder" format="reference|color" />
+    <attr name="listPopupWindowStyle" format="reference" />
+    <attr name="page.bg" format="reference|color" />
+    <attr name="toolbar" format="reference" />
     <color name="dracula_album_count_text">#89FFFFFF</color>
     <color name="dracula_album_placeholder">#455A64</color>
     <color name="dracula_album_popup_bg">#34474E</color>
@@ -62,13 +62,14 @@
     <string name="error_over_quality">Over quality</string>
     <string name="error_under_quality">Under quality</string>
     <string name="photo_grid_capture">Camera</string>
+
     <style name="Matisse.Dracula" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/dracula_primary</item>
         <item name="colorPrimaryDark">@color/dracula_primary_dark</item>
         <item name="toolbar">@style/Toolbar.Dracula</item>
         <item name="album.title.color">@color/dracula_album_title_text</item>
         <item name="album.count.color">@color/dracula_album_count_text</item>
-        <item name="album.selected">@android:color/white</item>
+        <item name="album.selected">@android:color/black</item>
         <item name="album.placeholder">@color/dracula_album_placeholder</item>
         <item name="album.emptyView">@drawable/ic_empty_dracula</item>
         <item name="album.emptyView.color">@color/dracula_empty_view</item>
@@ -76,18 +77,19 @@
         <item name="page.bg">@color/dracula_page_bg</item>
         <item name="bottomToolbar.bg">@color/dracula_bottom_toolbar_bg</item>
         <item name="bottomToolbar.preview.color">@color/dracula_bottom_toolbar_preview</item>
-        <item name="bottomToolbar.apply.color">@color/dracula_bottom_toolbar_apply</item>
+        <item name="bottomToolbar.apply.color">@color/more_yellow</item>
         <item name="android:listPopupWindowStyle">@style/Popup.Dracula</item>
         <item name="listPopupWindowStyle">@style/Popup.Dracula</item>
         <item name="capture.color">@color/dracula_capture</item>
     </style>
+
     <style name="Matisse.Zhihu" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/zhihu_primary</item>
-        <item name="colorPrimaryDark">@color/zhihu_primary_dark</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
         <item name="toolbar">@style/Toolbar.Zhihu</item>
         <item name="album.title.color">@color/zhihu_album_title_text</item>
         <item name="album.count.color">@color/zhihu_album_count_text</item>
-        <item name="album.selected">@android:color/white</item>
+        <item name="album.selected">@color/charcoalgrey</item>
         <item name="album.placeholder">@color/zhihu_album_placeholder</item>
         <item name="album.emptyView">@drawable/ic_empty_zhihu</item>
         <item name="album.emptyView.color">@color/zhihu_empty_view</item>
@@ -95,20 +97,24 @@
         <item name="page.bg">@color/zhihu_page_bg</item>
         <item name="bottomToolbar.bg">@color/zhihu_bottom_toolbar_bg</item>
         <item name="bottomToolbar.preview.color">@color/zhihu_bottom_toolbar_preview</item>
-        <item name="bottomToolbar.apply.color">@color/zhihu_bottom_toolbar_apply</item>
+        <item name="bottomToolbar.apply.color">@color/more_yellow</item>
         <item name="listPopupWindowStyle">@style/Popup.Zhihu</item>
         <item name="capture.color">@color/zhihu_capture</item>
     </style>
+
     <style name="Popup.Dracula" parent="Widget.AppCompat.ListPopupWindow">
         <item name="android:popupBackground">@color/dracula_album_popup_bg</item>
     </style>
+
     <style name="Popup.Zhihu" parent="Widget.AppCompat.Light.ListPopupWindow">
         <item name="android:popupBackground">@color/zhihu_album_popup_bg</item>
     </style>
+
     <style name="Toolbar.Dracula" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 
     </style>
-    <style name="Toolbar.Zhihu" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    <style name="Toolbar.Zhihu" parent="ThemeOverlay.AppCompat.ActionBar">
 
     </style>
 </resources>

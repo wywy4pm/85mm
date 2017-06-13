@@ -93,10 +93,10 @@ public class MatisseActivity extends AppCompatActivity implements
             mMediaStoreCompat.setCaptureStrategy(spec.captureStrategy);
         }
 
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        /*setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);*/
 
         mButtonPreview = (TextView) findViewById(R.id.button_preview);
         mButtonApply = (TextView) findViewById(R.id.button_apply);
@@ -214,6 +214,8 @@ public class MatisseActivity extends AppCompatActivity implements
             startActivity(result);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
             finish();
+        } else if (v.getId() == R.id.image_back) {
+            back();
         }
     }
 

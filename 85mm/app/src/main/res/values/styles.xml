@@ -59,4 +59,14 @@
         <item name="android:windowFrame">@null</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
+    <style name="MyToolbarNavigationButtonStyle" parent="@style/Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="android:minWidth">35dp</item>
+    </style>
+
+    <!-- ToolBar菜单样式 -->
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="toolbarNavigationButtonStyle">@style/MyToolbarNavigationButtonStyle</item>
+        <item name="colorPrimary">@color/white</item>
+    </style>
 </resources>
