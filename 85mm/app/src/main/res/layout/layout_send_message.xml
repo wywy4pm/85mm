@@ -9,7 +9,7 @@
 
     <include
         android:id="@+id/layout_title_bar"
-        layout="@layout/layout_title_bar"
+        layout="@layout/layout_title_right_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_status_place" />
@@ -78,12 +78,12 @@
                 android:stretchMode="columnWidth"
                 android:verticalSpacing="5dp" />
 
-            <View
+            <!--<View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/plain" />
+                android:background="@color/plain" />-->
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/send_msg"
                 android:layout_width="221dp"
                 android:layout_height="39dp"
@@ -95,7 +95,7 @@
                 android:text="发送"
                 android:textColor="@color/area_divide"
                 android:textSize="18sp"
-                android:onClick="sendMessage"/>
+                android:onClick="sendMessage"/>-->
 
         </LinearLayout>
     </ScrollView>

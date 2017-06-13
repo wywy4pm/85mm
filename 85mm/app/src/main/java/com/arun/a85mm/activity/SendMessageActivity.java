@@ -7,8 +7,11 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +19,8 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.UploadImageAdapter;
 import com.arun.a85mm.bean.UploadImageBean;
 import com.arun.a85mm.bean.request.MsgImgRequest;
+import com.arun.a85mm.event.UpdateMesDotEvent;
+import com.arun.a85mm.event.UpdateSendMsg;
 import com.arun.a85mm.helper.OssUploadImageHelper;
 import com.arun.a85mm.listener.ImagePickerListener;
 import com.arun.a85mm.listener.UploadImageListener;
@@ -24,10 +29,13 @@ import com.arun.a85mm.matisse.MimeType;
 import com.arun.a85mm.matisse.engine.impl.GlideEngine;
 import com.arun.a85mm.matisse.ui.MatisseActivity;
 import com.arun.a85mm.presenter.AddMessagePresenter;
+import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.FileUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.CommonView3;
 import com.arun.a85mm.widget.GridViewForScrollView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +44,7 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     private EditText reply_receiver;
     private EditText reply_description;
     private GridViewForScrollView gridView;
-    private TextView send_msg;
+    private TextView image_right;
     public static final String KEY_SEND_UID = "send_uid";
     private List<UploadImageBean> images = new ArrayList<>();
     private UploadImageAdapter uploadImageAdapter;
@@ -66,14 +74,37 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
         reply_receiver = (EditText) findViewById(R.id.reply_receiver);
         reply_description = (EditText) findViewById(R.id.reply_description);
         gridView = (GridViewForScrollView) findViewById(R.id.gridView);
-        send_msg = (TextView) findViewById(R.id.send_msg);
         uploadImageAdapter = new UploadImageAdapter(this, images);
         uploadImageAdapter.setImagePickerListener(this);
         gridView.setAdapter(uploadImageAdapter);
 
         setTitle("发私信");
+        setRight();
         setBack();
         setCommonShow();
+    }
+
+    private void setRight() {
+        image_right = (TextView) findViewById(R.id.image_right);
+        if (image_right.getLayoutParams() != null
+                && image_right.getLayoutParams() instanceof RelativeLayout.LayoutParams) {
+            image_right.getLayoutParams().height = DensityUtil.dp2px(this, 22);
+            image_right.getLayoutParams().width = DensityUtil.dp2px(this, 46);
+            ((RelativeLayout.LayoutParams) image_right.getLayoutParams())
+                    .setMargins(DensityUtil.dp2px(this, 10), DensityUtil.dp2px(this, 10), DensityUtil.dp2px(this, 10), DensityUtil.dp2px(this, 10));
+        }
+        image_right.setVisibility(View.VISIBLE);
+        image_right.setText("发送");
+        image_right.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        image_right.setBackgroundResource(R.drawable.shape_btn_reply);
+        image_right.setTextColor(getResources().getColor(R.color.white));
+        image_right.setGravity(Gravity.CENTER);
+        image_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage();
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -209,7 +240,7 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
         return count;
     }
 
-    public void sendMessage(View view) {
+    public void sendMessage() {
         if (addMessagePresenter != null) {
             if (TextUtils.isEmpty(reply_receiver.getText())) {
                 showTop("请填写收件人");
@@ -235,5 +266,7 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
         //showTop("发送成功");
         Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
         onBackPressed();
+        EventBus.getDefault().post(new UpdateSendMsg());
     }
+
 }

@@ -8,10 +8,15 @@ import com.arun.a85mm.adapter.MessageAdapter;
 import com.arun.a85mm.bean.MessageItem;
 import com.arun.a85mm.bean.MessageItemBean;
 import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.event.UpdateSendMsg;
 import com.arun.a85mm.presenter.MessagePresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.FullyLinearLayoutManager;
 import com.arun.a85mm.view.CommonView4;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +45,7 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         return R.layout.layout_message;
     }
 
@@ -144,6 +150,19 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
     public void onRefreshComplete() {
         if (swipeToLoadLayout != null) {
             swipeToLoadLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateSendMsg(UpdateSendMsg updateSendMsg) {
+        if (msgType == 1) {
+            requestData();
         }
     }
 }

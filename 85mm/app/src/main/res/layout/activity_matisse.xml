@@ -47,6 +47,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="46dp"
+        android:layout_below="@+id/layout_status_place"
         android:background="@color/white">
 
         <ImageView
