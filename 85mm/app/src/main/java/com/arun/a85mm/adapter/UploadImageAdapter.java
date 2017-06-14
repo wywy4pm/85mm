@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.UploadImageBean;
 import com.arun.a85mm.listener.ImagePickerListener;
+import com.arun.a85mm.utils.DensityUtil;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class UploadImageAdapter extends BaseListAdapter<UploadImageBean> {
         UploadImageHolder uploadImageHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.layout_upload_image, parent, false);
-            uploadImageHolder = new UploadImageHolder(convertView);
+            uploadImageHolder = new UploadImageHolder(context, convertView);
             convertView.setTag(uploadImageHolder);
         } else {
             uploadImageHolder = (UploadImageHolder) convertView.getTag();
@@ -81,11 +82,16 @@ public class UploadImageAdapter extends BaseListAdapter<UploadImageBean> {
         private ImageView image_picture;
         private RelativeLayout layout_add_photo;
 
-        private UploadImageHolder(View rootView) {
+        private UploadImageHolder(Context context, View rootView) {
             this.photo_close = (ImageView) rootView.findViewById(R.id.photo_close);
             this.add_photo = (ImageView) rootView.findViewById(R.id.add_photo);
             this.image_picture = (ImageView) rootView.findViewById(R.id.image_picture);
             this.layout_add_photo = (RelativeLayout) rootView.findViewById(R.id.layout_add_photo);
+            if (rootView.getLayoutParams() != null) {
+                int widthHeight = (DensityUtil.getScreenWidth(context) - DensityUtil.dp2px(context, 24) - 2 * DensityUtil.dp2px(context, 2)) / 3;
+                rootView.getLayoutParams().width = widthHeight;
+                rootView.getLayoutParams().height = widthHeight;
+            }
         }
     }
 }

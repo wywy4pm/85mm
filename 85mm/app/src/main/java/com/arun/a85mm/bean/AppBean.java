@@ -31,4 +31,8 @@ public class AppBean {
         osType = context.getString(R.string.android);
         isRelease = AppUtils.isApkDebug(context) ? 0 : 1;
     }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 }

@@ -2,6 +2,7 @@ package com.arun.a85mm.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.utils.DensityUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -134,7 +138,7 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageItem> {
             item_fullImage = (ImageView) rootView.findViewById(R.id.item_fullImage);
         }
 
-        private void setData(Context context, MessageItem bean, int position) {
+        private void setData(final Context context, final MessageItem bean, int position) {
             if (item_fullImage.getLayoutParams() != null) {
                 if (item_fullImage.getLayoutParams() instanceof RelativeLayout.LayoutParams) {
                     if (position != 0) {
@@ -144,11 +148,31 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageItem> {
                     }
                 }
                 int imageWidth = DensityUtil.getScreenWidth(context) - DensityUtil.dp2px(context, 12);
-                int imageHeight = (bean.height * imageWidth) / bean.width;
-                item_fullImage.getLayoutParams().height = imageHeight;
-                item_fullImage.getLayoutParams().width = imageWidth;
+                if (bean.width > 0) {
+                    int imageHeight = (bean.height * imageWidth) / bean.width;
+                    item_fullImage.setVisibility(View.VISIBLE);
+                    item_fullImage.getLayoutParams().height = imageHeight;
+                    item_fullImage.getLayoutParams().width = imageWidth;
+                } else {
+                    if (TextUtils.isEmpty(bean.imageUrl)) {
+                        item_fullImage.setVisibility(View.GONE);
+                    }
+                }
                 Glide.with(context).load(bean.imageUrl)
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(item_fullImage);
+                        .listener(new RequestListener<String, GlideDrawable>() {
+                            @Override
+                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                return false;
+                            }
+                        })
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .centerCrop()
+                        .into(item_fullImage);
             }
         }
     }

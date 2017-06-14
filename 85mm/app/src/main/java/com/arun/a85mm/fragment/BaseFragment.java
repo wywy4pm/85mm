@@ -232,7 +232,7 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
                             }
                         }
                     }
-                } else {
+                } else if (listView.getCount() > 5) {
                     synchronized (BaseFragment.this) {
                         if (listView.getLastVisiblePosition() >= listView.getCount() - 1) {
                             if (!isLoading) {

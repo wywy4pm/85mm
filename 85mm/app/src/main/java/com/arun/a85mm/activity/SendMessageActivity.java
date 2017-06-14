@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -15,11 +16,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arun.a85mm.MMApplication;
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.UploadImageAdapter;
 import com.arun.a85mm.bean.UploadImageBean;
 import com.arun.a85mm.bean.request.MsgImgRequest;
-import com.arun.a85mm.event.UpdateMesDotEvent;
 import com.arun.a85mm.event.UpdateSendMsg;
 import com.arun.a85mm.helper.OssUploadImageHelper;
 import com.arun.a85mm.listener.ImagePickerListener;
@@ -51,7 +52,7 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     private static final int REQUEST_CODE_CHOOSE = 1;
     private List<Uri> mSelected;
     //存放需要上传服务器的imageUrl
-    private List<MsgImgRequest> uploadImages = new ArrayList<>();
+    //private List<MsgImgRequest> uploadImages = new ArrayList<>();
     private AddMessagePresenter addMessagePresenter;
 
     public static void jumpToSendMessage(Context context, String uid) {
@@ -171,24 +172,19 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
                 for (int i = 0; i < mSelected.size(); i++) {
                     if (images.size() < 9) {
 
-                        String key = String.valueOf(System.currentTimeMillis());
-                        UploadImageBean bean = new UploadImageBean(true, mSelected.get(i), key);
+                        String realFilePath = FileUtils.getRealFilePathByUri(this, mSelected.get(i));
+                        String fileType = FileUtils.getFileTypeByPath(realFilePath);
+                        String objectKey = MMApplication.OSS_UPLOAD_IMAGE_FOLDER + userId + "_" + System.currentTimeMillis() + "." + fileType;
+
+                        UploadImageBean bean = new UploadImageBean(true, mSelected.get(i));
+                        bean.imageUrl = MMApplication.IMAGE_URL_BASE + objectKey;
                         images.add(bean);
 
-                        OssUploadImageHelper.uploadImage(this,
-                                FileUtils.getRealFilePathByUri(this, mSelected.get(i)),
-                                key,
+                        OssUploadImageHelper.uploadImage(realFilePath, objectKey,
                                 new UploadImageListener() {
                                     @Override
-                                    public void uploadSuccess(String key, String imageUrl) {
-                                        MsgImgRequest item = new MsgImgRequest(imageUrl);
-                                        uploadImages.add(item);
-
-                                        for (int i = 0; i < images.size(); i++) {
-                                            if (!TextUtils.isEmpty(key) && key.equals(images.get(i).key)) {
-                                                images.get(i).imageUrl = imageUrl;
-                                            }
-                                        }
+                                    public void uploadSuccess(String imageUrl) {
+                                        Log.d("TAG", "imageUrl = " + imageUrl);
                                     }
                                 });
                     }
@@ -210,17 +206,6 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     @Override
     public void removeSelect(int position) {
         if (images != null && images.size() > 0 && position <= images.size() - 1) {
-            UploadImageBean bean = images.get(position);
-            if (bean != null && !TextUtils.isEmpty(bean.imageUrl)) {
-                for (int i = 0; i < uploadImages.size(); i++) {
-                    if (uploadImages.get(i) != null) {
-                        if (bean.imageUrl.equals(uploadImages.get(i).imageUrl)) {
-                            uploadImages.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
 
             images.remove(position);
             if (getSelectCount(images) == 8) {
@@ -245,12 +230,28 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
             if (TextUtils.isEmpty(reply_receiver.getText())) {
                 showTop("请填写收件人");
                 return;
-            } else if (TextUtils.isEmpty(reply_description.getText()) && (uploadImages == null || uploadImages.size() == 0)) {
+            } else if (TextUtils.isEmpty(reply_description.getText()) && (images.size() < 2)) {
                 showTop("请填写消息内容或图片");
                 return;
             }
-            addMessagePresenter.addMessage(userId, reply_receiver.getText().toString(), reply_description.getText().toString(), uploadImages);
+            addMessagePresenter.addMessage(userId, reply_receiver.getText().toString(), reply_description.getText().toString(), getUploadImages(images));
         }
+    }
+
+    private List<MsgImgRequest> getUploadImages(List<UploadImageBean> images) {
+        List<MsgImgRequest> uploadImages = new ArrayList<>();
+        if (images.size() == 9) {
+            for (int i = 0; i < images.size(); i++) {
+                MsgImgRequest bean = new MsgImgRequest(images.get(i).imageUrl);
+                uploadImages.add(bean);
+            }
+        } else {
+            for (int i = 0; i < images.size() - 1; i++) {
+                MsgImgRequest bean = new MsgImgRequest(images.get(i).imageUrl);
+                uploadImages.add(bean);
+            }
+        }
+        return uploadImages;
     }
 
     @Override

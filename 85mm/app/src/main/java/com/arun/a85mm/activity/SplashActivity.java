@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.ConfigResponse;
+import com.arun.a85mm.helper.AppHelper;
 import com.arun.a85mm.helper.CommunityListCacheManager;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
 import com.arun.a85mm.helper.UrlJumpHelper;
@@ -178,6 +180,9 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
             if (data instanceof CommonApiResponse) {
                 final CommonApiResponse config = (CommonApiResponse) data;
                 SharedPreferencesUtils.saveUid(this, config.uid);
+                if (AppHelper.getInstance().getAppConfig() != null && TextUtils.isEmpty(AppHelper.getInstance().getAppConfig().uid)) {
+                    AppHelper.getInstance().getAppConfig().setUid(config.uid);
+                }
                 if (config.hideRead != null) {
                     SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_ENABLED, config.hideRead.hideReadEnable);
                     SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_OPENED, config.hideRead.hideReadOpen);

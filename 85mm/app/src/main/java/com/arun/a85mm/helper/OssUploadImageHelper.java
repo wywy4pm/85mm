@@ -22,13 +22,8 @@ import com.arun.a85mm.utils.SharedPreferencesUtils;
 
 public class OssUploadImageHelper {
 
-    public static void uploadImage(Context context, final String uploadFilePath, final String key, final UploadImageListener uploadImageListener) {
-        String uid = "";
-        if (!TextUtils.isEmpty(SharedPreferencesUtils.getUid(context))) {
-            uid = SharedPreferencesUtils.getUid(context);
-        }
-        String fileType = FileUtils.getFileTypeByPath(uploadFilePath);
-        final String objectKey = MMApplication.OSS_UPLOAD_IMAGE_FOLDER + uid + "_" + System.currentTimeMillis() + "." + fileType;
+    public static void uploadImage(final String uploadFilePath, final String objectKey, final UploadImageListener uploadImageListener) {
+
         // 构造上传请求
         PutObjectRequest put = new PutObjectRequest(MMApplication.OSS_BUCKET_NAME, objectKey, uploadFilePath);
         // 异步上传时可以设置进度回调
@@ -48,7 +43,7 @@ public class OssUploadImageHelper {
                 String imageUrl = MMApplication.IMAGE_URL_BASE + objectKey;
 
                 if (uploadImageListener != null) {
-                    uploadImageListener.uploadSuccess(key,imageUrl);
+                    uploadImageListener.uploadSuccess(imageUrl);
                 }
             }
 
