@@ -38,7 +38,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="12dp"
         android:onClick="messageClick">
 
         <ImageView
@@ -83,7 +83,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="11dp"
         android:onClick="moreClick"
         android:src="@mipmap/ic_home_more" />
 
