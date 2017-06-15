@@ -181,30 +181,15 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
                         }
 
                         if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
-                            if (workList.get(i).workDetail.size() <= 30) {
-                                for (int j = 0; j < workList.get(i).workDetail.size(); j++) {
-                                    workList.get(i).workDetail.get(j).backgroundColor = RandomColorHelper.getRandomColor();
-                                    if (j == workList.get(i).workDetail.size() - 1) {
-                                        if (workList.get(i).workDetail.get(j) != null) {
-                                            workList.get(i).workDetail.get(j).authorHeadImg = workList.get(i).authorHeadImg;
-                                            workList.get(i).workDetail.get(j).authorName = workList.get(i).authorName;
-                                            workList.get(i).workDetail.get(j).authorPageUrl = workList.get(i).authorPageUrl;
-                                            workList.get(i).workDetail.get(j).workTitle = workList.get(i).workTitle;
-                                            workList.get(i).workDetail.get(j).sourceUrl = workList.get(i).sourceUrl;
-                                        }
-                                    }
-                                }
-                            } else if (workList.get(i).workDetail.size() > 30) {
-                                for (int j = 0; j < 30; j++) {
-                                    workList.get(i).workDetail.get(j).backgroundColor = RandomColorHelper.getRandomColor();
-                                    if (j == 29) {
-                                        if (workList.get(i).workDetail.get(j) != null) {
-                                            workList.get(i).workDetail.get(j).authorHeadImg = workList.get(i).authorHeadImg;
-                                            workList.get(i).workDetail.get(j).authorName = workList.get(i).authorName;
-                                            workList.get(i).workDetail.get(j).authorPageUrl = workList.get(i).authorPageUrl;
-                                            workList.get(i).workDetail.get(j).workTitle = workList.get(i).workTitle;
-                                            workList.get(i).workDetail.get(j).sourceUrl = workList.get(i).sourceUrl;
-                                        }
+                            for (int j = 0; j < workList.get(i).workDetail.size(); j++) {
+                                workList.get(i).workDetail.get(j).backgroundColor = RandomColorHelper.getRandomColor();
+                                if (j == workList.get(i).workDetail.size() - 1) {
+                                    if (workList.get(i).workDetail.get(j) != null) {
+                                        workList.get(i).workDetail.get(j).authorHeadImg = workList.get(i).authorHeadImg;
+                                        workList.get(i).workDetail.get(j).authorName = workList.get(i).authorName;
+                                        workList.get(i).workDetail.get(j).authorPageUrl = workList.get(i).authorPageUrl;
+                                        workList.get(i).workDetail.get(j).workTitle = workList.get(i).workTitle;
+                                        workList.get(i).workDetail.get(j).sourceUrl = workList.get(i).sourceUrl;
                                     }
                                 }
                             }

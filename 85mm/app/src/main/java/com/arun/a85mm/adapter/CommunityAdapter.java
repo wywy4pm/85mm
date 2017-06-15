@@ -414,6 +414,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             if (isCommunity) {
                 if (workList.get(groupPosition).isBottom) {
                     workListItemHolder.layout_works_more.setVisibility(View.VISIBLE);
+                    workListItemHolder.query_more_works.setText(resources.getString(R.string.query_one_day_left_works, workGroup.date, workGroup.leftWorkNum));
                     if (groupPosition == workList.size() - 1) {
                         workListItemHolder.bg_line.setVisibility(View.GONE);
                     } else {
@@ -550,6 +551,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         private TextView author_name;
         private ImageView author_more;
         private RelativeLayout layout_works_more;
+        private TextView query_more_works;
         private View bg_line;
 
         private WorkListItemHolder(View rootView) {
@@ -561,6 +563,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             author_name = (TextView) rootView.findViewById(R.id.author_name);
             author_more = (ImageView) rootView.findViewById(R.id.author_more);
             layout_works_more = (RelativeLayout) rootView.findViewById(R.id.layout_works_more);
+            query_more_works = (TextView) rootView.findViewById(R.id.query_more_works);
             bg_line = rootView.findViewById(R.id.bg_line);
             bg_line.setOnClickListener(new View.OnClickListener() {
                 @Override
