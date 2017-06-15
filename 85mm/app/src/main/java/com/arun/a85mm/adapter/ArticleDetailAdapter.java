@@ -115,16 +115,21 @@ public class ArticleDetailAdapter extends RecyclerView.Adapter {
 
         private void setData(Context context, ArticleDetailBean bean, int position) {
             if (item_fullImage.getLayoutParams() != null) {
+                int imageWidth = DensityUtil.getScreenWidth(context);
+                int imageHeight = 0;
                 if (position == 0) {
-                    item_fullImage.getLayoutParams().height = (int) (DensityUtil.getScreenWidth(context) * 0.56);
-                    Glide.with(context).load(bean.imageUrl).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(item_fullImage);
+                    imageHeight = (int) (DensityUtil.getScreenWidth(context) * 0.56);
                 } else {
-                    int imageHeight = (bean.imageHeight * DensityUtil.getScreenWidth(context)) / bean.imageWidth;
-                    item_fullImage.getLayoutParams().height = imageHeight;
-                    item_fullImage.getLayoutParams().width = DensityUtil.getScreenWidth(context);
-                    Glide.with(context).load(bean.imageUrl)
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(item_fullImage);
+                    imageHeight = (bean.imageHeight * DensityUtil.getScreenWidth(context)) / bean.imageWidth;
                 }
+                item_fullImage.getLayoutParams().height = imageHeight;
+                item_fullImage.getLayoutParams().width = imageWidth;
+                Glide.with(context)
+                        .load(bean.imageUrl)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .override(imageWidth, imageHeight)
+                        .centerCrop()
+                        .into(item_fullImage);
             }
         }
     }

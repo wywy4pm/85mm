@@ -3,6 +3,7 @@ package com.arun.a85mm.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,17 +140,15 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageItem> {
         }
 
         private void setData(final Context context, final MessageItem bean, int position) {
+            //setIsRecyclable(false);
             if (item_fullImage.getLayoutParams() != null) {
                 if (item_fullImage.getLayoutParams() instanceof RelativeLayout.LayoutParams) {
-                    if (position != 0) {
-                        ((RelativeLayout.LayoutParams) item_fullImage.getLayoutParams()).setMargins(DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 8), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 19));
-                    } else {
-                        ((RelativeLayout.LayoutParams) item_fullImage.getLayoutParams()).setMargins(DensityUtil.dp2px(context, 12), 0, DensityUtil.dp2px(context, 12), 0);
-                    }
+                    ((RelativeLayout.LayoutParams) item_fullImage.getLayoutParams()).setMargins(DensityUtil.dp2px(context, 12), 0, DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 6));
                 }
                 int imageWidth = DensityUtil.getScreenWidth(context) - DensityUtil.dp2px(context, 12);
+                int imageHeight = 0;
                 if (bean.width > 0) {
-                    int imageHeight = (bean.height * imageWidth) / bean.width;
+                    imageHeight = (bean.height * imageWidth) / bean.width;
                     item_fullImage.setVisibility(View.VISIBLE);
                     item_fullImage.getLayoutParams().height = imageHeight;
                     item_fullImage.getLayoutParams().width = imageWidth;
@@ -158,6 +157,7 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageItem> {
                         item_fullImage.setVisibility(View.GONE);
                     }
                 }
+                //Log.d("TAG", "item_fullImage = " + item_fullImage.toString() + "     imageUrl = " + bean.imageUrl);
                 Glide.with(context).load(bean.imageUrl)
                         .listener(new RequestListener<String, GlideDrawable>() {
                             @Override
@@ -171,6 +171,7 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageItem> {
                             }
                         })
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .override(imageWidth, imageHeight)
                         .centerCrop()
                         .into(item_fullImage);
             }
