@@ -15,6 +15,7 @@ public class RetrofitUrl {
     public static final String WORKS_GOODS = WORKS + V1 + "/goods";
     public static final String WORKS_ONE_DAY_LEFT = WORKS + V1 + "/onedayGoods";
     public static final String WORKS_SINGLE_DETAIL = WORKS + "/single";
+    public static final String WORKS_AUDIT = WORKS + "/getAuditList";
 
     public static final String USER_ACTION = USER + V1 + "/action";
     public static final String USER_DEVICE_TOKEN = USER + "/addToken";

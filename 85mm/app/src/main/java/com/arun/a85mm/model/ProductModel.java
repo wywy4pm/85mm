@@ -25,8 +25,8 @@ public class ProductModel extends BaseModel {
         return instance;
     }
 
-    public Subscriber getWorksList( String lastWorkId, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().getWorksList( lastWorkId), listener);
+    public Subscriber getWorksList(String lastWorkId, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getWorksList(lastWorkId), listener);
     }
 
     public Subscriber getWorksGoods(String lastDate, CommonRequestListener listener) {
@@ -34,11 +34,15 @@ public class ProductModel extends BaseModel {
     }
 
     public Subscriber getWorksOneDayLeft(String date, int start, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().getWorksOneDayLeft( date, start), listener);
+        return request(RetrofitInit.getApi().getWorksOneDayLeft(date, start), listener);
     }
 
     public Subscriber getSingleWork(String workId, CommonRequestListener listener) {
         return request(RetrofitInit.getApi().getSingleWork(workId), listener);
+    }
+
+    public Subscriber getAuditWorkList(String searchName, String orderType, String start, String lastWorkId, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getAuditWorkList(searchName, orderType, start, lastWorkId), listener);
     }
 
 }

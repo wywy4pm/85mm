@@ -14,10 +14,12 @@ import android.widget.TextView;
 
 import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.AuditActivity;
 import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.listener.OnImageClick;
@@ -74,6 +76,18 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         } else {
             workListHeadHolder = (WorkListHeadHolder) convertView.getTag();
         }*/
+        if (ConfigHelper.tipsPosition > 0 && ConfigHelper.tipsPosition == groupPosition + 1) {
+            workListHeadHolder.layout_auditing_tips.setVisibility(View.VISIBLE);
+            workListHeadHolder.layout_auditing_tips.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AuditActivity.jumpToAudit(contexts.get());
+                }
+            });
+        } else {
+            workListHeadHolder.layout_auditing_tips.setVisibility(View.GONE);
+        }
+
         final WorkListHeadHolder headHolder = workListHeadHolder;
         final WorkListBean bean = works.get(groupPosition);
         //作品浏览
@@ -401,7 +415,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
     private static class WorkListHeadHolder {
         private View itemView;
         private RippleView rippleView;
-        private RelativeLayout layout_source, shadow;
+        private RelativeLayout layout_source, shadow, layout_auditing_tips;
         private ImageView work_list_cover_img, source_logo;
         private TextView work_list_cover_count, create_time;
 
@@ -414,6 +428,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             work_list_cover_count = (TextView) itemView.findViewById(R.id.work_list_cover_count);
             create_time = (TextView) itemView.findViewById(R.id.create_time);
             shadow = (RelativeLayout) itemView.findViewById(R.id.shadow);
+            layout_auditing_tips = (RelativeLayout) itemView.findViewById(R.id.layout_auditing_tips);
         }
     }
 

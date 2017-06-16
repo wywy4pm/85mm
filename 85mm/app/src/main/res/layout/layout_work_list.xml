@@ -4,11 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/layout_auditing_tips"
+        layout="@layout/layout_auditing_tips"
+        android:visibility="gone" />
+
     <com.andexert.library.RippleView
         android:id="@+id/rippleView"
         rv_centered="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layout_auditing_tips">
 
         <ImageView
             android:id="@+id/work_list_cover_img"

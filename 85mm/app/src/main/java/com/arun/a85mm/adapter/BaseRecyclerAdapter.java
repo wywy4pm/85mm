@@ -1,7 +1,9 @@
 package com.arun.a85mm.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
@@ -9,10 +11,12 @@ import java.util.List;
  */
 
 public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
-    public List<T> list;
+    protected List<T> list;
+    protected WeakReference<Context> contexts;
 
-    public BaseRecyclerAdapter(List<T> list) {
+    public BaseRecyclerAdapter(Context context, List<T> list) {
         this.list = list;
+        contexts = new WeakReference<>(context);
     }
 
     public T getItem(int position) {

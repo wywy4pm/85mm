@@ -30,14 +30,13 @@ import java.util.List;
  */
 
 public class MessageAdapter extends BaseRecyclerAdapter<MessageItem> {
-    private WeakReference<Context> contexts;
+
     private int msgType;
     private static final int TYPE_TOP = 1;
     private static final int TYPE_IMAGE = 2;
 
     public MessageAdapter(Context context, List<MessageItem> list, int msgType) {
-        super(list);
-        contexts = new WeakReference<>(context);
+        super(context, list);
         this.msgType = msgType;
     }
 

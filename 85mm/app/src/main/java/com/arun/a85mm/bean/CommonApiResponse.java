@@ -12,6 +12,12 @@ public class CommonApiResponse<T> {
     public String morePageImage;
     public T body;
 
+    /**
+     * 分页最后一个作品ID
+     */
+    public String lastWorkId;
+
+
     public HideReadBean hideRead;
     /**
      * 是否有新消息，0：没有，1：有
@@ -21,6 +27,11 @@ public class CommonApiResponse<T> {
     /**
      * oss相关信息
      */
-    public OssInfoBean ossInfo;
+    //public OssInfoBean ossInfo;
+
+    /**
+     * 审核相关信息
+     */
+    public AuditInfoBean auditInfo;
 
 }

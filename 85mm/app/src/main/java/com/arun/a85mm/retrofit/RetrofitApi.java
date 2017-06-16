@@ -68,4 +68,7 @@ public interface RetrofitApi {
     @Headers({"Content-Type:application/json;charset=UTF-8"})
     @POST(RetrofitUrl.USER_ADD_MESSAGE)
     Observable<CommonApiResponse> addMessage(@Body AddMessageRequest addMessageRequest);
+
+    @GET(RetrofitUrl.WORKS_AUDIT)
+    Observable<CommonApiResponse<List<WorkListBean>>> getAuditWorkList(@Query("searchName") String searchName, @Query("orderType") String orderType, @Query("start") String start, @Query("lastWorkId") String lastWorkId);
 }

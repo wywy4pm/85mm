@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,11 +15,14 @@ import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.fragment.BaseFragment;
 import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.helper.ShowTopToastHelper;
+import com.arun.a85mm.refresh.OnRefreshListener;
+import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -50,6 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
     private TextView titleView;
     public String userId;
     public String deviceId;
+    public boolean isLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +131,57 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.recordUserAction(this, type, EventStatisticsHelper.createOneActionList(type));
         }
+    }
+
+    public void setRecyclerViewScrollListener(RecyclerView recyclerView) {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                //得到当前显示的最后一个item的view
+                View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount() - 1);
+                //得到lastChildView的bottom坐标值
+                int lastChildBottom = lastChildView.getBottom();
+                //得到RecyclerView的底部坐标减去底部padding值，也就是显示内容最底部的坐标
+                int recyclerBottom = recyclerView.getBottom() - recyclerView.getPaddingBottom();
+                int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
+                synchronized (BaseActivity.this) {
+                    if (lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
+                        if (!isLoading) {
+                            setLoadMore();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public void setRefresh(SwipeToLoadLayout swipeToLoadLayout) {
+        if (swipeToLoadLayout != null) {
+            swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    onActionEvent(EventConstant.PULL_TO_REFRESH);
+                    reloadData();
+                }
+            });
+        }
+    }
+
+
+    public void setLoading(boolean isLoading) {
+        this.isLoading = isLoading;
+    }
+
+    protected void setLoadMore() {
+    }
+
+    protected void reloadData() {
     }
 
     @Override

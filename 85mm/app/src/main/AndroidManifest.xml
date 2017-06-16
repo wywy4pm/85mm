@@ -52,9 +52,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".activity.ArticleDetailActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -147,10 +145,15 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity android:name=".matisse.ui.MatisseActivity" />
         <activity android:name=".matisse.internal.ui.AlbumPreviewActivity" />
         <activity android:name=".matisse.internal.ui.SelectedPreviewActivity" />
 
+        <activity
+            android:name=".activity.AuditActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
     </application>
+
 </manifest>

@@ -19,6 +19,7 @@ import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.helper.AppHelper;
 import com.arun.a85mm.helper.CommunityListCacheManager;
+import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.presenter.SettingPresenter;
@@ -186,6 +187,11 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                 if (config.hideRead != null) {
                     SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_ENABLED, config.hideRead.hideReadEnable);
                     SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_OPENED, config.hideRead.hideReadOpen);
+                }
+
+                if (config.auditInfo != null) {
+                    ConfigHelper.tipsPosition = config.auditInfo.tipsPosition;
+                    ConfigHelper.tags = config.auditInfo.tags;
                 }
                 SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE, config.hasNewMsg);
                 new Thread(
