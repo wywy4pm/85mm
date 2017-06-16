@@ -158,6 +158,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
     }
 
     private void formatData(List<CommunityResponse.GoodsListBean> goodsList) {
+        int currentListAddCount = 0;
         if (goodsList != null && goodsList.size() > 0) {
             for (int k = 0; k < goodsList.size(); k++) {
                 CommunityResponse.GoodsListBean goodsListBean = goodsList.get(k);
@@ -214,6 +215,8 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
                     if (NetUtils.isWifi(getActivity())) {
                         preLoadChildFirstImage(workList);
                     }
+
+                    currentListAddCount += workList.size();
                     worksList.addAll(workList);
                 } else if (goodsListBean != null) {
                     WorkListBean bean = new WorkListBean();
@@ -232,10 +235,13 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
 
                     lastWorkDate = goodsListBean.searchDate;
 
+                    currentListAddCount += 1;
                     worksList.add(bean);
                 }
             }
         }
+
+        setCurrentResponseCount(currentListAddCount);
         communityAdapter.notifyDataSetChanged();
     }
 

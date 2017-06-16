@@ -62,6 +62,7 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
     private ImageView hide_read_tips_close;
     private ContactDialog contactDialog;
     //private Runnable runnable;
+    private int currentResponseCount = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -193,6 +194,14 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
         });
     }
 
+    public int getCurrentResponseCount() {
+        return currentResponseCount;
+    }
+
+    public void setCurrentResponseCount(int currentResponseCount) {
+        this.currentResponseCount = currentResponseCount;
+    }
+
     public void setExpandableListViewCommon(final ExpandableListView expandableListView, final ImageView next_group_img, final List<WorkListBean> worksList) {
         expandableListView.setFriction((float) (ViewConfiguration.getScrollFriction() * 0.4));
         expandableListView.setGroupIndicator(null);
@@ -224,7 +233,7 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
             @Override
             public void onScroll(AbsListView listView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 //分页处理
-                if (listView.getCount() > 9) {
+                if (currentResponseCount > 9) {
                     synchronized (BaseFragment.this) {
                         if (listView.getLastVisiblePosition() >= listView.getCount() - 9) {
                             if (!isLoading) {
@@ -232,7 +241,7 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
                             }
                         }
                     }
-                } else if (listView.getCount() > 5) {
+                } else if (currentResponseCount > 5) {
                     synchronized (BaseFragment.this) {
                         if (listView.getLastVisiblePosition() >= listView.getCount() - 1) {
                             if (!isLoading) {

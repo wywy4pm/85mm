@@ -113,6 +113,7 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     }
 
     private void formatData(List<WorkListBean> workList) {
+        setCurrentResponseCount(workList.size());
         for (int i = 0; i < workList.size(); i++) {
             if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
                 workList.get(i).backgroundColor = RandomColorHelper.getRandomColor();
