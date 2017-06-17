@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.AuditListAdapter;
 import com.arun.a85mm.bean.AuditInfoBean;
-import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.presenter.AuditPresenter;
@@ -181,6 +179,7 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
     @Override
     public void refresh(List<WorkListBean> data) {
         if (data != null) {
+            works.clear();
             works.addAll(data);
             auditListAdapter.notifyDataSetChanged();
         }

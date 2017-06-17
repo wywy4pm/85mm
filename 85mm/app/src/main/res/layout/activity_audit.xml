@@ -23,7 +23,7 @@
             android:gravity="center"
             android:paddingBottom="15dp" />
 
-        <ScrollView
+        <com.arun.a85mm.widget.NonScrollView
             android:id="@+id/swipe_target"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -47,9 +47,10 @@
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/layout_tags" />
+                    android:layout_below="@+id/layout_tags"
+                    android:layout_marginTop="10dp" />
             </RelativeLayout>
-        </ScrollView>
+        </com.arun.a85mm.widget.NonScrollView>
     </com.arun.a85mm.refresh.SwipeToLoadLayout>
 
 </RelativeLayout>
