@@ -50,6 +50,10 @@ public class EventStatisticsHelper implements EventView {
     }
 
 
+    public void recordUserAction(Context context, int type, String resourceId, String remark) {
+        recordUserAction(context, type, createOneActionList(type, resourceId, remark));
+    }
+
     public void recordUserAction(Context context, int type) {
         recordUserAction(context, type, createOneActionList(type));
     }
@@ -92,6 +96,8 @@ public class EventStatisticsHelper implements EventView {
             tips = context.getString(R.string.repeat);
         } else if (type == EventConstant.WORK_SHOW_SEQ) {
             tips = context.getString(R.string.show_seq);
+        }else if(type == EventConstant.WORK_AUDIT_RECOMMEND){
+            tips = context.getString(R.string.recommend_new);
         }
         if (context instanceof MainActivity) {
             ((MainActivity) context).showTop("[" + tips + "]" + "操作成功");

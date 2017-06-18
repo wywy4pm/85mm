@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.request.ActionRequest;
-import com.arun.a85mm.bean.CommonResponse;
 import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.retrofit.RetrofitInit;
@@ -46,7 +45,8 @@ public class EventPresenter extends BasePresenter<EventView> {
                                     || type == EventConstant.WORK_SCALE_OVER
                                     || type == EventConstant.WORK_BAD_COMMNET
                                     || type == EventConstant.WORK_REPEAT
-                                    || type == EventConstant.WORK_SHOW_SEQ) {
+                                    || type == EventConstant.WORK_SHOW_SEQ
+                                    || type == EventConstant.WORK_AUDIT_RECOMMEND) {
                                 getMvpView().eventDone(type);
                             }
                             getMvpView().eventSuccess(commonApiResponse.hasNewMsg);

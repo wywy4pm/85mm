@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -16,10 +17,12 @@ import com.arun.a85mm.adapter.AuditListAdapter;
 import com.arun.a85mm.bean.AuditInfoBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.helper.ConfigHelper;
+import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.presenter.AuditPresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.FullyGridLayoutManager;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.CommonView4;
 import com.arun.a85mm.widget.AutoLineLinearLayout;
@@ -80,17 +83,26 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
         image_right.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         image_right.setTextColor(getResources().getColor(R.color.tab_select));
         ((RelativeLayout.LayoutParams) image_right.getLayoutParams()).setMargins(DensityUtil.dp2px(this, 12), 0, DensityUtil.dp2px(this, 12), 0);
-        image_right.setText("按时间");
+        if (SharedPreferencesUtils.getConfigInt(this, SharedPreferencesUtils.KEY_AUDIT_SELECT_SORT) == 0) {
+            image_right.setText("按时间");
+            auditSortType = 0;
+        } else {
+            image_right.setText("按热度");
+            auditSortType = 1;
+        }
+
         image_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (auditSortType == 0) {
                     image_right.setText("按热度");
                     auditSortType = 1;
+                    SharedPreferencesUtils.setConfigInt(AuditActivity.this, SharedPreferencesUtils.KEY_AUDIT_SELECT_SORT, auditSortType);
                     requestData();
                 } else {
                     image_right.setText("按时间");
                     auditSortType = 0;
+                    SharedPreferencesUtils.setConfigInt(AuditActivity.this, SharedPreferencesUtils.KEY_AUDIT_SELECT_SORT, auditSortType);
                     requestData();
                 }
             }
@@ -100,7 +112,13 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
     private void initData() {
         tags = ConfigHelper.tags;
         if (tags != null && tags.size() > 0) {
-            searchName = tags.get(0).searchName;
+            String selectName = SharedPreferencesUtils.getConfigString(this, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG);
+            if (TextUtils.isEmpty(selectName)) {
+                searchName = tags.get(0).searchName;
+            } else {
+                searchName = selectName;
+            }
+
             for (int i = 0; i < tags.size(); i++) {
                 final TextView tv = new TextView(this);
                 tv.setTag(i);
@@ -120,8 +138,13 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
                         requestData();
                     }
                 });
-
                 tv.setText(tags.get(i).showName);
+
+                if ((!TextUtils.isEmpty(selectName) && selectName.equals(tags.get(i).searchName))
+                        || (TextUtils.isEmpty(selectName) && i == 0)) {
+                    tv.setSelected(true);
+                    tv.setTextColor(getResources().getColor(R.color.white));
+                }
                 layout_tags.addView(tv);
             }
         }
@@ -150,6 +173,8 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
             start = 0;
             lastWorkId = "";
             auditPresenter.getAuditWorkList(searchName, auditSortType, start, lastWorkId);
+
+            SharedPreferencesUtils.setConfigString(this, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG, searchName);
         }
     }
 
@@ -180,18 +205,36 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
     public void refresh(List<WorkListBean> data) {
         if (data != null) {
             works.clear();
+            setImgBgColor(data);
             works.addAll(data);
+            auditListAdapter.notifyDataSetChanged();
+        } else {
+            works.clear();
             auditListAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void refreshMore(List<WorkListBean> data) {
-
+        if (data != null) {
+            setImgBgColor(data);
+            works.addAll(data);
+            auditListAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void refresh(int type, Object data) {
+    }
+
+    private void setImgBgColor(List<WorkListBean> data) {
+        if (data != null && data.size() > 0) {
+            for (int i = 0; i < data.size(); i++) {
+                if (data.get(i) != null) {
+                    data.get(i).backgroundColor = RandomColorHelper.getRandomColor();
+                }
+            }
+        }
     }
 
     @Override

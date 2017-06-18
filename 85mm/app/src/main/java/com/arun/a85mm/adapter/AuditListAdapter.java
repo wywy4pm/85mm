@@ -9,12 +9,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.bean.WorkListBean;
+import com.arun.a85mm.fragment.OneWorkFragment;
+import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.utils.DensityUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wy on 2017/6/16.
@@ -52,17 +57,30 @@ public class AuditListAdapter extends BaseRecyclerAdapter<WorkListBean> {
             widthHeight = (DensityUtil.getScreenWidth(context) - DensityUtil.dp2px(context, 10)) / 2;
         }
 
-        private void setData(Context context, WorkListBean bean) {
+        private void setData(final Context context, final WorkListBean bean) {
 
             work_image.getLayoutParams().height = widthHeight;
             work_image.getLayoutParams().width = widthHeight;
             Glide.with(context)
                     .load(bean.coverUrl)
+                    .placeholder(bean.backgroundColor)
+                    .error(bean.backgroundColor)
                     .override(widthHeight, widthHeight)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .centerCrop()
                     .into(work_image);
             work_count.setText(bean.totalImageNum + "");
+
+            work_image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Map<String, String> map = new HashMap<>();
+                    map.put(UrlJumpHelper.WORK_ID, bean.workId);
+                    map.put(OneWorkFragment.KEY_AUDIT, OneWorkFragment.TYPE_AUDIT);
+                    FragmentCommonActivity.jumpToFragmentCommonActivity(context,
+                            FragmentCommonActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, FragmentCommonActivity.BACK_MODE_COM);
+                }
+            });
         }
     }
 }

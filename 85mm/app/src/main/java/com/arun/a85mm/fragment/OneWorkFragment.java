@@ -3,6 +3,7 @@ package com.arun.a85mm.fragment;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.adapter.ImageAdapter;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.UrlJumpHelper;
@@ -30,7 +32,7 @@ import java.util.Map;
  * Created by wy on 2017/6/5.
  */
 
-public class OneWorkFragment extends BaseFragment implements CommonView3, OnImageClick {
+public class OneWorkFragment extends BaseFragment implements CommonView3, OnImageClick, View.OnClickListener {
     private OneWorkPresenter oneWorkPresenter;
     private String workId;
     private String sourceUrl;
@@ -39,8 +41,14 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
     public TextView author_create_time;
     public RelativeLayout work_list_item_author;
     public ListViewForScrollView listView;
+    private LinearLayout bottom_view;
+    private TextView over_size;
+    private TextView recommend_new;
     private ImageAdapter imageAdapter;
+    public static final String KEY_AUDIT = "audit";
+    public static final String TYPE_AUDIT = "1";
     private List<WorkListItemBean> workListItems = new ArrayList<>();
+    private String type;
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -54,6 +62,11 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
         author_create_time = (TextView) findViewById(R.id.author_create_time);
         work_list_item_author = (RelativeLayout) findViewById(R.id.work_list_item_author);
         listView = (ListViewForScrollView) findViewById(R.id.listView);
+        bottom_view = (LinearLayout) findViewById(R.id.bottom_view);
+        over_size = (TextView) findViewById(R.id.over_size);
+        recommend_new = (TextView) findViewById(R.id.recommend_new);
+        over_size.setOnClickListener(this);
+        recommend_new.setOnClickListener(this);
         imageAdapter = new ImageAdapter(getActivity(), workListItems);
         imageAdapter.setOnImageClick(this);
         listView.setAdapter(imageAdapter);
@@ -66,7 +79,12 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
             Map<String, String> map = (Map<String, String>) getArguments().getSerializable(FragmentCommonActivity.EXTRAS);
             if (map != null) {
                 workId = map.get(UrlJumpHelper.WORK_ID);
+                type = map.get(KEY_AUDIT);
             }
+        }
+
+        if (TYPE_AUDIT.equals(type)) {
+            bottom_view.setVisibility(View.VISIBLE);
         }
         oneWorkPresenter = new OneWorkPresenter(getActivity());
         oneWorkPresenter.attachView(this);
@@ -127,5 +145,21 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
     @Override
     public void onMoreLinkClick(String workId, String sourceUrl) {
         DialogHelper.showBottomSourceLink(getActivity(), sourceUrl, workId, eventStatisticsHelper);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.recommend_new:
+                if (eventStatisticsHelper != null) {
+                    eventStatisticsHelper.recordUserAction(getActivity(), EventConstant.WORK_AUDIT_RECOMMEND, workId, "");
+                }
+                break;
+            case R.id.over_size:
+                if (eventStatisticsHelper != null) {
+                    eventStatisticsHelper.recordUserAction(getActivity(), EventConstant.WORK_SCALE_OVER, workId, "");
+                }
+                break;
+        }
     }
 }

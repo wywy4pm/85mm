@@ -7,13 +7,29 @@
     <ImageView
         android:id="@+id/work_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
 
-    <TextView
-        android:id="@+id/work_count"
+    <RelativeLayout
+        android:id="@+id/layout_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="10dp" />
+        android:layout_alignParentRight="true">
+
+        <TextView
+            android:id="@+id/work_count"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/shape_black_circle"
+            android:gravity="center"
+            android:minWidth="20dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+
 </RelativeLayout>

@@ -17,6 +17,8 @@ public class SharedPreferencesUtils {
     public static final String KEY_HIDE_READ_OPENED = "hide_read_opened";
     public static final String KEY_HIDE_READ_TIPS = "hide_read_tips";
     public static final String KEY_NEW_MESSAGE = "new_message";
+    public static final String KEY_AUDIT_SELECT_TAG = "select_tag";
+    public static final String KEY_AUDIT_SELECT_SORT = "select_sort";
 
     public static void saveUid(Context context, String uid) {
         if (!TextUtils.isEmpty(uid) && TextUtils.isEmpty(SharedPreferencesUtils.getUid(context))) {

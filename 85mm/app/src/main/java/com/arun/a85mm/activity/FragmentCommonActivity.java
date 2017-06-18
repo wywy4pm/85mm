@@ -28,12 +28,16 @@ public class FragmentCommonActivity extends BaseActivity {
     public static final String TYPE = "type";
     public static final String TITLE = "title";
     public static final String EXTRAS = "extras";
+    public static final String BACK_MODE = "back";
     public static final String FRAGMENT_LEFT_WORKS = "fragment_left_works";
     public static final String FRAGMENT_ONE_WORK = "fragment_one_work";
+    public static final int BACK_MODE_MAIN = 0;
+    public static final int BACK_MODE_COM = 1;
     //public static final String FRAGMENT_SEND_MESSAGE = "fragment_send_message";
     public String title;
     private String type = "";
     private Fragment fragment;
+    private int backMode;
 
     public static void jumpToFragmentCommonActivity(Context context, String type, String title, Map<String, String> extras) {
         Intent intent = new Intent(context, FragmentCommonActivity.class);
@@ -46,12 +50,26 @@ public class FragmentCommonActivity extends BaseActivity {
         ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
+    public static void jumpToFragmentCommonActivity(Context context, String type, String title, Map<String, String> extras, int backMode) {
+        Intent intent = new Intent(context, FragmentCommonActivity.class);
+        intent.putExtra(TYPE, type);
+        intent.putExtra(TITLE, title);
+        intent.putExtra(BACK_MODE, backMode);
+        if (extras != null) {
+            intent.putExtra(EXTRAS, (Serializable) extras);
+        }
+        context.startActivity(intent);
+        ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+    }
+
     public static void jumpToFragmentCommonActivity(Context context, String type, Map<String, String> extras) {
         Intent intent = new Intent(context, FragmentCommonActivity.class);
         intent.putExtra(TYPE, type);
         if (extras != null) {
-            String title = extras.get(TITLE);
-            intent.putExtra(TITLE, title);
+            if (extras.containsKey(TITLE)) {
+                String title = extras.get(TITLE);
+                intent.putExtra(TITLE, title);
+            }
             //extras.remove(TITLE);
             intent.putExtra(EXTRAS, (Serializable) extras);
         }
@@ -72,6 +90,7 @@ public class FragmentCommonActivity extends BaseActivity {
         if (getIntent() != null) {
             type = getIntent().getExtras().getString(TYPE);
             title = getIntent().getExtras().getString(TITLE);
+            backMode = getIntent().getExtras().getInt(BACK_MODE);
             map = (Map<String, String>) getIntent().getExtras().getSerializable(EXTRAS);
             initFragment(type, map);
         }
@@ -86,7 +105,8 @@ public class FragmentCommonActivity extends BaseActivity {
         if (layout_title_bar != null) {
             if (!TextUtils.isEmpty(title)) {
                 layout_title_bar.setVisibility(View.VISIBLE);
-                if (FRAGMENT_ONE_WORK.equals(type)) {
+                if (FRAGMENT_ONE_WORK.equals(type)
+                        && backMode == BACK_MODE_MAIN) {
                     setSwipeBackEnable(false);
                     setBackToMain(image_back);
                 } else {
@@ -159,7 +179,8 @@ public class FragmentCommonActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (FRAGMENT_ONE_WORK.equals(type)) {
+            if (FRAGMENT_ONE_WORK.equals(type)
+                    && backMode == BACK_MODE_MAIN) {
                 MainActivity.jumpToMain(FragmentCommonActivity.this, MainActivity.INTENT_TYPE_PUSH_BACK);
                 finish();
                 return true;

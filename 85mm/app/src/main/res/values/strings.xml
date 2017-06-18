@@ -31,5 +31,6 @@
     <string name="bad_comment">差评</string>
     <string name="repeat">和其他作品重复</string>
     <string name="show_seq">图片显示有问题</string>
+    <string name="recommend_new">推荐到最新频道</string>
     <string name="cancel">取消</string>
 </resources>

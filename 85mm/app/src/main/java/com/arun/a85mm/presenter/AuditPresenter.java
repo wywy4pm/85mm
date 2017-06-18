@@ -36,7 +36,11 @@ public class AuditPresenter extends BasePresenter<CommonView4> {
                                             getMvpView().refreshMore(data.body);
                                         }
                                     } else if (data.code == ErrorCode.NO_DATA) {
-                                        ((AuditActivity) getMvpView()).setHaveMore(false);
+                                        if (TextUtils.isEmpty(lastWorkId)) {
+                                            getMvpView().refresh(null);
+                                        } else {
+                                            ((AuditActivity) getMvpView()).setHaveMore(false);
+                                        }
                                     }
                                 }
                             }

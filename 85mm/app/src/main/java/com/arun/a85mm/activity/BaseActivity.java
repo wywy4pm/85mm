@@ -146,14 +146,16 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
                 //得到当前显示的最后一个item的view
                 View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount() - 1);
                 //得到lastChildView的bottom坐标值
-                int lastChildBottom = lastChildView.getBottom();
-                //得到RecyclerView的底部坐标减去底部padding值，也就是显示内容最底部的坐标
-                int recyclerBottom = recyclerView.getBottom() - recyclerView.getPaddingBottom();
-                int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
-                synchronized (BaseActivity.this) {
-                    if (lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
-                        if (!isLoading) {
-                            setLoadMore();
+                if(lastChildView != null){
+                    int lastChildBottom = lastChildView.getBottom();
+                    //得到RecyclerView的底部坐标减去底部padding值，也就是显示内容最底部的坐标
+                    int recyclerBottom = recyclerView.getBottom() - recyclerView.getPaddingBottom();
+                    int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
+                    synchronized (BaseActivity.this) {
+                        if (lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
+                            if (!isLoading) {
+                                setLoadMore();
+                            }
                         }
                     }
                 }
