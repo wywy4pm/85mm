@@ -14,6 +14,7 @@ import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.event.UpdateProductEvent;
 import com.arun.a85mm.helper.CommunityListCacheManager;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
@@ -23,6 +24,10 @@ import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +50,14 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
     private CommunityAdapter communityAdapter;
     private CommonApiResponse response;
 
+    public static CommunityFragment newInstance() {
+        CommunityFragment communityFragment = new CommunityFragment();
+        return communityFragment;
+    }
+
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         return R.layout.layout_producation;
     }
 
@@ -84,7 +95,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
     private long requestTime;
 
     @SuppressWarnings("unchecked")
-    private void refreshData() {
+    public void refreshData() {
         requestTime = System.currentTimeMillis();
         currentGroupPosition = 0;
         isSingleExpand = false;
@@ -279,9 +290,15 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
         DialogHelper.showBottomSourceLink(getActivity(), sourceUrl, workId, eventStatisticsHelper);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setHideState(UpdateProductEvent event) {
+        refreshData();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         if (communityPresenter != null) {
             communityPresenter.detachView();
         }

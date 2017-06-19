@@ -4,17 +4,21 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.AuditListAdapter;
 import com.arun.a85mm.bean.AuditInfoBean;
+import com.arun.a85mm.bean.AuditItemBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
@@ -26,6 +30,7 @@ import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.CommonView4;
 import com.arun.a85mm.widget.AutoLineLinearLayout;
+import com.arun.a85mm.widget.NonScrollView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,16 +38,17 @@ import java.util.List;
 public class AuditActivity extends BaseActivity implements CommonView4<List<WorkListBean>> {
 
     private TextView image_right;
-    private AutoLineLinearLayout layout_tags;
+    //private AutoLineLinearLayout layout_tags;
     private SwipeToLoadLayout swipeToLoad;
     private RecyclerView recyclerView;
     private AuditListAdapter auditListAdapter;
-    private List<WorkListBean> works = new ArrayList<>();
-    private List<AuditInfoBean.TagItemBean> tags;
+    private List<AuditItemBean> auditWorks = new ArrayList<>();
+    //private List<AuditInfoBean.TagItemBean> tags;
     private int auditSortType = 0;//0：按时间，1：按热度
     public int start;
     public String lastWorkId;
     private AuditPresenter auditPresenter;
+
     private String searchName;
     private boolean isHaveMore = true;
 
@@ -63,11 +69,16 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
 
     private void initView() {
         image_right = (TextView) findViewById(R.id.image_right);
-        layout_tags = (AutoLineLinearLayout) findViewById(R.id.layout_tags);
         swipeToLoad = (SwipeToLoadLayout) findViewById(R.id.swipeToLoad);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        auditListAdapter = new AuditListAdapter(this, works);
+        recyclerView = (RecyclerView) findViewById(R.id.swipe_target);
+        auditListAdapter = new AuditListAdapter(this, auditWorks);
         FullyGridLayoutManager gridLayoutManager = new FullyGridLayoutManager(this, 2);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return position == 0 ? 2 : 1;
+            }
+        });
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(auditListAdapter);
 
@@ -110,7 +121,7 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
     }
 
     private void initData() {
-        tags = ConfigHelper.tags;
+        /*tags = ConfigHelper.tags;
         if (tags != null && tags.size() > 0) {
             String selectName = SharedPreferencesUtils.getConfigString(this, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG);
             if (TextUtils.isEmpty(selectName)) {
@@ -147,27 +158,32 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
                 }
                 layout_tags.addView(tv);
             }
+        }*/
+        List<AuditInfoBean.TagItemBean> tags = ConfigHelper.tags;
+        if (tags != null && tags.size() > 0) {
+            String selectName = SharedPreferencesUtils.getConfigString(this, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG);
+            if (TextUtils.isEmpty(selectName)) {
+                setSearchName(tags.get(0).searchName);
+            } else {
+                setSearchName(selectName);
+            }
         }
+
+        //创建头部
+        AuditItemBean bean = new AuditItemBean();
+        bean.type = AuditListAdapter.TYPE_AUDIT_HEAD;
+        auditWorks.add(bean);
+
         auditPresenter = new AuditPresenter(this);
         auditPresenter.attachView(this);
         requestData();
     }
 
-    private void resetSelect(Object selectTag) {
-        if (layout_tags.getChildCount() > 0) {
-            for (int i = 0; i < layout_tags.getChildCount(); i++) {
-                TextView textView = (TextView) layout_tags.getChildAt(i);
-                if (textView != null && textView.getTag() != null
-                        && !textView.getTag().equals(selectTag)
-                        && textView.isSelected()) {
-                    textView.setSelected(false);
-                    textView.setTextColor(getResources().getColor(R.color.charcoalgrey));
-                }
-            }
-        }
+    public void setSearchName(String searchName) {
+        this.searchName = searchName;
     }
 
-    private void requestData() {
+    public void requestData() {
         if (auditPresenter != null) {
             setLoading(true);
             start = 0;
@@ -204,12 +220,15 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
     @Override
     public void refresh(List<WorkListBean> data) {
         if (data != null) {
-            works.clear();
-            setImgBgColor(data);
-            works.addAll(data);
+            AuditItemBean bean = auditWorks.get(0);
+            auditWorks.clear();
+            auditWorks.add(bean);
+            formatData(data);
             auditListAdapter.notifyDataSetChanged();
         } else {
-            works.clear();
+            AuditItemBean bean = auditWorks.get(0);
+            auditWorks.clear();
+            auditWorks.add(bean);
             auditListAdapter.notifyDataSetChanged();
         }
     }
@@ -217,8 +236,7 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
     @Override
     public void refreshMore(List<WorkListBean> data) {
         if (data != null) {
-            setImgBgColor(data);
-            works.addAll(data);
+            formatData(data);
             auditListAdapter.notifyDataSetChanged();
         }
     }
@@ -227,11 +245,19 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
     public void refresh(int type, Object data) {
     }
 
-    private void setImgBgColor(List<WorkListBean> data) {
+    private void formatData(List<WorkListBean> data) {
         if (data != null && data.size() > 0) {
             for (int i = 0; i < data.size(); i++) {
                 if (data.get(i) != null) {
-                    data.get(i).backgroundColor = RandomColorHelper.getRandomColor();
+                    WorkListBean work = data.get(i);
+                    AuditItemBean bean = new AuditItemBean();
+                    bean.type = AuditListAdapter.TYPE_AUDIT_LIST;
+                    bean.coverUrl = work.coverUrl;
+                    bean.backgroundColor = RandomColorHelper.getRandomColor();
+                    bean.totalImageNum = work.totalImageNum;
+                    bean.workId = work.workId;
+                    bean.workTitle = work.workTitle;
+                    auditWorks.add(bean);
                 }
             }
         }

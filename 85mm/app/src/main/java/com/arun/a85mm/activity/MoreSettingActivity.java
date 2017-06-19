@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.dialog.ContactDialog;
+import com.arun.a85mm.event.UpdateProductEvent;
 import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.presenter.MorePresenter;
 import com.arun.a85mm.utils.CacheUtils;
@@ -26,6 +27,8 @@ import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.utils.SystemServiceUtils;
 import com.arun.a85mm.view.CommonView3;
 import com.umeng.socialize.UMShareAPI;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,6 +179,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         if (type == MorePresenter.TYPE_HIDE_READ) {
             int isOpen = switchView.isChecked() ? 1 : 0;
             SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_OPENED, isOpen);
+            EventBus.getDefault().post(new UpdateProductEvent());
         }
     }
 

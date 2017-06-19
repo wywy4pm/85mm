@@ -1,57 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:fitsSystemWindows="true">
 
     <include
         android:id="@+id/layout_title_right_bar"
         layout="@layout/layout_title_right_bar" />
 
-    <com.arun.a85mm.refresh.SwipeToLoadLayout
-        android:id="@+id/swipeToLoad"
+    <include
+        layout="@layout/layout_refresh_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/layout_title_right_bar"
-        app:refresh_final_drag_offset="300dp">
-
-        <com.arun.a85mm.refresh.ShootRefreshView
-            android:id="@+id/swipe_refresh_header"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:paddingBottom="15dp" />
-
-        <com.arun.a85mm.widget.NonScrollView
-            android:id="@+id/swipe_target"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.arun.a85mm.widget.AutoLineLinearLayout
-                    android:id="@+id/layout_tags"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginTop="15dp"
-                    app:leftAndRightSpace="10dp"
-                    app:rowSpace="12dp" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/layout_tags"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp" />
-            </RelativeLayout>
-        </com.arun.a85mm.widget.NonScrollView>
-    </com.arun.a85mm.refresh.SwipeToLoadLayout>
+        android:layout_below="@+id/layout_title_right_bar" />
 
 </RelativeLayout>

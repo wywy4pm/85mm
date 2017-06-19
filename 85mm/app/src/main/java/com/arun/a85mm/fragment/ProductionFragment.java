@@ -12,6 +12,7 @@ import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.event.UpdateProductEvent;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.listener.OnImageClick;
@@ -20,6 +21,10 @@ import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +51,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         return R.layout.layout_producation;
     }
 
@@ -76,7 +82,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         refreshData();
     }
 
-    private void refreshData() {
+    public void refreshData() {
         currentGroupPosition = 0;
         isSingleExpand = false;
         collapseGroup(expandableListView, workLists);
@@ -231,9 +237,15 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         this.isHaveMore = isHaveMore;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setHideState(UpdateProductEvent event) {
+        refreshData();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         if (productFragmentPresenter != null) {
             productFragmentPresenter.detachView();
         }

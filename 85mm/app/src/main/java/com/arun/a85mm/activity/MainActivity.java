@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -42,6 +43,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -156,6 +163,22 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselect(int position) {
+                if (list != null && list.size() > 0
+                        && position <= list.size() - 1) {
+                    Fragment fragment = list.get(position);
+                    if (fragment != null) {
+                        if (fragment instanceof ProductionFragment) {
+                            ProductionFragment productionFragment = (ProductionFragment) fragment;
+                            productionFragment.refreshData();
+                        } else if (fragment instanceof CommunityFragment) {
+                            CommunityFragment communityFragment = (CommunityFragment) fragment;
+                            communityFragment.refreshData();
+                        } else if (fragment instanceof ArticleFragment) {
+                            ArticleFragment articleFragment = (ArticleFragment) fragment;
+                            articleFragment.refreshData();
+                        }
+                    }
+                }
             }
         });
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -193,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
         productionFragment = ProductionFragment.newInstance();
-        CommunityFragment communityFragment = new CommunityFragment();
+        CommunityFragment communityFragment = CommunityFragment.newInstance();
         ArticleFragment articleFragment = ArticleFragment.newIntense();
         list.add(productionFragment);
         list.add(communityFragment);

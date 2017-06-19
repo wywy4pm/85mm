@@ -1,7 +1,15 @@
 package com.arun.a85mm.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +17,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.AuditActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
+import com.arun.a85mm.bean.AuditInfoBean;
+import com.arun.a85mm.bean.AuditItemBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.fragment.OneWorkFragment;
+import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.utils.DensityUtil;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
+import com.arun.a85mm.widget.AutoLineLinearLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -25,16 +39,26 @@ import java.util.Map;
  * Created by wy on 2017/6/16.
  */
 
-public class AuditListAdapter extends BaseRecyclerAdapter<WorkListBean> {
+public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
+    public static final String TYPE_AUDIT_HEAD = "audit_head";
+    public static final String TYPE_AUDIT_LIST = "audit_list";
+    private static final int TYPE_HEAD = 0;
+    private static final int TYPE_LIST = 1;
 
-    public AuditListAdapter(Context context, List<WorkListBean> list) {
+    public AuditListAdapter(Context context, List<AuditItemBean> list) {
         super(context, list);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_audit_work_item, parent, false);
-        return new AuditHolder(contexts.get(), itemView);
+        if (viewType == TYPE_HEAD) {
+            View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_audit_head, parent, false);
+            return new AuditHeadHolder(contexts.get(), itemView);
+        } else if (viewType == TYPE_LIST) {
+            View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_audit_work_item, parent, false);
+            return new AuditHolder(contexts.get(), itemView);
+        }
+        return null;
     }
 
     @Override
@@ -42,6 +66,90 @@ public class AuditListAdapter extends BaseRecyclerAdapter<WorkListBean> {
         if (holder instanceof AuditHolder) {
             AuditHolder auditHolder = (AuditHolder) holder;
             auditHolder.setData(contexts.get(), getItem(position));
+        } else if (holder instanceof AuditHeadHolder) {
+            AuditHeadHolder auditHeadHolder = (AuditHeadHolder) holder;
+            auditHeadHolder.setData(contexts.get());
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        int type = -1;
+        if (TYPE_AUDIT_HEAD.equals(list.get(position).type)) {
+            type = TYPE_HEAD;
+        } else if (TYPE_AUDIT_LIST.equals(list.get(position).type)) {
+            type = TYPE_LIST;
+        }
+        return type;
+    }
+
+    private static class AuditHeadHolder extends RecyclerView.ViewHolder {
+        private AutoLineLinearLayout layout_tags;
+        private List<AuditInfoBean.TagItemBean> tags;
+
+        private AuditHeadHolder(final Context context, View itemView) {
+            super(itemView);
+            layout_tags = (AutoLineLinearLayout) itemView.findViewById(R.id.layout_tags);
+
+            tags = ConfigHelper.tags;
+            String selectName = SharedPreferencesUtils.getConfigString(context, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG);
+            for (int i = 0; i < tags.size(); i++) {
+                final TextView tv = new TextView(context);
+                tv.setTag(i);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                tv.setTextColor(context.getResources().getColor(R.color.charcoalgrey));
+                tv.setPadding(DensityUtil.dp2px(context, 10), DensityUtil.dp2px(context, 5), DensityUtil.dp2px(context, 10), DensityUtil.dp2px(context, 5));
+                tv.setGravity(Gravity.CENTER);
+                tv.setBackgroundResource(R.drawable.selector_audit_flow_tags);
+                final int finalI = i;
+                tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tv.setSelected(true);
+                        tv.setTextColor(context.getResources().getColor(R.color.white));
+                        resetSelect(context, tv.getTag());
+                        ((AuditActivity) context).setSearchName(tags.get(finalI).searchName);
+                        ((AuditActivity) context).requestData();
+                    }
+                });
+                tv.setText(tags.get(i).showName);
+
+                if ((!TextUtils.isEmpty(selectName) && selectName.equals(tags.get(i).searchName))
+                        || (TextUtils.isEmpty(selectName) && i == 0)) {
+                    tv.setSelected(true);
+                    tv.setTextColor(context.getResources().getColor(R.color.white));
+                }
+
+                layout_tags.addView(tv);
+            }
+        }
+
+        private void setData(final Context context) {
+            String selectName = SharedPreferencesUtils.getConfigString(context, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG);
+            for (int i = 0; i < layout_tags.getChildCount(); i++) {
+                TextView tv = (TextView) layout_tags.getChildAt(i);
+                if ((!TextUtils.isEmpty(selectName) && selectName.equals(tags.get(i).searchName))
+                        || (TextUtils.isEmpty(selectName) && i == 0)) {
+                    tv.setSelected(true);
+                    tv.setTextColor(context.getResources().getColor(R.color.white));
+
+                    resetSelect(context, tv.getTag());
+                }
+            }
+        }
+
+        private void resetSelect(Context context, Object selectTag) {
+            if (layout_tags.getChildCount() > 0) {
+                for (int i = 0; i < layout_tags.getChildCount(); i++) {
+                    TextView textView = (TextView) layout_tags.getChildAt(i);
+                    if (textView != null && textView.getTag() != null
+                            && !textView.getTag().equals(selectTag)
+                            && textView.isSelected()) {
+                        textView.setSelected(false);
+                        textView.setTextColor(context.getResources().getColor(R.color.charcoalgrey));
+                    }
+                }
+            }
         }
     }
 
@@ -54,10 +162,10 @@ public class AuditListAdapter extends BaseRecyclerAdapter<WorkListBean> {
             super(itemView);
             work_image = (ImageView) itemView.findViewById(R.id.work_image);
             work_count = (TextView) itemView.findViewById(R.id.work_count);
-            widthHeight = (DensityUtil.getScreenWidth(context) - DensityUtil.dp2px(context, 10)) / 2;
+            widthHeight = (DensityUtil.getScreenWidth(context)) / 2;
         }
 
-        private void setData(final Context context, final WorkListBean bean) {
+        private void setData(final Context context, final AuditItemBean bean) {
 
             work_image.getLayoutParams().height = widthHeight;
             work_image.getLayoutParams().width = widthHeight;
@@ -69,6 +177,7 @@ public class AuditListAdapter extends BaseRecyclerAdapter<WorkListBean> {
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .centerCrop()
                     .into(work_image);
+
             work_count.setText(bean.totalImageNum + "");
 
             work_image.setOnClickListener(new View.OnClickListener() {
