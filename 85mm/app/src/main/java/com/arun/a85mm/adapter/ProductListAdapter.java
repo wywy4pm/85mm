@@ -44,6 +44,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
     private WeakReference<Context> contexts;
     private List<WorkListBean> works;
     private int screenWidth;
+    private boolean isHaveAuditTips = false;
 
     public ProductListAdapter(Context context, List<WorkListBean> works) {
         contexts = new WeakReference<>(context);
@@ -77,6 +78,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             workListHeadHolder = (WorkListHeadHolder) convertView.getTag();
         }*/
         if (ConfigHelper.tipsPosition > 0 && ConfigHelper.tipsPosition == groupPosition + 1) {
+            isHaveAuditTips = true;
             workListHeadHolder.layout_auditing_tips.setVisibility(View.VISIBLE);
             workListHeadHolder.layout_auditing_tips.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,14 +87,21 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 }
             });
         } else {
+            isHaveAuditTips = false;
             workListHeadHolder.layout_auditing_tips.setVisibility(View.GONE);
         }
 
         final WorkListHeadHolder headHolder = workListHeadHolder;
         final WorkListBean bean = works.get(groupPosition);
+
         //作品浏览
         if (eventListener != null) {
-            eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_BROWSE_NEWEST, bean.workId, ""));
+            if (groupPosition >= 2) {
+                WorkListBean previousBean = works.get(groupPosition - 2);
+                if (previousBean != null) {
+                    eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_BROWSE_NEWEST, previousBean.workId, ""));
+                }
+            }
         }
 
         int imageHeight = 0;
@@ -108,7 +117,11 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             if (bean.isCoverLoad) {
                 if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
                     headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
-                    headHolder.itemView.getLayoutParams().height = imageHeight;
+                    if (isHaveAuditTips) {
+                        headHolder.itemView.getLayoutParams().height = imageHeight + DensityUtil.dp2px(contexts.get(), 67);
+                    } else {
+                        headHolder.itemView.getLayoutParams().height = imageHeight;
+                    }
                 }
                 Glide.with(contexts.get()).load(bean.coverUrl).centerCrop()
                         .placeholder(bean.backgroundColor).error(bean.backgroundColor)
@@ -132,7 +145,12 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             } else {
                 if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
                     headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
-                    headHolder.itemView.getLayoutParams().height = imageHeight;
+
+                    if (isHaveAuditTips) {
+                        headHolder.itemView.getLayoutParams().height = imageHeight + DensityUtil.dp2px(contexts.get(), 67);
+                    } else {
+                        headHolder.itemView.getLayoutParams().height = imageHeight;
+                    }
                 }
                 final int finalImageHeight = imageHeight;
                 Glide.with(contexts.get()).load(bean.coverUrl).centerCrop()
@@ -147,7 +165,12 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                     public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                         if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
                             headHolder.work_list_cover_img.getLayoutParams().height = finalImageHeight;
-                            headHolder.itemView.getLayoutParams().height = finalImageHeight;
+
+                            /*if (isHaveAuditTips) {
+                                headHolder.itemView.getLayoutParams().height = finalImageHeight + DensityUtil.dp2px(contexts.get(), 67);
+                            } else {
+                                headHolder.itemView.getLayoutParams().height = finalImageHeight;
+                            }*/
                         }
 
                         if (!bean.isExpand) {
@@ -206,7 +229,12 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                     } else {//加载异常时点击重新加载
                         if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
                             headHolder.work_list_cover_img.getLayoutParams().height = finalImageHeight;
-                            headHolder.itemView.getLayoutParams().height = finalImageHeight;
+
+                            /*if (isHaveAuditTips) {
+                                headHolder.itemView.getLayoutParams().height = finalImageHeight + DensityUtil.dp2px(contexts.get(), 67);
+                            }else {
+                                headHolder.itemView.getLayoutParams().height = finalImageHeight;
+                            }*/
                         }
                         Glide.with(contexts.get()).load(bean.coverUrl).centerCrop()
                                 .placeholder(bean.backgroundColor).error(bean.backgroundColor)
@@ -220,7 +248,12 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                             public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                                 if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
                                     headHolder.work_list_cover_img.getLayoutParams().height = finalImageHeight;
-                                    headHolder.itemView.getLayoutParams().height = finalImageHeight;
+
+                                    /*if (isHaveAuditTips) {
+                                        headHolder.itemView.getLayoutParams().height = finalImageHeight + DensityUtil.dp2px(contexts.get(), 67);
+                                    }else {
+                                        headHolder.itemView.getLayoutParams().height = finalImageHeight;
+                                    }*/
                                 }
 
                                 if (!bean.isExpand) {

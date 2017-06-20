@@ -1,6 +1,7 @@
 package com.arun.a85mm.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.listener.OnImageClick;
@@ -91,6 +93,13 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     }
 
     private void refreshData() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                expandableListView.setSelectedGroup(0);
+            }
+        }, 50);
+
         currentGroupPosition = 0;
         isSingleExpand = false;
         collapseGroup(expandableListView, workLists);
@@ -224,6 +233,9 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
 
     public void setHaveMore(boolean isHaveMore) {
         this.isHaveMore = isHaveMore;
+        if (!isHaveMore) {
+            setLeftWorkBrowse(EventConstant.WORK_BROWSE_ONEDAY, workLists);
+        }
     }
 
     @Override

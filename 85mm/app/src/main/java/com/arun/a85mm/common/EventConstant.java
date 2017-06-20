@@ -26,6 +26,7 @@ public class EventConstant {
     public static final int WORK_BROWSE_NEWEST = 1001;
     public static final int WORK_BROWSE_HOTEST = 1101;
     public static final int WORK_BROWSE_ONEDAY = 1201;
+    public static final int WORK_BROWSE_AUDIT = 1301;
 
     public static final int BTN_WORK_ONEDAY = 1005;
     public static final int PULL_TO_REFRESH = 1006;

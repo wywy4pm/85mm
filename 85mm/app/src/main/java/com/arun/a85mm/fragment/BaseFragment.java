@@ -405,14 +405,31 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
 
     @Override
     public void onEvent(List<ActionBean> actionList) {
-        if (eventStatisticsHelper != null) {
+        onActionEvent(EventConstant.DEFAULT, actionList);
+        /*if (eventStatisticsHelper != null) {
             eventStatisticsHelper.recordUserAction(getActivity(), EventConstant.DEFAULT, actionList);
+        }*/
+    }
+
+    public void onActionEvent(int type, List<ActionBean> actionList) {
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.recordUserAction(getActivity(), type, actionList);
         }
     }
 
     public void onActionEvent(int type) {
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.recordUserAction(getActivity(), type);
+        }
+    }
+
+    public void setLeftWorkBrowse(int type, List<WorkListBean> worksList) {
+        if (worksList.size() >= 2) {
+            for (int i = worksList.size() - 1; i >= worksList.size() - 2; i--) {
+                if (worksList.get(i) != null) {
+                    onEvent(EventStatisticsHelper.createOneActionList(type, worksList.get(i).workId, ""));
+                }
+            }
         }
     }
 
@@ -454,8 +471,6 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.detachView();
         }
-        /*if(runnable != null){
-            new Thread().stop();
-        }*/
     }
+
 }

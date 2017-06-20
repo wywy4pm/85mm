@@ -1,6 +1,7 @@
 package com.arun.a85mm.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -14,9 +15,11 @@ import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.event.UpdateProductEvent;
 import com.arun.a85mm.helper.CommunityListCacheManager;
 import com.arun.a85mm.helper.DialogHelper;
+import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.CommunityPresenter;
@@ -96,6 +99,13 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
 
     @SuppressWarnings("unchecked")
     public void refreshData() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                expandableListView.setSelectedGroup(0);
+            }
+        }, 50);
+
         requestTime = System.currentTimeMillis();
         currentGroupPosition = 0;
         isSingleExpand = false;
@@ -131,6 +141,9 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
 
     public void setHaveMore(boolean isHaveMore) {
         this.isHaveMore = isHaveMore;
+        if (!isHaveMore) {
+            setLeftWorkBrowse(EventConstant.WORK_BROWSE_HOTEST, worksList);
+        }
     }
 
     @Override

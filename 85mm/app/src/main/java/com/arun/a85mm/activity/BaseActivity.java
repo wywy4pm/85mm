@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.helper.ShowTopToastHelper;
+import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.DensityUtil;
@@ -41,7 +44,7 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivityHelper;
 /**
  * Created by WY on 2017/4/15.
  */
-public abstract class BaseActivity extends AppCompatActivity implements SwipeBackActivityBase, MvpView {
+public abstract class BaseActivity extends AppCompatActivity implements SwipeBackActivityBase, MvpView, EventListener {
     private SwipeBackActivityHelper mHelper;
     private boolean isShowingTop;
     private SaveImageHelper saveImageHelper;
@@ -133,6 +136,11 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
         }
     }
 
+    @Override
+    public void onEvent(List<ActionBean> actionList) {
+        onActionEvent(EventConstant.DEFAULT, actionList);
+    }
+
     public void setRecyclerViewScrollListener(RecyclerView recyclerView) {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -143,7 +151,7 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                //得到当前显示的最后一个item的view
+                /*//得到当前显示的最后一个item的view
                 View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount() - 1);
                 //得到lastChildView的bottom坐标值
                 if(lastChildView != null){
@@ -155,6 +163,28 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
                         if (lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
                             if (!isLoading) {
                                 setLoadMore();
+                            }
+                        }
+                    }
+                }*/
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                if (layoutManager != null) {
+                    if (layoutManager instanceof LinearLayoutManager) {
+                        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+                        int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
+                        int visibleCount = linearLayoutManager.getChildCount();
+                        int totalCount = linearLayoutManager.getItemCount();
+                        int limitLoadMore = 0;
+                        if (totalCount > 6) {
+                            limitLoadMore = totalCount - 6;
+                        } else {
+                            limitLoadMore = totalCount;
+                        }
+                        synchronized (BaseActivity.this) {
+                            if (firstVisiblePosition + visibleCount >= limitLoadMore) {
+                                if (!isLoading) {
+                                    setLoadMore();
+                                }
                             }
                         }
                     }

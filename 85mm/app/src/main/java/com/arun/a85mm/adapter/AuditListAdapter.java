@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -22,9 +23,12 @@ import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.bean.AuditInfoBean;
 import com.arun.a85mm.bean.AuditItemBean;
 import com.arun.a85mm.bean.WorkListBean;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.fragment.OneWorkFragment;
 import com.arun.a85mm.helper.ConfigHelper;
+import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.UrlJumpHelper;
+import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.widget.AutoLineLinearLayout;
@@ -44,6 +48,11 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
     public static final String TYPE_AUDIT_LIST = "audit_list";
     private static final int TYPE_HEAD = 0;
     private static final int TYPE_LIST = 1;
+    public EventListener eventListener;
+
+    public void setEventListener(EventListener eventListener) {
+        this.eventListener = eventListener;
+    }
 
     public AuditListAdapter(Context context, List<AuditItemBean> list) {
         super(context, list);
@@ -66,6 +75,12 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
         if (holder instanceof AuditHolder) {
             AuditHolder auditHolder = (AuditHolder) holder;
             auditHolder.setData(contexts.get(), getItem(position));
+            if (eventListener != null) {
+                if (position >= 6) {
+                    AuditItemBean previousBean = list.get(position - 6);
+                    eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_BROWSE_AUDIT, previousBean.workId, ""));
+                }
+            }
         } else if (holder instanceof AuditHeadHolder) {
             AuditHeadHolder auditHeadHolder = (AuditHeadHolder) holder;
             auditHeadHolder.setData(contexts.get());
@@ -154,12 +169,14 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
     }
 
     private static class AuditHolder extends RecyclerView.ViewHolder {
+        private View itemView;
         private ImageView work_image;
         private TextView work_count;
         private int widthHeight;
 
         private AuditHolder(Context context, View itemView) {
             super(itemView);
+            this.itemView = itemView;
             work_image = (ImageView) itemView.findViewById(R.id.work_image);
             work_count = (TextView) itemView.findViewById(R.id.work_count);
             widthHeight = (DensityUtil.getScreenWidth(context)) / 2;
@@ -180,7 +197,7 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
 
             work_count.setText(bean.totalImageNum + "");
 
-            work_image.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Map<String, String> map = new HashMap<>();

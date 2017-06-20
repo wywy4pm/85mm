@@ -49,8 +49,13 @@ public class ImageAdapter extends BaseListAdapter<WorkListItemBean> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         WorkListItemHolder workListItemHolder = null;
-        convertView = LayoutInflater.from(context).inflate(R.layout.layout_work_list_item, parent, false);
-        workListItemHolder = new WorkListItemHolder(convertView);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.layout_work_list_item, parent, false);
+            workListItemHolder = new WorkListItemHolder(convertView);
+            convertView.setTag(workListItemHolder);
+        } else {
+            workListItemHolder = (WorkListItemHolder) convertView.getTag();
+        }
 
         final WorkListItemBean bean = getItem(position);
         final WorkListItemHolder finalWorkListItemHolder = workListItemHolder;

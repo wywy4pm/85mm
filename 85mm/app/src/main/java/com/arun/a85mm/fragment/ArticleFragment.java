@@ -72,6 +72,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
     }
 
     public void refreshData() {
+        recyclerView.smoothScrollToPosition(0);
         setHaveMore(true);
         currentPageNum = 1;
         if (NetUtils.isConnected(getActivity())) {

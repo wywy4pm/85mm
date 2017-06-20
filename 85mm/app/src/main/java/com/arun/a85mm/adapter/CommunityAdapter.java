@@ -85,15 +85,21 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
 
         final WorkListHeadHolder headHolder = workListHeadHolder;
         final WorkListBean bean = workList.get(groupPosition);
+
         //作品浏览
         if (eventListener != null) {
-            int type = -1;
-            if (isCommunity) {
-                type = EventConstant.WORK_BROWSE_HOTEST;
-            } else {
-                type = EventConstant.WORK_BROWSE_ONEDAY;
+            if (groupPosition >=2) {
+                WorkListBean previousBean = workList.get(groupPosition - 2);
+                if (previousBean != null) {
+                    int type = -1;
+                    if (isCommunity) {
+                        type = EventConstant.WORK_BROWSE_HOTEST;
+                    } else {
+                        type = EventConstant.WORK_BROWSE_ONEDAY;
+                    }
+                    eventListener.onEvent(EventStatisticsHelper.createOneActionList(type, previousBean.workId, ""));
+                }
             }
-            eventListener.onEvent(EventStatisticsHelper.createOneActionList(type, bean.workId, ""));
         }
 
         if (isCommunity) {

@@ -17,11 +17,15 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.AuditListAdapter;
+import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.AuditInfoBean;
 import com.arun.a85mm.bean.AuditItemBean;
 import com.arun.a85mm.bean.WorkListBean;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.ConfigHelper;
+import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
+import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.presenter.AuditPresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.DensityUtil;
@@ -72,6 +76,7 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
         swipeToLoad = (SwipeToLoadLayout) findViewById(R.id.swipeToLoad);
         recyclerView = (RecyclerView) findViewById(R.id.swipe_target);
         auditListAdapter = new AuditListAdapter(this, auditWorks);
+        auditListAdapter.setEventListener(this);
         FullyGridLayoutManager gridLayoutManager = new FullyGridLayoutManager(this, 2);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -188,6 +193,7 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
             setLoading(true);
             start = 0;
             lastWorkId = "";
+            isHaveMore = true;
             auditPresenter.getAuditWorkList(searchName, auditSortType, start, lastWorkId);
 
             SharedPreferencesUtils.setConfigString(this, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG, searchName);
@@ -215,6 +221,19 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
 
     public void setHaveMore(boolean haveMore) {
         isHaveMore = haveMore;
+        if (!haveMore) {
+            setLeftWorkBrowse(EventConstant.WORK_BROWSE_AUDIT, auditWorks);
+        }
+    }
+
+    public void setLeftWorkBrowse(int type, List<AuditItemBean> worksList) {
+        if (worksList.size() >= 6) {
+            for (int i = worksList.size() - 1; i >= worksList.size() - 6; i--) {
+                if (worksList.get(i) != null) {
+                    onEvent(EventStatisticsHelper.createOneActionList(type, worksList.get(i).workId, ""));
+                }
+            }
+        }
     }
 
     @Override
@@ -270,4 +289,5 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
             swipeToLoad.setRefreshing(false);
         }
     }
+
 }
