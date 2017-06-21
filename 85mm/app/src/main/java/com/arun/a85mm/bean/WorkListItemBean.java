@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by wy on 2017/5/5.
  */
 
-public class WorkListItemBean implements Serializable{
+public class WorkListItemBean implements Serializable {
     public String imageUrl;
     public int height;
     public int width;
@@ -20,4 +20,7 @@ public class WorkListItemBean implements Serializable{
     public String sourceUrl;
 
     public boolean isLoad;
+
+    public String createTime;
+    public String type;
 }

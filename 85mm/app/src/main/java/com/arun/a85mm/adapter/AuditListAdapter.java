@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -78,7 +79,10 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
             if (eventListener != null) {
                 if (position >= 6) {
                     AuditItemBean previousBean = list.get(position - 6);
-                    eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_BROWSE_AUDIT, previousBean.workId, ""));
+                    if (!TextUtils.isEmpty(previousBean.workId)) {
+                        Log.d("TAG", "POSITION = " + position);
+                        eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_BROWSE_AUDIT, previousBean.workId, ""));
+                    }
                 }
             }
         } else if (holder instanceof AuditHeadHolder) {

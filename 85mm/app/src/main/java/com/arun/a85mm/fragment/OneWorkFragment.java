@@ -2,6 +2,8 @@ package com.arun.a85mm.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,7 +13,7 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
-import com.arun.a85mm.adapter.ImageAdapter;
+import com.arun.a85mm.adapter.OneWorkAdapter;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.EventConstant;
@@ -20,10 +22,7 @@ import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.OneWorkPresenter;
-import com.arun.a85mm.utils.GlideCircleTransform;
 import com.arun.a85mm.view.CommonView3;
-import com.arun.a85mm.widget.ListViewForScrollView;
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +40,11 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
     public TextView author_name;
     public TextView author_create_time;
     public RelativeLayout work_list_item_author;
-    public ListViewForScrollView listView;
+    public RecyclerView recyclerView;
     private LinearLayout bottom_view;
     private TextView over_size;
     private TextView recommend_new;
-    private ImageAdapter imageAdapter;
+    private OneWorkAdapter oneWorkAdapter;
     public static final String KEY_AUDIT = "audit";
     public static final String TYPE_AUDIT = "1";
     private List<WorkListItemBean> workListItems = new ArrayList<>();
@@ -62,15 +61,18 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
         author_name = (TextView) findViewById(R.id.author_name);
         author_create_time = (TextView) findViewById(R.id.author_create_time);
         work_list_item_author = (RelativeLayout) findViewById(R.id.work_list_item_author);
-        listView = (ListViewForScrollView) findViewById(R.id.listView);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         bottom_view = (LinearLayout) findViewById(R.id.bottom_view);
         over_size = (TextView) findViewById(R.id.over_size);
         recommend_new = (TextView) findViewById(R.id.recommend_new);
         over_size.setOnClickListener(this);
         recommend_new.setOnClickListener(this);
-        imageAdapter = new ImageAdapter(getActivity(), workListItems);
-        imageAdapter.setOnImageClick(this);
-        listView.setAdapter(imageAdapter);
+
+        oneWorkAdapter = new OneWorkAdapter(getActivity(), workListItems);
+        oneWorkAdapter.setOnImageClick(this);
+        recyclerView.setAdapter(oneWorkAdapter);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(manager);
     }
 
     @SuppressWarnings("unchecked")
@@ -100,21 +102,26 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
             if (getActivity() instanceof FragmentCommonActivity) {
                 ((FragmentCommonActivity) getActivity()).setShowBottomRight(sourceUrl, workId);
             }
-            setAuthor(bean);
-            imageAdapter.setWorkListBean(bean);
+            //setAuthor(bean);
+            oneWorkAdapter.setWorkListBean(bean);
+            addHead(bean);
             addCoverImage(bean);
             addImage(bean.workDetail);
         }
     }
 
-    private void setAuthor(WorkListBean bean) {
-        author_name.setText(bean.authorName);
-        Glide.with(this).load(bean.authorHeadImg).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).into(author_image);
-        author_create_time.setText(bean.createTime);
+    private void addHead(WorkListBean bean) {
+        WorkListItemBean itemHeadBean = new WorkListItemBean();
+        itemHeadBean.type = OneWorkAdapter.DATA_TYPE_HEAD;
+        itemHeadBean.authorHeadImg = bean.authorHeadImg;
+        itemHeadBean.authorName = bean.authorName;
+        itemHeadBean.createTime = bean.createTime;
+        workListItems.add(itemHeadBean);
     }
 
     private void addCoverImage(WorkListBean bean) {
         WorkListItemBean itemBean = new WorkListItemBean();
+        itemBean.type = OneWorkAdapter.DATA_TYPE_IMAGE;
         itemBean.imageUrl = bean.coverUrl;
         itemBean.width = bean.coverWidth;
         itemBean.height = bean.coverHeight;
@@ -125,10 +132,11 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
     private void addImage(List<WorkListItemBean> list) {
         for (int i = 0; i < list.size(); i++) {
             WorkListItemBean bean = list.get(i);
+            bean.type = OneWorkAdapter.DATA_TYPE_IMAGE;
             bean.backgroundColor = RandomColorHelper.getRandomColor();
         }
         workListItems.addAll(list);
-        imageAdapter.notifyDataSetChanged();
+        oneWorkAdapter.notifyDataSetChanged();
     }
 
     @Override

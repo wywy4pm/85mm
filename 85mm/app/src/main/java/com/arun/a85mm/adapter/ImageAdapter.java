@@ -27,6 +27,7 @@ import java.util.List;
  * Created by wy on 2017/6/5.
  */
 
+@Deprecated
 public class ImageAdapter extends BaseListAdapter<WorkListItemBean> {
     private int screenWidth;
     private WorkListBean workListBean;
@@ -40,7 +41,7 @@ public class ImageAdapter extends BaseListAdapter<WorkListItemBean> {
         this.workListBean = workListBean;
     }
 
-    public OnImageClick onImageClick;
+    private OnImageClick onImageClick;
 
     public void setOnImageClick(OnImageClick onImageClick) {
         this.onImageClick = onImageClick;
