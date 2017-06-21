@@ -2,6 +2,7 @@ package com.arun.a85mm.utils;
 
 import android.app.AppOpsManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Binder;
 
 import java.lang.reflect.Method;
@@ -10,6 +11,9 @@ import java.lang.reflect.Method;
  * Created by WY on 2017/4/19.
  */
 public class PermissionUtils {
+
+    public static final String WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
+
     /**
      * 判断 悬浮窗口权限是否打开
      *
@@ -41,5 +45,10 @@ public class PermissionUtils {
 
         }
         return false;
+    }
+
+    public static boolean hasPermission(Context context, String permission) {
+        int perm = context.checkCallingOrSelfPermission(permission);
+        return perm == PackageManager.PERMISSION_GRANTED;
     }
 }

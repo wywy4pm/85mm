@@ -32,6 +32,7 @@ import com.arun.a85mm.matisse.ui.MatisseActivity;
 import com.arun.a85mm.presenter.AddMessagePresenter;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.FileUtils;
+import com.arun.a85mm.utils.PermissionUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.CommonView3;
 import com.arun.a85mm.widget.GridViewForScrollView;
@@ -200,7 +201,11 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
 
     @Override
     public void openImagePicker() {
-        startPicturePicker();
+        if (FileUtils.hasSdcard() && PermissionUtils.hasPermission(this, PermissionUtils.WRITE_EXTERNAL_STORAGE)) {
+            startPicturePicker();
+        } else {
+            showTop("请开启sd卡存储权限");
+        }
     }
 
     @Override
