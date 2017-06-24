@@ -205,4 +205,7 @@
 
     <color name="msg_head_common">#b3b3b3</color>
     <color name="add_photo_stroke_color">#d3d6d6</color>
+
+    <!--<color name="line_community"></color>-->
+    <color name="comment_author">#4363a5</color>
 </resources>

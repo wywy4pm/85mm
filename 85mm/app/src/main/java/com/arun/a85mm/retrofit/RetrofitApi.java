@@ -1,6 +1,7 @@
 package com.arun.a85mm.retrofit;
 
 
+import com.arun.a85mm.bean.AssociationBean;
 import com.arun.a85mm.bean.request.ActionRequest;
 import com.arun.a85mm.bean.ArticleDetailResponse;
 import com.arun.a85mm.bean.ArticleListResponse;
@@ -71,4 +72,7 @@ public interface RetrofitApi {
 
     @GET(RetrofitUrl.WORKS_AUDIT)
     Observable<CommonApiResponse<List<WorkListBean>>> getAuditWorkList(@Query("searchName") String searchName, @Query("orderType") String orderType, @Query("start") String start, @Query("lastWorkId") String lastWorkId);
+
+    @GET(RetrofitUrl.WORKS_COMMUNITY_LIST)
+    Observable<CommonApiResponse<List<AssociationBean>>> getCommunityList(@Query("start") int start, @Query("dataType") int dataType);
 }

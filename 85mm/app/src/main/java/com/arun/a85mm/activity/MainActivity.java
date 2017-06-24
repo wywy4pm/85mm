@@ -24,6 +24,7 @@ import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.event.UpdateMesDotEvent;
 import com.arun.a85mm.fragment.ArticleFragment;
+import com.arun.a85mm.fragment.AssociationFragment;
 import com.arun.a85mm.fragment.CommunityFragment;
 import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.handler.ShowTopHandler;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private SlidingTabLayout tabLayout;
     private ViewPager viewPager;
     //private int[] titleIds = new int[]{R.string.main_tab_1, R.string.main_tab_2, R.string.main_tab_3};
-    private String[] titles = new String[]{"最新", "最热", "文章"};
+    private String[] titles = new String[]{"作品", "社区", "文章"};
     private List<Fragment> list = new ArrayList<>();
     private TextView topCommonView;
     private TextView toastView;
@@ -176,6 +177,9 @@ public class MainActivity extends AppCompatActivity {
                         } else if (fragment instanceof ArticleFragment) {
                             ArticleFragment articleFragment = (ArticleFragment) fragment;
                             articleFragment.refreshData();
+                        } else if (fragment instanceof AssociationFragment) {
+                            AssociationFragment associationFragment = (AssociationFragment) fragment;
+                            associationFragment.refreshData();
                         }
                     }
                 }
@@ -216,10 +220,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
         productionFragment = ProductionFragment.newInstance();
-        CommunityFragment communityFragment = CommunityFragment.newInstance();
+        //CommunityFragment communityFragment = CommunityFragment.newInstance();
+        AssociationFragment associationFragment = AssociationFragment.getInstance();
         ArticleFragment articleFragment = ArticleFragment.newIntense();
         list.add(productionFragment);
-        list.add(communityFragment);
+        //list.add(communityFragment);
+        list.add(associationFragment);
         list.add(articleFragment);
     }
 

@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
@@ -176,17 +178,26 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                //得到当前显示的最后一个item的view
-                View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount() - 1);
-                //得到lastChildView的bottom坐标值
-                int lastChildBottom = lastChildView.getBottom();
-                //得到RecyclerView的底部坐标减去底部padding值，也就是显示内容最底部的坐标
-                int recyclerBottom = recyclerView.getBottom() - recyclerView.getPaddingBottom();
-                int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
-                synchronized (BaseFragment.this) {
-                    if (lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
-                        if (!isLoading) {
-                            setLoadMore();
+
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                if (layoutManager != null) {
+                    if (layoutManager instanceof LinearLayoutManager) {
+                        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+                        int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
+                        int visibleCount = linearLayoutManager.getChildCount();
+                        int totalCount = linearLayoutManager.getItemCount();
+                        int limitLoadMore = 0;
+                        if (totalCount > 6) {
+                            limitLoadMore = totalCount - 6;
+                        } else {
+                            limitLoadMore = totalCount;
+                        }
+                        synchronized (BaseFragment.this) {
+                            if (firstVisiblePosition + visibleCount >= limitLoadMore) {
+                                if (!isLoading) {
+                                    setLoadMore();
+                                }
+                            }
                         }
                     }
                 }
