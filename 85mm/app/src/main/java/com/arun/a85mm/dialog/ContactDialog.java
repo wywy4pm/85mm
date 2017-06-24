@@ -3,8 +3,10 @@ package com.arun.a85mm.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -33,8 +35,15 @@ public class ContactDialog extends Dialog implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //getWindow().getDecorView().setPadding(0, 0, 0, 0);
+
+        Window win = getWindow();
+        if (win != null) {
+            win.getDecorView().setPadding(0, 0, 0, 0);
+            WindowManager.LayoutParams lp = win.getAttributes();
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            win.setAttributes(lp);
+        }
         setContentView(R.layout.layout_contact);
         initView();
     }

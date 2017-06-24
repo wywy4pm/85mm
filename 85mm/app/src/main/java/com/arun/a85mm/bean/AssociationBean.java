@@ -1,5 +1,7 @@
 package com.arun.a85mm.bean;
 
+import android.widget.LinearLayout;
+
 import java.util.List;
 
 /**
@@ -32,5 +34,7 @@ public class AssociationBean {
     public int workId;
     public int totalImageNum;
     public List<CommentsBean> comments;
+
+    public String type;
 
 }

@@ -8,7 +8,7 @@
         android:id="@+id/comment_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="呵呵哈哈哈: "
+        android:text=""
         android:textColor="@color/comment_author"
         android:textSize="14sp" />
 
@@ -17,7 +17,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/comment_author"
-        android:text="阿萨德撒多所撒多撒所所撒多撒多撒大阿萨德撒多撒多撒多撒多撒大多撒多撒asdsad"
+        android:lineSpacingExtra="4dp"
+        android:text=""
         android:textColor="@color/charcoalgrey"
         android:textSize="14sp" />
 </RelativeLayout>

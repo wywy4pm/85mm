@@ -58,6 +58,8 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:windowContentOverlay">@null</item>
+        <!-- 半透明 -->
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="MyToolbarNavigationButtonStyle" parent="@style/Widget.AppCompat.Toolbar.Button.Navigation">

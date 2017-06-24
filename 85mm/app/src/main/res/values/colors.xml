@@ -208,4 +208,6 @@
 
     <!--<color name="line_community"></color>-->
     <color name="comment_author">#4363a5</color>
+
+    <color name="login_text">#CCCCCC</color>
 </resources>

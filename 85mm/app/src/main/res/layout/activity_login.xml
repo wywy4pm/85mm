@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.arun.a85mm.activity.LoginActivity">
+
+    <ImageView
+        android:id="@+id/back_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/login_close"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="27dp"
+        android:background="@mipmap/login_close" />
+
+    <RelativeLayout
+        android:id="@+id/layout_wechat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/wechat_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="11dp"
+            android:shadowColor="@color/black70"
+            android:text="微信登录"
+            android:textColor="@color/login_text"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/wechat_icon"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_below="@+id/wechat_text"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="33dp"
+            android:src="@mipmap/wechat_login" />
+    </RelativeLayout>
+</RelativeLayout>

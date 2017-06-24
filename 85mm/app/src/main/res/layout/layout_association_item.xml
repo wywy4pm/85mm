@@ -46,15 +46,16 @@
     <RelativeLayout
         android:id="@+id/layout_list_comment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/comment_head"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="11dp"
+            android:paddingBottom="10dp"
             android:paddingLeft="20dp"
-            android:paddingTop="11dp">
+            android:paddingTop="10dp">
 
             <ImageView
                 android:layout_width="20dp"
@@ -70,14 +71,22 @@
                 android:src="@mipmap/comment_more" />
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/comment_shadow"
+            android:layout_width="176dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/comment_head"
+            android:layout_marginLeft="12dp"
+            android:background="@mipmap/list_comments" />
+
         <LinearLayout
             android:id="@+id/layout_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/comment_head"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="27dp"
-            android:background="@mipmap/list_comments"
+            android:layout_below="@+id/comment_shadow"
+            android:layout_marginBottom="18dp"
+            android:layout_marginLeft="23dp"
+            android:layout_marginRight="25dp"
             android:orientation="vertical" />
     </RelativeLayout>
 
