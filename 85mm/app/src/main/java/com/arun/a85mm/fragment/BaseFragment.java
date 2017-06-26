@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
+import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
@@ -55,6 +56,7 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
     private View no_network;
     public boolean isLoading;
     public int screenWidth;
+    public int screenHeight;
     public String userId;
     public String deviceId;
     public int currentGroupPosition;
@@ -95,6 +97,7 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
 
     private void initCommon() {
         screenWidth = DensityUtil.getScreenWidth(getActivity());
+        screenHeight = DensityUtil.getScreenHeight(getActivity());
         deviceId = DeviceUtils.getMobileIMEI(getActivity());
         eventStatisticsHelper = new EventStatisticsHelper(getActivity());
         userId = SharedPreferencesUtils.getUid(getActivity());
@@ -452,6 +455,16 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
     @Override
     public void onError(int errorType, @StringRes int errorMsg) {
         ShowTopToastHelper.showTopToastView(getActivity(), getString(errorMsg), R.color.red);
+    }
+
+    public void showTop(String data) {
+        if (getActivity() != null) {
+            if (getActivity() instanceof BaseActivity) {
+                ((BaseActivity) getActivity()).showTop(data);
+            } else if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).showTop(data);
+            }
+        }
     }
 
     public void setLoadMore() {

@@ -10,6 +10,7 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.activity.LoginActivity;
 import com.arun.a85mm.adapter.AssociationAdapter;
 import com.arun.a85mm.bean.AssociationBean;
+import com.arun.a85mm.bean.AuditItemBean;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.CommunityTagBean;
 import com.arun.a85mm.presenter.AssociationPresenter;
@@ -24,14 +25,14 @@ import java.util.List;
  * Created by wy on 2017/6/24.
  */
 
-public class AssociationFragment extends BaseFragment implements CommonView4<CommonApiResponse>, AssociationAdapter.OnTagClick {
+public class AssociationFragment extends BaseFragment implements CommonView4<List<AssociationBean>>, AssociationAdapter.OnTagClick {
     private RecyclerView recyclerView;
     private SwipeToLoadLayout swipeToLoad;
     private AssociationPresenter presenter;
     private List<AssociationBean> associationList = new ArrayList<>();
     private AssociationAdapter associationAdapter;
     private ImageView btn_add_community;
-    private int start;
+    public int start;
     private int dataType = 2;
     private String[] tags = new String[]{"精选", "最新", "最热"};
     private int[] types = new int[]{2, 0, 1};
@@ -115,28 +116,28 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Com
 
     @SuppressWarnings("unchecked")
     @Override
-    public void refresh(CommonApiResponse data) {
-        start = data.start;
-        if (data.body != null && data.body instanceof List) {
+    public void refresh(List<AssociationBean> data) {
+        if (data != null && data.size() > 0) {
             AssociationBean bean = associationList.get(0);
             associationList.clear();
             associationList.add(bean);
 
-            List<AssociationBean> list = (List<AssociationBean>) data.body;
-            formatData(list);
-            associationList.addAll(list);
+            formatData(data);
+            associationList.addAll(data);
+            associationAdapter.notifyDataSetChanged();
+        } else {
+            AssociationBean bean = associationList.get(0);
+            associationList.clear();
+            associationList.add(bean);
             associationAdapter.notifyDataSetChanged();
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public void refreshMore(CommonApiResponse data) {
-        start = data.start;
-        if (data.body != null) {
-            List<AssociationBean> list = (List<AssociationBean>) data.body;
-            formatData(list);
-            associationList.addAll(list);
+    public void refreshMore(List<AssociationBean> data) {
+        if (data != null && data.size() > 0) {
+            formatData(data);
+            associationList.addAll(data);
             associationAdapter.notifyDataSetChanged();
         }
     }
@@ -164,7 +165,15 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Com
     @Override
     public void click(int dataType) {
         this.dataType = dataType;
-        refreshData();
         SharedPreferencesUtils.setConfigInt(getActivity(), SharedPreferencesUtils.KEY_ASSOCIATION_TAG, dataType);
+        refreshData();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.detachView();
+        }
     }
 }

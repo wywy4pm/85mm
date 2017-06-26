@@ -1,6 +1,7 @@
 package com.arun.a85mm.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.CommentsBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.listener.OnImageClick;
@@ -22,6 +24,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,8 +37,12 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
     private OnImageClick onImageClick;
     public static String DATA_TYPE_HEAD = "head";
     public static String DATA_TYPE_IMAGE = "image";
+    public static String DATA_TYPE_DESCRIPTION = "description";
+    public static String DATA_TYPE_COMMENTS = "comments";
     private static int VIEW_TYPE_HEAD = 0;
     private static int VIEW_TYPE_IMAGE = 1;
+    private static int VIEW_TYPE_DESCRIPTION = 3;
+    private static int VIEW_TYPE_COMMENTS = 4;
 
     public OneWorkAdapter(Context context, List<WorkListItemBean> list) {
         super(context, list);
@@ -58,6 +65,12 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
         } else if (viewType == VIEW_TYPE_IMAGE) {
             View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list_item, parent, false);
             return new WorkListItemHolder(itemView);
+        } else if (viewType == VIEW_TYPE_DESCRIPTION) {
+            View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_description, parent, false);
+            return new DescriptionHolder(itemView);
+        } else if (viewType == VIEW_TYPE_COMMENTS) {
+            View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_one_work_comments, parent, false);
+            return new CommentsHolder(contexts.get(), itemView);
         }
         return null;
     }
@@ -70,16 +83,26 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
         } else if (holder instanceof OneWorkAuthorHolder) {
             OneWorkAuthorHolder oneWorkAuthorHolder = (OneWorkAuthorHolder) holder;
             oneWorkAuthorHolder.setData(contexts.get(), getItem(position));
+        } else if (holder instanceof DescriptionHolder) {
+            DescriptionHolder descriptionHolder = (DescriptionHolder) holder;
+            descriptionHolder.setData(getItem(position));
+        } else if (holder instanceof CommentsHolder) {
+            CommentsHolder commentsHolder = (CommentsHolder) holder;
+            commentsHolder.setData(getItem(position).comments);
         }
     }
 
     @Override
     public int getItemViewType(int position) {
         int type = -1;
-        if (DATA_TYPE_HEAD.equals(list.get(position).type)) {
+        if (DATA_TYPE_HEAD.equals(getItem(position).type)) {
             type = VIEW_TYPE_HEAD;
-        } else if (DATA_TYPE_IMAGE.equals(list.get(position).type)) {
+        } else if (DATA_TYPE_IMAGE.equals(getItem(position).type)) {
             type = VIEW_TYPE_IMAGE;
+        } else if (DATA_TYPE_DESCRIPTION.equals(getItem(position).type)) {
+            type = VIEW_TYPE_DESCRIPTION;
+        } else if (DATA_TYPE_COMMENTS.equals(getItem(position).type)) {
+            type = VIEW_TYPE_COMMENTS;
         }
         return type;
     }
@@ -197,6 +220,52 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
                     return false;
                 }
             });
+        }
+    }
+
+    private static class DescriptionHolder extends RecyclerView.ViewHolder {
+        private TextView community_title;
+        private TextView community_detail;
+
+        private DescriptionHolder(View itemView) {
+            super(itemView);
+            this.community_title = (TextView) itemView.findViewById(R.id.community_title);
+            this.community_detail = (TextView) itemView.findViewById(R.id.community_detail);
+        }
+
+        public void setData(WorkListItemBean bean) {
+            community_title.setText(bean.workTitle);
+            community_detail.setText(bean.description);
+        }
+    }
+
+    private static class CommentsHolder extends RecyclerView.ViewHolder {
+        private View itemView;
+        private TextView comment_count;
+        private RecyclerView comment_list;
+        private CommentAdapter commentAdapter;
+        private List<CommentsBean> commentList = new ArrayList<>();
+
+        private CommentsHolder(Context context, View itemView) {
+            super(itemView);
+            this.itemView = itemView;
+            comment_count = (TextView) itemView.findViewById(R.id.comment_count);
+            comment_list = (RecyclerView) itemView.findViewById(R.id.comment_list);
+            commentAdapter = new CommentAdapter(context, commentList);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+            comment_list.setAdapter(commentAdapter);
+            comment_list.setLayoutManager(linearLayoutManager);
+        }
+
+        private void setData(List<CommentsBean> comments) {
+            if (comments != null) {
+                commentList.clear();
+                comment_count.setText("评论 " + comments.size());
+                commentList.addAll(comments);
+                commentAdapter.notifyDataSetChanged();
+            } else {
+                comment_count.setText("评论 " + 0);
+            }
         }
     }
 }

@@ -290,4 +290,11 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (auditPresenter != null) {
+            auditPresenter.detachView();
+        }
+    }
 }

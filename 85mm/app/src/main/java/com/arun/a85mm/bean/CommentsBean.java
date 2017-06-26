@@ -16,4 +16,5 @@ public class CommentsBean {
     public String createTime;
     public String authorName;
     public int commentId;
+    public String headUrl;
 }

@@ -206,7 +206,7 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
                 public void onClick(View v) {
                     Map<String, String> map = new HashMap<>();
                     map.put(UrlJumpHelper.WORK_ID, bean.workId);
-                    map.put(OneWorkFragment.KEY_AUDIT, OneWorkFragment.TYPE_AUDIT);
+                    map.put(OneWorkFragment.KEY_TYPE, OneWorkFragment.TYPE_AUDIT);
                     FragmentCommonActivity.jumpToFragmentCommonActivity(context,
                             FragmentCommonActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, FragmentCommonActivity.BACK_MODE_COM);
                 }

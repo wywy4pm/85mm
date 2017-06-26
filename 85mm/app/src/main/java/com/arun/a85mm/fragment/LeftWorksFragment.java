@@ -250,4 +250,12 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     public void onError(String error, String tag) {
         showNetWorkErrorView(expandableListView);
     }*/
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (communityPresenter != null) {
+            communityPresenter.detachView();
+        }
+    }
 }

@@ -14,15 +14,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.bean.AssociationBean;
 import com.arun.a85mm.bean.CommentsBean;
 import com.arun.a85mm.bean.CommunityTagBean;
+import com.arun.a85mm.fragment.OneWorkFragment;
+import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.bumptech.glide.Glide;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wy on 2017/6/24.
@@ -139,11 +144,10 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
         }
 
         private void setData(final Context context, final List<CommunityTagBean> tagsList) {
-            String selectName = SharedPreferencesUtils.getConfigString(context, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG);
+            int dataType = SharedPreferencesUtils.getConfigInt(context, SharedPreferencesUtils.KEY_ASSOCIATION_TAG);
             for (int i = 0; i < layout_head_tags.getChildCount(); i++) {
                 TextView tv = (TextView) layout_head_tags.getChildAt(i);
-                if ((!TextUtils.isEmpty(selectName) && selectName.equals(tagsList.get(i).name))
-                        || (TextUtils.isEmpty(selectName) && i == 0)) {
+                if (dataType == tagsList.get(i).dataType) {
                     tv.setSelected(true);
                     tv.setTextColor(context.getResources().getColor(R.color.white));
 
@@ -170,17 +174,19 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
     private static class AssociationHolder extends RecyclerView.ViewHolder {
         public ImageView author_image;
         public TextView author_name;
-        public TextView author_create_time;
-        public RelativeLayout work_list_item_author;
-        public ImageView cover_Image;
-        public TextView community_title;
-        public TextView community_detail;
-        public RelativeLayout comment_head;
-        public LinearLayout layout_comment;
-        public RelativeLayout layout_list_comment;
+        private TextView author_create_time;
+        private RelativeLayout work_list_item_author;
+        private ImageView cover_Image;
+        private TextView community_title;
+        private TextView community_detail;
+        private RelativeLayout comment_head;
+        private LinearLayout layout_comment;
+        private RelativeLayout layout_list_comment;
+        private View itemView;
 
         private AssociationHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             this.author_image = (ImageView) itemView.findViewById(R.id.author_image);
             this.author_name = (TextView) itemView.findViewById(R.id.author_name);
             this.author_create_time = (TextView) itemView.findViewById(R.id.author_create_time);
@@ -193,7 +199,18 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
             this.layout_list_comment = (RelativeLayout) itemView.findViewById(R.id.layout_list_comment);
         }
 
-        private void setData(Context context, AssociationBean bean, int screenWidth) {
+        private void setData(final Context context, final AssociationBean bean, int screenWidth) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Map<String, String> map = new HashMap<>();
+                    map.put(UrlJumpHelper.WORK_ID, bean.workId);
+                    map.put(OneWorkFragment.KEY_TYPE, OneWorkFragment.TYPE_COMMUNITY);
+                    FragmentCommonActivity.jumpToFragmentCommonActivity(context,
+                            FragmentCommonActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, FragmentCommonActivity.BACK_MODE_COM);
+                }
+            });
+
             Glide.with(context).load(bean.authorHeadImg).centerCrop()
                     .bitmapTransform(new GlideCircleTransform(context)).into(author_image);
             author_name.setText(bean.authorName);
@@ -240,6 +257,5 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
             }
         }
     }
-
 
 }

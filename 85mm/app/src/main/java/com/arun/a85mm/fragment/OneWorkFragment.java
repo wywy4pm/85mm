@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -14,6 +16,7 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.adapter.OneWorkAdapter;
+import com.arun.a85mm.bean.CommentsBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.EventConstant;
@@ -22,6 +25,8 @@ import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.OneWorkPresenter;
+import com.arun.a85mm.utils.FullyLinearLayoutManager;
+import com.arun.a85mm.utils.KeyBoardUtils;
 import com.arun.a85mm.view.CommonView3;
 
 import java.util.ArrayList;
@@ -44,9 +49,13 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
     private LinearLayout bottom_view;
     private TextView over_size;
     private TextView recommend_new;
+    private RelativeLayout layout_add_comment;
+    private EditText edit_add_comment;
+    private TextView btn_add_comment;
     private OneWorkAdapter oneWorkAdapter;
-    public static final String KEY_AUDIT = "audit";
+    public static final String KEY_TYPE = "audit";
     public static final String TYPE_AUDIT = "1";
+    public static final String TYPE_COMMUNITY = "2";
     private List<WorkListItemBean> workListItems = new ArrayList<>();
     private String type;
 
@@ -65,14 +74,19 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
         bottom_view = (LinearLayout) findViewById(R.id.bottom_view);
         over_size = (TextView) findViewById(R.id.over_size);
         recommend_new = (TextView) findViewById(R.id.recommend_new);
+        layout_add_comment = (RelativeLayout) findViewById(R.id.layout_add_comment);
+        edit_add_comment = (EditText) findViewById(R.id.edit_add_comment);
+        btn_add_comment = (TextView) findViewById(R.id.btn_add_comment);
         over_size.setOnClickListener(this);
         recommend_new.setOnClickListener(this);
+        btn_add_comment.setOnClickListener(this);
 
         oneWorkAdapter = new OneWorkAdapter(getActivity(), workListItems);
         oneWorkAdapter.setOnImageClick(this);
         recyclerView.setAdapter(oneWorkAdapter);
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        FullyLinearLayoutManager manager = new FullyLinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -82,31 +96,49 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
             Map<String, String> map = (Map<String, String>) getArguments().getSerializable(FragmentCommonActivity.EXTRAS);
             if (map != null) {
                 workId = map.get(UrlJumpHelper.WORK_ID);
-                type = map.get(KEY_AUDIT);
+                type = map.get(KEY_TYPE);
             }
         }
 
         if (TYPE_AUDIT.equals(type)) {
             bottom_view.setVisibility(View.VISIBLE);
+        } else if (TYPE_COMMUNITY.equals(type)) {
+            layout_add_comment.setVisibility(View.VISIBLE);
+        } else {
+            bottom_view.setVisibility(View.GONE);
+            layout_add_comment.setVisibility(View.GONE);
         }
         oneWorkPresenter = new OneWorkPresenter(getActivity());
         oneWorkPresenter.attachView(this);
-        oneWorkPresenter.getOneWorkDetail(workId);
+        refreshData();
+    }
+
+    private void refreshData() {
+        if (oneWorkPresenter != null) {
+            oneWorkPresenter.getOneWorkDetail(workId);
+        }
     }
 
     @Override
-    public void refresh(int type, Object data) {
-        if (data instanceof WorkListBean) {
+    public void refresh(int dataType, Object data) {
+        if (dataType == OneWorkPresenter.TYPE_DETAIL && data instanceof WorkListBean) {
             WorkListBean bean = (WorkListBean) data;
             sourceUrl = bean.sourceUrl;
             if (getActivity() instanceof FragmentCommonActivity) {
                 ((FragmentCommonActivity) getActivity()).setShowBottomRight(sourceUrl, workId);
             }
-            //setAuthor(bean);
+            workListItems.clear();
             oneWorkAdapter.setWorkListBean(bean);
             addHead(bean);
             addCoverImage(bean);
+            if (TYPE_COMMUNITY.equals(type)) {
+                addDescription(bean);
+                addComments(bean);
+            }
             addImage(bean.workDetail);
+        } else if (dataType == OneWorkPresenter.TYPE_ADD_COMMENT) {
+            showTop("评论成功");
+            refreshData();
         }
     }
 
@@ -139,6 +171,21 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
         oneWorkAdapter.notifyDataSetChanged();
     }
 
+    private void addDescription(WorkListBean bean) {
+        WorkListItemBean itemDesBean = new WorkListItemBean();
+        itemDesBean.type = OneWorkAdapter.DATA_TYPE_DESCRIPTION;
+        itemDesBean.workTitle = bean.workTitle;
+        itemDesBean.description = bean.description;
+        workListItems.add(itemDesBean);
+    }
+
+    private void addComments(WorkListBean bean) {
+        WorkListItemBean itemComBean = new WorkListItemBean();
+        itemComBean.type = OneWorkAdapter.DATA_TYPE_COMMENTS;
+        itemComBean.comments = bean.comments;
+        workListItems.add(itemComBean);
+    }
+
     @Override
     public void onCountClick(int groupPosition) {
 
@@ -169,6 +216,26 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
                     eventStatisticsHelper.recordUserAction(getActivity(), EventConstant.WORK_SCALE_OVER, workId, "");
                 }
                 break;
+            case R.id.btn_add_comment:
+                if (TextUtils.isEmpty(edit_add_comment.getText())) {
+                    showTop("请输入评论内容");
+                    return;
+                }
+                if (oneWorkPresenter != null) {
+                    oneWorkPresenter.addComment(workId, edit_add_comment.getText().toString());
+                }
+                //发送成功后关闭软键盘
+                KeyBoardUtils.hideKeyBoard(getActivity());
+                edit_add_comment.getText().clear();
+                break;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (oneWorkPresenter != null) {
+            oneWorkPresenter.detachView();
         }
     }
 }

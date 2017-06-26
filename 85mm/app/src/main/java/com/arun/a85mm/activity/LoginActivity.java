@@ -11,9 +11,15 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ConfigResponse;
+import com.arun.a85mm.bean.UserInfo;
+import com.arun.a85mm.helper.LoginHelper;
+import com.arun.a85mm.listener.LoginListener;
+import com.arun.a85mm.presenter.AssociationPresenter;
+import com.arun.a85mm.presenter.LoginPresenter;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DateUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
+import com.arun.a85mm.view.CommonView2;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -26,13 +32,14 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import java.util.List;
 import java.util.Map;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, CommonView2, LoginListener {
 
     public ImageView login_close;
     public ImageView back_image;
     /*public TextView wechat_text;
     public ImageView wechat_icon;*/
     private RelativeLayout layout_wechat;
+    private LoginPresenter presenter;
 
     public static void jumpToLogin(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
@@ -74,6 +81,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 }
             }
         }
+        if (presenter == null) {
+            presenter = new LoginPresenter(this);
+            presenter.attachView(this);
+        }
     }
 
     private void show(final ConfigResponse.GuidePageBean bean) {
@@ -93,35 +104,45 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 onBackPressed();
                 break;
             case R.id.layout_wechat:
-                UMShareAPI.get(this).getPlatformInfo(this, SHARE_MEDIA.WEIXIN, new UMAuthListener() {
-                    @Override
-                    public void onStart(SHARE_MEDIA share_media) {
-
-                    }
-
-                    @Override
-                    public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-
-                    }
-
-                    @Override
-                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-
-                    }
-
-                    @Override
-                    public void onCancel(SHARE_MEDIA share_media, int i) {
-
-                    }
-                });
+                LoginHelper.login(this, this);
                 break;
         }
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onLoginSuccess(UserInfo userInfo) {
+        if (userInfo != null) {
+            postUserInfo(userInfo);
+        }
+    }
+
+    private void postUserInfo(UserInfo userInfo) {
+        if (presenter != null) {
+            presenter.postLoginInfo(userInfo.openId, userInfo.headUrl, userInfo.nickName);
+        }
+    }
+
+    @Override
+    public void onLoginFailed() {
+        showTop("登录失败");
+    }
+
+    @Override
+    public void refresh(Object data) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.detachView();
+        }
     }
 }

@@ -28,7 +28,15 @@ public class ObjectAnimatorHelper {
 
     private ObjectAnimator startAnimator;
     private ObjectAnimator endAnimator;
+    private boolean isSetToastParent = false;
     private List<ShowTopBean> waitShowTops = new ArrayList<>();
+
+    public ObjectAnimatorHelper() {
+    }
+
+    public ObjectAnimatorHelper(boolean isSetToastParent) {
+        this.isSetToastParent = isSetToastParent;
+    }
 
     public void managerShowTopView(final Activity activity, final TextView toastView, ShowTopBean showTopBean) {
         if (!showTopBean.isShowingTop) {
@@ -46,6 +54,9 @@ public class ObjectAnimatorHelper {
         }
 
         StatusBarUtils.setStatusBar(activity, true);
+        if (isSetToastParent && toastView.getParent() != null) {
+            ((View) toastView.getParent()).setVisibility(View.VISIBLE);
+        }
         toastView.setVisibility(View.VISIBLE);
         toastView.setText(showData);
         if (backgroundResId > 0) {
@@ -94,6 +105,9 @@ public class ObjectAnimatorHelper {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                if (isSetToastParent && toastView.getParent() != null) {
+                    ((View) toastView.getParent()).setVisibility(View.GONE);
+                }
                 toastView.setVisibility(View.GONE);
                 if (activity instanceof MainActivity) {
                     ((MainActivity) activity).setShowingTop(false);

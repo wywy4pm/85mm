@@ -13,6 +13,7 @@
         android:id="@+id/bottom_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/layout_add_comment"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:orientation="horizontal"
@@ -50,4 +51,43 @@
             android:textSize="15sp" />
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_add_comment"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bg_line"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/edit_add_comment"
+            android:layout_width="match_parent"
+            android:layout_height="37dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/shape_btn_circle_stroke"
+            android:gravity="center_vertical"
+            android:hint="发表评论..."
+            android:layout_toLeftOf="@+id/btn_add_comment"
+            android:paddingLeft="15dp"
+            android:textColor="@color/charcoalgrey"
+            android:textColorHint="@color/login_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/btn_add_comment"
+            android:layout_width="67dp"
+            android:layout_height="37dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/shape_btn_reply"
+            android:gravity="center"
+            android:text="发送"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
 </RelativeLayout>

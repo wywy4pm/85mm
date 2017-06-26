@@ -19,6 +19,7 @@ import com.arun.a85mm.fragment.LeftWorksFragment;
 import com.arun.a85mm.fragment.OneWorkFragment;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.utils.StatusBarUtils;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -31,13 +32,13 @@ public class FragmentCommonActivity extends BaseActivity {
     public static final String BACK_MODE = "back";
     public static final String FRAGMENT_LEFT_WORKS = "fragment_left_works";
     public static final String FRAGMENT_ONE_WORK = "fragment_one_work";
-    public static final int BACK_MODE_MAIN = 0;
-    public static final int BACK_MODE_COM = 1;
+    public static final int BACK_MODE_MAIN = 1;
+    public static final int BACK_MODE_COM = 0;
     //public static final String FRAGMENT_SEND_MESSAGE = "fragment_send_message";
     public String title;
     private String type = "";
     private Fragment fragment;
-    private int backMode;
+    private int backMode = 1;
 
     public static void jumpToFragmentCommonActivity(Context context, String type, String title, Map<String, String> extras) {
         Intent intent = new Intent(context, FragmentCommonActivity.class);
@@ -85,6 +86,7 @@ public class FragmentCommonActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_common);
+        new SystemBarTintManager(this).setStatusBarTintEnabled(true);
         StatusBarUtils.setStatusBarColor(this, R.color.white);
         Map<String, String> map = null;
         if (getIntent() != null) {
@@ -95,7 +97,7 @@ public class FragmentCommonActivity extends BaseActivity {
             initFragment(type, map);
         }
         initView();
-        setSaveImage();
+        setSaveImage(true);
     }
 
     private void initView() {

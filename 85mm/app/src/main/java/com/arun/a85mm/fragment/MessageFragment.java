@@ -157,6 +157,9 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        if (messagePresenter != null) {
+            messagePresenter.detachView();
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

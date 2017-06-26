@@ -74,11 +74,11 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
         eventStatisticsHelper = new EventStatisticsHelper(this);
     }
 
-    public void setSaveImage() {
+    public void setSaveImage(boolean isSetToastParent) {
         initToastView();
         saveImageHelper = new SaveImageHelper();
         showTopHandler = new ShowTopHandler(this);
-        objectAnimatorHelper = new ObjectAnimatorHelper();
+        objectAnimatorHelper = new ObjectAnimatorHelper(isSetToastParent);
     }
 
     public void setCommonShow() {

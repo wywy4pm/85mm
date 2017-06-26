@@ -13,6 +13,9 @@ import com.arun.a85mm.view.CommonView3;
  */
 
 public class OneWorkPresenter extends BasePresenter<CommonView3> {
+    public static final int TYPE_DETAIL = 0;
+    public static final int TYPE_ADD_COMMENT = 1;
+
     public OneWorkPresenter(Context context) {
         super(context);
     }
@@ -24,8 +27,20 @@ public class OneWorkPresenter extends BasePresenter<CommonView3> {
                     public void onSuccess(CommonApiResponse data) {
                         if (getMvpView() != null) {
                             if (data != null && data.code == ErrorCode.SUCCESS) {
-                                getMvpView().refresh(0, data.body);
+                                getMvpView().refresh(TYPE_DETAIL, data.body);
                             }
+                        }
+                    }
+                }));
+    }
+
+    public void addComment(String workId, String comment) {
+        addSubscriber(ProductModel.getInstance()
+                .addComment(workId, comment, new RequestListenerImpl(getMvpView()) {
+                    @Override
+                    public void onSuccess(CommonApiResponse data) {
+                        if (getMvpView() != null && data != null && data.code == ErrorCode.SUCCESS) {
+                            getMvpView().refresh(TYPE_ADD_COMMENT, data.body);
                         }
                     }
                 }));

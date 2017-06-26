@@ -11,6 +11,7 @@ import com.arun.a85mm.bean.CommunityResponse;
 import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.bean.MessageItemBean;
 import com.arun.a85mm.bean.WorkListBean;
+import com.arun.a85mm.bean.request.AddCommentRequest;
 import com.arun.a85mm.bean.request.AddMessageRequest;
 
 import java.util.List;
@@ -75,4 +76,11 @@ public interface RetrofitApi {
 
     @GET(RetrofitUrl.WORKS_COMMUNITY_LIST)
     Observable<CommonApiResponse<List<AssociationBean>>> getCommunityList(@Query("start") int start, @Query("dataType") int dataType);
+
+    @GET(RetrofitUrl.USER_THIRD_LOGIN)
+    Observable<CommonApiResponse> postLoginInfo(@Query("openId") String openId, @Query("headUrl") String headUrl, @Query("nickName") String nickName);
+
+    @Headers({"Content-Type:application/json;charset=UTF-8"})
+    @POST(RetrofitUrl.USER_ADD_COMMENT)
+    Observable<CommonApiResponse> addComment(@Body AddCommentRequest addCommentRequest);
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/top_divide"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/bg_line" />
+
+    <TextView
+        android:id="@+id/comment_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_divide"
+        android:layout_marginBottom="22dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="12dp"
+        android:text=""
+        android:textColor="@color/frenchgrey"
+        android:textSize="14sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/comment_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/comment_count" />
+
+</RelativeLayout>

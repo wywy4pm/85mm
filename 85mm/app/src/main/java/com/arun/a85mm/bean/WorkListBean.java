@@ -26,6 +26,8 @@ public class WorkListBean implements Serializable{
     public boolean isExpand;
     public boolean isCoverLoad;
     public int backgroundColor;
+    public String description;
+    public List<CommentsBean> comments;
 
     public int browseNum;
     public String date;

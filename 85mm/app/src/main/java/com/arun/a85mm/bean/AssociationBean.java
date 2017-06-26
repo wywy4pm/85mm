@@ -31,7 +31,7 @@ public class AssociationBean {
     public String authorHeadImg;
     public int coverWidth;
     public int coverHeight;
-    public int workId;
+    public String workId;
     public int totalImageNum;
     public List<CommentsBean> comments;
 
