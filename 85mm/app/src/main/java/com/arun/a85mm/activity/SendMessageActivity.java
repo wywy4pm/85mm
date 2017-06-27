@@ -3,7 +3,6 @@ package com.arun.a85mm.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -20,20 +19,18 @@ import com.arun.a85mm.MMApplication;
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.UploadImageAdapter;
 import com.arun.a85mm.bean.UploadImageBean;
-import com.arun.a85mm.bean.request.MsgImgRequest;
 import com.arun.a85mm.event.UpdateSendMsg;
+import com.arun.a85mm.helper.MatisseHelper;
 import com.arun.a85mm.helper.OssUploadImageHelper;
 import com.arun.a85mm.listener.ImagePickerListener;
 import com.arun.a85mm.listener.UploadImageListener;
-import com.arun.a85mm.matisse.Matisse;
-import com.arun.a85mm.matisse.MimeType;
-import com.arun.a85mm.matisse.engine.impl.GlideEngine;
 import com.arun.a85mm.matisse.ui.MatisseActivity;
 import com.arun.a85mm.presenter.AddMessagePresenter;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.FileUtils;
 import com.arun.a85mm.utils.PermissionUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
+import com.arun.a85mm.utils.UploadImageUtils;
 import com.arun.a85mm.view.CommonView3;
 import com.arun.a85mm.widget.GridViewForScrollView;
 
@@ -55,6 +52,7 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     //存放需要上传服务器的imageUrl
     //private List<MsgImgRequest> uploadImages = new ArrayList<>();
     private AddMessagePresenter addMessagePresenter;
+    public static final String BACK_MODE_SEND_MSG = "send_message";
 
     public static void jumpToSendMessage(Context context, String uid) {
         Intent intent = new Intent(context, SendMessageActivity.class);
@@ -129,20 +127,6 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
         }
     }
 
-    public void startPicturePicker() {
-        Matisse.from(this)
-                .choose(MimeType.allOf())
-                .countable(true)
-                .maxSelectable(9)
-                //.addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-                .gridExpectedSize(400)
-                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                .thumbnailScale(0.85f)
-                .imageEngine(new GlideEngine())
-                .forResult(REQUEST_CODE_CHOOSE);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
-    }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -202,7 +186,7 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     @Override
     public void openImagePicker() {
         if (FileUtils.hasSdcard() && PermissionUtils.hasPermission(this, PermissionUtils.WRITE_EXTERNAL_STORAGE)) {
-            startPicturePicker();
+            MatisseHelper.startPicturePicker(this, BACK_MODE_SEND_MSG);
         } else {
             showTop("请开启sd卡存储权限");
         }
@@ -213,21 +197,11 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
         if (images != null && images.size() > 0 && position <= images.size() - 1) {
 
             images.remove(position);
-            if (getSelectCount(images) == 8) {
+            if (UploadImageUtils.getSelectCount(images) == 8) {
                 images.add(new UploadImageBean(false, null));
             }
             uploadImageAdapter.notifyDataSetChanged();
         }
-    }
-
-    private int getSelectCount(List<UploadImageBean> images) {
-        int count = 0;
-        for (int i = 0; i < images.size(); i++) {
-            if (images.get(i).isUpload) {
-                count += 1;
-            }
-        }
-        return count;
     }
 
     public void sendMessage() {
@@ -239,25 +213,10 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
                 showTop("请填写消息内容或图片");
                 return;
             }
-            addMessagePresenter.addMessage(userId, reply_receiver.getText().toString(), reply_description.getText().toString(), getUploadImages(images));
+            addMessagePresenter.addMessage(userId, reply_receiver.getText().toString(), reply_description.getText().toString(), UploadImageUtils.getUploadImages(images));
         }
     }
 
-    private List<MsgImgRequest> getUploadImages(List<UploadImageBean> images) {
-        List<MsgImgRequest> uploadImages = new ArrayList<>();
-        if (images.size() == 9) {
-            for (int i = 0; i < images.size(); i++) {
-                MsgImgRequest bean = new MsgImgRequest(images.get(i).imageUrl);
-                uploadImages.add(bean);
-            }
-        } else {
-            for (int i = 0; i < images.size() - 1; i++) {
-                MsgImgRequest bean = new MsgImgRequest(images.get(i).imageUrl);
-                uploadImages.add(bean);
-            }
-        }
-        return uploadImages;
-    }
 
     @Override
     protected void onDestroy() {

@@ -26,29 +26,23 @@
             android:layout_marginLeft="12dp"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <EditText
+                android:id="@+id/community_title"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="8dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/reply_receiver"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:background="@null"
-                    android:ellipsize="end"
-                    android:hint="标题"
-                    android:includeFontPadding="false"
-                    android:inputType="number"
-                    android:lineSpacingExtra="0dp"
-                    android:maxLines="1"
-                    android:text=""
-                    android:textColor="@color/grey"
-                    android:textColorHint="@color/lightgrey"
-                    android:textSize="17sp" />
-            </RelativeLayout>
+                android:background="@null"
+                android:ellipsize="end"
+                android:hint="标题"
+                android:includeFontPadding="false"
+                android:inputType="text"
+                android:lineSpacingExtra="0dp"
+                android:maxLines="1"
+                android:text=""
+                android:textColor="@color/grey"
+                android:textColorHint="@color/lightgrey"
+                android:textSize="17sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -61,7 +55,7 @@
                 android:layout_marginRight="8dp">
 
                 <EditText
-                    android:id="@+id/reply_description"
+                    android:id="@+id/community_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"

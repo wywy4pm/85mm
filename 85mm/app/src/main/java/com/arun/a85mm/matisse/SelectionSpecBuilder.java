@@ -30,10 +30,13 @@ import com.arun.a85mm.matisse.internal.entity.CaptureStrategy;
 import com.arun.a85mm.matisse.internal.entity.SelectionSpec;
 import com.arun.a85mm.matisse.ui.MatisseActivity;
 
+import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_BEHIND;
@@ -72,6 +75,8 @@ public final class SelectionSpecBuilder {
     private int mGridExpectedSize;
     private float mThumbnailScale;
     private ImageEngine mImageEngine;
+    private Map<String, String> map;
+    private String mode;
 
     @IntDef({
             SCREEN_ORIENTATION_UNSPECIFIED,
@@ -252,6 +257,16 @@ public final class SelectionSpecBuilder {
         return this;
     }
 
+    public SelectionSpecBuilder addParams(Map<String, String> params) {
+        map = params;
+        return this;
+    }
+
+    public SelectionSpecBuilder addBackMode(String mode) {
+        this.mode = mode;
+        return this;
+    }
+
     /**
      * Start to select photo and wait for result.
      *
@@ -306,6 +321,8 @@ public final class SelectionSpecBuilder {
         mSelectionSpec.imageEngine = mImageEngine;
 
         Intent intent = new Intent(activity, MatisseActivity.class);
+        intent.putExtra(MatisseActivity.KEY_BACK_MODE, mode);
+        //intent.putExtra("map", (Serializable) map);
 
         Fragment fragment = mMatisse.getFragment();
         if (fragment != null) {

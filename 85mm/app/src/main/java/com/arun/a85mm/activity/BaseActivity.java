@@ -91,7 +91,7 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
         showTopToastView(showTopBean);
     }
 
-    private void initToastView() {
+    public void initToastView() {
         toastView = (TextView) findViewById(R.id.toastView);
         topCommonView = (TextView) findViewById(R.id.topCommonView);
         if (toastView != null && topCommonView != null

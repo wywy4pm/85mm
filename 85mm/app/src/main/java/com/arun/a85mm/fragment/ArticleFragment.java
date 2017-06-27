@@ -9,6 +9,9 @@ import android.view.animation.TranslateAnimation;
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.ArticleListAdapter;
 import com.arun.a85mm.bean.ArticleListResponse;
+import com.arun.a85mm.bean.WorkListBean;
+import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.presenter.ArticleFragmentPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.ShootRefreshView;
@@ -137,6 +140,19 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
 
     public void setHaveMore(boolean isHaveMore) {
         this.isHaveMore = isHaveMore;
+        if (!isHaveMore) {
+            setLeftArticleBrowse(EventConstant.ARTICLE_BROWSE, articles);
+        }
+    }
+
+    public void setLeftArticleBrowse(int type, List<ArticleListResponse.ArticleListBean> articleList) {
+        if (articleList.size() >= 4) {
+            for (int i = articleList.size() - 1; i >= articleList.size() - 4; i--) {
+                if (articleList.get(i) != null) {
+                    onEvent(EventStatisticsHelper.createOneActionList(type, articleList.get(i).id, ""));
+                }
+            }
+        }
     }
 
 }

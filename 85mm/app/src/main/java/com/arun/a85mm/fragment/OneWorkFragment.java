@@ -131,11 +131,13 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
             oneWorkAdapter.setWorkListBean(bean);
             addHead(bean);
             addCoverImage(bean);
+            addImage(bean.workDetail);
+
             if (TYPE_COMMUNITY.equals(type)) {
                 addDescription(bean);
                 addComments(bean);
             }
-            addImage(bean.workDetail);
+            oneWorkAdapter.notifyDataSetChanged();
         } else if (dataType == OneWorkPresenter.TYPE_ADD_COMMENT) {
             showTop("评论成功");
             refreshData();
@@ -168,7 +170,6 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
             bean.backgroundColor = RandomColorHelper.getRandomColor();
         }
         workListItems.addAll(list);
-        oneWorkAdapter.notifyDataSetChanged();
     }
 
     private void addDescription(WorkListBean bean) {

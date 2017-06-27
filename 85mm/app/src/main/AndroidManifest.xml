@@ -153,8 +153,13 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activity.AddCommunityActivity" />
-        <activity android:name=".activity.LoginActivity"></activity>
+        <activity
+            android:name=".activity.AddCommunityActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activity.LoginActivity" />
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@ package com.arun.a85mm.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.ArticleDetailActivity;
+import com.arun.a85mm.bean.ArticleDetailResponse;
 import com.arun.a85mm.bean.ArticleListResponse;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.EventStatisticsHelper;
@@ -50,7 +52,14 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ArticleHolder) {
             ArticleHolder articleHolder = (ArticleHolder) holder;
-            if (articles.get(position) != null) {
+            //浏览文章
+            if (eventListener != null) {
+                if (position >= 4) {
+                    ArticleListResponse.ArticleListBean bean = articles.get(position - 4);
+                    if (bean != null && !TextUtils.isEmpty(bean.id)) {
+                        eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.ARTICLE_BROWSE, bean.id, ""));
+                    }
+                }
                 articleHolder.setData(contexts.get(), articles.get(position), eventListener);
             }
         }
@@ -77,10 +86,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
         }
 
         private void setData(final Context context, final ArticleListResponse.ArticleListBean articleListBean, final EventListener eventListener) {
-            //浏览文章
-            if (eventListener != null) {
-                eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.ARTICLE_BROWSE, articleListBean.id, ""));
-            }
+
             if (article_image.getLayoutParams() != null) {
                 article_image.getLayoutParams().height = (int) (DensityUtil.getScreenWidth(context) * 0.56);
             }

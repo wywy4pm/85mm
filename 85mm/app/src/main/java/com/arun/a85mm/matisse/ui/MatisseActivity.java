@@ -34,6 +34,8 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.AddCommunityActivity;
+import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.activity.SendMessageActivity;
 import com.arun.a85mm.matisse.internal.entity.Album;
 import com.arun.a85mm.matisse.internal.entity.Item;
@@ -74,6 +76,8 @@ public class MatisseActivity extends AppCompatActivity implements
     private TextView mButtonApply;
     private View mContainer;
     private View mEmptyView;
+    public static final String KEY_BACK_MODE = "mode";
+    private String backMode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,6 +121,16 @@ public class MatisseActivity extends AppCompatActivity implements
         mAlbumCollection.onCreate(this, this);
         mAlbumCollection.onRestoreInstanceState(savedInstanceState);
         mAlbumCollection.loadAlbums();
+
+        getMode();
+    }
+
+    private void getMode() {
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            if (getIntent().getExtras().containsKey(KEY_BACK_MODE)) {
+                backMode = getIntent().getExtras().getString(KEY_BACK_MODE);
+            }
+        }
     }
 
     @Override
@@ -207,7 +221,15 @@ public class MatisseActivity extends AppCompatActivity implements
             startActivityForResult(intent, REQUEST_CODE_PREVIEW);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);*/
         } else if (v.getId() == R.id.button_apply) {
-            Intent result = new Intent(MatisseActivity.this, SendMessageActivity.class);
+            Intent result = null;
+            if (SendMessageActivity.BACK_MODE_SEND_MSG.equals(backMode)) {
+                result = new Intent(MatisseActivity.this, SendMessageActivity.class);
+            } else if (AddCommunityActivity.BACK_MODE_ADD_COMMUNITY.equals(backMode)) {
+                result = new Intent(MatisseActivity.this, AddCommunityActivity.class);
+            } else {//如果出错，跳回首页
+                result = new Intent(MatisseActivity.this, MainActivity.class);
+            }
+
             ArrayList<Uri> selectedUris = (ArrayList<Uri>) mSelectedCollection.asListOfUri();
             result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selectedUris);
             setResult(RESULT_OK, result);
@@ -304,7 +326,21 @@ public class MatisseActivity extends AppCompatActivity implements
     }
 
     public void back() {
+        if (SendMessageActivity.BACK_MODE_SEND_MSG.equals(backMode)) {
+            backToSendMsg();
+        } else if (AddCommunityActivity.BACK_MODE_ADD_COMMUNITY.equals(backMode)) {
+            backToAddCommunity();
+        }
+    }
+
+    public void backToSendMsg() {
         Intent intent = new Intent(MatisseActivity.this, SendMessageActivity.class);
+        startActivity(intent);
+        overridePendingTransition(0, R.anim.slide_out_right);
+    }
+
+    public void backToAddCommunity() {
+        Intent intent = new Intent(MatisseActivity.this, AddCommunityActivity.class);
         startActivity(intent);
         overridePendingTransition(0, R.anim.slide_out_right);
     }

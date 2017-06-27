@@ -1,7 +1,11 @@
 package com.arun.a85mm.model;
 
+import com.arun.a85mm.bean.request.AddCommunityRequest;
+import com.arun.a85mm.bean.request.MsgImgRequest;
 import com.arun.a85mm.listener.CommonRequestListener;
 import com.arun.a85mm.retrofit.RetrofitInit;
+
+import java.util.List;
 
 import rx.Subscriber;
 
@@ -24,5 +28,10 @@ public class AssociationModel extends BaseModel {
 
     public Subscriber getCommunityList(int start, int dataType, CommonRequestListener listener) {
         return request(RetrofitInit.getApi().getCommunityList(start, dataType), listener);
+    }
+
+    public Subscriber addCommunity(String title, String description, List<MsgImgRequest> imageList, CommonRequestListener listener) {
+        AddCommunityRequest addCommunityRequest = new AddCommunityRequest(title, description, imageList);
+        return request(RetrofitInit.getApi().addCommunity(addCommunityRequest), listener);
     }
 }

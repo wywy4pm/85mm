@@ -12,6 +12,7 @@ import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.bean.MessageItemBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.request.AddCommentRequest;
+import com.arun.a85mm.bean.request.AddCommunityRequest;
 import com.arun.a85mm.bean.request.AddMessageRequest;
 
 import java.util.List;
@@ -83,4 +84,8 @@ public interface RetrofitApi {
     @Headers({"Content-Type:application/json;charset=UTF-8"})
     @POST(RetrofitUrl.USER_ADD_COMMENT)
     Observable<CommonApiResponse> addComment(@Body AddCommentRequest addCommentRequest);
+
+    @Headers({"Content-Type:application/json;charset=UTF-8"})
+    @POST(RetrofitUrl.USER_ADD_WORK)
+    Observable<CommonApiResponse> addCommunity(@Body AddCommunityRequest addCommunityRequest);
 }

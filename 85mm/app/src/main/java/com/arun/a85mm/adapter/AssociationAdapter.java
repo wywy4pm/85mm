@@ -247,7 +247,7 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
                         }
                         TextView author = (TextView) commentView.findViewById(R.id.comment_author);
                         TextView detail = (TextView) commentView.findViewById(R.id.comment_detail);
-                        author.setText(commentItem.authorName);
+                        author.setText(commentItem.authorName + "");
                         detail.setText(commentItem.content);
                         layout_comment.addView(commentView);
                     }
