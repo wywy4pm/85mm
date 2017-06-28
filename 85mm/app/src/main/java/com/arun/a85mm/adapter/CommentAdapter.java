@@ -58,9 +58,8 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentsBean> {
         private void setData(Context context, CommentsBean bean) {
             Glide.with(context)
                     .load(bean.headUrl)
-                    .bitmapTransform(new GlideCircleTransform(context))
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .centerCrop()
+                    .bitmapTransform(new GlideCircleTransform(context))
                     .into(comment_head);
 
             comment_author.setText(bean.authorName);
