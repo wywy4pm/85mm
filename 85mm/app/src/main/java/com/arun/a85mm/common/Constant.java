@@ -43,4 +43,8 @@ public class Constant {
      * handler what
      */
     public static final int WHAT_SHOW_TOP = 1;
+
+
+    public static final int REQUEST_CODE_ASSOCIATE_LOGIN = 1001;
+    public static final int REQUEST_CODE_ASSOCIATE_MAIN = 1002;
 }

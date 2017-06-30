@@ -255,7 +255,7 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
                             }
                         }
                     }
-                } else if (currentResponseCount > 5) {
+                } else if (currentResponseCount >= 1) {
                     synchronized (BaseFragment.this) {
                         if (listView.getLastVisiblePosition() >= listView.getCount() - 1) {
                             if (!isLoading) {

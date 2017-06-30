@@ -1,5 +1,7 @@
 package com.arun.a85mm.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +16,9 @@ import com.arun.a85mm.bean.AssociationBean;
 import com.arun.a85mm.bean.AuditItemBean;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.CommunityTagBean;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.helper.MatisseHelper;
+import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.presenter.AssociationPresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -66,8 +70,13 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
         btn_add_community.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //LoginActivity.jumpToLogin(getActivity());
-                AddCommunityActivity.jumpToAddCommunity(getActivity());
+                if (UserManager.getInstance() != null) {
+                    if (UserManager.getInstance().isLogin()) {
+                        AddCommunityActivity.jumpToAddCommunityForResult(getActivity());
+                    } else {
+                        LoginActivity.jumpToLoginForResult(getActivity());
+                    }
+                }
             }
         });
     }
@@ -178,5 +187,12 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
         if (presenter != null) {
             presenter.detachView();
         }
+    }
+
+    public void setTagSelect(int position){
+        start = 0;
+        dataType = position;
+        SharedPreferencesUtils.setConfigInt(getActivity(), SharedPreferencesUtils.KEY_ASSOCIATION_TAG, dataType);
+        refreshData();
     }
 }

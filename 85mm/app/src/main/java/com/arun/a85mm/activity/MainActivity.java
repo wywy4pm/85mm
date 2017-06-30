@@ -21,6 +21,7 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.CommonFragmentPagerAdapter;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ShowTopBean;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.event.UpdateMesDotEvent;
 import com.arun.a85mm.fragment.ArticleFragment;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView topCommonView;
     private TextView toastView;
     private ProductionFragment productionFragment;
+    private AssociationFragment associationFragment;
     private long mExitTime;
     private boolean isShowingTop;
     private SaveImageHelper saveImageHelper;
@@ -221,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
     private void initData() {
         productionFragment = ProductionFragment.newInstance();
         //CommunityFragment communityFragment = CommunityFragment.newInstance();
-        AssociationFragment associationFragment = AssociationFragment.getInstance();
+        associationFragment = AssociationFragment.getInstance();
         ArticleFragment articleFragment = ArticleFragment.newIntense();
         list.add(productionFragment);
         //list.add(communityFragment);
@@ -330,6 +332,20 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == Constant.REQUEST_CODE_ASSOCIATE_LOGIN) {
+                AddCommunityActivity.jumpToAddCommunityForResult(this);
+            } else if (requestCode == Constant.REQUEST_CODE_ASSOCIATE_MAIN) {//跳到最新
+                if (associationFragment != null) {
+                    associationFragment.setTagSelect(1);
+                }
+            }
+        }
     }
 
 }

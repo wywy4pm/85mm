@@ -217,44 +217,47 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
             author_create_time.setText(bean.createTime);
 
             int imageHeight = 0;
-            if (bean.coverHeight < bean.coverWidth) {
-                imageHeight = screenWidth;
-            } else {
-                imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
-            }
-            if (imageHeight > 8192) {
-                imageHeight = 8192;
-            }
-            cover_Image.getLayoutParams().height = imageHeight;
-            Glide.with(context).load(bean.coverUrl).override(screenWidth, imageHeight).centerCrop().into(cover_Image);
-
-            community_title.setText(bean.workTitle);
-            community_detail.setText(bean.description);
-
-            if (bean.comments != null && bean.comments.size() > 0) {
-                layout_list_comment.setVisibility(View.VISIBLE);
-                layout_comment.removeAllViews();
-                for (int i = 0; i < bean.comments.size(); i++) {
-                    if (bean.comments.get(i) != null) {
-                        CommentsBean commentItem = bean.comments.get(i);
-                        View commentView = LayoutInflater.from(context).inflate(R.layout.list_commnet_item, layout_comment, false);
-                        if (commentView.getLayoutParams() != null && commentView.getLayoutParams() instanceof LinearLayout.LayoutParams) {
-                            if (i < bean.comments.size() - 1) {
-                                ((LinearLayout.LayoutParams) commentView.getLayoutParams()).setMargins(0, 0, 0, DensityUtil.dp2px(context, 12));
-                            } else {
-                                ((LinearLayout.LayoutParams) commentView.getLayoutParams()).setMargins(0, 0, 0, 0);
-                            }
-                        }
-                        TextView author = (TextView) commentView.findViewById(R.id.comment_author);
-                        TextView detail = (TextView) commentView.findViewById(R.id.comment_detail);
-                        author.setText(commentItem.authorName + "");
-                        detail.setText(commentItem.content);
-                        layout_comment.addView(commentView);
-                    }
+            if(bean.coverWidth > 0){
+                if (bean.coverHeight < bean.coverWidth) {
+                    imageHeight = screenWidth;
+                } else {
+                    imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
                 }
-            } else {
-                layout_list_comment.setVisibility(View.GONE);
+                if (imageHeight > 8192) {
+                    imageHeight = 8192;
+                }
+                cover_Image.getLayoutParams().height = imageHeight;
+                Glide.with(context).load(bean.coverUrl).override(screenWidth, imageHeight).centerCrop().into(cover_Image);
+
+                community_title.setText(bean.workTitle);
+                community_detail.setText(bean.description);
+
+                if (bean.comments != null && bean.comments.size() > 0) {
+                    layout_list_comment.setVisibility(View.VISIBLE);
+                    layout_comment.removeAllViews();
+                    for (int i = 0; i < bean.comments.size(); i++) {
+                        if (bean.comments.get(i) != null) {
+                            CommentsBean commentItem = bean.comments.get(i);
+                            View commentView = LayoutInflater.from(context).inflate(R.layout.list_commnet_item, layout_comment, false);
+                            if (commentView.getLayoutParams() != null && commentView.getLayoutParams() instanceof LinearLayout.LayoutParams) {
+                                if (i < bean.comments.size() - 1) {
+                                    ((LinearLayout.LayoutParams) commentView.getLayoutParams()).setMargins(0, 0, 0, DensityUtil.dp2px(context, 12));
+                                } else {
+                                    ((LinearLayout.LayoutParams) commentView.getLayoutParams()).setMargins(0, 0, 0, 0);
+                                }
+                            }
+                            TextView author = (TextView) commentView.findViewById(R.id.comment_author);
+                            TextView detail = (TextView) commentView.findViewById(R.id.comment_detail);
+                            author.setText(commentItem.authorName + "");
+                            detail.setText(commentItem.content);
+                            layout_comment.addView(commentView);
+                        }
+                    }
+                } else {
+                    layout_list_comment.setVisibility(View.GONE);
+                }
             }
+
         }
     }
 

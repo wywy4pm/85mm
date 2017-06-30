@@ -22,6 +22,7 @@ import com.arun.a85mm.helper.CommunityListCacheManager;
 import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
 import com.arun.a85mm.helper.UrlJumpHelper;
+import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.presenter.SettingPresenter;
 import com.arun.a85mm.utils.BitmapUtils;
 import com.arun.a85mm.utils.CacheUtils;
@@ -194,6 +195,8 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                     ConfigHelper.tags = config.auditInfo.tags;
                 }
                 SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE, config.hasNewMsg);
+                //SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_WECHAT_LOGIN, config.wechatLogin);
+                UserManager.getInstance().setLogin(config.wechatLogin == 1);
                 new Thread(
                         new Runnable() {
                             @Override

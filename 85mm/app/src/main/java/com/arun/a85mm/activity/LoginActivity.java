@@ -8,11 +8,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.bean.UserInfo;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.helper.LoginHelper;
+import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.listener.LoginListener;
 import com.arun.a85mm.presenter.AssociationPresenter;
 import com.arun.a85mm.presenter.LoginPresenter;
@@ -41,9 +44,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private RelativeLayout layout_wechat;
     private LoginPresenter presenter;
 
-    public static void jumpToLogin(Context context) {
+    public static void jumpToLoginForResult(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
-        context.startActivity(intent);
+        ((Activity) context).startActivityForResult(intent, Constant.REQUEST_CODE_ASSOCIATE_LOGIN);
         ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
@@ -130,12 +133,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onLoginFailed() {
-        showTop("登录失败");
+        //showTop("登录失败");
     }
 
     @Override
     public void refresh(Object data) {
-
+        if (UserManager.getInstance() != null) {
+            UserManager.getInstance().setLogin(true);
+        }
+        Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK);
+        finish();
     }
 
     @Override

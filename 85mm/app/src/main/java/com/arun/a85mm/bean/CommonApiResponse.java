@@ -34,4 +34,10 @@ public class CommonApiResponse<T> {
      */
     public AuditInfoBean auditInfo;
 
+
+    /**
+     * 微信登录标识    是否已微信登陆，0：未登陆，1：已登陆
+     */
+    public int wechatLogin;
+
 }

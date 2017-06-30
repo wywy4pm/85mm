@@ -20,6 +20,7 @@ public class SharedPreferencesUtils {
     public static final String KEY_AUDIT_SELECT_TAG = "select_tag";
     public static final String KEY_AUDIT_SELECT_SORT = "select_sort";
     public static final String KEY_ASSOCIATION_TAG = "association_tag";
+    public static final String KEY_WECHAT_LOGIN = "wechat_login";
 
     public static void saveUid(Context context, String uid) {
         if (!TextUtils.isEmpty(uid) && TextUtils.isEmpty(SharedPreferencesUtils.getUid(context))) {

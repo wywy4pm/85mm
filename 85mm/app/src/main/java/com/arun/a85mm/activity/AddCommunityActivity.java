@@ -20,6 +20,7 @@ import com.arun.a85mm.MMApplication;
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.UploadImageAdapter;
 import com.arun.a85mm.bean.UploadImageBean;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.helper.MatisseHelper;
 import com.arun.a85mm.helper.OssUploadImageHelper;
 import com.arun.a85mm.helper.ShowTopToastHelper;
@@ -53,6 +54,12 @@ public class AddCommunityActivity extends BaseActivity implements ImagePickerLis
     public static void jumpToAddCommunity(Context context) {
         Intent intent = new Intent(context, AddCommunityActivity.class);
         context.startActivity(intent);
+        ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+    }
+
+    public static void jumpToAddCommunityForResult(Context context) {
+        Intent intent = new Intent(context, AddCommunityActivity.class);
+        ((Activity)context).startActivityForResult(intent, Constant.REQUEST_CODE_ASSOCIATE_MAIN);
         ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
@@ -187,7 +194,10 @@ public class AddCommunityActivity extends BaseActivity implements ImagePickerLis
 
     @Override
     public void refresh(int type, Object data) {
-        Toast.makeText(this, "发布成功", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "发布成功", Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK);
+        finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     @Override
