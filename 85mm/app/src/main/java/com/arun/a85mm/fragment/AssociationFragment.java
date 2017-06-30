@@ -190,7 +190,6 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
     }
 
     public void setTagSelect(int position){
-        start = 0;
         dataType = position;
         SharedPreferencesUtils.setConfigInt(getActivity(), SharedPreferencesUtils.KEY_ASSOCIATION_TAG, dataType);
         refreshData();

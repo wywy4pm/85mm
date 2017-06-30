@@ -66,6 +66,7 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
         mHelper = new SwipeBackActivityHelper(this);
         mHelper.onActivityCreate();
         initCommon();
+        StatusBarUtils.statusBarLightMode(this);
     }
 
     private void initCommon() {

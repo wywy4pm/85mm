@@ -36,6 +36,7 @@ import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
+import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.utils.TextViewUtils;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         PushAgent.getInstance(this).onAppStart();
+        StatusBarUtils.statusBarLightMode(this);
         EventBus.getDefault().register(this);
         initData();
         init();
