@@ -98,6 +98,8 @@ public class EventStatisticsHelper implements EventView {
             tips = context.getString(R.string.show_seq);
         }else if(type == EventConstant.WORK_AUDIT_RECOMMEND){
             tips = context.getString(R.string.recommend_new);
+        }else if(type == EventConstant.WORK_ASSOCIATION_RECOMMEND){
+            tips = context.getString(R.string.recommend_jingxuan);
         }
         if (context instanceof MainActivity) {
             ((MainActivity) context).showTop("[" + tips + "]" + "操作成功");

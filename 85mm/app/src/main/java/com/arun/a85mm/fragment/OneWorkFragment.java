@@ -13,8 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.AddCommunityActivity;
 import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
+import com.arun.a85mm.activity.LoginActivity;
 import com.arun.a85mm.adapter.OneWorkAdapter;
 import com.arun.a85mm.bean.CommentsBean;
 import com.arun.a85mm.bean.WorkListBean;
@@ -23,6 +25,7 @@ import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.UrlJumpHelper;
+import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.OneWorkPresenter;
 import com.arun.a85mm.utils.FullyLinearLayoutManager;
@@ -80,6 +83,18 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
         over_size.setOnClickListener(this);
         recommend_new.setOnClickListener(this);
         btn_add_comment.setOnClickListener(this);
+        edit_add_comment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    if (UserManager.getInstance() != null) {
+                        if (!UserManager.getInstance().isLogin()) {
+                            LoginActivity.jumpToLoginForResult(getActivity());
+                        }
+                    }
+                }
+            }
+        });
 
         oneWorkAdapter = new OneWorkAdapter(getActivity(), workListItems);
         oneWorkAdapter.setOnImageClick(this);
@@ -125,7 +140,8 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
             WorkListBean bean = (WorkListBean) data;
             sourceUrl = bean.sourceUrl;
             if (getActivity() instanceof FragmentCommonActivity) {
-                ((FragmentCommonActivity) getActivity()).setShowBottomRight(sourceUrl, workId);
+                String authorUid = "";
+                ((FragmentCommonActivity) getActivity()).setShowBottomRight(sourceUrl, workId,TYPE_COMMUNITY,authorUid);
             }
             workListItems.clear();
             oneWorkAdapter.setWorkListBean(bean);

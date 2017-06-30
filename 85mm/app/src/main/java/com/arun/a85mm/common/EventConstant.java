@@ -16,7 +16,8 @@ public class EventConstant {
     public static final int WORK_SHOW_SEQ = 3004;
     public static final int WORK_SCALE_OVER = 3005;
     public static final int WORK_AUDIT_RECOMMEND = 3007;
-
+    public static final int WORK_ASSOCIATION_RECOMMEND = 3006;
+    public static final int WORK_ASSOCIATION_DELETE = 3009;
 
     public static final int TAB_NEWEST = 0011;
     public static final int TAB_HOTEST = 0012;

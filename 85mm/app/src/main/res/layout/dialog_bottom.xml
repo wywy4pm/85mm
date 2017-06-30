@@ -14,6 +14,7 @@
         android:padding="8dp">
 
         <TextView
+            android:id="@+id/read_origin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -55,6 +56,7 @@
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/report_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -199,22 +201,33 @@
         android:layout_marginRight="30dp"
         android:background="@color/plain" />
 
-    <!--<TextView
-        android:id="@+id/btn_check"
+    <LinearLayout
+        android:id="@+id/btn_recommend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="审核专用"
-        android:textColor="@color/charcoalgrey"
-        android:textSize="15sp" />
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/text_recommend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="推荐到精选/取消精选"
+            android:textColor="@color/red"
+            android:textSize="15sp" />
+    </LinearLayout>
 
     <View
+        android:id="@+id/line_btn_recommend"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:background="@color/plain" />-->
+        android:background="@color/plain"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/btn_cancel"

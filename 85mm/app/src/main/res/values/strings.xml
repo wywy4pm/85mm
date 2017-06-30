@@ -32,5 +32,6 @@
     <string name="repeat">和其他作品重复</string>
     <string name="show_seq">图片显示有问题</string>
     <string name="recommend_new">推荐到最新频道</string>
+    <string name="recommend_jingxuan">推荐到精选/取消精选</string>
     <string name="cancel">取消</string>
 </resources>

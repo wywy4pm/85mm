@@ -183,6 +183,8 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
         private LinearLayout layout_comment;
         private RelativeLayout layout_list_comment;
         private View itemView;
+        private RelativeLayout layout_cover_Image;
+        private TextView cover_count;
 
         private AssociationHolder(View itemView) {
             super(itemView);
@@ -197,6 +199,8 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
             this.comment_head = (RelativeLayout) itemView.findViewById(R.id.comment_head);
             this.layout_comment = (LinearLayout) itemView.findViewById(R.id.layout_comment);
             this.layout_list_comment = (RelativeLayout) itemView.findViewById(R.id.layout_list_comment);
+            this.layout_cover_Image = (RelativeLayout) itemView.findViewById(R.id.layout_cover_Image);
+            this.cover_count = (TextView) itemView.findViewById(R.id.cover_count);
         }
 
         private void setData(final Context context, final AssociationBean bean, int screenWidth) {
@@ -217,7 +221,7 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
             author_create_time.setText(bean.createTime);
 
             int imageHeight = 0;
-            if(bean.coverWidth > 0){
+            if (bean.coverWidth > 0) {
                 if (bean.coverHeight < bean.coverWidth) {
                     imageHeight = screenWidth;
                 } else {
@@ -226,7 +230,9 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
                 if (imageHeight > 8192) {
                     imageHeight = 8192;
                 }
+                layout_cover_Image.getLayoutParams().height = imageHeight;
                 cover_Image.getLayoutParams().height = imageHeight;
+                cover_count.setText(String.valueOf(bean.totalImageNum));
                 Glide.with(context).load(bean.coverUrl).override(screenWidth, imageHeight).centerCrop().into(cover_Image);
 
                 community_title.setText(bean.workTitle);

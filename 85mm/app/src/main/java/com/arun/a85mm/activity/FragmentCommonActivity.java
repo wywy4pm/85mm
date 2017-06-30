@@ -125,7 +125,7 @@ public class FragmentCommonActivity extends BaseActivity {
         }
     }
 
-    public void setShowBottomRight(final String linkUrl, final String workId) {
+    public void setShowBottomRight(final String linkUrl, final String workId, final String type, final String authorUid) {
         ImageView image_right = (ImageView) findViewById(R.id.image_right);
         if (image_right != null) {
             image_right.setVisibility(View.VISIBLE);
@@ -133,7 +133,7 @@ public class FragmentCommonActivity extends BaseActivity {
             image_right.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DialogHelper.showBottomSourceLink(FragmentCommonActivity.this, linkUrl, workId, eventStatisticsHelper);
+                    DialogHelper.showBottomSourceLink(FragmentCommonActivity.this, linkUrl, workId, eventStatisticsHelper, type, authorUid);
                 }
             });
         }
