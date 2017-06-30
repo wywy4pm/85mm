@@ -17,12 +17,17 @@ import com.arun.a85mm.bean.AuditItemBean;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.CommunityTagBean;
 import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.event.UpdateAssociateEvent;
 import com.arun.a85mm.helper.MatisseHelper;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.presenter.AssociationPresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView4;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +55,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         return R.layout.layout_association;
     }
 
@@ -184,14 +190,21 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         if (presenter != null) {
             presenter.detachView();
         }
     }
 
-    public void setTagSelect(int position){
+    public void setTagSelect(int position) {
         dataType = position;
         SharedPreferencesUtils.setConfigInt(getActivity(), SharedPreferencesUtils.KEY_ASSOCIATION_TAG, dataType);
+        refreshData();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateList(UpdateAssociateEvent event) {
+        recyclerView.scrollToPosition(0);
         refreshData();
     }
 }

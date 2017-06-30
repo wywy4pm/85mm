@@ -125,6 +125,20 @@ public class FragmentCommonActivity extends BaseActivity {
         }
     }
 
+    public void setShowBottomRight(final String linkUrl, final String workId) {
+        ImageView image_right = (ImageView) findViewById(R.id.image_right);
+        if (image_right != null) {
+            image_right.setVisibility(View.VISIBLE);
+            image_right.setImageResource(R.mipmap.ic_home_more);
+            image_right.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogHelper.showBottomSourceLink(FragmentCommonActivity.this, linkUrl, workId, eventStatisticsHelper);
+                }
+            });
+        }
+    }
+
     public void setShowBottomRight(final String linkUrl, final String workId, final String type, final String authorUid) {
         ImageView image_right = (ImageView) findViewById(R.id.image_right);
         if (image_right != null) {

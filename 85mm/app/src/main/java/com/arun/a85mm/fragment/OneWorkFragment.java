@@ -61,6 +61,7 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
     public static final String TYPE_COMMUNITY = "2";
     private List<WorkListItemBean> workListItems = new ArrayList<>();
     private String type;
+    private String authorUid = "";
 
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
@@ -140,8 +141,11 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
             WorkListBean bean = (WorkListBean) data;
             sourceUrl = bean.sourceUrl;
             if (getActivity() instanceof FragmentCommonActivity) {
-                String authorUid = "";
-                ((FragmentCommonActivity) getActivity()).setShowBottomRight(sourceUrl, workId,TYPE_COMMUNITY,authorUid);
+                if (TYPE_COMMUNITY.equals(type)) {
+                    ((FragmentCommonActivity) getActivity()).setShowBottomRight(sourceUrl, workId, TYPE_COMMUNITY, authorUid);
+                }else {
+                    ((FragmentCommonActivity) getActivity()).setShowBottomRight(sourceUrl, workId);
+                }
             }
             workListItems.clear();
             oneWorkAdapter.setWorkListBean(bean);
@@ -217,7 +221,11 @@ public class OneWorkFragment extends BaseFragment implements CommonView3, OnImag
 
     @Override
     public void onMoreLinkClick(String workId, String sourceUrl) {
-        DialogHelper.showBottomSourceLink(getActivity(), sourceUrl, workId, eventStatisticsHelper);
+        if (TYPE_COMMUNITY.equals(type)) {
+            DialogHelper.showBottomSourceLink(getActivity(), sourceUrl, workId, eventStatisticsHelper, type, authorUid);
+        } else {
+            DialogHelper.showBottomSourceLink(getActivity(), sourceUrl, workId, eventStatisticsHelper);
+        }
     }
 
     @Override

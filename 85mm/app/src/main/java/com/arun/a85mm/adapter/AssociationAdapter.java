@@ -185,6 +185,7 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
         private View itemView;
         private RelativeLayout layout_cover_Image;
         private TextView cover_count;
+        private RelativeLayout shadow;
 
         private AssociationHolder(View itemView) {
             super(itemView);
@@ -201,6 +202,7 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
             this.layout_list_comment = (RelativeLayout) itemView.findViewById(R.id.layout_list_comment);
             this.layout_cover_Image = (RelativeLayout) itemView.findViewById(R.id.layout_cover_Image);
             this.cover_count = (TextView) itemView.findViewById(R.id.cover_count);
+            this.shadow = (RelativeLayout) itemView.findViewById(R.id.shadow);
         }
 
         private void setData(final Context context, final AssociationBean bean, int screenWidth) {
@@ -263,7 +265,6 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
                     layout_list_comment.setVisibility(View.GONE);
                 }
             }
-
         }
     }
 

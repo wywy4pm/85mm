@@ -47,7 +47,8 @@ public class EventPresenter extends BasePresenter<EventView> {
                                     || type == EventConstant.WORK_REPEAT
                                     || type == EventConstant.WORK_SHOW_SEQ
                                     || type == EventConstant.WORK_AUDIT_RECOMMEND
-                                    || type == EventConstant.WORK_ASSOCIATION_RECOMMEND) {
+                                    || type == EventConstant.WORK_ASSOCIATION_RECOMMEND
+                                    || type == EventConstant.WORK_ASSOCIATION_DELETE) {
                                 getMvpView().eventDone(type);
                             }
                             getMvpView().eventSuccess(commonApiResponse.hasNewMsg);

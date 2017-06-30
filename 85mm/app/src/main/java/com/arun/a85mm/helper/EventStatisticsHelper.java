@@ -1,7 +1,9 @@
 package com.arun.a85mm.helper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.StringRes;
+import android.text.TextUtils;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
@@ -9,6 +11,7 @@ import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.request.ActionRequest;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.event.UpdateAssociateEvent;
 import com.arun.a85mm.event.UpdateMesDotEvent;
 import com.arun.a85mm.presenter.EventPresenter;
 import com.arun.a85mm.utils.AppUtils;
@@ -96,15 +99,21 @@ public class EventStatisticsHelper implements EventView {
             tips = context.getString(R.string.repeat);
         } else if (type == EventConstant.WORK_SHOW_SEQ) {
             tips = context.getString(R.string.show_seq);
-        }else if(type == EventConstant.WORK_AUDIT_RECOMMEND){
+        } else if (type == EventConstant.WORK_AUDIT_RECOMMEND) {
             tips = context.getString(R.string.recommend_new);
-        }else if(type == EventConstant.WORK_ASSOCIATION_RECOMMEND){
+        } else if (type == EventConstant.WORK_ASSOCIATION_RECOMMEND) {
             tips = context.getString(R.string.recommend_jingxuan);
         }
-        if (context instanceof MainActivity) {
-            ((MainActivity) context).showTop("[" + tips + "]" + "操作成功");
-        } else if (context instanceof BaseActivity) {
-            ((BaseActivity) context).showTop("[" + tips + "]" + "操作成功");
+        if (!TextUtils.isEmpty(tips)) {
+            if (context instanceof MainActivity) {
+                ((MainActivity) context).showTop("[" + tips + "]" + "操作成功");
+            } else if (context instanceof BaseActivity) {
+                ((BaseActivity) context).showTop("[" + tips + "]" + "操作成功");
+            }
+        }
+        if (type == EventConstant.WORK_ASSOCIATION_DELETE) {
+            EventBus.getDefault().post(new UpdateAssociateEvent());
+            ((Activity) context).finish();
         }
     }
 
