@@ -40,7 +40,7 @@ public class DialogHelper {
             @Override
             public void onClick(View v) {
                 if (helper != null) {
-                    helper.recordUserAction(context, EventConstant.WORK_REPORT, EventStatisticsHelper.createOneActionList(EventConstant.WORK_REPORT, workId, ""));
+                    helper.recordUserAction(context, EventConstant.WORK_REPORT, workId, "");
                 }
                 dialog.cancel();
             }
@@ -50,7 +50,7 @@ public class DialogHelper {
             @Override
             public void onClick(View v) {
                 if (helper != null) {
-                    helper.recordUserAction(context, EventConstant.WORK_SCALE_OVER, EventStatisticsHelper.createOneActionList(EventConstant.WORK_SCALE_OVER, workId, ""));
+                    helper.recordUserAction(context, EventConstant.WORK_SCALE_OVER, workId, "");
                 }
                 dialog.cancel();
             }
@@ -59,7 +59,7 @@ public class DialogHelper {
             @Override
             public void onClick(View v) {
                 if (helper != null) {
-                    helper.recordUserAction(context, EventConstant.WORK_BAD_COMMNET, EventStatisticsHelper.createOneActionList(EventConstant.WORK_BAD_COMMNET, workId, ""));
+                    helper.recordUserAction(context, EventConstant.WORK_BAD_COMMNET, workId, "");
                 }
                 dialog.cancel();
             }
@@ -68,7 +68,7 @@ public class DialogHelper {
             @Override
             public void onClick(View v) {
                 if (helper != null) {
-                    helper.recordUserAction(context, EventConstant.WORK_REPEAT, EventStatisticsHelper.createOneActionList(EventConstant.WORK_REPEAT, workId, ""));
+                    helper.recordUserAction(context, EventConstant.WORK_REPEAT, workId, "");
                 }
                 dialog.cancel();
             }
@@ -78,21 +78,12 @@ public class DialogHelper {
             @Override
             public void onClick(View v) {
                 if (helper != null) {
-                    helper.recordUserAction(context, EventConstant.WORK_SHOW_SEQ, EventStatisticsHelper.createOneActionList(EventConstant.WORK_SHOW_SEQ, workId, ""));
+                    helper.recordUserAction(context, EventConstant.WORK_SHOW_SEQ, workId, "");
                 }
                 dialog.cancel();
             }
         });
 
-        /*root.findViewById(R.id.btn_check).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (helper != null) {
-                    helper.recordUserAction(context, EventConstant, EventStatisticsHelper.createOneActionList(EventConstant.WORK_REPEAT, workId, ""));
-                }
-                dialog.cancel();
-            }
-        });*/
         root.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,15 +120,29 @@ public class DialogHelper {
 
             LinearLayout btn_recommend = (LinearLayout) root.findViewById(R.id.btn_recommend);
             View line_btn_recommend = root.findViewById(R.id.line_btn_recommend);
+            LinearLayout btn_move_audit = (LinearLayout) root.findViewById(R.id.btn_move_audit);
+            View line_move_audit = root.findViewById(R.id.line_move_audit);
+
             if ("4".equals(uid)) {
                 line_btn_recommend.setVisibility(View.VISIBLE);
                 btn_recommend.setVisibility(View.VISIBLE);
+                line_move_audit.setVisibility(View.VISIBLE);
+                btn_move_audit.setVisibility(View.VISIBLE);
+
                 btn_recommend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (helper != null) {
-                            helper.recordUserAction(context, EventConstant.WORK_ASSOCIATION_RECOMMEND,
-                                    EventStatisticsHelper.createOneActionList(EventConstant.WORK_ASSOCIATION_RECOMMEND, workId, ""));
+                            helper.recordUserAction(context, EventConstant.WORK_ASSOCIATION_RECOMMEND, workId, "");
+                        }
+                        dialog.cancel();
+                    }
+                });
+                btn_move_audit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (helper != null) {
+                            helper.recordUserAction(context, EventConstant.WORK_MOVE_TO_AUDIT, workId, "");
                         }
                         dialog.cancel();
                     }
@@ -145,6 +150,8 @@ public class DialogHelper {
             } else {
                 line_btn_recommend.setVisibility(View.GONE);
                 btn_recommend.setVisibility(View.GONE);
+                line_move_audit.setVisibility(View.GONE);
+                btn_move_audit.setVisibility(View.GONE);
             }
 
             if (!TextUtils.isEmpty(authorUid) && authorUid.equals(uid)) {
@@ -157,8 +164,7 @@ public class DialogHelper {
                     @Override
                     public void onClick(View v) {
                         if (helper != null) {
-                            helper.recordUserAction(context, EventConstant.WORK_ASSOCIATION_DELETE,
-                                    EventStatisticsHelper.createOneActionList(EventConstant.WORK_ASSOCIATION_DELETE, workId, ""));
+                            helper.recordUserAction(context, EventConstant.WORK_ASSOCIATION_DELETE, workId, "");
                         }
                         dialog.cancel();
                     }
@@ -166,6 +172,19 @@ public class DialogHelper {
             } else {
                 root.findViewById(R.id.btn_link).setVisibility(View.GONE);
             }
+        } else if (OneWorkActivity.TYPE_AUDIT.equals(type)) {
+            LinearLayout btn_recommend_work = (LinearLayout) root.findViewById(R.id.btn_recommend_work);
+            View line_btn_recommend_work = root.findViewById(R.id.line_btn_recommend_work);
+            btn_recommend_work.setVisibility(View.VISIBLE);
+            line_btn_recommend_work.setVisibility(View.VISIBLE);
+            btn_recommend_work.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (helper != null) {
+                        helper.recordUserAction(context, EventConstant.WORK_AUDIT_RECOMMEND, workId, "");
+                    }
+                }
+            });
         } else {
             root.findViewById(R.id.btn_link).setVisibility(View.VISIBLE);
             root.findViewById(R.id.btn_link).setOnClickListener(new View.OnClickListener() {
@@ -181,7 +200,7 @@ public class DialogHelper {
             @Override
             public void onClick(View v) {
                 if (helper != null) {
-                    helper.recordUserAction(context, EventConstant.WORK_REPORT, EventStatisticsHelper.createOneActionList(EventConstant.WORK_REPORT, workId, ""));
+                    helper.recordUserAction(context, EventConstant.WORK_REPORT, workId, "");
                 }
                 dialog.cancel();
             }
@@ -191,7 +210,7 @@ public class DialogHelper {
             @Override
             public void onClick(View v) {
                 if (helper != null) {
-                    helper.recordUserAction(context, EventConstant.WORK_SCALE_OVER, EventStatisticsHelper.createOneActionList(EventConstant.WORK_SCALE_OVER, workId, ""));
+                    helper.recordUserAction(context, EventConstant.WORK_SCALE_OVER, workId, "");
                 }
                 dialog.cancel();
             }
@@ -200,7 +219,7 @@ public class DialogHelper {
             @Override
             public void onClick(View v) {
                 if (helper != null) {
-                    helper.recordUserAction(context, EventConstant.WORK_BAD_COMMNET, EventStatisticsHelper.createOneActionList(EventConstant.WORK_BAD_COMMNET, workId, ""));
+                    helper.recordUserAction(context, EventConstant.WORK_BAD_COMMNET, workId, "");
                 }
                 dialog.cancel();
             }
@@ -209,7 +228,7 @@ public class DialogHelper {
             @Override
             public void onClick(View v) {
                 if (helper != null) {
-                    helper.recordUserAction(context, EventConstant.WORK_REPEAT, EventStatisticsHelper.createOneActionList(EventConstant.WORK_REPEAT, workId, ""));
+                    helper.recordUserAction(context, EventConstant.WORK_REPEAT, workId, "");
                 }
                 dialog.cancel();
             }
@@ -219,21 +238,12 @@ public class DialogHelper {
             @Override
             public void onClick(View v) {
                 if (helper != null) {
-                    helper.recordUserAction(context, EventConstant.WORK_SHOW_SEQ, EventStatisticsHelper.createOneActionList(EventConstant.WORK_SHOW_SEQ, workId, ""));
+                    helper.recordUserAction(context, EventConstant.WORK_SHOW_SEQ, workId, "");
                 }
                 dialog.cancel();
             }
         });
 
-        /*root.findViewById(R.id.btn_check).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (helper != null) {
-                    helper.recordUserAction(context, EventConstant, EventStatisticsHelper.createOneActionList(EventConstant.WORK_REPEAT, workId, ""));
-                }
-                dialog.cancel();
-            }
-        });*/
         root.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

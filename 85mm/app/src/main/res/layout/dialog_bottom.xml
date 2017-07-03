@@ -202,6 +202,34 @@
         android:background="@color/plain" />
 
     <LinearLayout
+        android:id="@+id/btn_move_audit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/text_move_audit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="转移到审核区"
+            android:textColor="@color/red"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line_move_audit"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/plain"
+        android:visibility="gone" />
+
+    <LinearLayout
         android:id="@+id/btn_recommend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -227,7 +255,35 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:background="@color/plain"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/btn_recommend_work"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/text_recommend_work"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="推荐到作品区"
+            android:textColor="@color/charcoalgrey"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line_btn_recommend_work"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/plain"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/btn_cancel"
