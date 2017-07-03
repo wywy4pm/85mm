@@ -12,9 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.common.EventConstant;
-import com.arun.a85mm.fragment.OneWorkFragment;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 
 /**
@@ -121,7 +121,7 @@ public class DialogHelper {
         LinearLayout root = (LinearLayout) LayoutInflater.from(context).inflate(
                 R.layout.dialog_bottom, null);
         String uid = SharedPreferencesUtils.getUid(context);
-        if (OneWorkFragment.TYPE_COMMUNITY.equals(type)) {
+        if (OneWorkActivity.TYPE_COMMUNITY.equals(type)) {
             TextView read_origin = (TextView) root.findViewById(R.id.read_origin);
 
             TextView report_detail = (TextView) root.findViewById(R.id.report_detail);

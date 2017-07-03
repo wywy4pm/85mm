@@ -1,12 +1,6 @@
 package com.arun.a85mm.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,12 +14,10 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.AuditActivity;
-import com.arun.a85mm.activity.FragmentCommonActivity;
+import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.bean.AuditInfoBean;
 import com.arun.a85mm.bean.AuditItemBean;
-import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.common.EventConstant;
-import com.arun.a85mm.fragment.OneWorkFragment;
 import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.UrlJumpHelper;
@@ -206,9 +198,11 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
                 public void onClick(View v) {
                     Map<String, String> map = new HashMap<>();
                     map.put(UrlJumpHelper.WORK_ID, bean.workId);
-                    map.put(OneWorkFragment.KEY_TYPE, OneWorkFragment.TYPE_AUDIT);
-                    FragmentCommonActivity.jumpToFragmentCommonActivity(context,
-                            FragmentCommonActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, FragmentCommonActivity.BACK_MODE_COM);
+                    map.put(OneWorkActivity.KEY_TYPE, OneWorkActivity.TYPE_AUDIT);
+                   /* FragmentCommonActivity.jumpToFragmentCommonActivity(context,
+                            FragmentCommonActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, FragmentCommonActivity.BACK_MODE_COM);*/
+
+                    OneWorkActivity.jumpToOneWorkActivity(context, OneWorkActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, OneWorkActivity.BACK_MODE_COM);
                 }
             });
         }

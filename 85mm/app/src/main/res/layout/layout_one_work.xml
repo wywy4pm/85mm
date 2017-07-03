@@ -7,10 +7,39 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_above="@+id/bottom_view" />
+        android:layout_above="@+id/layout_add_comment"
+        android:background="@color/white" />
 
-    <LinearLayout
+    <include
+        android:id="@+id/layout_status_place"
+        layout="@layout/layout_status_place"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/ic_back_white" />
+
+        <ImageView
+            android:id="@+id/image_more"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/ic_more_white" />
+    </RelativeLayout>
+
+    <!--<LinearLayout
         android:id="@+id/bottom_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,7 +80,7 @@
             android:textColor="@color/charcoalgrey"
             android:textSize="15sp" />
 
-    </LinearLayout>
+    </LinearLayout>-->
 
     <RelativeLayout
         android:id="@+id/layout_add_comment"
@@ -68,10 +97,10 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/btn_add_comment"
             android:background="@drawable/shape_btn_circle_stroke"
             android:gravity="center_vertical"
             android:hint="发表评论..."
-            android:layout_toLeftOf="@+id/btn_add_comment"
             android:paddingLeft="15dp"
             android:textColor="@color/charcoalgrey"
             android:textColorHint="@color/login_text"

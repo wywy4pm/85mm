@@ -2,7 +2,6 @@ package com.arun.a85mm.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,11 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
-import com.arun.a85mm.activity.FragmentCommonActivity;
+import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.bean.AssociationBean;
 import com.arun.a85mm.bean.CommentsBean;
 import com.arun.a85mm.bean.CommunityTagBean;
-import com.arun.a85mm.fragment.OneWorkFragment;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
@@ -211,9 +209,11 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
                 public void onClick(View v) {
                     Map<String, String> map = new HashMap<>();
                     map.put(UrlJumpHelper.WORK_ID, bean.workId);
-                    map.put(OneWorkFragment.KEY_TYPE, OneWorkFragment.TYPE_COMMUNITY);
-                    FragmentCommonActivity.jumpToFragmentCommonActivity(context,
-                            FragmentCommonActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, FragmentCommonActivity.BACK_MODE_COM);
+                    map.put(OneWorkActivity.KEY_TYPE, OneWorkActivity.TYPE_COMMUNITY);
+                    /*FragmentCommonActivity.jumpToFragmentCommonActivity(context,
+                            FragmentCommonActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, FragmentCommonActivity.BACK_MODE_COM);*/
+
+                    OneWorkActivity.jumpToOneWorkActivity(context,OneWorkActivity.FRAGMENT_ONE_WORK,bean.workTitle,map,OneWorkActivity.BACK_MODE_COM);
                 }
             });
 

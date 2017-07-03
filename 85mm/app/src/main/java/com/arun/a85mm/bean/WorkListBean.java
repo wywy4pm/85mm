@@ -28,6 +28,7 @@ public class WorkListBean implements Serializable{
     public int backgroundColor;
     public String description;
     public List<CommentsBean> comments;
+    public String uid;
 
     public int browseNum;
     public String date;

@@ -127,7 +127,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (UrlJumpHelper.JUMP_APP_WORK_DETAIL.equals(type)) {
-                    FragmentCommonActivity.jumpToFragmentCommonActivity(MainActivity.this, FragmentCommonActivity.FRAGMENT_ONE_WORK, map);
+                    //FragmentCommonActivity.jumpToFragmentCommonActivity(MainActivity.this, FragmentCommonActivity.FRAGMENT_ONE_WORK, map);
+                    OneWorkActivity.jumpToOneWorkActivity(MainActivity.this, OneWorkActivity.FRAGMENT_ONE_WORK, map);
                 }
                 type = "";
                 map = null;
