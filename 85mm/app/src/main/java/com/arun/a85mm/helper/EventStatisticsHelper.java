@@ -113,7 +113,7 @@ public class EventStatisticsHelper implements EventView {
         }
         if (type == EventConstant.WORK_ASSOCIATION_DELETE) {
             EventBus.getDefault().post(new UpdateAssociateEvent());
-            ((Activity) context).finish();
+            ((Activity) context).onBackPressed();
         }
     }
 
