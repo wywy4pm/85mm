@@ -12,6 +12,7 @@ import com.arun.a85mm.adapter.ProductListAdapter;
 import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.event.UpdateProductEvent;
 import com.arun.a85mm.helper.DialogHelper;
@@ -239,7 +240,8 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
 
     @Override
     public void onMoreLinkClick(String workId, String sourceUrl) {
-        DialogHelper.showBottomSourceLink(getActivity(), sourceUrl, workId, eventStatisticsHelper);
+        //DialogHelper.showBottomSourceLink(getActivity(), sourceUrl, workId, eventStatisticsHelper);
+        DialogHelper.showBottom(getActivity(), Constant.TYPE_WORK, sourceUrl, workId, "", eventStatisticsHelper);
     }
 
     public void setHaveMore(boolean isHaveMore) {

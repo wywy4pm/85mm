@@ -47,4 +47,9 @@ public class Constant {
 
     public static final int REQUEST_CODE_ASSOCIATE_LOGIN = 1001;
     public static final int REQUEST_CODE_ASSOCIATE_MAIN = 1002;
+
+    public static final String TYPE_WORK = "0";
+    public static final String TYPE_AUDIT = "1";
+    public static final String TYPE_COMMUNITY = "2";
+    public static final String TYPE_PUSH = "3";
 }

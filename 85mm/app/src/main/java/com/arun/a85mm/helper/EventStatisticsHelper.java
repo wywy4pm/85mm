@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.MainActivity;
+import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.request.ActionRequest;
 import com.arun.a85mm.common.EventConstant;
@@ -18,6 +19,7 @@ import com.arun.a85mm.utils.AppUtils;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.EventView;
+import com.sina.weibo.sdk.api.share.Base;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -113,7 +115,9 @@ public class EventStatisticsHelper implements EventView {
         }
         if (type == EventConstant.WORK_ASSOCIATION_DELETE) {
             EventBus.getDefault().post(new UpdateAssociateEvent());
-            ((Activity) context).onBackPressed();
+            if (context instanceof OneWorkActivity) {
+                ((Activity) context).onBackPressed();
+            }
         }
     }
 

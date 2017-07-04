@@ -8,6 +8,7 @@ import android.os.Parcelable;
 
 import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.activity.OneWorkActivity;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.utils.AppUtils;
 
 import java.io.Serializable;
@@ -37,6 +38,7 @@ public class UrlJumpHelper {
             map.put(TITLE, title);
             if (AppUtils.isAppRunning(context, "com.arun.a85mm")) {
                 //FragmentCommonActivity.jumpToFragmentCommonActivity(context, FragmentCommonActivity.FRAGMENT_ONE_WORK, map);
+                map.put(OneWorkActivity.KEY_TYPE, Constant.TYPE_PUSH);
                 OneWorkActivity.jumpToOneWorkActivity(context, OneWorkActivity.FRAGMENT_ONE_WORK, map);
             } else {
                 startAppToJump(context, "com.arun.a85mm", JUMP_APP_WORK_DETAIL, map);

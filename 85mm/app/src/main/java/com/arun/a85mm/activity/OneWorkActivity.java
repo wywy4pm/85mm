@@ -3,12 +3,15 @@ package com.arun.a85mm.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,8 +22,11 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.OneWorkAdapter;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.DialogHelper;
+import com.arun.a85mm.helper.ObjectAnimatorHelper;
+import com.arun.a85mm.helper.ObjectAnimatorManager;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.helper.UserManager;
@@ -69,12 +75,16 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     private EditText edit_add_comment;
     private TextView btn_add_comment;
     private OneWorkAdapter oneWorkAdapter;
-    public static final String KEY_TYPE = "audit";
-    public static final String TYPE_AUDIT = "1";
-    public static final String TYPE_COMMUNITY = "2";
+    public static final String KEY_TYPE = "show_bottom_type";
     private List<WorkListItemBean> workListItems = new ArrayList<>();
     private String type;
+    private String showBottomType;
     private String authorUid = "";
+
+    // 软键盘的高度
+    private int keyboardHeight;
+    // 软键盘的显示状态
+    private boolean isShowKeyboard;
 
     public static void jumpToOneWorkActivity(Context context, String type, String title, Map<String, String> extras, int backMode) {
         Intent intent = new Intent(context, OneWorkActivity.class);
@@ -109,7 +119,6 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_one_work);
-        new SystemBarTintManager(this).setStatusBarTintEnabled(true);
         StatusBarUtils.setStatusBarColor(this, R.color.white);
         initView();
         initData();
@@ -124,7 +133,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
             Map<String, String> map = (Map<String, String>) getIntent().getExtras().getSerializable(EXTRAS);
             if (map != null) {
                 workId = map.get(UrlJumpHelper.WORK_ID);
-                type = map.get(KEY_TYPE);
+                showBottomType = map.get(KEY_TYPE);
             }
         }
 
@@ -178,12 +187,46 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
         }
 
         setSaveImage(true);
+
+        View decorView = getWindow().getDecorView();
+        decorView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // 应用可以显示的区域。此处包括应用占用的区域，
+                // 以及ActionBar和状态栏，但不含设备底部的虚拟按键。
+                Rect r = new Rect();
+                getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
+                // 屏幕高度,这个高度不含虚拟按键的高度
+                int screenHeight = DensityUtil.getScreenHeight(OneWorkActivity.this);
+                int heightDiff = screenHeight - (r.bottom - r.top);
+                int statusBarHeight = DensityUtil.getStatusHeight(OneWorkActivity.this);
+                if (keyboardHeight == 0 && heightDiff > statusBarHeight) {
+                    keyboardHeight = heightDiff - statusBarHeight;
+                }
+
+                if (isShowKeyboard) {
+                    // 如果软键盘是弹出的状态，并且heightDiff小于等于状态栏高度，
+                    // 说明这时软键盘已经收起
+                    if (heightDiff <= statusBarHeight) {
+                        isShowKeyboard = false;
+                        //onHideKeyboard();
+                        ObjectAnimatorManager.translationY(layout_add_comment, -keyboardHeight, 0, 100, null);
+                    }
+                } else {
+                    // 如果软键盘是收起的状态，并且heightDiff大于状态栏高度，
+                    // 说明这时软键盘已经弹出
+                    if (heightDiff > statusBarHeight) {
+                        isShowKeyboard = true;
+                        ObjectAnimatorManager.translationY(layout_add_comment, 0, -keyboardHeight, 100, null);
+                        //onShowKeyboard();
+                    }
+                }
+            }
+        });
     }
 
     private void initData() {
-
-        if (TYPE_AUDIT.equals(type)) {
-        } else if (TYPE_COMMUNITY.equals(type)) {
+        if (Constant.TYPE_COMMUNITY.equals(showBottomType)) {
             layout_add_comment.setVisibility(View.VISIBLE);
         } else {
             layout_add_comment.setVisibility(View.GONE);
@@ -204,13 +247,9 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
         if (dataType == OneWorkPresenter.TYPE_DETAIL && data instanceof WorkListBean) {
             WorkListBean bean = (WorkListBean) data;
             sourceUrl = bean.sourceUrl;
-
             authorUid = bean.uid;
-            if (TYPE_COMMUNITY.equals(type)) {
-                setShowBottomRight(sourceUrl, workId, TYPE_COMMUNITY, authorUid);
-            } else {
-                setShowBottomRight(sourceUrl, workId);
-            }
+
+            setShowBottomRight(sourceUrl, workId, showBottomType, authorUid);
 
             workListItems.clear();
             oneWorkAdapter.setWorkListBean(bean);
@@ -220,7 +259,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
 
             addHead(bean);
 
-            if (TYPE_COMMUNITY.equals(type)) {
+            if (Constant.TYPE_COMMUNITY.equals(showBottomType)) {
                 addDescription(bean);
                 addComments(bean);
             }
@@ -229,16 +268,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
             showTop("评论成功");
             refreshData();
         }
-    }
 
-    public void setShowBottomRight(final String linkUrl, final String workId) {
-        image_more.setVisibility(View.VISIBLE);
-        image_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogHelper.showBottomSourceLink(OneWorkActivity.this, linkUrl, workId, eventStatisticsHelper);
-            }
-        });
     }
 
     public void setShowBottomRight(final String linkUrl, final String workId, final String type, final String authorUid) {
@@ -246,7 +276,12 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
         image_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogHelper.showBottomSourceLink(OneWorkActivity.this, linkUrl, workId, eventStatisticsHelper, type, authorUid);
+                //DialogHelper.showBottomSourceLink(OneWorkActivity.this, linkUrl, workId, eventStatisticsHelper, type, authorUid);
+                if (Constant.TYPE_COMMUNITY.equals(showBottomType) || Constant.TYPE_AUDIT.equals(showBottomType)) {
+                    DialogHelper.showBottom(OneWorkActivity.this, type, linkUrl, workId, authorUid, eventStatisticsHelper);
+                } else {
+                    DialogHelper.showBottom(OneWorkActivity.this, type, linkUrl, workId, "", eventStatisticsHelper);
+                }
             }
         });
     }
@@ -306,11 +341,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
 
     @Override
     public void onMoreLinkClick(String workId, String sourceUrl) {
-        if (TYPE_COMMUNITY.equals(type)) {
-            DialogHelper.showBottomSourceLink(this, sourceUrl, workId, eventStatisticsHelper, type, authorUid);
-        } else {
-            DialogHelper.showBottomSourceLink(this, sourceUrl, workId, eventStatisticsHelper);
-        }
+        DialogHelper.showBottom(this, showBottomType, sourceUrl, workId, authorUid, eventStatisticsHelper);
     }
 
     @Override
@@ -335,7 +366,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
                     oneWorkPresenter.addComment(workId, edit_add_comment.getText().toString());
                 }
                 //发送成功后关闭软键盘
-                KeyBoardUtils.hideKeyBoard(this);
+                KeyBoardUtils.hideKeyBoard(this, edit_add_comment);
                 edit_add_comment.getText().clear();
                 break;
         }

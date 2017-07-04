@@ -17,6 +17,7 @@ public class EventConstant {
     public static final int WORK_SCALE_OVER = 3005;
     public static final int WORK_AUDIT_RECOMMEND = 3007;
     public static final int WORK_ASSOCIATION_RECOMMEND = 3006;
+    public static final int WORK_MOVE_TO_ASSOCIATION = 3008;
     public static final int WORK_ASSOCIATION_DELETE = 3009;
     public static final int WORK_MOVE_TO_AUDIT = 3010;
 

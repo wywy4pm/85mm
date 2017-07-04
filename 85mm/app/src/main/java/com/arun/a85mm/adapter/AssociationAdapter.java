@@ -17,6 +17,9 @@ import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.bean.AssociationBean;
 import com.arun.a85mm.bean.CommentsBean;
 import com.arun.a85mm.bean.CommunityTagBean;
+import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.helper.DialogHelper;
+import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
@@ -40,6 +43,7 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
 
     private int screenWidth;
     private List<CommunityTagBean> tagsList;
+    private EventStatisticsHelper eventStatisticsHelper;
 
     private static OnTagClick onTagClick;
 
@@ -51,10 +55,11 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
         AssociationAdapter.onTagClick = onTagClick;
     }
 
-    public AssociationAdapter(Context context, List<AssociationBean> list, List<CommunityTagBean> tagsList) {
+    public AssociationAdapter(Context context, List<AssociationBean> list, List<CommunityTagBean> tagsList, EventStatisticsHelper eventStatisticsHelper) {
         super(context, list);
         screenWidth = DensityUtil.getScreenWidth(context);
         this.tagsList = tagsList;
+        this.eventStatisticsHelper = eventStatisticsHelper;
     }
 
     @Override
@@ -76,7 +81,7 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
             headHolder.setData(contexts.get(), tagsList);
         } else if (holder instanceof AssociationHolder) {
             AssociationHolder associationHolder = (AssociationHolder) holder;
-            associationHolder.setData(contexts.get(), getItem(position), screenWidth);
+            associationHolder.setData(contexts.get(), getItem(position), screenWidth, eventStatisticsHelper);
         }
     }
 
@@ -184,6 +189,8 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
         private RelativeLayout layout_cover_Image;
         private TextView cover_count;
         private RelativeLayout shadow;
+        private TextView comment_shadow;
+        private ImageView comment_more;
 
         private AssociationHolder(View itemView) {
             super(itemView);
@@ -201,15 +208,17 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
             this.layout_cover_Image = (RelativeLayout) itemView.findViewById(R.id.layout_cover_Image);
             this.cover_count = (TextView) itemView.findViewById(R.id.cover_count);
             this.shadow = (RelativeLayout) itemView.findViewById(R.id.shadow);
+            this.comment_shadow = (TextView) itemView.findViewById(R.id.comment_shadow);
+            this.comment_more = (ImageView) itemView.findViewById(R.id.comment_more);
         }
 
-        private void setData(final Context context, final AssociationBean bean, int screenWidth) {
+        private void setData(final Context context, final AssociationBean bean, int screenWidth, final EventStatisticsHelper eventStatisticsHelper) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Map<String, String> map = new HashMap<>();
                     map.put(UrlJumpHelper.WORK_ID, bean.workId);
-                    map.put(OneWorkActivity.KEY_TYPE, OneWorkActivity.TYPE_COMMUNITY);
+                    map.put(OneWorkActivity.KEY_TYPE, Constant.TYPE_COMMUNITY);
                     /*FragmentCommonActivity.jumpToFragmentCommonActivity(context,
                             FragmentCommonActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, FragmentCommonActivity.BACK_MODE_COM);*/
 
@@ -236,34 +245,43 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
                 cover_Image.getLayoutParams().height = imageHeight;
                 cover_count.setText(String.valueOf(bean.totalImageNum));
                 Glide.with(context).load(bean.coverUrl).override(screenWidth, imageHeight).centerCrop().into(cover_Image);
+            }
 
-                community_title.setText(bean.workTitle);
-                community_detail.setText(bean.description);
+            community_title.setText(bean.workTitle);
+            community_detail.setText(bean.description);
 
-                if (bean.comments != null && bean.comments.size() > 0) {
-                    layout_list_comment.setVisibility(View.VISIBLE);
-                    layout_comment.removeAllViews();
-                    for (int i = 0; i < bean.comments.size(); i++) {
-                        if (bean.comments.get(i) != null) {
-                            CommentsBean commentItem = bean.comments.get(i);
-                            View commentView = LayoutInflater.from(context).inflate(R.layout.list_commnet_item, layout_comment, false);
-                            if (commentView.getLayoutParams() != null && commentView.getLayoutParams() instanceof LinearLayout.LayoutParams) {
-                                if (i < bean.comments.size() - 1) {
-                                    ((LinearLayout.LayoutParams) commentView.getLayoutParams()).setMargins(0, 0, 0, DensityUtil.dp2px(context, 12));
-                                } else {
-                                    ((LinearLayout.LayoutParams) commentView.getLayoutParams()).setMargins(0, 0, 0, 0);
-                                }
-                            }
-                            TextView author = (TextView) commentView.findViewById(R.id.comment_author);
-                            TextView detail = (TextView) commentView.findViewById(R.id.comment_detail);
-                            author.setText(commentItem.authorName + " : ");
-                            detail.setText(commentItem.content);
-                            layout_comment.addView(commentView);
-                        }
-                    }
-                } else {
-                    layout_list_comment.setVisibility(View.GONE);
+            comment_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //DialogHelper.showBottomSourceLink(context, "", bean.workId, eventStatisticsHelper, Constant.TYPE_COMMUNITY, bean.uid);
+                    DialogHelper.showBottom(context, Constant.TYPE_COMMUNITY, "", bean.workId, bean.uid, eventStatisticsHelper);
                 }
+            });
+            if (bean.comments != null && bean.comments.size() > 0) {
+                comment_shadow.setVisibility(View.VISIBLE);
+                layout_comment.setVisibility(View.VISIBLE);
+                layout_comment.removeAllViews();
+                for (int i = 0; i < bean.comments.size(); i++) {
+                    if (bean.comments.get(i) != null) {
+                        CommentsBean commentItem = bean.comments.get(i);
+                        View commentView = LayoutInflater.from(context).inflate(R.layout.list_commnet_item, layout_comment, false);
+                        if (commentView.getLayoutParams() != null && commentView.getLayoutParams() instanceof LinearLayout.LayoutParams) {
+                            if (i < bean.comments.size() - 1) {
+                                ((LinearLayout.LayoutParams) commentView.getLayoutParams()).setMargins(0, 0, 0, DensityUtil.dp2px(context, 12));
+                            } else {
+                                ((LinearLayout.LayoutParams) commentView.getLayoutParams()).setMargins(0, 0, 0, 0);
+                            }
+                        }
+                        TextView author = (TextView) commentView.findViewById(R.id.comment_author);
+                        TextView detail = (TextView) commentView.findViewById(R.id.comment_detail);
+                        author.setText(commentItem.authorName + " : ");
+                        detail.setText(commentItem.content);
+                        layout_comment.addView(commentView);
+                    }
+                }
+            } else {
+                comment_shadow.setVisibility(View.GONE);
+                layout_comment.setVisibility(View.GONE);
             }
         }
     }

@@ -17,6 +17,7 @@ import com.arun.a85mm.activity.AuditActivity;
 import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.bean.AuditInfoBean;
 import com.arun.a85mm.bean.AuditItemBean;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
@@ -198,7 +199,7 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
                 public void onClick(View v) {
                     Map<String, String> map = new HashMap<>();
                     map.put(UrlJumpHelper.WORK_ID, bean.workId);
-                    map.put(OneWorkActivity.KEY_TYPE, OneWorkActivity.TYPE_AUDIT);
+                    map.put(OneWorkActivity.KEY_TYPE, Constant.TYPE_AUDIT);
                    /* FragmentCommonActivity.jumpToFragmentCommonActivity(context,
                             FragmentCommonActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, FragmentCommonActivity.BACK_MODE_COM);*/
 

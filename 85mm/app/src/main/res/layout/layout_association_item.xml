@@ -75,8 +75,7 @@
     <RelativeLayout
         android:id="@+id/layout_list_comment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:id="@+id/comment_head"
@@ -93,6 +92,7 @@
                 android:src="@mipmap/list_comment_left" />
 
             <ImageView
+                android:id="@+id/comment_more"
                 android:layout_width="16dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"

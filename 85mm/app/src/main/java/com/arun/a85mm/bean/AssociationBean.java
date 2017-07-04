@@ -36,5 +36,6 @@ public class AssociationBean {
     public List<CommentsBean> comments;
 
     public String type;
+    public String uid;
 
 }

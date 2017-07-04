@@ -67,7 +67,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        associationAdapter = new AssociationAdapter(getActivity(), associationList, createHead());
+        associationAdapter = new AssociationAdapter(getActivity(), associationList, createHead(),eventStatisticsHelper);
         associationAdapter.setOnTagClick(this);
         recyclerView.setAdapter(associationAdapter);
 

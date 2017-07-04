@@ -160,7 +160,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.OneWorkActivity"></activity>
+        <activity
+            android:name=".activity.OneWorkActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

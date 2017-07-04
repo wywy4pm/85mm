@@ -53,6 +53,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -128,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 if (UrlJumpHelper.JUMP_APP_WORK_DETAIL.equals(type)) {
                     //FragmentCommonActivity.jumpToFragmentCommonActivity(MainActivity.this, FragmentCommonActivity.FRAGMENT_ONE_WORK, map);
+                    Map<String, String> map = new HashMap<>();
+                    map.put(OneWorkActivity.KEY_TYPE, Constant.TYPE_PUSH);
                     OneWorkActivity.jumpToOneWorkActivity(MainActivity.this, OneWorkActivity.FRAGMENT_ONE_WORK, map);
                 }
                 type = "";

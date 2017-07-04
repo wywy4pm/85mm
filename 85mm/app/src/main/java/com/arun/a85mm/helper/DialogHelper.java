@@ -9,12 +9,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.activity.WebViewActivity;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.fragment.ProductionFragment;
+import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 
 /**
@@ -23,19 +27,25 @@ import com.arun.a85mm.utils.SharedPreferencesUtils;
 
 public class DialogHelper {
 
-    public static void showBottomSourceLink(final Context context, final String linkUrl, final String workId, final EventStatisticsHelper helper) {
+    /*public static void showBottomSourceLink(final Context context, final String linkUrl, final String workId, final EventStatisticsHelper helper) {
         final Dialog dialog = new Dialog(context, R.style.ActionSheetDialogStyle);
         LinearLayout root = (LinearLayout) LayoutInflater.from(context).inflate(
                 R.layout.dialog_bottom, null);
         TextView workIdView = (TextView) root.findViewById(R.id.text_works_id);
         workIdView.setText(String.valueOf("ID：" + workId));
-        root.findViewById(R.id.btn_link).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                WebViewActivity.jumpToWebViewActivity(context, linkUrl);
-                dialog.cancel();
-            }
-        });
+        if (!TextUtils.isEmpty(linkUrl)) {
+            root.findViewById(R.id.btn_link).setVisibility(View.VISIBLE);
+            root.findViewById(R.id.btn_link).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    WebViewActivity.jumpToWebViewActivity(context, linkUrl);
+                    dialog.cancel();
+                }
+            });
+        } else {
+            root.findViewById(R.id.btn_link).setVisibility(View.GONE);
+        }
+
         root.findViewById(R.id.btn_report).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,14 +115,14 @@ public class DialogHelper {
             dialogWindow.setAttributes(lp);
             dialog.show();
         }
-    }
+    }*/
 
-    public static void showBottomSourceLink(final Context context, final String linkUrl, final String workId, final EventStatisticsHelper helper, String type, String authorUid) {
+    /*public static void showBottomSourceLink(final Context context, final String linkUrl, final String workId, final EventStatisticsHelper helper, String type, String authorUid) {
         final Dialog dialog = new Dialog(context, R.style.ActionSheetDialogStyle);
         LinearLayout root = (LinearLayout) LayoutInflater.from(context).inflate(
                 R.layout.dialog_bottom, null);
         String uid = SharedPreferencesUtils.getUid(context);
-        if (OneWorkActivity.TYPE_COMMUNITY.equals(type)) {
+        if (Constant.TYPE_COMMUNITY.equals(type)) {
             TextView read_origin = (TextView) root.findViewById(R.id.read_origin);
 
             TextView report_detail = (TextView) root.findViewById(R.id.report_detail);
@@ -147,6 +157,7 @@ public class DialogHelper {
                         dialog.cancel();
                     }
                 });
+
             } else {
                 line_btn_recommend.setVisibility(View.GONE);
                 btn_recommend.setVisibility(View.GONE);
@@ -154,7 +165,7 @@ public class DialogHelper {
                 btn_move_audit.setVisibility(View.GONE);
             }
 
-            if (!TextUtils.isEmpty(authorUid) && authorUid.equals(uid)) {
+            if ((!TextUtils.isEmpty(authorUid) && authorUid.equals(uid)) || "4".equals(uid)) {
                 root.findViewById(R.id.btn_link).setVisibility(View.VISIBLE);
                 read_origin.setTextColor(context.getResources().getColor(R.color.red));
                 read_origin.setText("删除");
@@ -172,7 +183,7 @@ public class DialogHelper {
             } else {
                 root.findViewById(R.id.btn_link).setVisibility(View.GONE);
             }
-        } else if (OneWorkActivity.TYPE_AUDIT.equals(type)) {
+        } else if (Constant.TYPE_AUDIT.equals(type)) {
             LinearLayout btn_recommend_work = (LinearLayout) root.findViewById(R.id.btn_recommend_work);
             View line_btn_recommend_work = root.findViewById(R.id.line_btn_recommend_work);
             btn_recommend_work.setVisibility(View.VISIBLE);
@@ -183,17 +194,24 @@ public class DialogHelper {
                     if (helper != null) {
                         helper.recordUserAction(context, EventConstant.WORK_AUDIT_RECOMMEND, workId, "");
                     }
-                }
-            });
-        } else {
-            root.findViewById(R.id.btn_link).setVisibility(View.VISIBLE);
-            root.findViewById(R.id.btn_link).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    WebViewActivity.jumpToWebViewActivity(context, linkUrl);
                     dialog.cancel();
                 }
             });
+
+            if (!TextUtils.isEmpty(linkUrl)) {
+                root.findViewById(R.id.btn_link).setVisibility(View.VISIBLE);
+                TextView workIdView = (TextView) root.findViewById(R.id.text_works_id);
+                workIdView.setText(String.valueOf("ID：" + workId));
+                root.findViewById(R.id.btn_link).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        WebViewActivity.jumpToWebViewActivity(context, linkUrl);
+                        dialog.cancel();
+                    }
+                });
+            } else {
+                root.findViewById(R.id.btn_link).setVisibility(View.GONE);
+            }
         }
 
         root.findViewById(R.id.btn_report).setOnClickListener(new View.OnClickListener() {
@@ -215,15 +233,24 @@ public class DialogHelper {
                 dialog.cancel();
             }
         });
-        root.findViewById(R.id.btn_bad_comment).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (helper != null) {
-                    helper.recordUserAction(context, EventConstant.WORK_BAD_COMMNET, workId, "");
+
+        if (Constant.TYPE_COMMUNITY.equals(type)) {
+            root.findViewById(R.id.btn_bad_comment).setVisibility(View.GONE);
+            root.findViewById(R.id.line_bad_comment).setVisibility(View.GONE);
+        } else {
+            root.findViewById(R.id.line_bad_comment).setVisibility(View.VISIBLE);
+            root.findViewById(R.id.btn_bad_comment).setVisibility(View.VISIBLE);
+            root.findViewById(R.id.btn_bad_comment).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (helper != null) {
+                        helper.recordUserAction(context, EventConstant.WORK_BAD_COMMNET, workId, "");
+                    }
+                    dialog.cancel();
                 }
-                dialog.cancel();
-            }
-        });
+            });
+        }
+
         root.findViewById(R.id.btn_repeat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -265,5 +292,180 @@ public class DialogHelper {
             dialogWindow.setAttributes(lp);
             dialog.show();
         }
+    }*/
+
+
+    public static void showBottom(final Context context, String type, final String linkUrl, final String workId, String authorUid, final EventStatisticsHelper helper) {
+        final Dialog dialog = new Dialog(context, R.style.ActionSheetDialogStyle);
+        LinearLayout root = (LinearLayout) LayoutInflater.from(context).inflate(
+                R.layout.dialog_bottom, null);
+        String uid = SharedPreferencesUtils.getUid(context);
+
+        for (int i = 0; i < 12; i++) {
+            if (Constant.TYPE_AUDIT.equals(type)) {
+                if ("4".equals(uid)) {
+                    if (i == 2) {
+                        setView(context, i, root, dialog, workId, linkUrl, helper);
+                    }
+                }
+                if (i == 0 || i == 4 || i == 5 || i == 6 || i == 7 || i == 8 || i == 9 || i == 11) {
+                    setView(context, i, root, dialog, workId, linkUrl, helper);
+                }
+            } else if (Constant.TYPE_WORK.equals(type)) {
+                if ("4".equals(uid)) {
+                    if (i == 2 || i == 3) {
+                        setView(context, i, root, dialog, workId, linkUrl, helper);
+                    }
+                } else {
+                    if (i == 4 || i == 5 || i == 6 || i == 7 || i == 8 || i == 9 || i == 11) {
+                        setView(context, i, root, dialog, workId, linkUrl, helper);
+                    }
+                }
+            } else if (Constant.TYPE_COMMUNITY.equals(type)) {
+                if ("4".equals(uid)) {
+                    if (i == 1 || i == 3 || i == 10) {
+                        setView(context, i, root, dialog, workId, linkUrl, helper);
+                    }
+                } else if (!TextUtils.isEmpty(authorUid) && authorUid.equals(uid)) {
+                    if (i == 10) {
+                        setView(context, i, root, dialog, workId, linkUrl, helper);
+                    }
+                } else {
+                    if (i == 5 || i == 6 || i == 8 || i == 9 || i == 11) {
+                        setView(context, i, root, dialog, workId, linkUrl, helper);
+                    }
+                }
+            } else if (Constant.TYPE_PUSH.equals(type)) {
+                if (i == 9 || i == 11) {
+                    setView(context, i, root, dialog, workId, linkUrl, helper);
+                }
+            }
+        }
+
+        dialog.setContentView(root);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+
+        Window dialogWindow = dialog.getWindow();
+        //dialogWindow.setWindowAnimations(R.style.ActionSheetDialogAnimation);
+        if (dialogWindow != null) {
+            dialogWindow.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+            lp.x = 0; // 新位置X坐标
+            lp.y = 0; // 新位置Y坐标
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            dialogWindow.setAttributes(lp);
+            dialog.show();
+        }
     }
+
+    private static void setView(Context context, int position, LinearLayout root, Dialog dialog, String workId, String linkUrl, EventStatisticsHelper helper) {
+        View layout_item = LayoutInflater.from(context).inflate(R.layout.layout_bottom_item, root, false);
+        TextView text_big = (TextView) layout_item.findViewById(R.id.text_big);
+        TextView text_small = (TextView) layout_item.findViewById(R.id.text_small);
+        setOneText(context, position, text_big, text_small, workId);
+        setOneClick(context, position, layout_item, dialog, workId, linkUrl, helper);
+        root.addView(layout_item);
+    }
+
+    private static void setOneText(Context context, int position, TextView bigText, TextView smallText, String workId) {
+        String big = "";
+        if (position == 0) {
+            big = "建议收录";
+            bigText.setTextColor(context.getResources().getColor(R.color.red));
+            bigText.setPadding(DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12));
+        } else if (position == 1) {
+            big = "推荐到精选/取消精选";
+            bigText.setTextColor(context.getResources().getColor(R.color.red));
+            bigText.setPadding(DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12));
+        } else if (position == 2) {
+            big = "转移到社区";
+            bigText.setTextColor(context.getResources().getColor(R.color.red));
+            bigText.setPadding(DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12));
+        } else if (position == 3) {
+            big = "转移到审核区";
+            bigText.setTextColor(context.getResources().getColor(R.color.red));
+            bigText.setPadding(DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12));
+        } else if (position == 4) {
+            big = "查看原文";
+            smallText.setText(String.valueOf("ID：" + workId));
+            smallText.setVisibility(View.VISIBLE);
+        } else if (position == 5) {
+            big = "举报";
+            bigText.setTextColor(context.getResources().getColor(R.color.red));
+            smallText.setText("作品是广告，作品低俗");
+            smallText.setTextColor(context.getResources().getColor(R.color.red));
+            smallText.setVisibility(View.VISIBLE);
+        } else if (position == 6) {
+            big = "尺度有点大";
+            smallText.setText("色情");
+            smallText.setVisibility(View.VISIBLE);
+        } else if (position == 7) {
+            big = "差评";
+            smallText.setText("作品质量低下");
+            smallText.setVisibility(View.VISIBLE);
+        } else if (position == 8) {
+            big = "和其他作品重复";
+            smallText.setText("作品此前已经出现过");
+            smallText.setVisibility(View.VISIBLE);
+        } else if (position == 9) {
+            big = "图片显示有问题";
+            smallText.setText("加载不出来等");
+            smallText.setVisibility(View.VISIBLE);
+        } else if (position == 10) {
+            big = "删除";
+            bigText.setTextColor(context.getResources().getColor(R.color.red));
+            smallText.setText(String.valueOf("ID：" + workId));
+            smallText.setTextColor(context.getResources().getColor(R.color.red));
+            smallText.setVisibility(View.VISIBLE);
+        } else if (position == 11) {
+            big = "取消";
+            bigText.setPadding(DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12));
+        }
+        bigText.setText(big);
+    }
+
+    private static void setOneClick(final Context context, final int position, View itemView, final Dialog dialog, final String workId, final String linkUrl, final EventStatisticsHelper helper) {
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (position == 0 || position == 1 || position == 2 || position == 3
+                        || position == 5 || position == 6 || position == 7 || position == 8
+                        || position == 9 || position == 10) {
+                    int type = 0;
+                    if (position == 0) {
+                        type = EventConstant.WORK_AUDIT_RECOMMEND;
+                    } else if (position == 1) {
+                        type = EventConstant.WORK_ASSOCIATION_RECOMMEND;
+                    } else if (position == 2) {
+                        type = EventConstant.WORK_MOVE_TO_ASSOCIATION;
+                    } else if (position == 3) {
+                        type = EventConstant.WORK_MOVE_TO_AUDIT;
+                    } else if (position == 5) {
+                        type = EventConstant.WORK_REPORT;
+                    } else if (position == 6) {
+                        type = EventConstant.WORK_SCALE_OVER;
+                    } else if (position == 7) {
+                        type = EventConstant.WORK_BAD_COMMNET;
+                    } else if (position == 8) {
+                        type = EventConstant.WORK_REPEAT;
+                    } else if (position == 9) {
+                        type = EventConstant.WORK_SHOW_SEQ;
+                    } else {
+                        type = EventConstant.WORK_ASSOCIATION_DELETE;
+                    }
+                    if (helper != null) {
+                        helper.recordUserAction(context, type, workId, "");
+                    }
+                    dialog.cancel();
+                } else if (position == 4) {
+                    WebViewActivity.jumpToWebViewActivity(context, linkUrl);
+                    dialog.cancel();
+                } else if (position == 11) {
+                    dialog.cancel();
+                }
+            }
+        });
+    }
+
 }

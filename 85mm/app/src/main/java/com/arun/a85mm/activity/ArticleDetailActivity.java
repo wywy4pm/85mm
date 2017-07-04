@@ -93,6 +93,10 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         back = (ImageView) findViewById(R.id.back);
         setBack(back);
+        if (back.getLayoutParams() != null && back.getLayoutParams() instanceof RelativeLayout.LayoutParams) {
+            ((RelativeLayout.LayoutParams) back.getLayoutParams()).setMargins(0, DensityUtil.getStatusHeight(this), 0, 0);
+        }
+
         FullyLinearLayoutManager layoutManager = new FullyLinearLayoutManager(this);
         //recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(layoutManager);
