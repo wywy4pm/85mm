@@ -38,7 +38,7 @@ public class AssociationPresenter extends BasePresenter<CommonView4> {
                                 if (start == 0) {
                                     getMvpView().refresh(null);
                                 } else {
-                                    ((AuditActivity) getMvpView()).setHaveMore(false);
+                                    ((AssociationFragment) getMvpView()).setHaveMore(false);
                                 }
                             }
                         }

@@ -306,12 +306,14 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     }
 
     private void addImage(List<WorkListItemBean> list) {
-        for (int i = 0; i < list.size(); i++) {
-            WorkListItemBean bean = list.get(i);
-            bean.type = OneWorkAdapter.DATA_TYPE_IMAGE;
-            bean.backgroundColor = RandomColorHelper.getRandomColor();
+        if (list != null && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                WorkListItemBean bean = list.get(i);
+                bean.type = OneWorkAdapter.DATA_TYPE_IMAGE;
+                bean.backgroundColor = RandomColorHelper.getRandomColor();
+            }
+            workListItems.addAll(list);
         }
-        workListItems.addAll(list);
     }
 
     private void addDescription(WorkListBean bean) {

@@ -3,6 +3,8 @@ package com.arun.a85mm.model;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.common.ErrorCode;
+import com.arun.a85mm.exception.ApiException;
+import com.arun.a85mm.helper.ExceptionHelper;
 import com.arun.a85mm.listener.CommonRequestListener;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
@@ -39,15 +41,19 @@ public class BaseModel {
                 @Override
                 public void onError(Throwable e) {
                     if (listener != null) {
-                        if (e instanceof ConnectException
+                        ApiException apiException = ExceptionHelper.handleException(e);
+                        if (apiException != null) {
+                            listener.onError(apiException.code, apiException.errorMsg);
+                        }
+                       /*if (e instanceof ConnectException
                                 || e instanceof SocketTimeoutException
                                 || e instanceof TimeoutException
                                 || e instanceof UnknownHostException
                                 || e instanceof UnknownServiceException) {
-                            listener.onError(ErrorCode.NETWORK_ERROR, R.string.net_error);
+                            listener.onError(ErrorCode.NETWORK_ERROR, R.string.error_network);
                         } else if (e instanceof JsonSyntaxException || e instanceof JsonParseException) {
-                            listener.onError(ErrorCode.DATA_FORMAT_ERROR, R.string.net_error_data_format);
-                        }
+                            listener.onError(ErrorCode.DATA_FORMAT_ERROR, R.string.error_data_format);
+                        }*/
                         listener.onComplete();
                     }
                 }
@@ -56,7 +62,9 @@ public class BaseModel {
                 public void onNext(CommonApiResponse object) {
                     if (listener != null) {
                         if (object != null) {
-                            listener.onSuccess(object);
+                            if (object.code == ErrorCode.SUCCESS || object.code == ErrorCode.NO_DATA) {
+                                listener.onSuccess(object);
+                            }
                         }
                     }
                 }

@@ -19,9 +19,11 @@
     <string name="main_tab_3">文章</string>
 
     <!--网络请求异常情况-->
-    <string name="net_error">服务器出了点小问题，正在修复，请稍后重试</string>
-    <string name="net_error_system">系统异常</string>
-    <string name="net_error_data_format">数据解析异常</string>
+    <string name="error_network">网络异常</string>
+    <string name="error_server">服务器出了点小问题，正在修复，请稍后重试</string>
+    <string name="error_system">系统异常</string>
+    <string name="error_data_format">数据解析异常</string>
+    <string name="error_unknown">未知错误</string>
 
     <string name="android">android</string>
 

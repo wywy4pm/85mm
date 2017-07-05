@@ -47,6 +47,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
     private int dataType = 0;
     private String[] tags = new String[]{"精选", "最新", "最热"};
     private int[] types = new int[]{0, 1, 2};
+    private boolean isHaveMore = true;
 
     public static AssociationFragment getInstance() {
         AssociationFragment associationFragment = new AssociationFragment();
@@ -67,7 +68,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        associationAdapter = new AssociationAdapter(getActivity(), associationList, createHead(),eventStatisticsHelper);
+        associationAdapter = new AssociationAdapter(getActivity(), associationList, createHead(), eventStatisticsHelper);
         associationAdapter.setOnTagClick(this);
         recyclerView.setAdapter(associationAdapter);
 
@@ -115,6 +116,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
 
     public void refreshData() {
         start = 0;
+        isHaveMore = true;
         presenter.getCommunityList(start, dataType);
     }
 
@@ -129,7 +131,9 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
 
     @Override
     public void setLoadMore() {
-        loadMore();
+        if (isHaveMore) {
+            loadMore();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -206,5 +210,9 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
     public void updateList(UpdateAssociateEvent event) {
         recyclerView.scrollToPosition(0);
         refreshData();
+    }
+
+    public void setHaveMore(boolean isHaveMore) {
+        this.isHaveMore = isHaveMore;
     }
 }

@@ -27,7 +27,7 @@ import com.umeng.socialize.UMShareAPI;
  * Created by WY on 2017/5/14.
  */
 public class MMApplication extends Application implements Application.ActivityLifecycleCallbacks {
-
+    private static MMApplication application;
     //OSS的Bucket
     public static final String OSS_BUCKET_NAME = "85mm";
 
@@ -44,9 +44,7 @@ public class MMApplication extends Application implements Application.ActivityLi
     public static OSS oss;
 
     public int count = 0;
-
     private EventStatisticsHelper helper;
-
 
     {
         PlatformConfig.setWeixin("wxaa1d1954f46301df", "979486cc1c9736c83f974421282c753e");
@@ -54,9 +52,14 @@ public class MMApplication extends Application implements Application.ActivityLi
         PlatformConfig.setSinaWeibo("3732105978", "6aebd8c81c878394c19f98cde6be4da7", "http://sns.whalecloud.com/sina2/callback");
     }
 
+    public static MMApplication getInstance() {
+        return application;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        application = this;
         //Config.DEBUG = true;
         UMShareAPI.get(this);
         AppHelper.getInstance().setAppConfig(getApplicationContext());
@@ -85,7 +88,7 @@ public class MMApplication extends Application implements Application.ActivityLi
 
         helper = new EventStatisticsHelper(getApplicationContext());
 
-        PushHelper.setPushNotification(mPushAgent,helper);
+        PushHelper.setPushNotification(mPushAgent, helper);
         //mPushAgent.setPushIntentServiceClass(PushIntentService.class);
         //初始化OSS配置
         initOSSConfig();
