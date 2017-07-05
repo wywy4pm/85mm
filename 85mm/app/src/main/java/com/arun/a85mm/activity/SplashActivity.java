@@ -17,9 +17,11 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.ConfigResponse;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.AppHelper;
 import com.arun.a85mm.helper.CommunityListCacheManager;
 import com.arun.a85mm.helper.ConfigHelper;
+import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.helper.UserManager;
@@ -56,6 +58,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
     private boolean isShowCache;
     private String type;
     private Map<String, String> map;
+    private EventStatisticsHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,9 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
 
     @SuppressWarnings("unchecked")
     private void initData() {
+        helper = new EventStatisticsHelper(this);
+        helper.recordUserAction(this, EventConstant.APP_START);
+
         if (settingPresenter == null) {
             settingPresenter = new SettingPresenter(this);
             settingPresenter.attachView(this);
@@ -251,6 +257,9 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
         cover_Image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (helper != null) {
+                    helper.recordUserAction(SplashActivity.this, EventConstant.CLICK_SPLASH);
+                }
                 isJumpToWebView = true;
                 WebViewActivity.jumpToWebViewActivity(SplashActivity.this, bean.linkUrl, String.valueOf(true));
             }
@@ -315,6 +324,9 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
         super.onDestroy();
         if (settingPresenter != null) {
             settingPresenter.detachView();
+        }
+        if (helper != null) {
+            helper.detachView();
         }
     }
 

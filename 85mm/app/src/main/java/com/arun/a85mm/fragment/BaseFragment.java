@@ -313,6 +313,9 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
                     //Log.d(TAG, "currentPosition = " + (currentGroupPosition + 1));
                     int currentPosition = currentGroupPosition + 1;
                     expandableListView.setSelectedGroup(currentPosition);
+                    if (eventStatisticsHelper != null) {
+                        eventStatisticsHelper.recordUserAction(getActivity(), EventConstant.WORK_CLICK_SKIP);
+                    }
                 }
                 next_group_img.setVisibility(View.GONE);
                 isSingleExpand = false;

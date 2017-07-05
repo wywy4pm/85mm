@@ -48,6 +48,8 @@ public class EventPresenter extends BasePresenter<EventView> {
                                     || type == EventConstant.WORK_SHOW_SEQ
                                     || type == EventConstant.WORK_AUDIT_RECOMMEND
                                     || type == EventConstant.WORK_ASSOCIATION_RECOMMEND
+                                    || type == EventConstant.WORK_MOVE_TO_ASSOCIATION
+                                    || type == EventConstant.WORK_MOVE_TO_AUDIT
                                     || type == EventConstant.WORK_ASSOCIATION_DELETE) {
                                 getMvpView().eventDone(type);
                             }

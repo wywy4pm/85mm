@@ -105,6 +105,10 @@ public class EventStatisticsHelper implements EventView {
             tips = context.getString(R.string.recommend_new);
         } else if (type == EventConstant.WORK_ASSOCIATION_RECOMMEND) {
             tips = context.getString(R.string.recommend_jingxuan);
+        } else if (type == EventConstant.WORK_MOVE_TO_ASSOCIATION) {
+            tips = context.getString(R.string.move_association);
+        } else if (type == EventConstant.WORK_MOVE_TO_AUDIT) {
+            tips = context.getString(R.string.move_audit);
         }
         if (!TextUtils.isEmpty(tips)) {
             if (context instanceof MainActivity) {

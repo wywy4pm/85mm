@@ -316,10 +316,9 @@ public class DialogHelper {
                     if (i == 2 || i == 3) {
                         setView(context, i, root, dialog, workId, linkUrl, helper);
                     }
-                } else {
-                    if (i == 4 || i == 5 || i == 6 || i == 7 || i == 8 || i == 9 || i == 11) {
-                        setView(context, i, root, dialog, workId, linkUrl, helper);
-                    }
+                }
+                if (i == 4 || i == 5 || i == 6 || i == 7 || i == 8 || i == 9 || i == 11) {
+                    setView(context, i, root, dialog, workId, linkUrl, helper);
                 }
             } else if (Constant.TYPE_COMMUNITY.equals(type)) {
                 if ("4".equals(uid)) {
@@ -330,10 +329,9 @@ public class DialogHelper {
                     if (i == 10) {
                         setView(context, i, root, dialog, workId, linkUrl, helper);
                     }
-                } else {
-                    if (i == 5 || i == 6 || i == 8 || i == 9 || i == 11) {
-                        setView(context, i, root, dialog, workId, linkUrl, helper);
-                    }
+                }
+                if (i == 5 || i == 6 || i == 8 || i == 9 || i == 11) {
+                    setView(context, i, root, dialog, workId, linkUrl, helper);
                 }
             } else if (Constant.TYPE_PUSH.equals(type)) {
                 if (i == 9 || i == 11) {
@@ -371,55 +369,55 @@ public class DialogHelper {
     private static void setOneText(Context context, int position, TextView bigText, TextView smallText, String workId) {
         String big = "";
         if (position == 0) {
-            big = "建议收录";
+            big = context.getString(R.string.recommend_new);
             bigText.setTextColor(context.getResources().getColor(R.color.red));
             bigText.setPadding(DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12));
         } else if (position == 1) {
-            big = "推荐到精选/取消精选";
+            big = context.getString(R.string.recommend_jingxuan);
             bigText.setTextColor(context.getResources().getColor(R.color.red));
             bigText.setPadding(DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12));
         } else if (position == 2) {
-            big = "转移到社区";
+            big = context.getString(R.string.move_association);
             bigText.setTextColor(context.getResources().getColor(R.color.red));
             bigText.setPadding(DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12));
         } else if (position == 3) {
-            big = "转移到审核区";
+            big = context.getString(R.string.move_audit);
             bigText.setTextColor(context.getResources().getColor(R.color.red));
             bigText.setPadding(DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12));
         } else if (position == 4) {
-            big = "查看原文";
+            big = context.getString(R.string.read_origin);
             smallText.setText(String.valueOf("ID：" + workId));
             smallText.setVisibility(View.VISIBLE);
         } else if (position == 5) {
-            big = "举报";
-            bigText.setTextColor(context.getResources().getColor(R.color.red));
-            smallText.setText("作品是广告，作品低俗");
-            smallText.setTextColor(context.getResources().getColor(R.color.red));
+            big = context.getString(R.string.report);
+            smallText.setText(context.getResources().getString(R.string.report_detail));
             smallText.setVisibility(View.VISIBLE);
         } else if (position == 6) {
-            big = "尺度有点大";
-            smallText.setText("色情");
+            big = context.getString(R.string.scale_over);
+            smallText.setText(context.getResources().getString(R.string.scale_over_detail));
             smallText.setVisibility(View.VISIBLE);
         } else if (position == 7) {
-            big = "差评";
-            smallText.setText("作品质量低下");
+            big = context.getString(R.string.bad_comment);
+            bigText.setTextColor(context.getResources().getColor(R.color.red));
+            smallText.setText(context.getResources().getString(R.string.bad_comment_detail));
+            smallText.setTextColor(context.getResources().getColor(R.color.red));
             smallText.setVisibility(View.VISIBLE);
         } else if (position == 8) {
-            big = "和其他作品重复";
-            smallText.setText("作品此前已经出现过");
+            big = context.getString(R.string.repeat);
+            smallText.setText(context.getResources().getString(R.string.repeat_detail));
             smallText.setVisibility(View.VISIBLE);
         } else if (position == 9) {
-            big = "图片显示有问题";
-            smallText.setText("加载不出来等");
+            big = context.getString(R.string.show_seq);
+            smallText.setText(context.getResources().getString(R.string.show_seq_detail));
             smallText.setVisibility(View.VISIBLE);
         } else if (position == 10) {
-            big = "删除";
+            big = context.getString(R.string.delete);
             bigText.setTextColor(context.getResources().getColor(R.color.red));
             smallText.setText(String.valueOf("ID：" + workId));
             smallText.setTextColor(context.getResources().getColor(R.color.red));
             smallText.setVisibility(View.VISIBLE);
         } else if (position == 11) {
-            big = "取消";
+            big = context.getString(R.string.cancel);
             bigText.setPadding(DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12));
         }
         bigText.setText(big);
@@ -460,6 +458,10 @@ public class DialogHelper {
                     dialog.cancel();
                 } else if (position == 4) {
                     WebViewActivity.jumpToWebViewActivity(context, linkUrl);
+                    int type = EventConstant.WORK_OPEN_ORIGIN;
+                    if (helper != null) {
+                        helper.recordUserAction(context, type, workId, "");
+                    }
                     dialog.cancel();
                 } else if (position == 11) {
                     dialog.cancel();

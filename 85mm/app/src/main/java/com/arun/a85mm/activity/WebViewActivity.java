@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.utils.StatusBarUtils;
 
 public class WebViewActivity extends BaseActivity {
@@ -89,6 +90,9 @@ public class WebViewActivity extends BaseActivity {
         loadWebView(webView);
         if (getIntent().getExtras() != null) {
             url = getIntent().getExtras().getString(Constant.INTENT_WEB_URL);
+            if (eventStatisticsHelper != null) {
+                eventStatisticsHelper.recordUserAction(this, EventConstant.OPEN_WEBVIEW, "", url);
+            }
             if (!TextUtils.isEmpty(url)) {
                 webView.loadUrl(url);
             }

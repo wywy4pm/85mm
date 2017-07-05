@@ -202,14 +202,14 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 int type = -1;
                 if (position == 0) {
-                    type = EventConstant.TAB_NEWEST;
+                    type = EventConstant.CHANGE_WORK;
                 } else if (position == 1) {
-                    type = EventConstant.TAB_HOTEST;
+                    type = EventConstant.CHANGE_ASSOCIATION;
                 } else if (position == 2) {
-                    type = EventConstant.TAB_ARTICLE;
+                    type = EventConstant.CHANGE_ARTICLE;
                 }
                 if (eventStatisticsHelper != null) {
-                    eventStatisticsHelper.recordUserAction(MainActivity.this, type, EventStatisticsHelper.createOneActionList(type));
+                    eventStatisticsHelper.recordUserAction(MainActivity.this, type);
                 }
                 for (int i = 0; i < tabLayout.getTabCount(); i++) {
                     if (i == position) {
@@ -289,12 +289,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void moreClick(View view) {
         if (eventStatisticsHelper != null) {
-            eventStatisticsHelper.recordUserAction(MainActivity.this, EventConstant.TAB_MORE, EventStatisticsHelper.createOneActionList(EventConstant.TAB_MORE));
+            eventStatisticsHelper.recordUserAction(MainActivity.this, EventConstant.CHANGE_MORE);
         }
         MoreSettingActivity.jumpToMoreSettingActivity(this);
     }
 
     public void messageClick(View view) {
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.recordUserAction(this, EventConstant.CHANGE_MESSAGE);
+        }
         MessageCenterActivity.jumpToMessageCenter(this);
         dot_new_message.setVisibility(View.GONE);
         SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE, 0);

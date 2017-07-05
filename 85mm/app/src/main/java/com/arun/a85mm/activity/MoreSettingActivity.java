@@ -82,6 +82,9 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                 //阻止手指离开时onTouch方法的继续执行
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (hideReadEnable == 1) {//有隐藏已读权限
+                        if (eventStatisticsHelper != null) {
+                            eventStatisticsHelper.recordUserAction(MoreSettingActivity.this, EventConstant.HIDE_READ);
+                        }
                         switchView.setChecked(!switchView.isChecked());
                         if (morePresenter != null) {
                             morePresenter.setHideReadStatus(switchView.isChecked() ? 1 : 0);

@@ -31,7 +31,16 @@
     <string name="bad_comment">差评</string>
     <string name="repeat">和其他作品重复</string>
     <string name="show_seq">图片显示有问题</string>
-    <string name="recommend_new">推荐到最新频道</string>
+    <string name="recommend_new">建议收录</string>
     <string name="recommend_jingxuan">推荐到精选/取消精选</string>
+    <string name="move_association">转移到社区</string>
+    <string name="move_audit">转移到审核区</string>
+    <string name="delete">删除</string>
     <string name="cancel">取消</string>
+
+    <string name="report_detail">作品是广告，作品低俗</string>
+    <string name="scale_over_detail">色情</string>
+    <string name="bad_comment_detail">作品质量低下</string>
+    <string name="repeat_detail">作品此前已经出现过</string>
+    <string name="show_seq_detail">加载不出来等</string>
 </resources>

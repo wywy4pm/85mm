@@ -126,6 +126,9 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
     }
 
     private void initData() {
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.recordUserAction(this, EventConstant.OPEN_AUDIT);
+        }
         /*tags = ConfigHelper.tags;
         if (tags != null && tags.size() > 0) {
             String selectName = SharedPreferencesUtils.getConfigString(this, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG);

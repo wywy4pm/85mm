@@ -98,7 +98,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     //点击进入文章详情
                     if (eventListener != null) {
-                        eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.ARTICLE_BROWSE, articleListBean.id, ""));
+                        eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.CLICK_TO_ARTICLE_DETAIL, articleListBean.id, ""));
                     }
                     int[] location = new int[2];
                     v.getLocationOnScreen(location);

@@ -1,7 +1,10 @@
 package com.arun.a85mm;
 
+import android.app.Activity;
 import android.app.Application;
+import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.sdk.android.oss.ClientConfiguration;
 import com.alibaba.sdk.android.oss.OSS;
@@ -9,7 +12,9 @@ import com.alibaba.sdk.android.oss.OSSClient;
 import com.alibaba.sdk.android.oss.common.OSSLog;
 import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.AppHelper;
+import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.PushHelper;
 import com.arun.a85mm.presenter.DeviceTokenPresenter;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -21,7 +26,7 @@ import com.umeng.socialize.UMShareAPI;
 /**
  * Created by WY on 2017/5/14.
  */
-public class MMApplication extends Application {
+public class MMApplication extends Application implements Application.ActivityLifecycleCallbacks {
 
     //OSS的Bucket
     public static final String OSS_BUCKET_NAME = "85mm";
@@ -36,8 +41,12 @@ public class MMApplication extends Application {
     //Key
     private static final String ACCESS_KEY_ID = "LTAI2NTBH0TVhoph";
     private static final String ACCESS_KEY_SECRET = "CF0bPVfcbFYY8SJqRUwHS4WBqMugrZ";
-
     public static OSS oss;
+
+    public int count = 0;
+
+    private EventStatisticsHelper helper;
+
 
     {
         PlatformConfig.setWeixin("wxaa1d1954f46301df", "979486cc1c9736c83f974421282c753e");
@@ -73,10 +82,15 @@ public class MMApplication extends Application {
 
             }
         });
-        PushHelper.setPushNotification(mPushAgent);
+
+        helper = new EventStatisticsHelper(getApplicationContext());
+
+        PushHelper.setPushNotification(mPushAgent,helper);
         //mPushAgent.setPushIntentServiceClass(PushIntentService.class);
         //初始化OSS配置
         initOSSConfig();
+
+        registerActivityLifecycleCallbacks(this);
     }
 
     private void initOSSConfig() {
@@ -91,5 +105,66 @@ public class MMApplication extends Application {
             OSSLog.enableLog();
         }
         oss = new OSSClient(getApplicationContext(), OSS_BUCKET_ENDPOINT, credentialProvider, conf);
+    }
+
+    @Override
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+        Log.v("viclee", activity + "onActivityCreated");
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+        Log.v("viclee", activity + "onActivitySaveInstanceState");
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+        Log.v("viclee", activity + "onActivityStarted");
+        if (count == 0) {
+            Log.v("viclee", ">>>>>>>>>>>>>>>>>>>切到前台  lifecycle");
+            if (helper != null) {
+                helper.recordUserAction(getApplicationContext(), EventConstant.APP_FRONT);
+            }
+        }
+        count++;
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+        Log.v("viclee", activity + "onActivityStopped");
+        count--;
+        if (count == 0) {
+            Log.v("viclee", ">>>>>>>>>>>>>>>>>>>切到后台  lifecycle");
+            if (helper != null) {
+                helper.recordUserAction(getApplicationContext(), EventConstant.APP_BACK);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPaused(Activity activity) {
+        Log.v("viclee", activity + "onActivityPaused");
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
+        Log.v("viclee", activity + "onActivityResumed");
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
+        Log.v("viclee", activity + "onActivityDestroyed");
+    }
+
+
+    /**
+     * 程序终止
+     */
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        if (helper != null) {
+            helper.detachView();
+        }
     }
 }

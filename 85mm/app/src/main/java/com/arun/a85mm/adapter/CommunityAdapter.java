@@ -88,7 +88,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
 
         //作品浏览
         if (eventListener != null) {
-            if (groupPosition >=2) {
+            if (groupPosition >= 2) {
                 WorkListBean previousBean = workList.get(groupPosition - 2);
                 if (previousBean != null) {
                     int type = -1;
@@ -390,12 +390,18 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 workListItemHolder.author_image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (eventListener != null) {
+                            eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_CLICK_AUTHOR));
+                        }
                         WebViewActivity.jumpToWebViewActivity(contexts.get(), bean.authorPageUrl);
                     }
                 });
                 workListItemHolder.author_name.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (eventListener != null) {
+                            eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_CLICK_AUTHOR));
+                        }
                         WebViewActivity.jumpToWebViewActivity(contexts.get(), bean.authorPageUrl);
                     }
                 });
@@ -490,8 +496,11 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
     }
 
     private void jumpToLeftWorks(WorkListBean bean) {
-        String title = resources.getString(R.string.one_day_left_works_title, bean.date, bean.leftWorkNum);
+        if (eventListener != null) {
+            eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_CLICK_ONEDAY));
+        }
 
+        String title = resources.getString(R.string.one_day_left_works_title, bean.date, bean.leftWorkNum);
         Map<String, String> map = new HashMap<>();
         map.put(Constant.INTENT_WORKS_LEFT_DATE, bean.searchDate);
         map.put(Constant.INTENT_WORKS_LEFT_START, String.valueOf(bean.start));

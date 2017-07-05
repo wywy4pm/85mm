@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.activity.MoreSettingActivity;
 import com.arun.a85mm.bean.PushCustomBean;
+import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.utils.GsonUtils;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -28,7 +29,7 @@ import java.net.URL;
 
 public class PushHelper {
 
-    public static void setPushNotification(PushAgent mPushAgent) {
+    public static void setPushNotification(PushAgent mPushAgent, final EventStatisticsHelper helper) {
         /*UmengMessageHandler umengAdHandler = new UmengMessageHandler() {
 
             @Override
@@ -46,6 +47,9 @@ public class PushHelper {
                         PushCustomBean pushCustomBean = GsonUtils.fromJson(msg.custom, new TypeToken<PushCustomBean>() {
                         }.getType());
                         if (pushCustomBean != null) {
+                            if (helper != null) {
+                                helper.recordUserAction(context, EventConstant.CLICK_PUSH);
+                            }
                             String pageUrl = pushCustomBean.pageUrl;
                             String pageTitle = pushCustomBean.pageTitle;
                             UrlJumpHelper.urlJumpTo(context, pageUrl, pageTitle);
