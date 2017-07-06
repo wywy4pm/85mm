@@ -2,6 +2,7 @@ package com.arun.a85mm.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -232,7 +233,8 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
             author_create_time.setText(bean.createTime);
 
             int imageHeight = 0;
-            if (bean.coverWidth > 0) {
+            if (bean.coverWidth > 0 && !TextUtils.isEmpty(bean.coverUrl)) {
+                layout_cover_Image.setVisibility(View.VISIBLE);
                 if (bean.coverHeight < bean.coverWidth) {
                     imageHeight = screenWidth;
                 } else {
@@ -245,6 +247,8 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
                 cover_Image.getLayoutParams().height = imageHeight;
                 cover_count.setText(String.valueOf(bean.totalImageNum));
                 Glide.with(context).load(bean.coverUrl).override(screenWidth, imageHeight).centerCrop().into(cover_Image);
+            } else {
+                layout_cover_Image.setVisibility(View.GONE);
             }
 
             community_title.setText(bean.workTitle);
