@@ -1,8 +1,6 @@
 package com.arun.a85mm.helper;
 
 import com.arun.a85mm.bean.CommonApiResponse;
-import com.arun.a85mm.bean.CommunityResponse;
-import com.arun.a85mm.bean.ProductListResponse;
 
 /**
  * Created by wy on 2017/5/17.

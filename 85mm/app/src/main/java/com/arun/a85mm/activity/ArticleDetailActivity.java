@@ -6,35 +6,29 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.ArticleDetailAdapter;
+import com.arun.a85mm.bean.ArticleBean;
 import com.arun.a85mm.bean.ArticleDetailBean;
-import com.arun.a85mm.bean.ArticleDetailResponse;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.presenter.ArticleActivityPresenter;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.FullyLinearLayoutManager;
-import com.arun.a85mm.utils.GlideCircleTransform;
 import com.arun.a85mm.utils.StatusBarUtils;
-import com.arun.a85mm.view.CommonView;
 import com.arun.a85mm.view.CommonView2;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArticleDetailActivity extends BaseActivity implements CommonView2<ArticleDetailResponse.ArticleBean> {
+public class ArticleDetailActivity extends BaseActivity implements CommonView2<ArticleBean> {
 
     private RelativeLayout layout_detail;
     private ArticleActivityPresenter articleActivityPresenter;
@@ -51,7 +45,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
     private RecyclerView recyclerView;
     private ImageView back;
     private ArticleDetailAdapter articleDetailAdapter;
-    private ArticleDetailResponse.ArticleBean articleBean;
+    private ArticleBean articleBean;
     private List<ArticleDetailBean> articleDetails = new ArrayList<>();
     private boolean isAnimEndLoadUnSuccess = true;
     private ImageView imageView;
@@ -186,7 +180,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
     }
 
     @Override
-    public void refresh(ArticleDetailResponse.ArticleBean data) {
+    public void refresh(ArticleBean data) {
         if (data != null) {
             articleBean = data;
             if (articleBean.contentComponents != null && articleBean.contentComponents.size() > 0 && articleBean.contentComponents.get(0) != null) {//添加头图

@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Fragment> list = new ArrayList<>();
     private TextView topCommonView;
     private TextView toastView;
-    private ProductionFragment productionFragment;
+    //private ProductionFragment productionFragment;
     private AssociationFragment associationFragment;
     private long mExitTime;
     private boolean isShowingTop;
@@ -158,8 +158,8 @@ public class MainActivity extends AppCompatActivity {
         });*/
 
         tabLayout.setViewPager(viewPager, titles);
-        TextViewUtils.setTextBold(tabLayout.getTitleView(1), true);
-        viewPager.setCurrentItem(1);
+        TextViewUtils.setTextBold(tabLayout.getTitleView(0), true);
+        viewPager.setCurrentItem(0);
         setSaveImage();
     }
 
@@ -227,12 +227,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        productionFragment = ProductionFragment.newInstance();
-        //CommunityFragment communityFragment = CommunityFragment.newInstance();
+        //productionFragment = ProductionFragment.newInstance();
+        CommunityFragment communityFragment = CommunityFragment.newInstance();
         associationFragment = AssociationFragment.getInstance();
         ArticleFragment articleFragment = ArticleFragment.newIntense();
-        list.add(productionFragment);
-        //list.add(communityFragment);
+        //list.add(productionFragment);
+        list.add(communityFragment);
         list.add(associationFragment);
         list.add(articleFragment);
     }

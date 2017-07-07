@@ -1,10 +1,8 @@
 package com.arun.a85mm.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +11,7 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.ArticleDetailActivity;
-import com.arun.a85mm.bean.ArticleDetailResponse;
-import com.arun.a85mm.bean.ArticleListResponse;
+import com.arun.a85mm.bean.ArticleListBean;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.listener.EventListener;
@@ -30,14 +27,14 @@ import java.util.List;
 public class ArticleListAdapter extends RecyclerView.Adapter {
 
     private WeakReference<Context> contexts;
-    private List<ArticleListResponse.ArticleListBean> articles;
+    private List<ArticleListBean> articles;
     private EventListener eventListener;
 
     public void setEventListener(EventListener eventListener) {
         this.eventListener = eventListener;
     }
 
-    public ArticleListAdapter(Context context, List<ArticleListResponse.ArticleListBean> articles) {
+    public ArticleListAdapter(Context context, List<ArticleListBean> articles) {
         contexts = new WeakReference<>(context);
         this.articles = articles;
     }
@@ -55,7 +52,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
             //浏览文章
             if (eventListener != null) {
                 if (position >= 4) {
-                    ArticleListResponse.ArticleListBean bean = articles.get(position - 4);
+                    ArticleListBean bean = articles.get(position - 4);
                     if (bean != null && !TextUtils.isEmpty(bean.id)) {
                         eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.ARTICLE_BROWSE, bean.id, ""));
                     }
@@ -85,7 +82,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
             this.article_detail = (TextView) itemView.findViewById(R.id.article_detail);
         }
 
-        private void setData(final Context context, final ArticleListResponse.ArticleListBean articleListBean, final EventListener eventListener) {
+        private void setData(final Context context, final ArticleListBean articleListBean, final EventListener eventListener) {
 
             if (article_image.getLayoutParams() != null) {
                 article_image.getLayoutParams().height = (int) (DensityUtil.getScreenWidth(context) * 0.56);

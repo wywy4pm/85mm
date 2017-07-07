@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.CommonApiResponse;
-import com.arun.a85mm.bean.ConfigResponse;
+import com.arun.a85mm.bean.GuidePageBean;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.AppHelper;
 import com.arun.a85mm.helper.CommunityListCacheManager;
@@ -30,7 +30,6 @@ import com.arun.a85mm.utils.BitmapUtils;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DateUtils;
 import com.arun.a85mm.utils.DensityUtil;
-import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView3;
 import com.bumptech.glide.Glide;
@@ -212,7 +211,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                         }
                 ).start();
                 if (config.body != null && config.body instanceof List) {
-                    List<ConfigResponse.GuidePageBean> list = (List<ConfigResponse.GuidePageBean>) config.body;
+                    List<GuidePageBean> list = (List<GuidePageBean>) config.body;
                     if (list.size() == 2) {
                         CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE, (Serializable) config.body);
                     }
@@ -232,7 +231,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
         }
     }
 
-    private void show(final ConfigResponse.GuidePageBean bean) {
+    private void show(final GuidePageBean bean) {
         Glide.with(this).load(bean.imageUrl)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .placeholder(R.color.splash_bg)
@@ -285,11 +284,11 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
     private void showSplash() {
         if (CacheUtils.getObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE) != null
                 && CacheUtils.getObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE) instanceof List) {
-            List<ConfigResponse.GuidePageBean> list = (List<ConfigResponse.GuidePageBean>)
+            List<GuidePageBean> list = (List<GuidePageBean>)
                     CacheUtils.getObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE);
             if (list.size() == 2) {
-                ConfigResponse.GuidePageBean first = list.get(0);
-                ConfigResponse.GuidePageBean second = list.get(1);
+                GuidePageBean first = list.get(0);
+                GuidePageBean second = list.get(1);
                 if (DateUtils.isToday(first.date)) {
                     show(first);
                     isShowCache = true;

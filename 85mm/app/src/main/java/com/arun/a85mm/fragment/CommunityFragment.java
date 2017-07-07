@@ -3,16 +3,19 @@ package com.arun.a85mm.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.adapter.CommunityAdapter;
+import com.arun.a85mm.bean.ColumnBean;
 import com.arun.a85mm.bean.CommonApiResponse;
-import com.arun.a85mm.bean.CommunityResponse;
+import com.arun.a85mm.bean.GoodsListBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
@@ -22,12 +25,17 @@ import com.arun.a85mm.helper.CommunityListCacheManager;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
+import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.CommunityPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
+import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
+import com.arun.a85mm.view.CommonView4;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,7 +47,7 @@ import java.util.List;
 /**
  * Created by WY on 2017/4/14.
  */
-public class CommunityFragment extends BaseFragment implements CommonView<List<CommunityResponse.GoodsListBean>>, OnImageClick {
+public class CommunityFragment extends BaseFragment implements CommonView4<List<GoodsListBean>>, OnImageClick {
     public ExpandableListView expandableListView;
     public SwipeToLoadLayout swipeToLoadLayout;
     public ImageView not_network_image;
@@ -53,6 +61,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
     private ImageView next_group_img;
     private CommunityAdapter communityAdapter;
     private CommonApiResponse response;
+    private LinearLayout headView;
 
     public static CommunityFragment newInstance() {
         CommunityFragment communityFragment = new CommunityFragment();
@@ -77,15 +86,19 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
         expandableListView.setAdapter(communityAdapter);
         communityAdapter.setOnImageClick(this);
         communityAdapter.setEventListener(this);
-        /*swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshData();
-            }
-        });*/
+        addHeadView();
+
         setRefresh(swipeToLoadLayout);
         setExpandableListViewCommon(expandableListView, next_group_img, worksList);
         setHideReadTips();
+
+    }
+
+    private void addHeadView() {
+        headView = new LinearLayout(getActivity());
+        headView.setOrientation(LinearLayout.VERTICAL);
+        headView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        expandableListView.addHeaderView(headView);
     }
 
     @Override
@@ -96,27 +109,25 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
         refreshData();
     }
 
-    private long requestTime;
-
     @SuppressWarnings("unchecked")
     public void refreshData() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                expandableListView.setSelectedGroup(0);
+                expandableListView.setSelection(0);
             }
         }, 50);
-
-        requestTime = System.currentTimeMillis();
         currentGroupPosition = 0;
         isSingleExpand = false;
         collapseGroup(expandableListView, worksList);
-
         next_group_img.setVisibility(View.GONE);
         setHaveMore(true);
+
         if (NetUtils.isConnected(getActivity())) {
             hideNetWorkErrorView(expandableListView);
             if (communityPresenter != null) {
+                communityPresenter.getWorkMix();
+
                 lastWorkDate = "";
                 if (response == null) {
                     setLoading(true);
@@ -124,7 +135,7 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
                 } else {
                     if (response.body != null) {
                         if (response.body instanceof List) {
-                            List<CommunityResponse.GoodsListBean> goodsList = (List<CommunityResponse.GoodsListBean>) response.body;
+                            List<GoodsListBean> goodsList = (List<GoodsListBean>) response.body;
                             worksList.clear();
                             formatData(goodsList);
                             response = null;
@@ -167,26 +178,68 @@ public class CommunityFragment extends BaseFragment implements CommonView<List<C
     }
 
     @Override
-    public void refresh(List<CommunityResponse.GoodsListBean> data) {
+    public void refresh(List<GoodsListBean> data) {
         if (data != null && data.size() > 0) {
             worksList.clear();
             formatData(data);
         }
-        Log.d("TAG", "system time refresh = " + (System.currentTimeMillis() - requestTime));
     }
 
     @Override
-    public void refreshMore(List<CommunityResponse.GoodsListBean> data) {
+    public void refreshMore(List<GoodsListBean> data) {
         if (data != null && data.size() > 0) {
             formatData(data);
         }
     }
 
-    private void formatData(List<CommunityResponse.GoodsListBean> goodsList) {
+    @Override
+    public void refresh(int type, Object data) {
+        if (data != null && data instanceof List) {
+            final List<ColumnBean> columns = (List<ColumnBean>) data;
+            if (columns.size() > 0) {
+                headView.removeAllViews();
+                int imageWidthHeight = screenWidth / 3;
+
+                for (int i = 0; i < columns.size(); i++) {
+                    View columnView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_work_column, headView, false);
+                    columnView.getLayoutParams().height = imageWidthHeight;
+                    if (i == 0) {
+                        ((LinearLayout.LayoutParams) columnView.getLayoutParams()).setMargins(0, 0, 0, DensityUtil.dp2px(getActivity(), 5));
+                    }
+
+                    ImageView image1 = (ImageView) columnView.findViewById(R.id.image1);
+                    ImageView image2 = (ImageView) columnView.findViewById(R.id.image2);
+                    ImageView image3 = (ImageView) columnView.findViewById(R.id.image3);
+                    image1.getLayoutParams().width = imageWidthHeight;
+                    image2.getLayoutParams().width = imageWidthHeight;
+                    image3.getLayoutParams().width = imageWidthHeight;
+                    TextView text_big = (TextView) columnView.findViewById(R.id.text_big);
+                    TextView text_small = (TextView) columnView.findViewById(R.id.text_small);
+
+                    Glide.with(getActivity()).load(columns.get(i).images.get(0)).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(image1);
+                    Glide.with(getActivity()).load(columns.get(i).images.get(1)).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(image2);
+                    Glide.with(getActivity()).load(columns.get(i).images.get(2)).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(image3);
+                    text_big.setText(columns.get(i).text.get(0));
+                    text_small.setText(columns.get(i).text.get(1));
+                    final int finalI = i;
+                    columnView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            UrlJumpHelper.urlJumpTo(getActivity(), columns.get(finalI).linkUrl, columns.get(finalI).text.get(0));
+                        }
+                    });
+
+                    headView.addView(columnView);
+                }
+            }
+        }
+    }
+
+    private void formatData(List<GoodsListBean> goodsList) {
         int currentListAddCount = 0;
         if (goodsList != null && goodsList.size() > 0) {
             for (int k = 0; k < goodsList.size(); k++) {
-                CommunityResponse.GoodsListBean goodsListBean = goodsList.get(k);
+                GoodsListBean goodsListBean = goodsList.get(k);
                 if (goodsListBean != null && goodsListBean.workList != null && goodsListBean.workList.size() > 0) {
                     List<WorkListBean> workList = goodsListBean.workList;
                     for (int i = 0; i < workList.size(); i++) {

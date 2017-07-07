@@ -23,6 +23,7 @@ import com.arun.a85mm.presenter.CommunityPresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.view.CommonView;
+import com.arun.a85mm.view.CommonView4;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ import java.util.Map;
 /**
  * Created by WY on 2017/5/7.
  */
-public class LeftWorksFragment extends BaseFragment implements OnImageClick, CommonView<CommonApiResponse> {
+public class LeftWorksFragment extends BaseFragment implements OnImageClick, CommonView4<CommonApiResponse> {
 
     public ExpandableListView expandableListView;
     public SwipeToLoadLayout swipeToLoadLayout;
@@ -230,6 +231,11 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
                 }
             }
         }
+    }
+
+    @Override
+    public void refresh(int type, Object data) {
+
     }
 
     public void setHaveMore(boolean isHaveMore) {

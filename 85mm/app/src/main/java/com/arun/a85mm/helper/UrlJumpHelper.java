@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 
+import com.arun.a85mm.activity.AuditActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.common.Constant;
@@ -43,6 +44,10 @@ public class UrlJumpHelper {
             } else {
                 startAppToJump(context, "com.arun.a85mm", JUMP_APP_WORK_DETAIL, map);
             }
+        } else if (path.contains("/audit/list")) {
+            AuditActivity.jumpToAudit(context);
+        } else if (path.contains("/works/latest")) {
+            FragmentCommonActivity.jumpToFragmentCommonActivity(context, FragmentCommonActivity.FRAGMENT_LATEST_WORKS, title, null);
         }
     }
 

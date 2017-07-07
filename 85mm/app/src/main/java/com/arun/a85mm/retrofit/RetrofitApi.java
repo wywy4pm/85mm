@@ -1,14 +1,13 @@
 package com.arun.a85mm.retrofit;
 
 
+import com.arun.a85mm.bean.ArticleBean;
+import com.arun.a85mm.bean.ArticleListBean;
 import com.arun.a85mm.bean.AssociationBean;
+import com.arun.a85mm.bean.GoodsListBean;
+import com.arun.a85mm.bean.GuidePageBean;
 import com.arun.a85mm.bean.request.ActionRequest;
-import com.arun.a85mm.bean.ArticleDetailResponse;
-import com.arun.a85mm.bean.ArticleListResponse;
 import com.arun.a85mm.bean.CommonApiResponse;
-import com.arun.a85mm.bean.CommonResponse;
-import com.arun.a85mm.bean.CommunityResponse;
-import com.arun.a85mm.bean.ConfigResponse;
 import com.arun.a85mm.bean.MessageItemBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.request.AddCommentRequest;
@@ -35,16 +34,16 @@ public interface RetrofitApi {
     Call<ResponseBody> downLoadImage(@Url String url);
 
     @GET(RetrofitUrl.ARTICLE_LIST)
-    Observable<CommonApiResponse<List<ArticleListResponse.ArticleListBean>>> getArticleList(@Query("pageNum") int pageNum);
+    Observable<CommonApiResponse<List<ArticleListBean>>> getArticleList(@Query("pageNum") int pageNum);
 
     @GET(RetrofitUrl.ARTICLE_DETAIL)
-    Observable<CommonApiResponse<ArticleDetailResponse.ArticleBean>> getArticleDetail(@Query("id") String id);
+    Observable<CommonApiResponse<ArticleBean>> getArticleDetail(@Query("id") String id);
 
     @GET(RetrofitUrl.WORKS_LIST)
     Observable<CommonApiResponse<List<WorkListBean>>> getWorksList(@Query("lastWorkId") String lastWorkId);
 
     @GET(RetrofitUrl.WORKS_GOODS)
-    Observable<CommonApiResponse<List<CommunityResponse.GoodsListBean>>> getWorksGoods(@Query("lastDate") String lastDate);
+    Observable<CommonApiResponse<List<GoodsListBean>>> getWorksGoods(@Query("lastDate") String lastDate);
 
     @GET(RetrofitUrl.WORKS_ONE_DAY_LEFT)
     Observable<CommonApiResponse<List<WorkListBean>>> getWorksOneDayLeft(@Query("date") String date, @Query("start") int start);
@@ -54,7 +53,7 @@ public interface RetrofitApi {
     Observable<CommonApiResponse> recordUserAction(@Body ActionRequest actionRequest);
 
     @GET(RetrofitUrl.CONFIG_QUERY)
-    Observable<CommonApiResponse<List<ConfigResponse.GuidePageBean>>> queryConfig();
+    Observable<CommonApiResponse<List<GuidePageBean>>> queryConfig();
 
     @GET(RetrofitUrl.USER_DEVICE_TOKEN)
     Observable<CommonApiResponse> postDeviceToken(@Query("deviceToken") String deviceToken);
@@ -88,4 +87,7 @@ public interface RetrofitApi {
     @Headers({"Content-Type:application/json;charset=UTF-8"})
     @POST(RetrofitUrl.USER_ADD_WORK)
     Observable<CommonApiResponse> addCommunity(@Body AddCommunityRequest addCommunityRequest);
+
+    @GET(RetrofitUrl.WORKS_MIX)
+    Observable<CommonApiResponse> getWorkMix();
 }

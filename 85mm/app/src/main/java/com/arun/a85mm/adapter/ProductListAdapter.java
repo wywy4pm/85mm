@@ -77,7 +77,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         } else {
             workListHeadHolder = (WorkListHeadHolder) convertView.getTag();
         }*/
-        if (ConfigHelper.tipsPosition > 0 && ConfigHelper.tipsPosition == groupPosition + 1) {
+       /* if (ConfigHelper.tipsPosition > 0 && ConfigHelper.tipsPosition == groupPosition + 1) {
             isHaveAuditTips = true;
             workListHeadHolder.layout_auditing_tips.setVisibility(View.VISIBLE);
             workListHeadHolder.layout_auditing_tips.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +89,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         } else {
             isHaveAuditTips = false;
             workListHeadHolder.layout_auditing_tips.setVisibility(View.GONE);
-        }
+        }*/
 
         final WorkListHeadHolder headHolder = workListHeadHolder;
         final WorkListBean bean = works.get(groupPosition);

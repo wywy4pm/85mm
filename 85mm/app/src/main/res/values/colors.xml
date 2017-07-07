@@ -23,6 +23,9 @@
     <color name="inner_black">#222222</color>
 
     <color name="black0">#00000000</color>//透明度0%
+
+    <color name="black16">#29000000</color>
+
     <color name="black30">#3C000000</color>//透明度30%
 
     <color name="black40">#66000000</color>//透明度40%

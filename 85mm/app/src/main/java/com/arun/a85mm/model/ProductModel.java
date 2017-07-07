@@ -1,9 +1,6 @@
 package com.arun.a85mm.model;
 
-import com.arun.a85mm.bean.AppBean;
-import com.arun.a85mm.bean.ProductListResponse;
 import com.arun.a85mm.bean.request.AddCommentRequest;
-import com.arun.a85mm.helper.AppHelper;
 import com.arun.a85mm.listener.CommonRequestListener;
 import com.arun.a85mm.retrofit.RetrofitInit;
 
@@ -49,5 +46,9 @@ public class ProductModel extends BaseModel {
     public Subscriber addComment(String workId, String comment, CommonRequestListener listener) {
         AddCommentRequest request = new AddCommentRequest(workId, comment);
         return request(RetrofitInit.getApi().addComment(request), listener);
+    }
+
+    public Subscriber getWorkMix(CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getWorkMix(), listener);
     }
 }

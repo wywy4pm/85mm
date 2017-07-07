@@ -7,33 +7,24 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arun.a85mm.R;
-import com.arun.a85mm.bean.ConfigResponse;
+import com.arun.a85mm.bean.GuidePageBean;
 import com.arun.a85mm.bean.UserInfo;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.helper.LoginHelper;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.listener.LoginListener;
-import com.arun.a85mm.presenter.AssociationPresenter;
 import com.arun.a85mm.presenter.LoginPresenter;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DateUtils;
-import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView2;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.List;
-import java.util.Map;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener, CommonView2, LoginListener {
 
@@ -72,11 +63,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private void initData() {
         if (CacheUtils.getObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE) != null
                 && CacheUtils.getObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE) instanceof List) {
-            List<ConfigResponse.GuidePageBean> list = (List<ConfigResponse.GuidePageBean>)
+            List<GuidePageBean> list = (List<GuidePageBean>)
                     CacheUtils.getObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE);
             if (list.size() == 2) {
-                ConfigResponse.GuidePageBean first = list.get(0);
-                ConfigResponse.GuidePageBean second = list.get(1);
+                GuidePageBean first = list.get(0);
+                GuidePageBean second = list.get(1);
                 if (DateUtils.isToday(first.date)) {
                     show(first);
                 } else if (DateUtils.isToday(second.date)) {
@@ -90,7 +81,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
-    private void show(final ConfigResponse.GuidePageBean bean) {
+    private void show(final GuidePageBean bean) {
         Glide.with(this).load(bean.imageUrl)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .placeholder(R.color.splash_bg)

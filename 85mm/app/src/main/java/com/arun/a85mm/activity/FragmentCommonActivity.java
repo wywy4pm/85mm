@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.fragment.LeftWorksFragment;
+import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -27,16 +28,11 @@ public class FragmentCommonActivity extends BaseActivity {
     public static final String TYPE = "type";
     public static final String TITLE = "title";
     public static final String EXTRAS = "extras";
-    //public static final String BACK_MODE = "back";
+    public static final String FRAGMENT_LATEST_WORKS = "fragment_latest_works";
     public static final String FRAGMENT_LEFT_WORKS = "fragment_left_works";
-    //public static final String FRAGMENT_ONE_WORK = "fragment_one_work";
-    //public static final int BACK_MODE_MAIN = 1;
-    //public static final int BACK_MODE_COM = 0;
-    //public static final String FRAGMENT_SEND_MESSAGE = "fragment_send_message";
     public String title;
     private String type = "";
     private Fragment fragment;
-    //private int backMode = 1;
 
     public static void jumpToFragmentCommonActivity(Context context, String type, String title, Map<String, String> extras) {
         Intent intent = new Intent(context, FragmentCommonActivity.class);
@@ -54,13 +50,11 @@ public class FragmentCommonActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_common);
-        new SystemBarTintManager(this).setStatusBarTintEnabled(true);
         StatusBarUtils.setStatusBarColor(this, R.color.white);
         Map<String, String> map = null;
         if (getIntent() != null) {
             type = getIntent().getExtras().getString(TYPE);
             title = getIntent().getExtras().getString(TITLE);
-            //backMode = getIntent().getExtras().getInt(BACK_MODE);
             map = (Map<String, String>) getIntent().getExtras().getSerializable(EXTRAS);
             initFragment(type, map);
         }
@@ -118,6 +112,8 @@ public class FragmentCommonActivity extends BaseActivity {
         fragment = null;
         if (FRAGMENT_LEFT_WORKS.equals(type)) {
             fragment = new LeftWorksFragment();
+        } else if (FRAGMENT_LATEST_WORKS.equals(type)) {
+            fragment = ProductionFragment.newInstance();
         }
         return fragment;
     }

@@ -3,21 +3,15 @@ package com.arun.a85mm.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.view.animation.TranslateAnimation;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.ArticleListAdapter;
-import com.arun.a85mm.bean.ArticleListResponse;
-import com.arun.a85mm.bean.WorkListBean;
+import com.arun.a85mm.bean.ArticleListBean;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.presenter.ArticleFragmentPresenter;
-import com.arun.a85mm.refresh.OnRefreshListener;
-import com.arun.a85mm.refresh.ShootRefreshView;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
-import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView;
 
 import java.util.ArrayList;
@@ -27,12 +21,12 @@ import java.util.List;
  * Created by wy on 2017/4/13.
  */
 
-public class ArticleFragment extends BaseFragment implements CommonView<List<ArticleListResponse.ArticleListBean>> {
+public class ArticleFragment extends BaseFragment implements CommonView<List<ArticleListBean>> {
 
     private SwipeToLoadLayout swipeToLoadLayout;
     private RecyclerView recyclerView;
     private ArticleListAdapter articleListAdapter;
-    private List<ArticleListResponse.ArticleListBean> articles = new ArrayList<>();
+    private List<ArticleListBean> articles = new ArrayList<>();
     private ArticleFragmentPresenter articleFragmentPresenter;
     private int currentPageNum;
     private boolean isHaveMore = true;
@@ -113,7 +107,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
     }
 
     @Override
-    public void refresh(List<ArticleListResponse.ArticleListBean> data) {
+    public void refresh(List<ArticleListBean> data) {
         if (data != null && data.size() > 0) {
             //SharedPreferencesUtils.saveUid(getActivity(), data.uid);
             articles.clear();
@@ -123,7 +117,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
     }
 
     @Override
-    public void refreshMore(List<ArticleListResponse.ArticleListBean> data) {
+    public void refreshMore(List<ArticleListBean> data) {
         if (data != null && data.size() > 0) {
             articles.addAll(data);
             articleListAdapter.notifyDataSetChanged();
@@ -145,7 +139,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
         }
     }
 
-    public void setLeftArticleBrowse(int type, List<ArticleListResponse.ArticleListBean> articleList) {
+    public void setLeftArticleBrowse(int type, List<ArticleListBean> articleList) {
         if (articleList.size() >= 4) {
             for (int i = articleList.size() - 1; i >= articleList.size() - 4; i--) {
                 if (articleList.get(i) != null) {
