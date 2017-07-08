@@ -33,6 +33,10 @@ public class MessagePresenter extends BasePresenter<CommonView4> {
                                 } else {
                                     getMvpView().refreshMore(data.body);
                                 }
+                            } else if (data.code == ErrorCode.NO_DATA) {
+                                if (lastMsgId == 0) {
+                                    getMvpView().refresh(data.body);
+                                }
                             }
                         }
                     }

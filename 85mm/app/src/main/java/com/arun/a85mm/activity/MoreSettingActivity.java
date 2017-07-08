@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.SwitchCompat;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,18 +16,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.dialog.ContactDialog;
 import com.arun.a85mm.event.UpdateProductEvent;
 import com.arun.a85mm.helper.ShareWindow;
+import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.presenter.MorePresenter;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DataCleanManager;
+import com.arun.a85mm.utils.GlideCircleTransform;
 import com.arun.a85mm.utils.OtherAppStartUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.utils.SystemServiceUtils;
 import com.arun.a85mm.view.CommonView3;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.socialize.UMShareAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,6 +45,9 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     private RelativeLayout layout_share;
     private RelativeLayout layout_clear;
     private TextView cache_size;
+    private RelativeLayout layout_user_info;
+    private ImageView user_head;
+    private TextView user_name;
     //private ListView configListView;
     //private ConfigAdapter configAdapter;
     private List<String> texts = new ArrayList<>();
@@ -46,6 +56,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     private MorePresenter morePresenter;
     private int hideReadEnable = 0;
     private ContactDialog contactDialog;
+    private UserInfoBean userInfoBean;
 
     public static void jumpToMoreSettingActivity(Context context) {
         Intent intent = new Intent(context, MoreSettingActivity.class);
@@ -68,6 +79,9 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         cache_size = (TextView) findViewById(R.id.cache_size);
         more_detail = (ImageView) findViewById(R.id.more_detail);
         switchView = (SwitchCompat) findViewById(R.id.switchView);
+        layout_user_info = (RelativeLayout) findViewById(R.id.layout_user_info);
+        user_head = (ImageView) findViewById(R.id.user_head);
+        user_name = (TextView) findViewById(R.id.user_name);
         /*switchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +117,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
 
         layout_share.setOnClickListener(this);
         layout_clear.setOnClickListener(this);
+        layout_user_info.setOnClickListener(this);
         setTitle("欢迎你，我们的第" + SharedPreferencesUtils.getUid(this) + "号用户");
         setBack();
         setCommonShow();
@@ -134,7 +149,8 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         }
         morePresenter = new MorePresenter(this);
         morePresenter.attachView(this);
-        //configAdapter.notifyDataSetChanged();
+
+        setUser();
     }
 
     private void showShare() {
@@ -159,6 +175,23 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         showTop("复制成功");
     }
 
+    private void setUser() {
+        userInfoBean = UserManager.getInstance().getUserInfoBean();
+        if (UserManager.getInstance() != null) {
+            if (!UserManager.getInstance().isLogin()) {
+                setNotLogin();
+            } else {
+                setLogin(userInfoBean);
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUser();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -168,6 +201,33 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
             case R.id.layout_clear:
                 clearCache();
                 break;
+            case R.id.layout_user_info:
+                if (UserManager.getInstance() != null) {
+                    if (!UserManager.getInstance().isLogin()) {
+                        LoginActivity.jumpToLoginForResult(this);
+                    } else {
+                        UserInfoActivity.jumpToUserInfo(this);
+                    }
+                }
+                break;
+        }
+    }
+
+    private void setNotLogin() {
+        Glide.with(this).load(R.mipmap.default_avatar).diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .centerCrop().bitmapTransform(new GlideCircleTransform(this)).into(user_head);
+        user_name.setText("点击登录注册");
+        user_name.setBackgroundResource(R.drawable.shape_btn_circle_stroke);
+        user_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+    }
+
+    private void setLogin(UserInfoBean bean) {
+        if (bean != null) {
+            Glide.with(this).load(bean.headerUrl).diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .centerCrop().bitmapTransform(new GlideCircleTransform(this)).into(user_head);
+            user_name.setText(bean.name);
+            user_name.setBackgroundColor(getResources().getColor(R.color.white));
+            user_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         }
     }
 

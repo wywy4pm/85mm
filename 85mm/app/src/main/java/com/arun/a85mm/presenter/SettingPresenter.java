@@ -41,7 +41,7 @@ public class SettingPresenter extends BasePresenter<CommonView3> {
                 }));
     }
 
-    public void getWorksGoods(final String lastDate) {
+    /*public void getWorksGoods(final String lastDate) {
         addSubscriber(ProductModel.getInstance()
                 .getWorksGoods(lastDate, new RequestListenerImpl(getMvpView()) {
 
@@ -53,6 +53,22 @@ public class SettingPresenter extends BasePresenter<CommonView3> {
                                 if (TextUtils.isEmpty(lastDate)) {
                                     getMvpView().refresh(TYPE_WORKS, data);
                                 }
+                            }
+                        }
+                    }
+                }));
+    }*/
+
+    public void getWorkMix() {
+        addSubscriber(ProductModel.getInstance()
+                .getWorkMix(new RequestListenerImpl(getMvpView()) {
+
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    public void onSuccess(CommonApiResponse data) {
+                        if (getMvpView() != null) {
+                            if (data != null && data.code == ErrorCode.SUCCESS) {
+                                getMvpView().refresh(TYPE_WORKS, data);
                             }
                         }
                     }

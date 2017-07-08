@@ -19,6 +19,7 @@ import com.arun.a85mm.listener.LoginListener;
 import com.arun.a85mm.presenter.LoginPresenter;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DateUtils;
+import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.view.CommonView2;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -57,6 +58,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         layout_wechat = (RelativeLayout) findViewById(R.id.layout_wechat);
         login_close.setOnClickListener(this);
         layout_wechat.setOnClickListener(this);
+
+        if (login_close.getLayoutParams() != null && login_close.getLayoutParams() instanceof RelativeLayout.LayoutParams) {
+            ((RelativeLayout.LayoutParams) login_close.getLayoutParams()).setMargins(DensityUtil.dp2px(this, 23), DensityUtil.dp2px(this, 5) + DensityUtil.getStatusHeight(this), 0, 0);
+        }
     }
 
     @SuppressWarnings("unchecked")

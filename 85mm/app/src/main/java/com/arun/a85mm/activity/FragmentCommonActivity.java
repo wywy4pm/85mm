@@ -59,7 +59,7 @@ public class FragmentCommonActivity extends BaseActivity {
             initFragment(type, map);
         }
         initView();
-        setSaveImage(true);
+        setSaveImage(false);
     }
 
     private void initView() {
@@ -76,7 +76,19 @@ public class FragmentCommonActivity extends BaseActivity {
             } else {
                 layout_title_bar.setVisibility(View.GONE);
             }
+
+            layout_title_bar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (FRAGMENT_LATEST_WORKS.equals(type)) {
+                        if (fragment != null && fragment instanceof ProductionFragment) {
+                            ((ProductionFragment) fragment).refreshData();
+                        }
+                    }
+                }
+            });
         }
+
     }
 
     private void initFragment(String type, Map<String, String> map) {

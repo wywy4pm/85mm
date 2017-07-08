@@ -18,6 +18,7 @@ import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.GoodsListBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.bean.WorkMixBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.event.UpdateProductEvent;
@@ -126,20 +127,25 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
         if (NetUtils.isConnected(getActivity())) {
             hideNetWorkErrorView(expandableListView);
             if (communityPresenter != null) {
-                communityPresenter.getWorkMix();
 
                 lastWorkDate = "";
                 if (response == null) {
                     setLoading(true);
-                    communityPresenter.getWorksGoods(lastWorkDate);
+                    //communityPresenter.getWorksGoods(lastWorkDate);
+                    communityPresenter.getWorkMix();
                 } else {
                     if (response.body != null) {
-                        if (response.body instanceof List) {
-                            List<GoodsListBean> goodsList = (List<GoodsListBean>) response.body;
+                        if (response.body instanceof WorkMixBean) {
                             worksList.clear();
-                            formatData(goodsList);
+                            WorkMixBean workMixBean = (WorkMixBean) response.body;
+                            setColumns(workMixBean.columns);
+                            formatData(workMixBean.historyList);
                             response = null;
+                        } else {
+                            swipeToLoadLayout.setRefreshing(false);
                         }
+                    } else {
+                        swipeToLoadLayout.setRefreshing(false);
                     }
                 }
             }
@@ -179,9 +185,19 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
 
     @Override
     public void refresh(List<GoodsListBean> data) {
-        if (data != null && data.size() > 0) {
+        /*if (data != null && data.size() > 0) {
             worksList.clear();
             formatData(data);
+        }*/
+    }
+
+    @Override
+    public void refresh(int type, Object data) {
+        if (data != null && data instanceof WorkMixBean) {
+            worksList.clear();
+            WorkMixBean workMixBean = (WorkMixBean) data;
+            setColumns(workMixBean.columns);
+            formatData(workMixBean.historyList);
         }
     }
 
@@ -192,45 +208,42 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
         }
     }
 
-    @Override
-    public void refresh(int type, Object data) {
-        if (data != null && data instanceof List) {
-            final List<ColumnBean> columns = (List<ColumnBean>) data;
-            if (columns.size() > 0) {
-                headView.removeAllViews();
-                int imageWidthHeight = screenWidth / 3;
 
-                for (int i = 0; i < columns.size(); i++) {
-                    View columnView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_work_column, headView, false);
-                    columnView.getLayoutParams().height = imageWidthHeight;
-                    if (i == 0) {
-                        ((LinearLayout.LayoutParams) columnView.getLayoutParams()).setMargins(0, 0, 0, DensityUtil.dp2px(getActivity(), 5));
-                    }
+    private void setColumns(final List<ColumnBean> columns) {
+        if (columns != null && columns.size() > 0) {
+            headView.removeAllViews();
+            int imageWidthHeight = screenWidth / 3;
 
-                    ImageView image1 = (ImageView) columnView.findViewById(R.id.image1);
-                    ImageView image2 = (ImageView) columnView.findViewById(R.id.image2);
-                    ImageView image3 = (ImageView) columnView.findViewById(R.id.image3);
-                    image1.getLayoutParams().width = imageWidthHeight;
-                    image2.getLayoutParams().width = imageWidthHeight;
-                    image3.getLayoutParams().width = imageWidthHeight;
-                    TextView text_big = (TextView) columnView.findViewById(R.id.text_big);
-                    TextView text_small = (TextView) columnView.findViewById(R.id.text_small);
-
-                    Glide.with(getActivity()).load(columns.get(i).images.get(0)).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(image1);
-                    Glide.with(getActivity()).load(columns.get(i).images.get(1)).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(image2);
-                    Glide.with(getActivity()).load(columns.get(i).images.get(2)).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(image3);
-                    text_big.setText(columns.get(i).text.get(0));
-                    text_small.setText(columns.get(i).text.get(1));
-                    final int finalI = i;
-                    columnView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            UrlJumpHelper.urlJumpTo(getActivity(), columns.get(finalI).linkUrl, columns.get(finalI).text.get(0));
-                        }
-                    });
-
-                    headView.addView(columnView);
+            for (int i = 0; i < columns.size(); i++) {
+                View columnView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_work_column, headView, false);
+                columnView.getLayoutParams().height = imageWidthHeight;
+                if (i == 0) {
+                    ((LinearLayout.LayoutParams) columnView.getLayoutParams()).setMargins(0, 0, 0, DensityUtil.dp2px(getActivity(), 5));
                 }
+
+                ImageView image1 = (ImageView) columnView.findViewById(R.id.image1);
+                ImageView image2 = (ImageView) columnView.findViewById(R.id.image2);
+                ImageView image3 = (ImageView) columnView.findViewById(R.id.image3);
+                image1.getLayoutParams().width = imageWidthHeight;
+                image2.getLayoutParams().width = imageWidthHeight;
+                image3.getLayoutParams().width = imageWidthHeight;
+                TextView text_big = (TextView) columnView.findViewById(R.id.text_big);
+                TextView text_small = (TextView) columnView.findViewById(R.id.text_small);
+
+                Glide.with(getActivity()).load(columns.get(i).images.get(0)).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(image1);
+                Glide.with(getActivity()).load(columns.get(i).images.get(1)).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(image2);
+                Glide.with(getActivity()).load(columns.get(i).images.get(2)).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(image3);
+                text_big.setText(columns.get(i).text.get(0));
+                text_small.setText(columns.get(i).text.get(1));
+                final int finalI = i;
+                columnView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UrlJumpHelper.urlJumpTo(getActivity(), columns.get(finalI).linkUrl, columns.get(finalI).text.get(0));
+                    }
+                });
+
+                headView.addView(columnView);
             }
         }
     }

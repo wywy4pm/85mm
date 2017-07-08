@@ -55,6 +55,8 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
 
     private String searchName;
     private boolean isHaveMore = true;
+    private String lastSearchName;
+    private int lastSearchType;
 
     public static void jumpToAudit(Context context) {
         Intent intent = new Intent(context, AuditActivity.class);
@@ -88,10 +90,23 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
         recyclerView.setAdapter(auditListAdapter);
 
         setBack();
+        setTitleBar();
         setTitle("审核");
         setRight();
         setRefresh(swipeToLoad);
         setRecyclerViewScrollListener(recyclerView);
+    }
+
+    public void setTitleBar() {
+        RelativeLayout layout_title_right_bar = (RelativeLayout) findViewById(R.id.layout_title_right_bar);
+        if (layout_title_right_bar != null) {
+            layout_title_right_bar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    requestData();
+                }
+            });
+        }
     }
 
     private void setRight() {
@@ -193,13 +208,21 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
 
     public void requestData() {
         if (auditPresenter != null) {
+            if ((!TextUtils.isEmpty(lastSearchName) && !lastSearchName.equals(searchName))
+                    || lastSearchType != auditSortType) {
+                clearAndAddHead();
+            }
+
+            recyclerView.scrollToPosition(0);
             setLoading(true);
             start = 0;
             lastWorkId = "";
             isHaveMore = true;
             auditPresenter.getAuditWorkList(searchName, auditSortType, start, lastWorkId);
-
             SharedPreferencesUtils.setConfigString(this, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG, searchName);
+
+            lastSearchName = searchName;
+            lastSearchType = auditSortType;
         }
     }
 
@@ -207,6 +230,9 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
         if (auditPresenter != null) {
             setLoading(true);
             auditPresenter.getAuditWorkList(searchName, auditSortType, start, lastWorkId);
+
+            lastSearchName = searchName;
+            lastSearchType = auditSortType;
         }
     }
 
@@ -242,17 +268,21 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
     @Override
     public void refresh(List<WorkListBean> data) {
         if (data != null) {
-            AuditItemBean bean = auditWorks.get(0);
-            auditWorks.clear();
-            auditWorks.add(bean);
+            if ((!(!TextUtils.isEmpty(lastSearchName) && !lastSearchName.equals(searchName)))
+                    || lastSearchType == auditSortType) {
+                clearAndAddHead();
+            }
             formatData(data);
             auditListAdapter.notifyDataSetChanged();
         } else {
-            AuditItemBean bean = auditWorks.get(0);
-            auditWorks.clear();
-            auditWorks.add(bean);
             auditListAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void clearAndAddHead() {
+        AuditItemBean bean = auditWorks.get(0);
+        auditWorks.clear();
+        auditWorks.add(bean);
     }
 
     @Override

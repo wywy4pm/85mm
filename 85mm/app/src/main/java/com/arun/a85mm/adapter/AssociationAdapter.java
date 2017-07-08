@@ -227,6 +227,14 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
                 }
             });
 
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    DialogHelper.showBottom(context, Constant.TYPE_COMMUNITY, "", bean.workId, bean.uid, eventStatisticsHelper);
+                    return false;
+                }
+            });
+
             Glide.with(context).load(bean.authorHeadImg).centerCrop()
                     .bitmapTransform(new GlideCircleTransform(context)).into(author_image);
             author_name.setText(bean.authorName);

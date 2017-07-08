@@ -1,6 +1,7 @@
 package com.arun.a85mm.helper;
 
 import com.arun.a85mm.bean.UserInfo;
+import com.arun.a85mm.bean.UserInfoBean;
 
 /**
  * Created by wy on 2017/6/30.
@@ -8,7 +9,7 @@ import com.arun.a85mm.bean.UserInfo;
 
 public class UserManager {
     private volatile static UserManager userManager;
-    private UserInfo userInfo;
+    private UserInfoBean userInfoBean;
     private boolean isLogin;
 
     public static UserManager getInstance() {
@@ -22,13 +23,13 @@ public class UserManager {
         return userManager;
     }
 
-    /*public UserInfo getUserInfo() {
-        return userInfo;
+    public UserInfoBean getUserInfoBean() {
+        return userInfoBean;
     }
 
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
-    }*/
+    public void setUserInfoBean(UserInfoBean userInfoBean) {
+        this.userInfoBean = userInfoBean;
+    }
 
     public void setLogin(boolean login) {
         isLogin = login;
@@ -37,4 +38,6 @@ public class UserManager {
     public boolean isLogin() {
         return isLogin;
     }
+
+
 }

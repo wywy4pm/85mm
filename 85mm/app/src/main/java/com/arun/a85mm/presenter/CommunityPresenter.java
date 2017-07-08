@@ -76,7 +76,7 @@ public class CommunityPresenter extends BasePresenter<CommonView4> {
                     public void onSuccess(CommonApiResponse data) {
                         if (getMvpView() != null) {
                             if (data != null && data.code == ErrorCode.SUCCESS) {
-                                getMvpView().refresh(0, data.columns);
+                                getMvpView().refresh(0, data.body);
                             }
                         }
                     }

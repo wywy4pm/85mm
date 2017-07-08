@@ -63,7 +63,7 @@ public class MessageCenterActivity extends BaseActivity {
         viewPager.setCurrentItem(0);
 
         setBack();
-        setSaveImage(false);
+        //setSaveImage(false);
     }
 
     private void setListener() {

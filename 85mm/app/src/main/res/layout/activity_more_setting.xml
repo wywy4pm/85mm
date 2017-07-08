@@ -20,6 +20,51 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/layout_user_info"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp">
+
+                <ImageView
+                    android:id="@+id/user_head"
+                    android:layout_width="43dp"
+                    android:layout_height="43dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/default_avatar" />
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toRightOf="@+id/user_head"
+                    android:background="@drawable/shape_btn_circle_stroke"
+                    android:gravity="center"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="8dp"
+                    android:text="点击登录注册"
+                    android:textColor="@color/charcoalgrey"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/ic_right" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/line_user_info"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/area_divide" />
+
+            <RelativeLayout
                 android:id="@+id/layout_hide_read"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
@@ -62,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="center"
-                    android:text="分享"
+                    android:text="分享app给好友"
                     android:textColor="@color/charcoalgrey"
                     android:textSize="15sp" />
 

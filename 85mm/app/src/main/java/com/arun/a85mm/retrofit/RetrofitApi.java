@@ -6,6 +6,7 @@ import com.arun.a85mm.bean.ArticleListBean;
 import com.arun.a85mm.bean.AssociationBean;
 import com.arun.a85mm.bean.GoodsListBean;
 import com.arun.a85mm.bean.GuidePageBean;
+import com.arun.a85mm.bean.WorkMixBean;
 import com.arun.a85mm.bean.request.ActionRequest;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.MessageItemBean;
@@ -89,5 +90,5 @@ public interface RetrofitApi {
     Observable<CommonApiResponse> addCommunity(@Body AddCommunityRequest addCommunityRequest);
 
     @GET(RetrofitUrl.WORKS_MIX)
-    Observable<CommonApiResponse> getWorkMix();
+    Observable<CommonApiResponse<WorkMixBean>> getWorkMix();
 }

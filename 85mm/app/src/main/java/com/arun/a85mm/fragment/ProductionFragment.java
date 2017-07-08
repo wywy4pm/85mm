@@ -7,7 +7,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 
 import com.arun.a85mm.R;
-import com.arun.a85mm.activity.MainActivity;
+import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.adapter.ProductListAdapter;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
@@ -52,6 +52,9 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     @Override
     protected int preparedCreate(Bundle savedInstanceState) {
         EventBus.getDefault().register(this);
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.recordUserAction(getActivity(), EventConstant.OPEN_LATEST);
+        }
         return R.layout.layout_producation;
     }
 
@@ -214,8 +217,8 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
 
     @Override
     public void onCoverClick(String workId, String coverUrl, int width, int height) {
-        if (getActivity() != null && getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).saveImageShowTop(workId, coverUrl, width, height);
+        if (getActivity() != null && getActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).saveImageShowTop(workId, coverUrl, width, height);
         }
     }
 

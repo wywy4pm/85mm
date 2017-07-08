@@ -2,6 +2,8 @@ package com.arun.a85mm.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.MessageAdapter;
@@ -34,6 +36,7 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
     private List<MessageItem> messages = new ArrayList<>();
     private int msgType;
     private int lastMsgId = 0;
+    private RelativeLayout layout_no_data;
 
     public static MessageFragment getInstance(int msgType) {
         MessageFragment messageFragment = new MessageFragment();
@@ -57,6 +60,7 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
 
         recyclerView = (RecyclerView) findViewById(R.id.swipe_target);
         swipeToLoadLayout = (SwipeToLoadLayout) findViewById(R.id.swipeToLoad);
+        layout_no_data = (RelativeLayout) findViewById(R.id.layout_no_data);
 
         FullyLinearLayoutManager layoutManager = new FullyLinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -75,6 +79,7 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
     }
 
     private void requestData() {
+        setHaveData();
         if (messagePresenter != null) {
             lastMsgId = 0;
             messagePresenter.getMessageList(userId, msgType, lastMsgId);
@@ -93,11 +98,23 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
         }
     }
 
+    private void setHaveData() {
+        layout_no_data.setVisibility(View.GONE);
+        swipeToLoadLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void setNoData() {
+        layout_no_data.setVisibility(View.VISIBLE);
+        swipeToLoadLayout.setVisibility(View.GONE);
+    }
+
     @Override
     public void refresh(List<MessageItemBean> data) {
         if (data != null && data.size() > 0) {
             messages.clear();
             formatData(data);
+        } else {
+            setNoData();
         }
     }
 

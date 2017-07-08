@@ -73,5 +73,6 @@
         android:layout_marginRight="12dp"
         android:lineSpacingExtra="2dp"
         android:textColor="@color/article_list_brief"
+        android:textIsSelectable="true"
         android:textSize="15sp" />
 </RelativeLayout>

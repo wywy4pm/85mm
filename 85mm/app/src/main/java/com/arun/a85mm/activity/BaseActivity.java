@@ -2,6 +2,7 @@ package com.arun.a85mm.activity;
 
 import android.os.Bundle;
 import android.os.Message;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
@@ -125,6 +127,12 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
         return isShowingTop;
     }
 
+    public void setImageRight(ImageView imageView, @DrawableRes int drawableResId) {
+        if (imageView != null) {
+            imageView.setImageResource(drawableResId);
+        }
+    }
+
     public void onActionEvent(int type, List<ActionBean> actionList) {
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.recordUserAction(this, type, actionList);
@@ -176,8 +184,8 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
                         int visibleCount = linearLayoutManager.getChildCount();
                         int totalCount = linearLayoutManager.getItemCount();
                         int limitLoadMore = 0;
-                        if (totalCount > 6) {
-                            limitLoadMore = totalCount - 6;
+                        if (totalCount > 20) {
+                            limitLoadMore = totalCount - 20;
                         } else {
                             limitLoadMore = totalCount;
                         }
@@ -310,4 +318,5 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
     public void onRefreshComplete() {
 
     }
+
 }

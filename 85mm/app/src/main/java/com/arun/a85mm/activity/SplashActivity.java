@@ -89,7 +89,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
         if (settingPresenter == null) {
             settingPresenter = new SettingPresenter(this);
             settingPresenter.attachView(this);
-            settingPresenter.getWorksGoods("");
+            settingPresenter.getWorkMix();
         }
         showSplash();
         if (getIntent() != null && getIntent().getExtras() != null) {
@@ -202,6 +202,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                 SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE, config.hasNewMsg);
                 //SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_WECHAT_LOGIN, config.wechatLogin);
                 UserManager.getInstance().setLogin(config.wechatLogin == 1);
+                UserManager.getInstance().setUserInfoBean(config.userInfo);
                 new Thread(
                         new Runnable() {
                             @Override

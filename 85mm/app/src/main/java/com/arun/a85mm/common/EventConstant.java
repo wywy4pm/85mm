@@ -13,6 +13,7 @@ public class EventConstant {
     public static final int CLICK_SPLASH = 5;
     public static final int CLICK_PUSH = 6;
 
+    public static final int OPEN_LATEST = 11;
     public static final int CHANGE_WORK = 12;
     public static final int CHANGE_ARTICLE = 13;
     public static final int CHANGE_MORE = 14;

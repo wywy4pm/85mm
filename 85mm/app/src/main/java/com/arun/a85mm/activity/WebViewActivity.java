@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.utils.StatusBarUtils;
 
 public class WebViewActivity extends BaseActivity {
@@ -70,7 +71,6 @@ public class WebViewActivity extends BaseActivity {
     private void initView() {
         image_back = (ImageView) findViewById(R.id.image_back);
         titleText = (TextView) findViewById(R.id.title);
-        //image_right = (ImageView) findViewById(R.id.image_right);
         webView = (WebView) findViewById(R.id.webView);
         if (!isFromSplash) {
             setBack(image_back);
@@ -84,6 +84,22 @@ public class WebViewActivity extends BaseActivity {
                 }
             });
         }
+        setRight();
+    }
+
+    private void setRight() {
+        ImageView image_right = (ImageView) findViewById(R.id.image_right);
+        image_right.setVisibility(View.VISIBLE);
+        image_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(titleText.getText())) {
+                    onActionEvent(EventConstant.BTN_SHARE);
+                    ShareWindow.show(WebViewActivity.this, getString(R.string.share_title), getString(R.string.share_description), getString(R.string.share_url), "", eventStatisticsHelper);
+                }
+            }
+        });
+        setImageRight(image_right, R.mipmap.web_btn_share);
     }
 
     private void initWebView() {

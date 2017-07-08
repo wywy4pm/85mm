@@ -47,11 +47,11 @@ public class PushHelper {
                         PushCustomBean pushCustomBean = GsonUtils.fromJson(msg.custom, new TypeToken<PushCustomBean>() {
                         }.getType());
                         if (pushCustomBean != null) {
-                            if (helper != null) {
-                                helper.recordUserAction(context, EventConstant.CLICK_PUSH);
-                            }
                             String pageUrl = pushCustomBean.pageUrl;
                             String pageTitle = pushCustomBean.pageTitle;
+                            if (helper != null) {
+                                helper.recordUserAction(context, EventConstant.CLICK_PUSH, "", pageUrl);
+                            }
                             UrlJumpHelper.urlJumpTo(context, pageUrl, pageTitle);
                         }
                     } catch (Exception e) {

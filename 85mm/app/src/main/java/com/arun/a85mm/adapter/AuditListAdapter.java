@@ -105,34 +105,36 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
 
             tags = ConfigHelper.tags;
             String selectName = SharedPreferencesUtils.getConfigString(context, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG);
-            for (int i = 0; i < tags.size(); i++) {
-                final TextView tv = new TextView(context);
-                tv.setTag(i);
-                tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                tv.setTextColor(context.getResources().getColor(R.color.charcoalgrey));
-                tv.setPadding(DensityUtil.dp2px(context, 10), DensityUtil.dp2px(context, 5), DensityUtil.dp2px(context, 10), DensityUtil.dp2px(context, 5));
-                tv.setGravity(Gravity.CENTER);
-                tv.setBackgroundResource(R.drawable.selector_audit_flow_tags);
-                final int finalI = i;
-                tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            if (tags != null) {
+                for (int i = 0; i < tags.size(); i++) {
+                    final TextView tv = new TextView(context);
+                    tv.setTag(i);
+                    tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                    tv.setTextColor(context.getResources().getColor(R.color.charcoalgrey));
+                    tv.setPadding(DensityUtil.dp2px(context, 10), DensityUtil.dp2px(context, 5), DensityUtil.dp2px(context, 10), DensityUtil.dp2px(context, 5));
+                    tv.setGravity(Gravity.CENTER);
+                    tv.setBackgroundResource(R.drawable.selector_audit_flow_tags);
+                    final int finalI = i;
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            tv.setSelected(true);
+                            tv.setTextColor(context.getResources().getColor(R.color.white));
+                            resetSelect(context, tv.getTag());
+                            ((AuditActivity) context).setSearchName(tags.get(finalI).searchName);
+                            ((AuditActivity) context).requestData();
+                        }
+                    });
+                    tv.setText(tags.get(i).showName);
+
+                    if ((!TextUtils.isEmpty(selectName) && selectName.equals(tags.get(i).searchName))
+                            || (TextUtils.isEmpty(selectName) && i == 0)) {
                         tv.setSelected(true);
                         tv.setTextColor(context.getResources().getColor(R.color.white));
-                        resetSelect(context, tv.getTag());
-                        ((AuditActivity) context).setSearchName(tags.get(finalI).searchName);
-                        ((AuditActivity) context).requestData();
                     }
-                });
-                tv.setText(tags.get(i).showName);
 
-                if ((!TextUtils.isEmpty(selectName) && selectName.equals(tags.get(i).searchName))
-                        || (TextUtils.isEmpty(selectName) && i == 0)) {
-                    tv.setSelected(true);
-                    tv.setTextColor(context.getResources().getColor(R.color.white));
+                    layout_tags.addView(tv);
                 }
-
-                layout_tags.addView(tv);
             }
         }
 

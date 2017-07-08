@@ -1,7 +1,5 @@
 package com.arun.a85mm.bean;
 
-import java.util.List;
-
 /**
  * Created by wy on 2017/5/22.
  */
@@ -42,5 +40,9 @@ public class CommonApiResponse<T> {
      */
     public int wechatLogin;
 
-    public List<ColumnBean> columns;
+    /**
+     * 用户信息
+     */
+    public UserInfoBean userInfo;
+
 }
