@@ -17,13 +17,18 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.helper.UserManager;
+import com.arun.a85mm.presenter.UserPresenter;
+import com.arun.a85mm.view.CommonView3;
+import com.tencent.connect.UserInfo;
 
-public class UpdateUserNameActivity extends BaseActivity {
+public class UpdateUserNameActivity extends BaseActivity implements CommonView3 {
     public TextView image_right;
     public EditText edit_user_name;
     public RelativeLayout layout_update_name;
     public ImageView edit_clean;
     private UserInfoBean user;
+    private UserPresenter presenter;
+    private String userName;
 
     public static void jumpToUpdateUserName(Context context) {
         Intent intent = new Intent(context, UpdateUserNameActivity.class);
@@ -87,17 +92,42 @@ public class UpdateUserNameActivity extends BaseActivity {
             right.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if (TextUtils.isEmpty(edit_user_name.getText())) {
+                        showTop("不能为空");
+                    } else {
+                        if (presenter != null) {
+                            userName = edit_user_name.getText().toString();
+                            presenter.updateUserInfo(userName, "", "", "");
+                        }
+                    }
                 }
             });
         }
     }
 
     private void initData() {
+        presenter = new UserPresenter(this);
+        presenter.attachView(this);
         user = UserManager.getInstance().getUserInfoBean();
         if (user != null) {
             edit_user_name.setText(user.name);
         }
     }
 
+    @Override
+    public void refresh(int type, Object data) {
+        if (type == UserPresenter.TYPE_UPDATE_USER_NAME) {
+            UserInfoBean userInfoBean = new UserInfoBean(userName, "", "", "");
+            UserManager.getInstance().setUserInfoBean(userInfoBean);
+            onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.detachView();
+        }
+    }
 }

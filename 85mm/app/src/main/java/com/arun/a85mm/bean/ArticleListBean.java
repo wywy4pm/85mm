@@ -9,4 +9,5 @@ public class ArticleListBean {
     public String headImage;
     public String id;
     public String title;
+    public int backgroundColor;
 }

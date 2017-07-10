@@ -38,4 +38,5 @@ public class AssociationBean {
     public String type;
     public String uid;
 
+    public int backgroundColor;
 }

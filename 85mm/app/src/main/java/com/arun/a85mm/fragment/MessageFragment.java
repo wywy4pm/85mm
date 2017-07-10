@@ -11,6 +11,7 @@ import com.arun.a85mm.bean.MessageItem;
 import com.arun.a85mm.bean.MessageItemBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.event.UpdateSendMsg;
+import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.presenter.MessagePresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.FullyLinearLayoutManager;
@@ -151,6 +152,7 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
                             itemImage.width = image.width;
                             itemImage.height = image.height;
                             itemImage.imageUrl = image.imageUrl;
+                            itemImage.backgroundColor = RandomColorHelper.getRandomColor();
                             messages.add(itemImage);
                         }
                     }

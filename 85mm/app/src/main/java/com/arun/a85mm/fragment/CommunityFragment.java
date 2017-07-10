@@ -230,9 +230,24 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
                 TextView text_big = (TextView) columnView.findViewById(R.id.text_big);
                 TextView text_small = (TextView) columnView.findViewById(R.id.text_small);
 
-                Glide.with(getActivity()).load(columns.get(i).images.get(0)).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(image1);
-                Glide.with(getActivity()).load(columns.get(i).images.get(1)).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(image2);
-                Glide.with(getActivity()).load(columns.get(i).images.get(2)).diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(image3);
+                Glide.with(getActivity()).load(columns.get(i).images.get(0))
+                        .placeholder(RandomColorHelper.getRandomColor())
+                        .error(RandomColorHelper.getRandomColor())
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .centerCrop()
+                        .into(image1);
+                Glide.with(getActivity()).load(columns.get(i).images.get(1))
+                        .placeholder(RandomColorHelper.getRandomColor())
+                        .error(RandomColorHelper.getRandomColor())
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .centerCrop()
+                        .into(image2);
+                Glide.with(getActivity()).load(columns.get(i).images.get(2))
+                        .placeholder(RandomColorHelper.getRandomColor())
+                        .error(RandomColorHelper.getRandomColor())
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .centerCrop()
+                        .into(image3);
                 text_big.setText(columns.get(i).text.get(0));
                 text_small.setText(columns.get(i).text.get(1));
                 final int finalI = i;

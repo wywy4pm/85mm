@@ -18,6 +18,7 @@ import com.arun.a85mm.adapter.ArticleDetailAdapter;
 import com.arun.a85mm.bean.ArticleBean;
 import com.arun.a85mm.bean.ArticleDetailBean;
 import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.presenter.ArticleActivityPresenter;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.FullyLinearLayoutManager;
@@ -187,6 +188,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
                 ArticleDetailBean articleDetailBean = new ArticleDetailBean();
                 articleDetailBean.componentType = Constant.ARTICLE_TYPE_FULL_IMAGE;
                 articleDetailBean.imageUrl = url;
+                articleDetailBean.backgroundColor = RandomColorHelper.getRandomColor();
                 articleDetails.add(articleDetailBean);
                 //articleBean.contentComponents.remove(0);//去除多余头图
             }
@@ -204,6 +206,12 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
                 articleDetailBean.createTime = articleBean.createTime;
                 articleDetails.add(articleDetailBean);
             }
+            if (articleBean.contentComponents != null && articleBean.contentComponents.size() > 0) {
+                for (int i = 0; i < articleBean.contentComponents.size(); i++) {
+                    articleBean.contentComponents.get(i).backgroundColor = RandomColorHelper.getRandomColor();
+                }
+            }
+
             articleDetails.addAll(articleBean.contentComponents);
             if (!isAnimEndLoadUnSuccess) {
                 setLoadSuccessView();

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -30,6 +31,7 @@ import com.arun.a85mm.utils.BitmapUtils;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DateUtils;
 import com.arun.a85mm.utils.DensityUtil;
+import com.arun.a85mm.utils.GsonUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView3;
 import com.bumptech.glide.Glide;
@@ -58,6 +60,8 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
     private String type;
     private Map<String, String> map;
     private EventStatisticsHelper helper;
+    private boolean isAnimationEnd;
+    private boolean isConfigComplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,16 +142,10 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
 
                             @Override
                             public void onAnimationEnd(Animator animation) {
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (!isJumpToWebView) {
-                                            MainActivity.jumpToMain(SplashActivity.this, type, map);
-                                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                                        }
-                                        SplashActivity.this.finish();
-                                    }
-                                }, 1000);
+                                isAnimationEnd = true;
+                                if (isConfigComplete) {
+                                    jumpToMain(true);
+                                }
                             }
 
                             @Override
@@ -200,7 +198,6 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                     ConfigHelper.tags = config.auditInfo.tags;
                 }
                 SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE, config.hasNewMsg);
-                //SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_WECHAT_LOGIN, config.wechatLogin);
                 UserManager.getInstance().setLogin(config.wechatLogin == 1);
                 UserManager.getInstance().setUserInfoBean(config.userInfo);
                 new Thread(
@@ -216,11 +213,16 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                     if (list.size() == 2) {
                         CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE, (Serializable) config.body);
                     }
+                    isConfigComplete = true;
                     if (!isShowCache) {
                         if (list.size() > 0 && list.get(0) != null) {
                             show(list.get(0));
                         } else {
-                            errorIn();
+                            jumpToMain(false);
+                        }
+                    } else {
+                        if (isAnimationEnd) {
+                            jumpToMain(false);
                         }
                     }
                 }
@@ -242,7 +244,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        errorIn();
+                        jumpToMain(false);
                         return false;
                     }
 
@@ -273,7 +275,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
 
     @Override
     public void onError(int errorType, @StringRes int errorMsg) {
-        errorIn();
+        //errorIn();
     }
 
     @Override
@@ -308,15 +310,25 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
         }
     }
 
-    private void errorIn() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                MainActivity.jumpToMain(SplashActivity.this, type, map);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                finish();
-            }
-        }, 1000);
+    private synchronized void jumpToMain(boolean isWait) {
+        if (isWait) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    inMain();
+                }
+            }, 500);
+        } else {
+            inMain();
+        }
+    }
+
+    private void inMain() {
+        if (!isJumpToWebView) {
+            MainActivity.jumpToMain(SplashActivity.this, type, map);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }
+        finish();
     }
 
     @Override

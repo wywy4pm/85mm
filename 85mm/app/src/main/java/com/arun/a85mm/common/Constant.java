@@ -45,8 +45,13 @@ public class Constant {
     public static final int WHAT_SHOW_TOP = 1;
 
 
+    /**
+     * intent request code
+     */
     public static final int REQUEST_CODE_ASSOCIATE_LOGIN = 1001;
     public static final int REQUEST_CODE_ASSOCIATE_MAIN = 1002;
+    public static final int REQUEST_CODE_ALBUM_HEAD = 1003;
+    public static final int REQUEST_CODE_ALBUM_COVER = 1004;
 
     public static final String TYPE_WORK = "0";
     public static final String TYPE_AUDIT = "1";

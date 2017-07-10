@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.SwitchCompat;
@@ -20,19 +21,24 @@ import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.dialog.ContactDialog;
 import com.arun.a85mm.event.UpdateProductEvent;
+import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.presenter.MorePresenter;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DataCleanManager;
+import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.arun.a85mm.utils.OtherAppStartUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.utils.SystemServiceUtils;
 import com.arun.a85mm.view.CommonView3;
+import com.arun.a85mm.widget.CircleImageView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.umeng.socialize.UMShareAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,7 +52,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     private RelativeLayout layout_clear;
     private TextView cache_size;
     private RelativeLayout layout_user_info;
-    private ImageView user_head;
+    private CircleImageView user_head;
     private TextView user_name;
     //private ListView configListView;
     //private ConfigAdapter configAdapter;
@@ -80,7 +86,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         more_detail = (ImageView) findViewById(R.id.more_detail);
         switchView = (SwitchCompat) findViewById(R.id.switchView);
         layout_user_info = (RelativeLayout) findViewById(R.id.layout_user_info);
-        user_head = (ImageView) findViewById(R.id.user_head);
+        user_head = (CircleImageView) findViewById(R.id.user_head);
         user_name = (TextView) findViewById(R.id.user_name);
         /*switchView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,20 +220,41 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setNotLogin() {
-        Glide.with(this).load(R.mipmap.default_avatar).diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .centerCrop().bitmapTransform(new GlideCircleTransform(this)).into(user_head);
+
+        Glide.with(this)
+                .load(R.mipmap.default_avatar)
+                .placeholder(RandomColorHelper.getRandomColor())
+                .error(RandomColorHelper.getRandomColor())
+                .centerCrop()
+                .into(new SimpleTarget<GlideDrawable>() {
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                        user_head.setImageDrawable(resource);
+                    }
+                });
         user_name.setText("点击登录注册");
         user_name.setBackgroundResource(R.drawable.shape_btn_circle_stroke);
-        user_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        user_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        user_name.setPadding(DensityUtil.dp2px(this, 10), DensityUtil.dp2px(this, 8), DensityUtil.dp2px(this, 10), DensityUtil.dp2px(this, 8));
     }
 
     private void setLogin(UserInfoBean bean) {
         if (bean != null) {
-            Glide.with(this).load(bean.headerUrl).diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .centerCrop().bitmapTransform(new GlideCircleTransform(this)).into(user_head);
+            Glide.with(this)
+                    .load(bean.headerUrl)
+                    .placeholder(RandomColorHelper.getRandomColor())
+                    .error(RandomColorHelper.getRandomColor())
+                    .centerCrop()
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            user_head.setImageDrawable(resource);
+                        }
+                    });
             user_name.setText(bean.name);
             user_name.setBackgroundColor(getResources().getColor(R.color.white));
             user_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            user_name.setPadding(0, 0, 0, 0);
         }
     }
 

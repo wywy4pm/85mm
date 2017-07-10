@@ -9,6 +9,7 @@ import com.arun.a85mm.adapter.ArticleListAdapter;
 import com.arun.a85mm.bean.ArticleListBean;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.EventStatisticsHelper;
+import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.presenter.ArticleFragmentPresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
@@ -109,8 +110,8 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
     @Override
     public void refresh(List<ArticleListBean> data) {
         if (data != null && data.size() > 0) {
-            //SharedPreferencesUtils.saveUid(getActivity(), data.uid);
             articles.clear();
+            formatData(data);
             articles.addAll(data);
             articleListAdapter.notifyDataSetChanged();
         }
@@ -119,8 +120,15 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
     @Override
     public void refreshMore(List<ArticleListBean> data) {
         if (data != null && data.size() > 0) {
+            formatData(data);
             articles.addAll(data);
             articleListAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void formatData(List<ArticleListBean> data) {
+        for (int i = 0; i < data.size(); i++) {
+            data.get(i).backgroundColor = RandomColorHelper.getRandomColor();
         }
     }
 

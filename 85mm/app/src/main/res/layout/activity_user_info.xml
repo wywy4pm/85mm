@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:fitsSystemWindows="true"
     android:orientation="vertical">
+
+    <include layout="@layout/layout_status_place" />
 
     <include layout="@layout/layout_title_bar" />
 
@@ -25,10 +26,10 @@
             android:textColor="@color/charcoalgrey"
             android:textSize="15sp" />
 
-        <ImageView
+        <com.arun.a85mm.widget.CircleImageView
             android:id="@+id/user_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/right_icon" />

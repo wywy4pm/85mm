@@ -27,6 +27,7 @@ public class RetrofitUrl {
     public static final String USER_THIRD_LOGIN = USER + "/thirdLogin";
     public static final String USER_ADD_COMMENT = USER + "/addComment";
     public static final String USER_ADD_WORK = USER + "/addWork";
+    public static final String USER_UPDATE_INFO = USER + "/update";
 
     public static final String CONFIG_QUERY = CONFIG + V1 + "/query";
 

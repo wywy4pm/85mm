@@ -87,7 +87,12 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
             if (article_image.getLayoutParams() != null) {
                 article_image.getLayoutParams().height = (int) (DensityUtil.getScreenWidth(context) * 0.56);
             }
-            Glide.with(context).load(articleListBean.headImage).centerCrop().into(article_image);
+            Glide.with(context)
+                    .load(articleListBean.headImage)
+                    .placeholder(articleListBean.backgroundColor)
+                    .error(articleListBean.backgroundColor)
+                    .centerCrop()
+                    .into(article_image);
             article_title.setText(articleListBean.title);
             article_detail.setText(articleListBean.brief);
             itemView.setOnClickListener(new View.OnClickListener() {

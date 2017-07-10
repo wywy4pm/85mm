@@ -139,7 +139,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
         Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK);
-        finish();
+        onBackPressed();
     }
 
     @Override

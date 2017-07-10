@@ -167,6 +167,10 @@ public class AddCommunityActivity extends BaseActivity implements ImagePickerLis
                         OssUploadImageHelper.uploadImage(realFilePath, objectKey,
                                 new UploadImageListener() {
                                     @Override
+                                    public void uploadPrepare(String imageUrl) {
+                                    }
+
+                                    @Override
                                     public void uploadSuccess(String imageUrl) {
                                         Log.d("TAG", "imageUrl = " + imageUrl);
                                     }

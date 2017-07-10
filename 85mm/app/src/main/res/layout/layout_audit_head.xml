@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
         app:leftAndRightSpace="10dp"
         app:rowSpace="12dp" />

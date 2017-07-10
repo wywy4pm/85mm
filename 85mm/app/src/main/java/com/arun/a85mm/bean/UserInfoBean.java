@@ -9,4 +9,12 @@ public class UserInfoBean {
     public String headerUrl;
     public String description;
     public String coverUrl;
+
+    public UserInfoBean(String name, String headerUrl, String description, String coverUrl) {
+        this.name = name;
+        this.headerUrl = headerUrl;
+        this.description = description;
+        this.coverUrl = coverUrl;
+    }
+
 }

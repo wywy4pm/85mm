@@ -26,4 +26,6 @@ public class ArticleDetailBean {
     public int imageHeight;
     public int imageWidth;
 
+    public int backgroundColor;
+
 }

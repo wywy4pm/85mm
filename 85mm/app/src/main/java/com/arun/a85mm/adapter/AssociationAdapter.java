@@ -254,7 +254,13 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
                 layout_cover_Image.getLayoutParams().height = imageHeight;
                 cover_Image.getLayoutParams().height = imageHeight;
                 cover_count.setText(String.valueOf(bean.totalImageNum));
-                Glide.with(context).load(bean.coverUrl).override(screenWidth, imageHeight).centerCrop().into(cover_Image);
+                Glide.with(context)
+                        .load(bean.coverUrl)
+                        .placeholder(bean.backgroundColor)
+                        .error(bean.backgroundColor)
+                        .override(screenWidth, imageHeight)
+                        .centerCrop()
+                        .into(cover_Image);
             } else {
                 layout_cover_Image.setVisibility(View.GONE);
             }

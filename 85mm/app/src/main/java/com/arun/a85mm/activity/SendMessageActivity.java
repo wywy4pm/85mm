@@ -47,7 +47,7 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     public static final String KEY_SEND_UID = "send_uid";
     private List<UploadImageBean> images = new ArrayList<>();
     private UploadImageAdapter uploadImageAdapter;
-    private static final int REQUEST_CODE_CHOOSE = 1;
+    //private static final int REQUEST_CODE_CHOOSE = 1;
     private List<Uri> mSelected;
     //存放需要上传服务器的imageUrl
     //private List<MsgImgRequest> uploadImages = new ArrayList<>();
@@ -131,16 +131,16 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_CHOOSE && resultCode == Activity.RESULT_OK) {
-            /*mSelected = Matisse.obtainResult(data);
+        /*if (requestCode == REQUEST_CODE_CHOOSE && resultCode == Activity.RESULT_OK) {
+            mSelected = Matisse.obtainResult(data);
             Log.d("Matisse", "mSelected: " + mSelected);
             if (mSelected != null && mSelected.size() > 0) {
                 for (int i = 0; i < mSelected.size(); i++) {
                     UploadImageBean bean = new UploadImageBean(true, mSelected.get(i));
                     images.add(bean);
                 }
-            }*/
-        }
+            }
+        }*/
     }
 
     @Override
@@ -167,6 +167,10 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
 
                         OssUploadImageHelper.uploadImage(realFilePath, objectKey,
                                 new UploadImageListener() {
+                                    @Override
+                                    public void uploadPrepare(String imageUrl) {
+                                    }
+
                                     @Override
                                     public void uploadSuccess(String imageUrl) {
                                         Log.d("TAG", "imageUrl = " + imageUrl);

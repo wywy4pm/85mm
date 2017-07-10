@@ -15,6 +15,7 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.activity.SendMessageActivity;
 import com.arun.a85mm.bean.MessageItem;
 import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.utils.DensityUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -170,6 +171,8 @@ public class MessageAdapter extends BaseRecyclerAdapter<MessageItem> {
                             }
                         })
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .placeholder(bean.backgroundColor)
+                        .error(bean.backgroundColor)
                         .override(imageWidth, imageHeight)
                         .centerCrop()
                         .into(item_fullImage);

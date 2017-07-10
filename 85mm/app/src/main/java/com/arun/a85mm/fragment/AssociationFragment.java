@@ -19,6 +19,7 @@ import com.arun.a85mm.bean.CommunityTagBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.event.UpdateAssociateEvent;
 import com.arun.a85mm.helper.MatisseHelper;
+import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.presenter.AssociationPresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
@@ -169,6 +170,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
             AssociationBean bean = list.get(i);
             if (bean != null) {
                 bean.type = AssociationAdapter.DATA_TYPE_CONTENT;
+                bean.backgroundColor = RandomColorHelper.getRandomColor();
             }
         }
     }

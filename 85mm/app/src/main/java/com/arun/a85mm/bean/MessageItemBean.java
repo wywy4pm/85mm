@@ -23,4 +23,5 @@ public class MessageItemBean {
     public String sendTime;
     public List<MessageItem> imageList;
 
+    public int backgroundColor;
 }

@@ -1,5 +1,6 @@
 package com.arun.a85mm.model;
 
+import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.listener.CommonRequestListener;
 import com.arun.a85mm.retrofit.RetrofitInit;
 
@@ -24,5 +25,10 @@ public class UserModel extends BaseModel {
 
     public Subscriber postLoginInfo(String openId, String headUrl, String nickName, CommonRequestListener listener) {
         return request(RetrofitInit.getApi().postLoginInfo(openId, headUrl, nickName), listener);
+    }
+
+    public Subscriber updateUserInfo(String name, String headerUrl, String description, String coverUrl, CommonRequestListener listener) {
+        UserInfoBean userInfoBean = new UserInfoBean(name, headerUrl, description, coverUrl);
+        return request(RetrofitInit.getApi().updateUserInfo(userInfoBean), listener);
     }
 }

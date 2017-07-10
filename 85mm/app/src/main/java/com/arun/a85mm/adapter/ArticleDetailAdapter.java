@@ -127,6 +127,8 @@ public class ArticleDetailAdapter extends RecyclerView.Adapter {
                 Glide.with(context)
                         .load(bean.imageUrl)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .placeholder(bean.backgroundColor)
+                        .error(bean.backgroundColor)
                         .override(imageWidth, imageHeight)
                         .centerCrop()
                         .into(item_fullImage);

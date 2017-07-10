@@ -17,6 +17,7 @@ import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.dialog.UploadImageDialog;
 import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -93,12 +94,12 @@ public class DialogHelper {
         View layout_item = LayoutInflater.from(context).inflate(R.layout.layout_bottom_item, root, false);
         TextView text_big = (TextView) layout_item.findViewById(R.id.text_big);
         TextView text_small = (TextView) layout_item.findViewById(R.id.text_small);
-        setOneText(context, position, text_big, text_small, workId);
+        setOneText(context, position, layout_item, text_big, text_small, workId);
         setOneClick(context, position, layout_item, dialog, workId, linkUrl, helper);
         root.addView(layout_item);
     }
 
-    private static void setOneText(Context context, int position, TextView bigText, TextView smallText, String workId) {
+    private static void setOneText(Context context, int position, View layout_item, TextView bigText, TextView smallText, String workId) {
         String big = "";
         if (position == 10) {
             big = context.getString(R.string.recommend_new);
@@ -151,6 +152,7 @@ public class DialogHelper {
         } else if (position == 11) {
             big = context.getString(R.string.cancel);
             bigText.setPadding(DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12), DensityUtil.dp2px(context, 12));
+            layout_item.setBackgroundColor(context.getResources().getColor(R.color.area_divide));
         }
         bigText.setText(big);
     }
@@ -200,6 +202,24 @@ public class DialogHelper {
                 }
             }
         });
+    }
+
+    public static void showUploadImageBottom(Context context, int requestCode) {
+        UploadImageDialog dialog = new UploadImageDialog(context, R.style.ActionSheetDialogStyle, requestCode);
+
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+        Window dialogWindow = dialog.getWindow();
+        if (dialogWindow != null) {
+            dialogWindow.getDecorView().setPadding(0, 0, 0, 0);
+            dialogWindow.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+            lp.x = 0; // 新位置X坐标
+            lp.y = 0; // 新位置Y坐标
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            dialogWindow.setAttributes(lp);
+            dialog.show();
+        }
     }
 
 }

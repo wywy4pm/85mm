@@ -6,6 +6,7 @@ import com.arun.a85mm.bean.ArticleListBean;
 import com.arun.a85mm.bean.AssociationBean;
 import com.arun.a85mm.bean.GoodsListBean;
 import com.arun.a85mm.bean.GuidePageBean;
+import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.bean.WorkMixBean;
 import com.arun.a85mm.bean.request.ActionRequest;
 import com.arun.a85mm.bean.CommonApiResponse;
@@ -91,4 +92,8 @@ public interface RetrofitApi {
 
     @GET(RetrofitUrl.WORKS_MIX)
     Observable<CommonApiResponse<WorkMixBean>> getWorkMix();
+
+    @Headers({"Content-Type:application/json;charset=UTF-8"})
+    @POST(RetrofitUrl.USER_UPDATE_INFO)
+    Observable<CommonApiResponse> updateUserInfo(@Body UserInfoBean userInfoBean);
 }
