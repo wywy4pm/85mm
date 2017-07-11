@@ -18,6 +18,7 @@ public class UserPresenter extends BasePresenter<CommonView3> {
     public static final int TYPE_UPDATE_USER_HEAD = 2;
     public static final int TYPE_UPDATE_USER_DESCRIPTION = 3;
     public static final int TYPE_UPDATE_USER_COVER = 4;
+    public static final int TYPE_LOG_OUT = 5;
 
     public UserPresenter(Context context) {
         super(context);
@@ -43,5 +44,23 @@ public class UserPresenter extends BasePresenter<CommonView3> {
                         }
                     }
                 }));
+    }
+
+    public void userLogout() {
+        addSubscriber(UserModel.getInstance()
+                .userLogout(new RequestListenerImpl(getMvpView()) {
+                    @Override
+                    public void onSuccess(CommonApiResponse data) {
+                        if (getMvpView() != null) {
+                            if (data != null && data.code == ErrorCode.SUCCESS) {
+                                getMvpView().refresh(TYPE_LOG_OUT, data);
+                            }
+                        }
+                    }
+                }));
+    }
+
+    public void getUserMain(){
+
     }
 }

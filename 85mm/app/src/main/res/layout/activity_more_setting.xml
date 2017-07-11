@@ -26,11 +26,12 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="15dp">
 
-                <com.arun.a85mm.widget.CircleImageView
+                <ImageView
                     android:id="@+id/user_head"
                     android:layout_width="43dp"
                     android:layout_height="43dp"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/bg_user_head"/>
 
                 <TextView
                     android:id="@+id/user_name"

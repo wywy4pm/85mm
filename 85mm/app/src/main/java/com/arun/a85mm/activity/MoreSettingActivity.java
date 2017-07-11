@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
@@ -28,6 +28,7 @@ import com.arun.a85mm.presenter.MorePresenter;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.DensityUtil;
+import com.arun.a85mm.utils.DrawableUtils;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.arun.a85mm.utils.OtherAppStartUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -52,7 +53,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     private RelativeLayout layout_clear;
     private TextView cache_size;
     private RelativeLayout layout_user_info;
-    private CircleImageView user_head;
+    private ImageView user_head;
     private TextView user_name;
     //private ListView configListView;
     //private ConfigAdapter configAdapter;
@@ -86,7 +87,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         more_detail = (ImageView) findViewById(R.id.more_detail);
         switchView = (SwitchCompat) findViewById(R.id.switchView);
         layout_user_info = (RelativeLayout) findViewById(R.id.layout_user_info);
-        user_head = (CircleImageView) findViewById(R.id.user_head);
+        user_head = (ImageView) findViewById(R.id.user_head);
         user_name = (TextView) findViewById(R.id.user_name);
         /*switchView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,18 +221,12 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setNotLogin() {
-
         Glide.with(this)
                 .load(R.mipmap.default_avatar)
-                .placeholder(RandomColorHelper.getRandomColor())
-                .error(RandomColorHelper.getRandomColor())
+                .placeholder(R.mipmap.default_avatar)
                 .centerCrop()
-                .into(new SimpleTarget<GlideDrawable>() {
-                    @Override
-                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                        user_head.setImageDrawable(resource);
-                    }
-                });
+                .bitmapTransform(new GlideCircleTransform(this))
+                .into(user_head);
         user_name.setText("点击登录注册");
         user_name.setBackgroundResource(R.drawable.shape_btn_circle_stroke);
         user_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
@@ -240,17 +235,14 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
 
     private void setLogin(UserInfoBean bean) {
         if (bean != null) {
+            GradientDrawable drawable = DrawableUtils.getHeadBgDrawable(user_head);
             Glide.with(this)
                     .load(bean.headerUrl)
-                    .placeholder(RandomColorHelper.getRandomColor())
-                    .error(RandomColorHelper.getRandomColor())
+                    .placeholder(drawable)
+                    .error(drawable)
                     .centerCrop()
-                    .into(new SimpleTarget<GlideDrawable>() {
-                        @Override
-                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            user_head.setImageDrawable(resource);
-                        }
-                    });
+                    .bitmapTransform(new GlideCircleTransform(this))
+                    .into(user_head);
             user_name.setText(bean.name);
             user_name.setBackgroundColor(getResources().getColor(R.color.white));
             user_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);

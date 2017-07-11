@@ -26,13 +26,14 @@
             android:textColor="@color/charcoalgrey"
             android:textSize="15sp" />
 
-        <com.arun.a85mm.widget.CircleImageView
+        <ImageView
             android:id="@+id/user_image"
             android:layout_width="43dp"
             android:layout_height="43dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/right_icon" />
+            android:layout_toLeftOf="@+id/right_icon"
+            android:background="@drawable/bg_user_head" />
 
         <ImageView
             android:id="@+id/right_icon"

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.OneWorkActivity;
+import com.arun.a85mm.activity.UserMainActivity;
 import com.arun.a85mm.bean.AssociationBean;
 import com.arun.a85mm.bean.CommentsBean;
 import com.arun.a85mm.bean.CommunityTagBean;
@@ -239,6 +240,19 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
                     .bitmapTransform(new GlideCircleTransform(context)).into(author_image);
             author_name.setText(bean.authorName);
             author_create_time.setText(bean.createTime);
+
+            author_name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UserMainActivity.jumpToUserMain(context, bean.uid);
+                }
+            });
+            author_image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UserMainActivity.jumpToUserMain(context, bean.uid);
+                }
+            });
 
             int imageHeight = 0;
             if (bean.coverWidth > 0 && !TextUtils.isEmpty(bean.coverUrl)) {

@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
@@ -19,19 +18,18 @@ import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.presenter.UserPresenter;
 import com.arun.a85mm.view.CommonView3;
-import com.tencent.connect.UserInfo;
 
-public class UpdateUserNameActivity extends BaseActivity implements CommonView3 {
+public class UpdateUserBriefActivity extends BaseActivity implements CommonView3 {
+
     public TextView image_right;
-    public EditText edit_user_name;
-    public RelativeLayout layout_update_name;
-    public ImageView edit_clean;
+    public EditText edit_brief;
+    public TextView edit_num;
     private UserInfoBean user;
     private UserPresenter presenter;
-    private String userName;
+    private String brief;
 
-    public static void jumpToUpdateUserName(Context context) {
-        Intent intent = new Intent(context, UpdateUserNameActivity.class);
+    public static void jumpToUpdateUserBrief(Context context) {
+        Intent intent = new Intent(context, UpdateUserBriefActivity.class);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
@@ -39,22 +37,17 @@ public class UpdateUserNameActivity extends BaseActivity implements CommonView3 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_user_name);
+        setContentView(R.layout.activity_user_brief);
         initView();
         initData();
     }
 
     private void initView() {
         image_right = (TextView) findViewById(R.id.image_right);
-        edit_user_name = (EditText) findViewById(R.id.edit_user_name);
-        layout_update_name = (RelativeLayout) findViewById(R.id.layout_update_name);
-        edit_clean = (ImageView) findViewById(R.id.edit_clean);
+        edit_brief = (EditText) findViewById(R.id.edit_brief);
+        edit_num = (TextView) findViewById(R.id.edit_num);
 
-        setTitle("用户名");
-        setBack();
-        setRight();
-
-        edit_user_name.addTextChangedListener(new TextWatcher() {
+        edit_brief.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -65,21 +58,14 @@ public class UpdateUserNameActivity extends BaseActivity implements CommonView3 
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!TextUtils.isEmpty(s)) {
-                    edit_clean.setVisibility(View.VISIBLE);
-                } else {
-                    edit_clean.setVisibility(View.GONE);
-                }
+                int num = s.length();
+                edit_num.setText(String.valueOf(num));
             }
         });
-        edit_clean.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!TextUtils.isEmpty(edit_user_name.getText())) {
-                    edit_user_name.getText().clear();
-                }
-            }
-        });
+
+        setTitle("简介");
+        setBack();
+        setRight();
     }
 
     private void setRight() {
@@ -92,12 +78,12 @@ public class UpdateUserNameActivity extends BaseActivity implements CommonView3 
             right.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (TextUtils.isEmpty(edit_user_name.getText())) {
+                    if (TextUtils.isEmpty(edit_brief.getText())) {
                         showTop("不能为空");
                     } else {
                         if (presenter != null) {
-                            userName = edit_user_name.getText().toString();
-                            presenter.updateUserInfo(userName, "", "", "");
+                            brief = edit_brief.getText().toString();
+                            presenter.updateUserInfo("", "", brief, "");
                         }
                     }
                 }
@@ -110,14 +96,15 @@ public class UpdateUserNameActivity extends BaseActivity implements CommonView3 
         presenter.attachView(this);
         user = UserManager.getInstance().getUserInfoBean();
         if (user != null) {
-            edit_user_name.setText(user.name);
+            edit_brief.setText(user.description);
         }
     }
 
+
     @Override
     public void refresh(int type, Object data) {
-        if (type == UserPresenter.TYPE_UPDATE_USER_NAME) {
-            UserManager.getInstance().setUserName(userName);
+        if (type == UserPresenter.TYPE_UPDATE_USER_DESCRIPTION) {
+            UserManager.getInstance().setUserBrief(brief);
             onBackPressed();
         }
     }

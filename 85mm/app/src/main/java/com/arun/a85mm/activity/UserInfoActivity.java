@@ -3,6 +3,7 @@ package com.arun.a85mm.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,19 +23,16 @@ import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.listener.UploadImageListener;
 import com.arun.a85mm.presenter.UserPresenter;
+import com.arun.a85mm.utils.DrawableUtils;
+import com.arun.a85mm.utils.GlideCircleTransform;
 import com.arun.a85mm.view.CommonView3;
-import com.arun.a85mm.widget.CircleImageView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 
 public class UserInfoActivity extends BaseActivity implements View.OnClickListener, CommonView3 {
 
     public RelativeLayout layout_user_head;
     public TextView text_user_name;
-    public CircleImageView user_image;
+    public ImageView user_image;
     public RelativeLayout layout_user_name;
     public RelativeLayout layout_user_brief;
     public RelativeLayout layout_user_cover;
@@ -61,7 +59,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private void initView() {
         layout_user_head = (RelativeLayout) findViewById(R.id.layout_user_head);
         text_user_name = (TextView) findViewById(R.id.text_user_name);
-        user_image = (CircleImageView) findViewById(R.id.user_image);
+        user_image = (ImageView) findViewById(R.id.user_image);
         layout_user_name = (RelativeLayout) findViewById(R.id.layout_user_name);
         layout_user_brief = (RelativeLayout) findViewById(R.id.layout_user_brief);
         layout_user_cover = (RelativeLayout) findViewById(R.id.layout_user_cover);
@@ -70,6 +68,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         layout_user_name.setOnClickListener(this);
         layout_user_brief.setOnClickListener(this);
         layout_user_cover.setOnClickListener(this);
+        exit_login.setOnClickListener(this);
         setTitle("个人信息");
         setBack();
         setCommonShow();
@@ -86,18 +85,14 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void updateImage(String imageUrl) {
+        GradientDrawable drawable = DrawableUtils.getHeadBgDrawable(user_image);
         Glide.with(this)
                 .load(imageUrl)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .placeholder(RandomColorHelper.getRandomColor())
-                .error(RandomColorHelper.getRandomColor())
+                .placeholder(drawable)
+                .error(drawable)
                 .centerCrop()
-                .into(new SimpleTarget<GlideDrawable>() {
-                    @Override
-                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                        user_image.setImageDrawable(resource);
-                    }
-                });
+                .bitmapTransform(new GlideCircleTransform(this))
+                .into(user_image);
     }
 
     private void updateName(String userName) {
@@ -114,13 +109,15 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 UpdateUserNameActivity.jumpToUpdateUserName(this);
                 break;
             case R.id.layout_user_brief:
-
+                UpdateUserBriefActivity.jumpToUpdateUserBrief(this);
                 break;
             case R.id.layout_user_cover:
                 DialogHelper.showUploadImageBottom(this, Constant.REQUEST_CODE_ALBUM_COVER);
                 break;
             case R.id.exit_login:
-
+                if (userPresenter != null) {
+                    userPresenter.userLogout();
+                }
                 break;
         }
     }
@@ -165,9 +162,15 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void refresh(int type, Object data) {
         if (type == UserPresenter.TYPE_UPDATE_USER_HEAD) {
+            UserManager.getInstance().setUserHead(headerUrl);
             updateImage(headerUrl);
         } else if (type == UserPresenter.TYPE_UPDATE_USER_COVER) {
+            UserManager.getInstance().setUserCover(coverUrl);
             showTop("修改成功");
+        } else if (type == UserPresenter.TYPE_LOG_OUT) {
+            UserManager.getInstance().setUserInfoBean(null);
+            UserManager.getInstance().setLogin(false);
+            onBackPressed();
         }
     }
 

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent">
+
+        <RelativeLayout
+            android:id="@+id/activity_user_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/user_head_bg"
+                android:layout_width="match_parent"
+                android:layout_height="281dp"
+                android:background="@mipmap/user_main_bg"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/user_head_image"
+                    android:layout_width="76dp"
+                    android:layout_height="76dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="62dp"
+                    android:background="@drawable/bg_user_head" />
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_head_image"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="9dp"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/user_brief"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_name"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="14dp"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <com.flyco.tablayout.SlidingTabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:paddingBottom="4dp"
+                    app:tl_indicator_anim_duration="100"
+                    app:tl_indicator_anim_enable="true"
+                    app:tl_indicator_bounce_enable="true"
+                    app:tl_indicator_color="@color/more_yellow"
+                    app:tl_indicator_height="2dp"
+                    app:tl_indicator_width="12dp"
+                    app:tl_tab_padding="30dp"
+                    app:tl_textSelectColor="@color/white"
+                    app:tl_textUnselectColor="@color/white"
+                    app:tl_textsize="15sp" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/user_head_bg" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <include
+        android:id="@+id/layout_status_place"
+        layout="@layout/layout_status_place"
+        />
+
+    <include
+        android:id="@+id/layout_title_bar"
+        layout="@layout/layout_title_bar_dark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_status_place" />
+</RelativeLayout>

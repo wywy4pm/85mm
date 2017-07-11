@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.GuidePageBean;
 import com.arun.a85mm.bean.UserInfo;
+import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.helper.LoginHelper;
 import com.arun.a85mm.helper.UserManager;
@@ -35,6 +36,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public ImageView wechat_icon;*/
     private RelativeLayout layout_wechat;
     private LoginPresenter presenter;
+    private String userName;
+    private String headUrl;
 
     public static void jumpToLoginForResult(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
@@ -123,7 +126,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     private void postUserInfo(UserInfo userInfo) {
         if (presenter != null) {
-            presenter.postLoginInfo(userInfo.openId, userInfo.headUrl, userInfo.nickName);
+            userName = userInfo.nickName;
+            headUrl = userInfo.headUrl;
+            presenter.postLoginInfo(userInfo.openId, headUrl, userName);
         }
     }
 
@@ -136,6 +141,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void refresh(Object data) {
         if (UserManager.getInstance() != null) {
             UserManager.getInstance().setLogin(true);
+            UserInfoBean userInfoBean = new UserInfoBean(userName, headUrl, "", "");
+            UserManager.getInstance().setUserInfoBean(userInfoBean);
         }
         Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK);

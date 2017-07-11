@@ -31,4 +31,16 @@ public class UserModel extends BaseModel {
         UserInfoBean userInfoBean = new UserInfoBean(name, headerUrl, description, coverUrl);
         return request(RetrofitInit.getApi().updateUserInfo(userInfoBean), listener);
     }
+
+    public Subscriber userLogout(CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().userLogout(), listener);
+    }
+
+    public Subscriber getUserMainPage(String authorId, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getUserMainPage(authorId), listener);
+    }
+
+    public Subscriber getUserMainPageMore(String authorId, String lastWorkId, int type, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getUserMainPageMore(authorId, lastWorkId, type), listener);
+    }
 }

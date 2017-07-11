@@ -7,6 +7,7 @@ import com.arun.a85mm.bean.AssociationBean;
 import com.arun.a85mm.bean.GoodsListBean;
 import com.arun.a85mm.bean.GuidePageBean;
 import com.arun.a85mm.bean.UserInfoBean;
+import com.arun.a85mm.bean.UserMainPageBean;
 import com.arun.a85mm.bean.WorkMixBean;
 import com.arun.a85mm.bean.request.ActionRequest;
 import com.arun.a85mm.bean.CommonApiResponse;
@@ -96,4 +97,14 @@ public interface RetrofitApi {
     @Headers({"Content-Type:application/json;charset=UTF-8"})
     @POST(RetrofitUrl.USER_UPDATE_INFO)
     Observable<CommonApiResponse> updateUserInfo(@Body UserInfoBean userInfoBean);
+
+    @GET(RetrofitUrl.USER_LOG_OUT)
+    Observable<CommonApiResponse> userLogout();
+
+    @GET(RetrofitUrl.USER_MAIN_PAGE + "/{authorId}")
+    Observable<CommonApiResponse<UserMainPageBean>> getUserMainPage(@Path("authorId") String authorId);
+
+    @GET(RetrofitUrl.USER_MAIN_PAGE + "/{authorId}/more")
+    Observable<CommonApiResponse<UserMainPageBean>> getUserMainPageMore(@Path("authorId") String authorId, @Query("lastWorkId") String lastWorkId, @Query("type") int type);
+
 }

@@ -175,6 +175,8 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity android:name=".activity.UpdateUserBriefActivity" />
+        <activity android:name=".activity.UserMainActivity"></activity>
     </application>
 
 </manifest>

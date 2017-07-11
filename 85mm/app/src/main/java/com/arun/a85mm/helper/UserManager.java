@@ -31,6 +31,30 @@ public class UserManager {
         this.userInfoBean = userInfoBean;
     }
 
+    public void setUserName(String userName) {
+        if (userInfoBean != null) {
+            userInfoBean.name = userName;
+        }
+    }
+
+    public void setUserHead(String headUrl) {
+        if (userInfoBean != null) {
+            userInfoBean.headerUrl = headUrl;
+        }
+    }
+
+    public void setUserBrief(String brief) {
+        if (userInfoBean != null) {
+            userInfoBean.description = brief;
+        }
+    }
+
+    public void setUserCover(String coverUrl) {
+        if (userInfoBean != null) {
+            userInfoBean.coverUrl = coverUrl;
+        }
+    }
+
     public void setLogin(boolean login) {
         isLogin = login;
     }
