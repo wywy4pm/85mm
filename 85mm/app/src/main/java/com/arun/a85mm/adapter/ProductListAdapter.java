@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -27,6 +28,7 @@ import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.arun.a85mm.utils.GlideRoundTransform;
 import com.arun.a85mm.utils.NetUtils;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -290,8 +292,36 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 return false;
             }
         });
+        if (!TextUtils.isEmpty(SharedPreferencesUtils.getUid(contexts.get()))
+                && SharedPreferencesUtils.getUid(contexts.get()).equals("4")) {
+            convertView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            downX = event.getX();
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            upX = event.getX();
+                            if (upX - downX > 30) {
+
+                            } else if (upX - downX < -30) {
+
+                            }
+                            break;
+                    }
+                    return false;
+                }
+            });
+        }
+        
         return convertView;
     }
+
+    private float downX;
+    private float upX;
 
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {

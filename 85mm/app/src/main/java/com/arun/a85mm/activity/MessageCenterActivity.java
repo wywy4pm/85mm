@@ -42,7 +42,6 @@ public class MessageCenterActivity extends BaseActivity {
         initFragment();
         initView();
         setListener();
-        initData();
     }
 
     private void initFragment() {
@@ -110,14 +109,8 @@ public class MessageCenterActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 SendMessageActivity.jumpToSendMessage(MessageCenterActivity.this, "");
-                /*FragmentCommonActivity.jumpToFragmentCommonActivity(MessageCenterActivity.this,
-                        FragmentCommonActivity.FRAGMENT_SEND_MESSAGE, "发私信", null);*/
             }
         });
-    }
-
-    private void initData() {
-
     }
 
 }

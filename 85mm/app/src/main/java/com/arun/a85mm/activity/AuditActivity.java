@@ -33,8 +33,6 @@ import com.arun.a85mm.utils.FullyGridLayoutManager;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.CommonView4;
-import com.arun.a85mm.widget.AutoLineLinearLayout;
-import com.arun.a85mm.widget.NonScrollView;
 
 import java.util.ArrayList;
 import java.util.List;
