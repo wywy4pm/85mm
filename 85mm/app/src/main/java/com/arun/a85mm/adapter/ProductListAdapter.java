@@ -293,30 +293,34 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             }
         });
         if (!TextUtils.isEmpty(SharedPreferencesUtils.getUid(contexts.get()))
-                && SharedPreferencesUtils.getUid(contexts.get()).equals("4")) {
-            convertView.setOnTouchListener(new View.OnTouchListener() {
+                && SharedPreferencesUtils.getUid(contexts.get()).equals("3")) {
+            workListHeadHolder.rippleView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    //获取当前坐标
+                    float x = event.getX();
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            downX = event.getX();
+                            downX = x;
+                            Log.d("TAG", "downX = " + x);
                             break;
                         case MotionEvent.ACTION_MOVE:
                             break;
                         case MotionEvent.ACTION_UP:
-                            upX = event.getX();
-                            if (upX - downX > 30) {
-
-                            } else if (upX - downX < -30) {
-
+                            upX = x;
+                            Log.d("TAG", "upX = " + upX);
+                            if (downX - upX > 50) {//向左
+                                Log.d("TAG", "向左滑 = " + (downX - upX));
+                            } else if (upX - downX > 50) {//向右
+                                Log.d("TAG", "向右滑 = " + (upX - downX));
                             }
                             break;
                     }
-                    return false;
+                    return true;
                 }
             });
         }
-        
+
         return convertView;
     }
 

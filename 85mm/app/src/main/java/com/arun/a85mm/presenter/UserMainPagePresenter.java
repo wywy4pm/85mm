@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.common.ErrorCode;
+import com.arun.a85mm.fragment.MainPageFragment;
 import com.arun.a85mm.listener.RequestListenerImpl;
 import com.arun.a85mm.model.UserModel;
 import com.arun.a85mm.view.CommonView4;
@@ -46,6 +47,8 @@ public class UserMainPagePresenter extends BasePresenter<CommonView4> {
                             if (data != null) {
                                 if (data.code == ErrorCode.SUCCESS) {
                                     getMvpView().refresh(data.body);
+                                } else if (data.code == ErrorCode.NO_DATA) {
+                                    ((MainPageFragment) getMvpView()).setHaveMore(false);
                                 }
                             }
                         }

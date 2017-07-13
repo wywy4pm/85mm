@@ -17,6 +17,7 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.CommonFragmentPagerAdapter;
 import com.arun.a85mm.bean.AuthorInfo;
 import com.arun.a85mm.bean.UserMainPageBean;
+import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.fragment.MainPageFragment;
 import com.arun.a85mm.listener.AppBarStateChangeListener;
 import com.arun.a85mm.presenter.UserMainPagePresenter;
@@ -26,6 +27,9 @@ import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.utils.TextViewUtils;
 import com.arun.a85mm.view.CommonView4;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 
@@ -35,6 +39,7 @@ import java.util.List;
 public class UserMainActivity extends BaseActivity implements CommonView4<UserMainPageBean> {
     public ImageView image_back;
     public TextView title;
+    private View line;
     public ImageView image_right;
     public ImageView user_head_image;
     public TextView user_name;
@@ -83,6 +88,7 @@ public class UserMainActivity extends BaseActivity implements CommonView4<UserMa
         image_back = (ImageView) findViewById(R.id.image_back);
         title = (TextView) findViewById(R.id.title);
         title.setTextColor(getResources().getColor(R.color.charcoalgrey));
+        line = findViewById(R.id.line);
         image_right = (ImageView) findViewById(R.id.image_right);
         user_head_image = (ImageView) findViewById(R.id.user_head_image);
         user_name = (TextView) findViewById(R.id.user_name);
@@ -95,23 +101,19 @@ public class UserMainActivity extends BaseActivity implements CommonView4<UserMa
         appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
             @Override
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                //Log.d("STATE", state.name());
                 if (state == State.EXPANDED) {
                     //展开状态
-                    image_back.setImageResource(R.mipmap.img_back_white);
-                    setImageRight(image_right, R.mipmap.message_white);
                     title.setVisibility(View.GONE);
+                    line.setVisibility(View.GONE);
                 } else if (state == State.COLLAPSED) {
                     //折叠状态
-                    image_back.setImageResource(R.mipmap.title_back);
-                    setImageRight(image_right, R.mipmap.message_center);
                     title.setVisibility(View.VISIBLE);
                     title.setText(nickName);
+                    line.setVisibility(View.VISIBLE);
                 } else {
                     //中间状态
-                    image_back.setImageResource(R.mipmap.img_back_white);
-                    setImageRight(image_right, R.mipmap.message_white);
                     title.setVisibility(View.GONE);
+                    line.setVisibility(View.GONE);
                 }
             }
         });
@@ -120,11 +122,12 @@ public class UserMainActivity extends BaseActivity implements CommonView4<UserMa
         image_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MessageCenterActivity.jumpToMessageCenter(UserMainActivity.this);
+                SendMessageActivity.jumpToSendMessage(UserMainActivity.this, authorId);
             }
         });
-        setImageRight(image_right, R.mipmap.message_white);
+        setImageRight(image_right, R.mipmap.message_center);
         setBack();
+        setCommonShow();
 
         viewPager.setAdapter(new CommonFragmentPagerAdapter(getSupportFragmentManager(), list));
         tabLayout.setViewPager(viewPager, titles);
@@ -134,6 +137,7 @@ public class UserMainActivity extends BaseActivity implements CommonView4<UserMa
     }
 
     private void setListener() {
+
         tabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
@@ -193,7 +197,10 @@ public class UserMainActivity extends BaseActivity implements CommonView4<UserMa
                 user_brief.setText(authorInfo.description);
             }
             publishFragment.setData(data.publishWorkList);
+            publishFragment.setAuthorId(authorId);
+
             downloadFragment.setData(data.downloadWorkList);
+            downloadFragment.setAuthorId(authorId);
         }
     }
 
@@ -205,5 +212,13 @@ public class UserMainActivity extends BaseActivity implements CommonView4<UserMa
     @Override
     public void refresh(int type, Object data) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.detachView();
+        }
     }
 }

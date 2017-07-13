@@ -6,6 +6,7 @@ package com.arun.a85mm.bean;
 
 public class AuthorInfo {
     public String headerUrl;
+    public String coverUrl;
     public String nickName;
     public String description;
 }

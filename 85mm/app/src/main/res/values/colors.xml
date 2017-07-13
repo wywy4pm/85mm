@@ -213,4 +213,6 @@
     <color name="comment_author">#4363a5</color>
 
     <color name="login_text">#CCCCCC</color>
+
+    <color name="transparent">#00000000</color>
 </resources>

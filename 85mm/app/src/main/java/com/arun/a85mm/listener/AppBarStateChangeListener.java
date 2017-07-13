@@ -1,6 +1,7 @@
 package com.arun.a85mm.listener;
 
 import android.support.design.widget.AppBarLayout;
+import android.util.Log;
 
 /**
  * Created by wy on 2017/7/12.
@@ -18,6 +19,7 @@ public abstract class AppBarStateChangeListener implements AppBarLayout.OnOffset
 
     @Override
     public final void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+        Log.d("TAG", " i = " + i);
         if (i == 0) {
             if (mCurrentState != State.EXPANDED) {
                 onStateChanged(appBarLayout, State.EXPANDED);

@@ -2,18 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/work_list_item_author"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="62dp"
     android:background="@color/white"
-    android:paddingBottom="8dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="8dp"
+    android:paddingBottom="15dp"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="15dp"
     android:visibility="visible">
 
     <ImageView
         android:id="@+id/author_image"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_centerVertical="true" />
 
     <TextView
@@ -21,19 +21,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="9dp"
         android:layout_toLeftOf="@+id/author_create_time"
         android:layout_toRightOf="@+id/author_image"
         android:ellipsize="end"
         android:maxLines="1"
         android:text=""
         android:textColor="@color/charcoalgrey"
-        android:textSize="14sp" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/author_create_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:textSize="12sp" />
 </RelativeLayout>

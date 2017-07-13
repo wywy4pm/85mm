@@ -13,7 +13,8 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing_tool_bar"
@@ -26,16 +27,15 @@
                 <RelativeLayout
                     android:id="@+id/user_head_bg"
                     android:layout_width="match_parent"
-                    android:layout_height="281dp"
-                    android:background="@mipmap/user_main_bg"
-                    app:layout_collapseMode="parallax">
+                    android:layout_height="213dp"
+                    android:background="@mipmap/user_main_bg">
 
                     <ImageView
                         android:id="@+id/user_head_image"
                         android:layout_width="76dp"
                         android:layout_height="76dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="62dp"
+                        android:layout_marginTop="40dp"
                         android:background="@drawable/bg_user_head" />
 
                     <TextView
@@ -45,7 +45,7 @@
                         android:layout_below="@+id/user_head_image"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="9dp"
-                        android:textColor="@color/white"
+                        android:textColor="@color/charcoalgrey"
                         android:textSize="17sp" />
 
                     <TextView
@@ -55,7 +55,7 @@
                         android:layout_below="@+id/user_name"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="14dp"
-                        android:textColor="@color/white"
+                        android:textColor="@color/charcoalgrey"
                         android:textSize="14sp" />
 
                 </RelativeLayout>
@@ -63,15 +63,14 @@
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/mToolBar"
                     android:layout_width="match_parent"
-                    android:layout_height="46dp"
-                    android:minHeight="46dp"
+                    android:layout_height="wrap_content"
                     app:contentInsetLeft="0dp"
                     app:contentInsetStart="0dp"
                     app:layout_collapseMode="pin">
 
                     <include
                         android:id="@+id/layout_title_bar_dark"
-                        layout="@layout/layout_title_bar_dark" />
+                        layout="@layout/layout_title_bar_transparent" />
 
                 </android.support.v7.widget.Toolbar>
             </android.support.design.widget.CollapsingToolbarLayout>
@@ -80,21 +79,22 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <RelativeLayout
                 android:id="@+id/layout_tabLayout"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:background="@mipmap/user_main_bg">
+                android:layout_height="wrap_content">
 
                 <com.flyco.tablayout.SlidingTabLayout
                     android:id="@+id/tabLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="4dp"
-                    android:paddingBottom="6dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="16dp"
+                    android:paddingBottom="7dp"
                     app:tl_indicator_anim_duration="100"
                     app:tl_indicator_anim_enable="true"
                     app:tl_indicator_bounce_enable="true"
@@ -102,9 +102,15 @@
                     app:tl_indicator_height="2dp"
                     app:tl_indicator_width="12dp"
                     app:tl_tab_padding="45dp"
-                    app:tl_textSelectColor="@color/white"
-                    app:tl_textUnselectColor="@color/white"
+                    app:tl_textSelectColor="@color/charcoalgrey"
+                    app:tl_textUnselectColor="@color/charcoalgrey"
                     app:tl_textsize="15sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_below="@+id/tabLayout"
+                    android:background="@color/background_color" />
             </RelativeLayout>
 
             <android.support.v4.view.ViewPager
