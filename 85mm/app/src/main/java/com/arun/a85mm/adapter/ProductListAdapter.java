@@ -261,7 +261,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 public boolean onSingleTapConfirmed(MotionEvent e) {
                     Log.d("TAG", "IMAGE  onSingleTapConfirmed ");
                     if (eventListener != null) {
-                        eventListener.onEvent(EventConstant.WORK_BAD_COMMNET);
+                        eventListener.onEvent(EventConstant.WORK_BAD_COMMNET, bean.workId);
                     }
                     return super.onSingleTapConfirmed(e);
                 }
