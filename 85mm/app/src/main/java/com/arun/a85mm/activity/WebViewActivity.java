@@ -30,6 +30,7 @@ public class WebViewActivity extends BaseActivity {
     private ImageView image_back;
     private TextView titleText;
     private boolean isFromSplash;
+    private String title;
 
     public static void jumpToWebViewActivity(Context context, String webUrl) {
         Intent intent = new Intent(context, WebViewActivity.class);
@@ -93,9 +94,9 @@ public class WebViewActivity extends BaseActivity {
         image_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(titleText.getText())) {
-                    onActionEvent(EventConstant.BTN_SHARE);
-                    ShareWindow.show(WebViewActivity.this, getString(R.string.share_title), getString(R.string.share_description), getString(R.string.share_url), "", eventStatisticsHelper);
+                if (!TextUtils.isEmpty(title)) {
+                    onEvent(EventConstant.BTN_SHARE);
+                    ShareWindow.show(WebViewActivity.this, title, url, url, "", eventStatisticsHelper);
                 }
             }
         });
@@ -142,6 +143,7 @@ public class WebViewActivity extends BaseActivity {
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
                 Log.d("ANDROID_LAB", "TITLE=" + title);
+                WebViewActivity.this.title = title;
                 titleText.setText(title);
             }
         };

@@ -7,25 +7,19 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.AuditListAdapter;
-import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.AuditInfoBean;
 import com.arun.a85mm.bean.AuditItemBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.ConfigHelper;
-import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
-import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.presenter.AuditPresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.DensityUtil;
@@ -257,7 +251,7 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
         if (worksList.size() >= 6) {
             for (int i = worksList.size() - 1; i >= worksList.size() - 6; i--) {
                 if (worksList.get(i) != null) {
-                    onEvent(EventStatisticsHelper.createOneActionList(type, worksList.get(i).workId, ""));
+                    onEvent(type, worksList.get(i).workId);
                 }
             }
         }

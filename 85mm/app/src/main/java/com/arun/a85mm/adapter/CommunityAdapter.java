@@ -97,7 +97,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     } else {
                         type = EventConstant.WORK_BROWSE_ONEDAY;
                     }
-                    eventListener.onEvent(EventStatisticsHelper.createOneActionList(type, previousBean.workId, ""));
+                    eventListener.onEvent(type, previousBean.workId);
                 }
             }
         }
@@ -249,7 +249,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                         }
                         //作品点击展开
                         if (eventListener != null) {
-                            eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_CLICK_EXPAND, bean.workId, ""));
+                            eventListener.onEvent(EventConstant.WORK_CLICK_EXPAND, bean.workId);
                         }
                     } else {//加载异常时点击重新加载
                         if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemImageView.getLayoutParams() != null) {
@@ -391,7 +391,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     @Override
                     public void onClick(View v) {
                         if (eventListener != null) {
-                            eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_CLICK_AUTHOR));
+                            eventListener.onEvent(EventConstant.WORK_CLICK_AUTHOR);
                         }
                         WebViewActivity.jumpToWebViewActivity(contexts.get(), bean.authorPageUrl);
                     }
@@ -400,7 +400,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     @Override
                     public void onClick(View v) {
                         if (eventListener != null) {
-                            eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_CLICK_AUTHOR));
+                            eventListener.onEvent(EventConstant.WORK_CLICK_AUTHOR);
                         }
                         WebViewActivity.jumpToWebViewActivity(contexts.get(), bean.authorPageUrl);
                     }
@@ -497,7 +497,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
 
     private void jumpToLeftWorks(WorkListBean bean) {
         if (eventListener != null) {
-            eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_CLICK_ONEDAY));
+            eventListener.onEvent(EventConstant.WORK_CLICK_ONEDAY);
         }
 
         String title = resources.getString(R.string.one_day_left_works_title, bean.date, bean.leftWorkNum);

@@ -408,7 +408,7 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
             swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    onActionEvent(EventConstant.PULL_TO_REFRESH);
+                    onEvent(EventConstant.PULL_TO_REFRESH);
                     reloadData();
                 }
             });
@@ -421,22 +421,23 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
     }
 
     @Override
-    public void onEvent(List<ActionBean> actionList) {
-        onActionEvent(EventConstant.DEFAULT, actionList);
-        /*if (eventStatisticsHelper != null) {
-            eventStatisticsHelper.recordUserAction(getActivity(), EventConstant.DEFAULT, actionList);
-        }*/
+    public void onEvent(int actionType) {
+        onActionEvent(actionType, "", "");
     }
 
-    public void onActionEvent(int type, List<ActionBean> actionList) {
-        if (eventStatisticsHelper != null) {
-            eventStatisticsHelper.recordUserAction(getActivity(), type, actionList);
-        }
+    @Override
+    public void onEvent(int actionType, String resourceId) {
+        onActionEvent(actionType, resourceId, "");
     }
 
-    public void onActionEvent(int type) {
+    @Override
+    public void onEvent(int actionType, String resourceId, String remark) {
+        onActionEvent(actionType, resourceId, remark);
+    }
+
+    public void onActionEvent(int type, String resourceId, String remark) {
         if (eventStatisticsHelper != null) {
-            eventStatisticsHelper.recordUserAction(getActivity(), type);
+            eventStatisticsHelper.recordUserAction(getActivity(), type, resourceId, remark);
         }
     }
 
@@ -444,7 +445,7 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
         if (worksList.size() >= 2) {
             for (int i = worksList.size() - 1; i >= worksList.size() - 2; i--) {
                 if (worksList.get(i) != null) {
-                    onEvent(EventStatisticsHelper.createOneActionList(type, worksList.get(i).workId, ""));
+                    onEvent(type, worksList.get(i).workId);
                 }
             }
         }

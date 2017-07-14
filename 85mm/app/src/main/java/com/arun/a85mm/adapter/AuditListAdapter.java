@@ -74,7 +74,7 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
                     AuditItemBean previousBean = list.get(position - 6);
                     if (!TextUtils.isEmpty(previousBean.workId)) {
                         Log.d("TAG", "POSITION = " + position);
-                        eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.WORK_BROWSE_AUDIT, previousBean.workId, ""));
+                        eventListener.onEvent(EventConstant.WORK_BROWSE_AUDIT, previousBean.workId);
                     }
                 }
             }

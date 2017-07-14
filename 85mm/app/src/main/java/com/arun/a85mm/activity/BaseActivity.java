@@ -107,7 +107,7 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
     public void saveImageShowTop(String workId, String coverUrl, int width, int height) {
         if (saveImageHelper != null && showTopHandler != null) {
             if (!TextUtils.isEmpty(workId)) {
-                onActionEvent(EventConstant.WORK_IMAGE_DOWNLOAD, EventStatisticsHelper.createOneActionList(EventConstant.WORK_IMAGE_DOWNLOAD, workId, coverUrl));
+                onEvent(EventConstant.WORK_IMAGE_DOWNLOAD, workId, coverUrl);
             }
             saveImageHelper.saveImageShowTop(this, coverUrl, width, height, showTopHandler, isShowingTop);
         }
@@ -133,21 +133,31 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
         }
     }
 
-    public void onActionEvent(int type, List<ActionBean> actionList) {
+    /*public void onActionEvent(int type, List<ActionBean> actionList) {
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.recordUserAction(this, type, actionList);
         }
-    }
+    }*/
 
-    public void onActionEvent(int type) {
-        if (eventStatisticsHelper != null) {
-            eventStatisticsHelper.recordUserAction(this, type, EventStatisticsHelper.createOneActionList(type));
-        }
+    @Override
+    public void onEvent(int actionType) {
+        onActionEvent(actionType, "", "");
     }
 
     @Override
-    public void onEvent(List<ActionBean> actionList) {
-        onActionEvent(EventConstant.DEFAULT, actionList);
+    public void onEvent(int actionType, String resourceId) {
+        onActionEvent(actionType, resourceId, "");
+    }
+
+    @Override
+    public void onEvent(int actionType, String resourceId, String remark) {
+        onActionEvent(actionType, resourceId, remark);
+    }
+
+    public void onActionEvent(int type, String resourceId, String remark) {
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.recordUserAction(this, type, resourceId, remark);
+        }
     }
 
     public void setRecyclerViewScrollListener(RecyclerView recyclerView) {
@@ -207,7 +217,7 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
             swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    onActionEvent(EventConstant.PULL_TO_REFRESH);
+                    onEvent(EventConstant.PULL_TO_REFRESH);
                     reloadData();
                 }
             });

@@ -59,6 +59,10 @@ public class EventStatisticsHelper implements EventView {
         recordUserAction(context, type, createOneActionList(type, resourceId, remark));
     }
 
+    public void recordUserAction(Context context, int type, String resourceId) {
+        recordUserAction(context, type, createOneActionList(type, resourceId, ""));
+    }
+
     public void recordUserAction(Context context, int type) {
         recordUserAction(context, type, createOneActionList(type));
     }

@@ -54,7 +54,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
                 if (position >= 4) {
                     ArticleListBean bean = articles.get(position - 4);
                     if (bean != null && !TextUtils.isEmpty(bean.id)) {
-                        eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.ARTICLE_BROWSE, bean.id, ""));
+                        eventListener.onEvent(EventConstant.ARTICLE_BROWSE, bean.id);
                     }
                 }
                 articleHolder.setData(contexts.get(), articles.get(position), eventListener);
@@ -100,7 +100,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     //点击进入文章详情
                     if (eventListener != null) {
-                        eventListener.onEvent(EventStatisticsHelper.createOneActionList(EventConstant.CLICK_TO_ARTICLE_DETAIL, articleListBean.id, ""));
+                        eventListener.onEvent(EventConstant.CLICK_TO_ARTICLE_DETAIL, articleListBean.id);
                     }
                     int[] location = new int[2];
                     v.getLocationOnScreen(location);

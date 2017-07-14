@@ -151,7 +151,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
         if (articleList.size() >= 4) {
             for (int i = articleList.size() - 1; i >= articleList.size() - 4; i--) {
                 if (articleList.get(i) != null) {
-                    onEvent(EventStatisticsHelper.createOneActionList(type, articleList.get(i).id, ""));
+                    onEvent(type, articleList.get(i).id);
                 }
             }
         }

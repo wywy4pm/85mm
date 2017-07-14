@@ -3,6 +3,7 @@ package com.arun.a85mm.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 
@@ -67,12 +68,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         expandableListView.setAdapter(productListAdapter);
         productListAdapter.setOnImageClick(this);
         productListAdapter.setEventListener(this);
-        /*swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshData();
-            }
-        });*/
+
         setRefresh(swipeToLoadLayout);
         setExpandableListViewCommon(expandableListView, next_group_img, workLists);
         setHideReadTips();

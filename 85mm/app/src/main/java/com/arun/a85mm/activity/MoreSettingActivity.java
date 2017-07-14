@@ -161,19 +161,19 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void showShare() {
-        onActionEvent(EventConstant.BTN_SHARE);
+        onEvent(EventConstant.BTN_SHARE);
         ShareWindow.show(this, getString(R.string.share_title), getString(R.string.share_description), getString(R.string.share_url), "", eventStatisticsHelper);
     }
 
     private void clearCache() {
-        onActionEvent(EventConstant.BTN_CLEAR_CACHE);
+        onEvent(EventConstant.BTN_CLEAR_CACHE);
         DataCleanManager.clearImageAllCache(this);
         cache_size.setText(DataCleanManager.getImageCacheSize(this));
         showTop("清除缓存成功");
     }
 
     public void openWeChat(View view) {
-        onActionEvent(EventConstant.BTN_OPEN_WECHAT);
+        onEvent(EventConstant.BTN_OPEN_WECHAT);
         OtherAppStartUtils.jumpToWeChat(this);
     }
 
