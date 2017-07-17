@@ -3,6 +3,7 @@ package com.arun.a85mm.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -116,6 +117,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
     }
 
     public void refreshData() {
+        recyclerView.scrollToPosition(0);
         start = 0;
         isHaveMore = true;
         presenter.getCommunityList(start, dataType);
@@ -210,7 +212,6 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateList(UpdateAssociateEvent event) {
-        recyclerView.scrollToPosition(0);
         refreshData();
     }
 

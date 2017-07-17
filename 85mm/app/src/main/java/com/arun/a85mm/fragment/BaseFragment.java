@@ -190,8 +190,8 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
                         int visibleCount = linearLayoutManager.getChildCount();
                         int totalCount = linearLayoutManager.getItemCount();
                         int limitLoadMore = 0;
-                        if (totalCount > 10) {
-                            limitLoadMore = totalCount - 10;
+                        if (totalCount > 8) {
+                            limitLoadMore = totalCount - 8;
                         } else {
                             limitLoadMore = totalCount;
                         }
