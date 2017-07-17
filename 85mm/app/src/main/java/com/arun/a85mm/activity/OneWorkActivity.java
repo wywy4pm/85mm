@@ -4,17 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,11 +20,10 @@ import com.arun.a85mm.adapter.OneWorkAdapter;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
-import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.DialogHelper;
-import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
 import com.arun.a85mm.helper.RandomColorHelper;
+import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.listener.OnImageClick;
@@ -35,9 +31,9 @@ import com.arun.a85mm.presenter.OneWorkPresenter;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.FullyLinearLayoutManager;
 import com.arun.a85mm.utils.KeyBoardUtils;
+import com.arun.a85mm.utils.ShareParaUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.CommonView3;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -56,6 +52,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     public static final int BACK_MODE_COM = 0;
     private RelativeLayout layout_top;
     private ImageView image_back;
+    private ImageView image_share;
     private ImageView image_more;
     private String title;
     //private String type = "";
@@ -139,6 +136,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
 
         layout_top = (RelativeLayout) findViewById(R.id.layout_top);
         image_back = (ImageView) findViewById(R.id.image_back);
+        image_share = (ImageView) findViewById(R.id.image_share);
         image_more = (ImageView) findViewById(R.id.image_more);
         author_image = (ImageView) findViewById(R.id.author_image);
         author_name = (TextView) findViewById(R.id.author_name);
@@ -244,11 +242,14 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
 
     @Override
     public void refresh(int dataType, Object data) {
-        if (dataType == OneWorkPresenter.TYPE_DETAIL && data instanceof WorkListBean) {
+        if (dataType == OneWorkPresenter.TYPE_DETAIL
+                && data instanceof WorkListBean) {
             WorkListBean bean = (WorkListBean) data;
             sourceUrl = bean.sourceUrl;
             authorUid = bean.uid;
 
+            setShare(bean.workTitle, ShareParaUtils.getWorkDetailShareDescription(bean.authorName),
+                    ShareParaUtils.getWorkDetailShareUrl(workId), bean.coverUrl);
             setShowBottomRight(sourceUrl, workId, showBottomType, authorUid);
 
             workListItems.clear();
@@ -271,7 +272,17 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
 
     }
 
-    public void setShowBottomRight(final String linkUrl, final String workId, final String type, final String authorUid) {
+    private void setShare(final String shareTitle, final String shareDescription, final String shareUrl, final String shareImageUrl) {
+        image_share.setVisibility(View.VISIBLE);
+        image_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareWindow.show(OneWorkActivity.this, shareTitle, shareDescription, shareUrl, shareImageUrl, eventStatisticsHelper);
+            }
+        });
+    }
+
+    private void setShowBottomRight(final String linkUrl, final String workId, final String type, final String authorUid) {
         image_more.setVisibility(View.VISIBLE);
         image_more.setOnClickListener(new View.OnClickListener() {
             @Override

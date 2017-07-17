@@ -2,6 +2,7 @@ package com.arun.a85mm.helper;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.arun.a85mm.R;
@@ -45,7 +46,13 @@ public class ShareHelper {
         } else {
             web.setTitle(title);
         }
-        web.setThumb(new UMImage(activity, R.mipmap.ic_launcher));
+        UMImage umImage = null;
+        if (TextUtils.isEmpty(shareImage)) {
+            umImage = new UMImage(activity, R.mipmap.ic_launcher);
+        } else {
+            umImage = new UMImage(activity, shareImage);
+        }
+        web.setThumb(umImage);
         web.setDescription(description);
         new ShareAction(activity)
                 .withMedia(web)

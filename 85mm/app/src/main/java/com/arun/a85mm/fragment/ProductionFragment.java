@@ -17,10 +17,12 @@ import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.event.UpdateProductEvent;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
+import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.presenter.ProductFragmentPresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
+import com.arun.a85mm.utils.ShareParaUtils;
 import com.arun.a85mm.view.CommonView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -260,4 +262,5 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
             productFragmentPresenter.detachView();
         }
     }
+
 }

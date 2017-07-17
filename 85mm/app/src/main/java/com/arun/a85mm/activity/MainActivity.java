@@ -21,6 +21,7 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.CommonFragmentPagerAdapter;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ShowTopBean;
+import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.event.UpdateMesDotEvent;
@@ -32,9 +33,11 @@ import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
+import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.DensityUtil;
+import com.arun.a85mm.utils.ShareParaUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.utils.TextViewUtils;
@@ -355,6 +358,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void shareWorkDetail(WorkListBean workListBean) {
+        ShareWindow.show(this, workListBean.workTitle, ShareParaUtils.getWorkDetailShareDescription(workListBean.authorName),
+                ShareParaUtils.getWorkDetailShareUrl(workListBean.workId), workListBean.coverUrl, eventStatisticsHelper);
     }
 
 }

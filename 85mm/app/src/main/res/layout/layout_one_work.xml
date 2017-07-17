@@ -27,7 +27,17 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="12dp"
             android:layout_marginTop="5dp"
-            android:src="@mipmap/ic_back_white" />
+            android:src="@mipmap/ic_back_one_work" />
+
+        <ImageView
+            android:id="@+id/image_share"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@+id/image_more"
+            android:src="@mipmap/ic_share_one_work"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/image_more"
@@ -36,7 +46,8 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="12dp"
             android:layout_marginTop="5dp"
-            android:src="@mipmap/ic_more_white" />
+            android:src="@mipmap/ic_more_one_work"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <!--<LinearLayout
@@ -101,8 +112,8 @@
             android:background="@drawable/shape_btn_circle_stroke"
             android:gravity="center_vertical"
             android:hint="发表评论..."
-            android:paddingLeft="15dp"
             android:lineSpacingExtra="0dp"
+            android:paddingLeft="15dp"
             android:textColor="@color/charcoalgrey"
             android:textColorHint="@color/login_text"
             android:textSize="12sp" />

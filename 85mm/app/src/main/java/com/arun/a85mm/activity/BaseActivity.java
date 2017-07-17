@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.ShowTopBean;
+import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.fragment.BaseFragment;
@@ -24,12 +25,14 @@ import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
+import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.helper.ShowTopToastHelper;
 import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.DeviceUtils;
+import com.arun.a85mm.utils.ShareParaUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.MvpView;
@@ -327,6 +330,11 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
     @Override
     public void onRefreshComplete() {
 
+    }
+
+    public void shareWorkDetail(WorkListBean workListBean) {
+        ShareWindow.show(this, workListBean.workTitle, ShareParaUtils.getWorkDetailShareDescription(workListBean.authorName),
+                ShareParaUtils.getWorkDetailShareUrl(workListBean.workId), workListBean.coverUrl, eventStatisticsHelper);
     }
 
 }

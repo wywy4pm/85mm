@@ -45,4 +45,5 @@
     <string name="bad_comment_detail">作品质量低下</string>
     <string name="repeat_detail">作品此前已经出现过</string>
     <string name="show_seq_detail">加载不出来等</string>
+
 </resources>

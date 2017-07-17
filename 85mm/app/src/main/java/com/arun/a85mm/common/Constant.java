@@ -6,6 +6,12 @@ package com.arun.a85mm.common;
 public class Constant {
 
     public static final String API_BASE_URL = "http://api.link365.cn:38888";
+    public static final String WEB_BASE_URL = "http://api.link365.cn:38888";
+
+
+    public static final String PATH_WORK_DETAIL = "/works/detail";
+    public static final String PATH_AUDIT_LIST = "/audit/list";
+    public static final String PATH_WORK_LATEST = "/works/latest";
 
     /**
      * intent key

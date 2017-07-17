@@ -15,7 +15,9 @@ import android.widget.TextView;
 
 import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
+import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
@@ -415,6 +417,16 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     }
                 }
             });
+            workListItemHolder.work_share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (contexts.get() instanceof MainActivity) {
+                        ((MainActivity) contexts.get()).shareWorkDetail(workGroup);
+                    } else if (contexts.get() instanceof BaseActivity) {
+                        ((BaseActivity) contexts.get()).shareWorkDetail(workGroup);
+                    }
+                }
+            });
             workListItemHolder.work_list_item_title.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -564,7 +576,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         private RippleView rippleView;
         private ImageView author_image;
         private TextView author_name;
-        private ImageView author_more;
+        private ImageView work_share, author_more;
         private RelativeLayout layout_works_more;
         private TextView query_more_works;
         private View bg_line;
@@ -576,6 +588,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             work_list_item_author = (RelativeLayout) rootView.findViewById(R.id.work_list_item_author);
             author_image = (ImageView) rootView.findViewById(R.id.author_image);
             author_name = (TextView) rootView.findViewById(R.id.author_name);
+            work_share = (ImageView) rootView.findViewById(R.id.work_share);
             author_more = (ImageView) rootView.findViewById(R.id.author_more);
             layout_works_more = (RelativeLayout) rootView.findViewById(R.id.layout_works_more);
             query_more_works = (TextView) rootView.findViewById(R.id.query_more_works);
