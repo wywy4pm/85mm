@@ -215,4 +215,5 @@
     <color name="login_text">#CCCCCC</color>
 
     <color name="transparent">#00000000</color>
+    <color name="my_tag_delete">#cc3030</color>
 </resources>

@@ -49,10 +49,8 @@ import java.util.List;
 
 public class MoreSettingActivity extends BaseActivity implements View.OnClickListener, CommonView3 {
 
-    private RelativeLayout layout_share;
-    private RelativeLayout layout_clear;
     private TextView cache_size;
-    private RelativeLayout layout_user_info;
+    private RelativeLayout layout_share, layout_clear, layout_user_info, layout_my_tags;
     private ImageView user_head;
     private TextView user_name;
     //private ListView configListView;
@@ -87,6 +85,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         more_detail = (ImageView) findViewById(R.id.more_detail);
         switchView = (SwitchCompat) findViewById(R.id.switchView);
         layout_user_info = (RelativeLayout) findViewById(R.id.layout_user_info);
+        layout_my_tags = (RelativeLayout) findViewById(R.id.layout_my_tags);
         user_head = (ImageView) findViewById(R.id.user_head);
         user_name = (TextView) findViewById(R.id.user_name);
         /*switchView.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +124,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         layout_share.setOnClickListener(this);
         layout_clear.setOnClickListener(this);
         layout_user_info.setOnClickListener(this);
+        layout_my_tags.setOnClickListener(this);
         setTitle("欢迎你，我们的第" + SharedPreferencesUtils.getUid(this) + "号用户");
         setBack();
         setCommonShow();
@@ -216,6 +216,9 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                         UserInfoActivity.jumpToUserInfo(this);
                     }
                 }
+                break;
+            case R.id.layout_my_tags:
+                TagsActivity.jumpToMyTags(this);
                 break;
         }
     }

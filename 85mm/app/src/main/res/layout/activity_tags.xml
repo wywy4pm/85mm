@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="com.arun.a85mm.activity.TagsActivity">
+
+    <include
+        android:id="@+id/layout_status_place"
+        layout="@layout/layout_status_place" />
+
+    <include
+        android:id="@+id/layout_title_bar"
+        layout="@layout/layout_title_right_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_status_place" />
+
+    <RelativeLayout
+        android:id="@+id/layout_edit_top"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_below="@+id/layout_status_place"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/title_back"
+            android:text="取消"
+            android:textColor="@color/charcoalgrey"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/btn_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/title_back"
+            android:text="确认"
+            android:textColor="@color/more_yellow"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layout_title_bar" />
+
+</RelativeLayout>

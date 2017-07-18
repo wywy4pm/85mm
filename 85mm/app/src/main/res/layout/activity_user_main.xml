@@ -103,8 +103,8 @@
                     app:tl_indicator_height="2dp"
                     app:tl_indicator_width="12dp"
                     app:tl_tab_padding="45dp"
-                    app:tl_textSelectColor="@color/charcoalgrey"
-                    app:tl_textUnselectColor="@color/charcoalgrey"
+                    app:tl_textSelectColor="@color/tab_select"
+                    app:tl_textUnselectColor="@color/tab_un_select"
                     app:tl_textsize="15sp" />
 
                 <View

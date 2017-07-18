@@ -197,6 +197,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                     ConfigHelper.tipsPosition = config.auditInfo.tipsPosition;
                     ConfigHelper.tags = config.auditInfo.tags;
                 }
+                ConfigHelper.userTags = config.userTagList;
                 SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE, config.hasNewMsg);
                 UserManager.getInstance().setLogin(config.wechatLogin == 1);
                 UserManager.getInstance().setUserInfoBean(config.userInfo);

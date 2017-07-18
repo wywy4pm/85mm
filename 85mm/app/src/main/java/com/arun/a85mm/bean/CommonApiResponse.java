@@ -1,5 +1,7 @@
 package com.arun.a85mm.bean;
 
+import java.util.List;
+
 /**
  * Created by wy on 2017/5/22.
  */
@@ -44,5 +46,10 @@ public class CommonApiResponse<T> {
      * 用户信息
      */
     public UserInfoBean userInfo;
+
+    /**
+     * 用户标签列表
+     */
+    public List<UserTagBean> userTagList;
 
 }
