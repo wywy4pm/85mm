@@ -1,21 +1,10 @@
 package com.arun.a85mm.model;
 
-import android.util.Log;
-
-import com.arun.a85mm.R;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.exception.ApiException;
 import com.arun.a85mm.helper.ExceptionHelper;
 import com.arun.a85mm.listener.CommonRequestListener;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
-
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-import java.net.UnknownServiceException;
-import java.util.concurrent.TimeoutException;
 
 import rx.Observable;
 import rx.Subscriber;

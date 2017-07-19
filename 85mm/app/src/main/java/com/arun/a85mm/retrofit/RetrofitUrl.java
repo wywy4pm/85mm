@@ -7,6 +7,7 @@ public class RetrofitUrl {
     public static final String WORKS = "/works";
     public static final String CONFIG = "/config";
     public static final String USER = "/user";
+    public static final String TAG = "/tag";
 
     public static final String ARTICLE_LIST = ARTICLE + V1 + "/list";
     public static final String ARTICLE_DETAIL = ARTICLE + V1 + "/detail";
@@ -33,5 +34,6 @@ public class RetrofitUrl {
 
     public static final String CONFIG_QUERY = CONFIG + V1 + "/query";
 
-
+    public static final String TAG_UPDATE_LIST = TAG + "/update/mylist";
+    public static final String TAG_WORK_LIST = TAG + "/worklist";
 }

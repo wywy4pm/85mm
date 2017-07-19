@@ -53,6 +53,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/layout_title_bar" />
+        android:layout_below="@+id/layout_title_bar"
+        android:background="@color/white" />
 
 </RelativeLayout>

@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+import com.arun.a85mm.adapter.MyTagsAdapter;
 import com.arun.a85mm.listener.OnItemTouchCallbackListener;
 
 /**
@@ -16,9 +17,11 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private boolean canDrag = true;
     private boolean canSwipe = false;
+    private RecyclerView.Adapter adapter;
 
-    public ItemTouchHelperCallback(OnItemTouchCallbackListener onItemTouchCallbackListener) {
+    public ItemTouchHelperCallback(RecyclerView.Adapter adapter, OnItemTouchCallbackListener onItemTouchCallbackListener) {
         this.onItemTouchCallbackListener = onItemTouchCallbackListener;
+        this.adapter = adapter;
     }
 
     @Override
@@ -34,8 +37,17 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         } else if (layoutManager instanceof LinearLayoutManager) {
             // 如果是纵向Linear布局，则能上下拖动，左右滑动
             if (((LinearLayoutManager) layoutManager).getOrientation() == LinearLayoutManager.VERTICAL) {
-                dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-                swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                if (adapter instanceof MyTagsAdapter) {
+                    MyTagsAdapter myTagsAdapter = (MyTagsAdapter) adapter;
+                    if (viewHolder instanceof MyTagsAdapter.TagItemHolder
+                            && myTagsAdapter.isEdit()) {
+                        dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                        swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                    }
+                } else {
+                    dragFlags = 0;
+                    swipeFlags = 0;
+                }
             } else {
                 // 如果是横向Linear布局，则能左右拖动，上下滑动
                 swipeFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;

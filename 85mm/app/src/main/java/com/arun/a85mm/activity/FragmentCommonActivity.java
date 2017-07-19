@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.fragment.LeftWorksFragment;
 import com.arun.a85mm.fragment.ProductionFragment;
+import com.arun.a85mm.fragment.TagWorkFragment;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -30,6 +31,7 @@ public class FragmentCommonActivity extends BaseActivity {
     public static final String EXTRAS = "extras";
     public static final String FRAGMENT_LATEST_WORKS = "fragment_latest_works";
     public static final String FRAGMENT_LEFT_WORKS = "fragment_left_works";
+    public static final String FRAGMENT_TAG_WORKS = "fragment_tag_works";
     public String title;
     private String type = "";
     private Fragment fragment;
@@ -126,6 +128,8 @@ public class FragmentCommonActivity extends BaseActivity {
             fragment = new LeftWorksFragment();
         } else if (FRAGMENT_LATEST_WORKS.equals(type)) {
             fragment = ProductionFragment.newInstance();
+        } else if (FRAGMENT_TAG_WORKS.equals(type)) {
+            fragment = TagWorkFragment.newInstance();
         }
         return fragment;
     }

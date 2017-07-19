@@ -56,10 +56,10 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
     private ShowTopHandler showTopHandler;
     private ObjectAnimatorHelper objectAnimatorHelper;
     public EventStatisticsHelper eventStatisticsHelper;
-    private TextView topCommonView;
-    private TextView toastView;
-    private ImageView image_back;
-    private TextView titleView;
+    public TextView topCommonView;
+    public TextView toastView;
+    public ImageView image_back;
+    public TextView titleView;
     public String userId;
     public String deviceId;
     public boolean isLoading;

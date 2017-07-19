@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="55dp"
-    android:orientation="vertical">
+    android:layout_height="55dp">
 
     <TextView
         android:id="@+id/tag_name"
@@ -10,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="12dp"
         android:layout_marginRight="20dp"
         android:layout_toLeftOf="@+id/btn_tag_delete"
         android:ellipsize="end"

@@ -4,10 +4,14 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.arun.a85mm.bean.CommonApiResponse;
+import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.listener.RequestListenerImpl;
+import com.arun.a85mm.model.TagModel;
 import com.arun.a85mm.model.UserModel;
 import com.arun.a85mm.view.CommonView3;
+
+import java.util.List;
 
 /**
  * Created by wy on 2017/7/8.
@@ -60,7 +64,4 @@ public class UserPresenter extends BasePresenter<CommonView3> {
                 }));
     }
 
-    public void getUserMain(){
-
-    }
 }
