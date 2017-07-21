@@ -6,10 +6,12 @@ package com.arun.a85mm.event;
 
 public class UpdateTagEvent {
     public String tagName;
+    public int position;
     public boolean isAdd;
 
-    public UpdateTagEvent(String tagName, boolean isAdd) {
+    public UpdateTagEvent(String tagName, int position, boolean isAdd) {
         this.tagName = tagName;
+        this.position = position;
         this.isAdd = isAdd;
     }
 

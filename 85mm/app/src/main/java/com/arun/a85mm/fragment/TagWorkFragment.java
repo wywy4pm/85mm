@@ -42,7 +42,7 @@ public class TagWorkFragment extends BaseFragment implements OnImageClick, Commo
     private List<WorkListBean> workLists = new ArrayList<>();
     private TagWorkPresenter tagWorkPresenter;
     private boolean isHaveMore = true;
-    private int start;
+    private String lastWorkId;
     private static final String TAG = "TagWorkFragment";
     public static final String KEY_TAG_NAME = "tag_name";
     private ImageView next_group_img;
@@ -110,8 +110,8 @@ public class TagWorkFragment extends BaseFragment implements OnImageClick, Commo
             hideNetWorkErrorView(expandableListView);
             if (tagWorkPresenter != null) {
                 setLoading(true);
-                start = 0;
-                tagWorkPresenter.getTagWorkList(tagName, start);
+                lastWorkId = "";
+                tagWorkPresenter.getTagWorkList(lastWorkId, tagName);
             }
         } else {
             if (swipeToLoadLayout.isRefreshing()) {
@@ -131,7 +131,7 @@ public class TagWorkFragment extends BaseFragment implements OnImageClick, Commo
     private void loadMore() {
         setLoading(true);
         if (tagWorkPresenter != null) {
-            tagWorkPresenter.getTagWorkList(tagName, start);
+            tagWorkPresenter.getTagWorkList(lastWorkId, tagName);
         }
     }
 
@@ -181,6 +181,9 @@ public class TagWorkFragment extends BaseFragment implements OnImageClick, Commo
                 items.add(itemBean);
                 workList.get(i).workDetail = items;
             }
+            if (i == workList.size() - 1) {
+                lastWorkId = workList.get(i).id;
+            }
         }
         if (NetUtils.isWifi(getActivity())) {
             preLoadChildFirstImage(workList);
@@ -189,10 +192,6 @@ public class TagWorkFragment extends BaseFragment implements OnImageClick, Commo
         workLists.addAll(workList);
         productListAdapter.notifyDataSetChanged();
 
-    }
-
-    public void setStart(int start) {
-        this.start = start;
     }
 
     @Override

@@ -77,6 +77,7 @@ public class RetrofitInit {
                     String osType = "android";
                     String deviceId = "";
                     String uid = "";
+                    String apiVersion = "";
                     if (getAppBean() != null) {
                         appVersion = getAppBean().appVersion;
                         deviceModel = getAppBean().deviceModel;
@@ -85,6 +86,7 @@ public class RetrofitInit {
                         osType = getAppBean().osType;
                         deviceId = getAppBean().deviceId;
                         uid = getAppBean().uid;
+                        apiVersion = getAppBean().apiVersion;
                     }
                     Request originalRequest = chain.request();
                     Request authorised = originalRequest.newBuilder()
@@ -95,6 +97,7 @@ public class RetrofitInit {
                             .addHeader("osType", osType)
                             .addHeader("deviceId", deviceId)
                             .addHeader("uid", uid)
+                            .addHeader("apiVersion", apiVersion)
                             .build();
                     return chain.proceed(authorised);
                 }

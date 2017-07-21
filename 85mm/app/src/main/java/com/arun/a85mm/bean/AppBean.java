@@ -3,7 +3,9 @@ package com.arun.a85mm.bean;
 import android.content.Context;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.model.ArticleModel;
+import com.arun.a85mm.retrofit.RetrofitUrl;
 import com.arun.a85mm.utils.AppUtils;
 import com.arun.a85mm.utils.DeviceUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
@@ -21,6 +23,7 @@ public class AppBean {
     public String deviceModel;
     public String osType;
     public int isRelease;
+    public String apiVersion;
 
     public AppBean(Context context) {
         uid = SharedPreferencesUtils.getUid(context);
@@ -30,6 +33,7 @@ public class AppBean {
         deviceModel = DeviceUtils.getMobileModel();
         osType = context.getString(R.string.android);
         isRelease = AppUtils.isApkDebug(context) ? 0 : 1;
+        apiVersion = "v2";
     }
 
     public void setUid(String uid) {

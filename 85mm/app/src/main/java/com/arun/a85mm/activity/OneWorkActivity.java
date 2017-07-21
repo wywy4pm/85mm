@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -116,7 +118,6 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_one_work);
-        StatusBarUtils.setStatusBarColor(this, R.color.white);
         initView();
         initData();
     }
@@ -152,18 +153,6 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
         //over_size.setOnClickListener(this);
         //recommend_new.setOnClickListener(this);
         btn_add_comment.setOnClickListener(this);
-        edit_add_comment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    if (UserManager.getInstance() != null) {
-                        if (!UserManager.getInstance().isLogin()) {
-                            LoginActivity.jumpToLoginForResult(OneWorkActivity.this);
-                        }
-                    }
-                }
-            }
-        });
 
         if (layout_top.getLayoutParams() != null && layout_top.getLayoutParams() instanceof RelativeLayout.LayoutParams) {
             ((RelativeLayout.LayoutParams) layout_top.getLayoutParams()).setMargins(0, DensityUtil.getStatusHeight(this), 0, 0);
@@ -371,6 +360,12 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
                 }
                 break;*/
             case R.id.btn_add_comment:
+                if (UserManager.getInstance() != null) {
+                    if (!UserManager.getInstance().isLogin()) {
+                        LoginActivity.jumpToLoginForResult(OneWorkActivity.this);
+                        return;
+                    }
+                }
                 if (TextUtils.isEmpty(edit_add_comment.getText())) {
                     showTop("请输入评论内容");
                     return;

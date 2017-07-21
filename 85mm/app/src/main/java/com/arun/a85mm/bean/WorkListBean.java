@@ -1,5 +1,7 @@
 package com.arun.a85mm.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -39,4 +41,24 @@ public class WorkListBean implements Serializable{
     public int workNum;
     public boolean isTitle;
     public boolean isBottom;
+
+
+    /**
+     * clickNum : 0
+     * copy : 04-24 14:56
+     * createDate : 1493017012000
+     * id : 1111
+     * imageList : []
+     * module : 0
+     * title : 侧面
+     * uid : 0
+     */
+
+    public int clickNum;
+    public String copy;
+    public long createDate;
+    public String id;
+    public int module;
+    public String title;
+    public List<WorkListItemBean> imageList;
 }

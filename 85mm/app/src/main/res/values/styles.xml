@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppCompatLight" parent="Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
@@ -18,7 +18,7 @@
     </style>
 
     <style name="AppTheme" parent="@style/BaseTheme">
-        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowIsTranslucent">false</item>
     </style>
 
     <!-- 自定义仿IOS的ActionSheet底部Dialog的样式 ，有模糊效果 -->

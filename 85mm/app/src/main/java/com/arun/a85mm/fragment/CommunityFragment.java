@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -98,7 +100,7 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
     private void addHeadView() {
         headView = new LinearLayout(getActivity());
         headView.setOrientation(LinearLayout.VERTICAL);
-        headView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        headView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
         expandableListView.addHeaderView(headView);
     }
 

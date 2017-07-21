@@ -67,6 +67,9 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                           RecyclerView.ViewHolder target) {
         //这里我们直接将参数传递到回调接口方法中，提高复用性
+        if (!(target instanceof MyTagsAdapter.TagItemHolder)) {
+            return false;
+        }
         return onItemTouchCallbackListener.onMove(recyclerView, viewHolder, target);
     }
 

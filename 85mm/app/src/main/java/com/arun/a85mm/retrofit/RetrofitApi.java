@@ -114,7 +114,20 @@ public interface RetrofitApi {
     @POST(RetrofitUrl.TAG_UPDATE_LIST)
     Observable<CommonApiResponse> updateUserTag(@Body Map<String, List<UserTagBean>> tagList);
 
-    @GET(RetrofitUrl.TAG_WORK_LIST)
-    Observable<CommonApiResponse<TagWorkListBean>> getTagWorkList(@Query("tagName") String tagName, @Query("start") int start);
+
+    /**
+     * @param dataType 0：最新作品，
+     *                 1：某日作品，
+     *                 2：社区精选，
+     *                 3：社区最新，
+     *                 4：社区最热，
+     *                 5：用户标签关联的作品列表，
+     *                 6：标签关联的所有作品列表，
+     *                 7：个人主页已发布作品列表，
+     *                 8：个人主页已下载作品列表
+     * @return
+     */
+    @GET(RetrofitUrl.WORK_COMMON_LIST)
+    Observable<CommonApiResponse<TagWorkListBean>> getTagWorkList(@Query("lastId") String lastId, @Query("date") String date, @Query("tagName") String tagName, @Query("dataType") int dataType);
 
 }

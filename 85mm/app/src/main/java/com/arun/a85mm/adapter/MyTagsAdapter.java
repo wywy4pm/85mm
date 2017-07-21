@@ -16,7 +16,6 @@ import com.arun.a85mm.activity.UpdateUserNameActivity;
 import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.fragment.TagWorkFragment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +60,7 @@ public class MyTagsAdapter extends BaseRecyclerAdapter<UserTagBean> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TagItemHolder) {
             TagItemHolder tagItemHolder = (TagItemHolder) holder;
-            tagItemHolder.setData(contexts.get(), getItem(position), isEdit);
+            tagItemHolder.setData(contexts.get(), getItem(position), position, isEdit);
         } else if (holder instanceof TagAddBottomHolder) {
             TagAddBottomHolder tagAddBottomHolder = (TagAddBottomHolder) holder;
             tagAddBottomHolder.setData(contexts.get());
@@ -91,6 +90,7 @@ public class MyTagsAdapter extends BaseRecyclerAdapter<UserTagBean> {
         private ImageView btn_tag_right;
         private UserTagBean bean;
         private Context context;
+        private int position;
 
         private TagItemHolder(View rootView) {
             super(rootView);
@@ -110,9 +110,10 @@ public class MyTagsAdapter extends BaseRecyclerAdapter<UserTagBean> {
             itemView.setOnClickListener(this);
         }
 
-        private void setData(final Context context, final UserTagBean bean, boolean isEdit) {
+        private void setData(final Context context, final UserTagBean bean, int position, boolean isEdit) {
             this.context = context;
             this.bean = bean;
+            this.position = position;
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -156,7 +157,7 @@ public class MyTagsAdapter extends BaseRecyclerAdapter<UserTagBean> {
                     }
                     break;
                 case R.id.btn_tag_rename:
-                    UpdateUserNameActivity.jumpToAddTag(context, bean);
+                    UpdateUserNameActivity.jumpToAddTag(context, bean, position);
                     break;
                 case R.id.btn_show_hide:
                     bean.isShow = bean.isShow == 1 ? 0 : 1;
@@ -178,7 +179,7 @@ public class MyTagsAdapter extends BaseRecyclerAdapter<UserTagBean> {
             layout_add_tag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UpdateUserNameActivity.jumpToAddTag(context, null);
+                    UpdateUserNameActivity.jumpToAddTag(context, null, 0);
                 }
             });
         }

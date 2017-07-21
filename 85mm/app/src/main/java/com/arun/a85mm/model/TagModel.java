@@ -33,7 +33,7 @@ public class TagModel extends BaseModel {
         return request(RetrofitInit.getApi().updateUserTag(map), listener);
     }
 
-    public Subscriber getTagWorkList(String tagName, int start, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().getTagWorkList(tagName, start), listener);
+    public Subscriber getTagWorkList(String lastId, String tagName, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getTagWorkList(lastId, "", tagName, 5), listener);
     }
 }

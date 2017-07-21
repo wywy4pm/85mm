@@ -19,6 +19,7 @@ public class RetrofitUrl {
     public static final String WORKS_AUDIT = WORKS + "/getAuditList";
     public static final String WORKS_COMMUNITY_LIST = WORKS + "/communityList";
     public static final String WORKS_MIX = WORKS + "/mix";
+    public static final String WORK_COMMON_LIST = WORKS + "/common/list";
 
     public static final String USER_ACTION = USER + V1 + "/action";
     public static final String USER_DEVICE_TOKEN = USER + "/addToken";
@@ -35,5 +36,5 @@ public class RetrofitUrl {
     public static final String CONFIG_QUERY = CONFIG + V1 + "/query";
 
     public static final String TAG_UPDATE_LIST = TAG + "/update/mylist";
-    public static final String TAG_WORK_LIST = TAG + "/worklist";
+    //public static final String TAG_WORK_LIST = TAG + "/worklist";
 }

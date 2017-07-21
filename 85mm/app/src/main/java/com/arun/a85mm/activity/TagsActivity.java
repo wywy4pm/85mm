@@ -10,6 +10,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -130,8 +131,14 @@ public class TagsActivity extends BaseActivity implements View.OnClickListener, 
         if (list != null && list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 UserTagBean bean = list.get(i);
-                bean.type = MyTagsAdapter.DATA_TYPE_ITEM;
-                userTags.add(bean);
+                if (bean != null) {
+                    UserTagBean newBean = new UserTagBean();
+                    newBean.name = bean.name;
+                    newBean.id = bean.id;
+                    newBean.isShow = bean.isShow;
+                    newBean.type = MyTagsAdapter.DATA_TYPE_ITEM;
+                    userTags.add(newBean);
+                }
             }
         }
         addBottom();
@@ -154,8 +161,9 @@ public class TagsActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void refresh(int type, Object data) {
+        //myTagsAdapter.notifyDataSetChanged();
         ConfigHelper.userTags = getUserTags();
-        showTop("修改成功");
+        showTop("操作成功");
     }
 
     private List<UserTagBean> getUserTags() {
@@ -252,8 +260,14 @@ public class TagsActivity extends BaseActivity implements View.OnClickListener, 
                     userTags.add(0, bean);
                     refreshData();
                 } else {
-                    myTagsAdapter.notifyDataSetChanged();
+                    if (event.position < userTags.size() - 1) {
+                        UserTagBean bean = userTags.get(event.position);
+                        if (bean != null) {
+                            bean.name = event.tagName;
+                        }
+                    }
                 }
+                myTagsAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -274,4 +288,14 @@ public class TagsActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (myTagsAdapter != null && myTagsAdapter.isEdit()) {
+                setCommonMode();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

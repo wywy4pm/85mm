@@ -40,8 +40,10 @@ public class UpdateUserNameActivity extends BaseActivity implements CommonView3 
     private static final String TYPE_UPDATE_USERNAME = "type_update_username";
     private static final String TYPE_ADD_TAG = "type_add_tag";
     private static final String TAG_BEAN = "tag_bean";
+    private static final String TAG_LIST_POSITION = "tag_position";
     private String type;
     private UserTagBean userTagBean;
+    private int tagPosition;
 
     public static void jumpToUpdateUserName(Context context) {
         Intent intent = new Intent(context, UpdateUserNameActivity.class);
@@ -50,10 +52,11 @@ public class UpdateUserNameActivity extends BaseActivity implements CommonView3 
         ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
-    public static void jumpToAddTag(Context context, UserTagBean userTagBean) {
+    public static void jumpToAddTag(Context context, UserTagBean userTagBean, int position) {
         Intent intent = new Intent(context, UpdateUserNameActivity.class);
         intent.putExtra(TYPE, TYPE_ADD_TAG);
         intent.putExtra(TAG_BEAN, userTagBean);
+        intent.putExtra(TAG_LIST_POSITION, position);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
@@ -68,6 +71,9 @@ public class UpdateUserNameActivity extends BaseActivity implements CommonView3 
             }
             if (getIntent().getExtras().containsKey(TAG_BEAN)) {
                 userTagBean = (UserTagBean) getIntent().getExtras().getSerializable(TAG_BEAN);
+            }
+            if (getIntent().getExtras().containsKey(TAG_LIST_POSITION)) {
+                tagPosition = getIntent().getExtras().getInt(TAG_LIST_POSITION);
             }
         }
         initView();
@@ -138,12 +144,10 @@ public class UpdateUserNameActivity extends BaseActivity implements CommonView3 
                             presenter.updateUserInfo(userName, "", "", "");
                         } else if (TYPE_ADD_TAG.equals(type)) {
                             boolean isAdd = false;
-                            if (userTagBean != null) {
-                                userTagBean.name = edit_user_name.getText().toString();
-                            } else {
+                            if (userTagBean == null) {
                                 isAdd = true;
                             }
-                            EventBus.getDefault().post(new UpdateTagEvent(edit_user_name.getText().toString(), isAdd));
+                            EventBus.getDefault().post(new UpdateTagEvent(edit_user_name.getText().toString(), tagPosition, isAdd));
                             onBackPressed();
                         }
                     }
