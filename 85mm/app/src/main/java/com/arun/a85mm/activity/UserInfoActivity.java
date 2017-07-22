@@ -25,8 +25,12 @@ import com.arun.a85mm.listener.UploadImageListener;
 import com.arun.a85mm.presenter.UserPresenter;
 import com.arun.a85mm.utils.DrawableUtils;
 import com.arun.a85mm.utils.GlideCircleTransform;
+import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.CommonView3;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 public class UserInfoActivity extends BaseActivity implements View.OnClickListener, CommonView3 {
 
@@ -51,6 +55,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarUtils.setStatusBarColor(this, R.color.white);
         setContentView(R.layout.activity_user_info);
         initView();
         initData();
@@ -91,6 +96,18 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 .placeholder(drawable)
                 .error(drawable)
                 .centerCrop()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        user_image.setImageResource(R.mipmap.default_avatar);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        return false;
+                    }
+                })
                 .bitmapTransform(new GlideCircleTransform(this))
                 .into(user_image);
     }

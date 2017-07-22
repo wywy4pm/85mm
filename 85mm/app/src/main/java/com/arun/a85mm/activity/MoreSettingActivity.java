@@ -38,8 +38,10 @@ import com.arun.a85mm.view.CommonView3;
 import com.arun.a85mm.widget.CircleImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.umeng.socialize.UMShareAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -244,6 +246,18 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                     .placeholder(drawable)
                     .error(drawable)
                     .centerCrop()
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            user_head.setImageResource(R.mipmap.default_avatar);
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
                     .bitmapTransform(new GlideCircleTransform(this))
                     .into(user_head);
             user_name.setText(bean.name);

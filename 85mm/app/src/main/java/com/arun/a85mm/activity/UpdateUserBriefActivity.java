@@ -17,6 +17,7 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.presenter.UserPresenter;
+import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.CommonView3;
 
 public class UpdateUserBriefActivity extends BaseActivity implements CommonView3 {
@@ -37,6 +38,7 @@ public class UpdateUserBriefActivity extends BaseActivity implements CommonView3
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarUtils.setStatusBarColor(this, R.color.white);
         setContentView(R.layout.activity_user_brief);
         initView();
         initData();

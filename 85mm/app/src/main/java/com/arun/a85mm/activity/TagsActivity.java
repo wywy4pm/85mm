@@ -25,6 +25,7 @@ import com.arun.a85mm.listener.OnItemTouchCallbackListener;
 import com.arun.a85mm.presenter.UserTagPresenter;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
+import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.CommonView3;
 
 import org.greenrobot.eventbus.EventBus;
@@ -56,6 +57,7 @@ public class TagsActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarUtils.setStatusBarColor(this, R.color.white);
         setContentView(R.layout.activity_tags);
         EventBus.getDefault().register(this);
         initView();
