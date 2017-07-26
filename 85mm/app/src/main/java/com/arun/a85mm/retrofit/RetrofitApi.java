@@ -4,9 +4,9 @@ package com.arun.a85mm.retrofit;
 import com.arun.a85mm.bean.ArticleBean;
 import com.arun.a85mm.bean.ArticleListBean;
 import com.arun.a85mm.bean.AssociationBean;
+import com.arun.a85mm.bean.CommonWorkListBean;
 import com.arun.a85mm.bean.GoodsListBean;
 import com.arun.a85mm.bean.GuidePageBean;
-import com.arun.a85mm.bean.TagWorkListBean;
 import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.bean.UserMainPageBean;
 import com.arun.a85mm.bean.UserTagBean;
@@ -36,8 +36,8 @@ import rx.Observable;
 
 public interface RetrofitApi {
 
-    @GET
-    Call<ResponseBody> downLoadImage(@Url String url);
+    /*@GET
+    Call<ResponseBody> downLoadImage(@Url String url);*/
 
     @GET(RetrofitUrl.ARTICLE_LIST)
     Observable<CommonApiResponse<List<ArticleListBean>>> getArticleList(@Query("pageNum") int pageNum);
@@ -128,6 +128,9 @@ public interface RetrofitApi {
      * @return
      */
     @GET(RetrofitUrl.WORK_COMMON_LIST)
-    Observable<CommonApiResponse<TagWorkListBean>> getTagWorkList(@Query("lastId") String lastId, @Query("date") String date, @Query("tagName") String tagName, @Query("dataType") int dataType);
+    Observable<CommonApiResponse<CommonWorkListBean>> getWorkList(@Query("lastId") String lastId, @Query("date") String date, @Query("tagName") String tagName, @Query("dataType") int dataType);
 
+
+    @GET(RetrofitUrl.TAG_TAG_WORK)
+    Observable<CommonApiResponse> tagWork(@Query("tagName") String tagName, @Query("workId") String workId, @Query("type") int type);
 }

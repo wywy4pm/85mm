@@ -9,9 +9,9 @@ import java.util.List;
  * Created by wy on 2017/5/5.
  */
 
-public class WorkListBean implements Serializable{
-    public String workId;
-    public String workTitle;
+public class WorkListBean implements Serializable {
+    public String id;
+    public String title;
     public String coverUrl;
     public int coverHeight;
     public int coverWidth;
@@ -24,7 +24,7 @@ public class WorkListBean implements Serializable{
     public String sourceLogo;
     public String sourceSite;
     public String createTime;
-    public List<WorkListItemBean> workDetail;
+    public List<WorkListItemBean> imageList;
     public boolean isExpand;
     public boolean isCoverLoad;
     public int backgroundColor;
@@ -37,7 +37,7 @@ public class WorkListBean implements Serializable{
     public String searchDate;
     public int allDownloadNum;
     public int leftWorkNum;
-    public int start;
+    //public int start;
     public int workNum;
     public boolean isTitle;
     public boolean isBottom;
@@ -57,8 +57,6 @@ public class WorkListBean implements Serializable{
     public int clickNum;
     public String copy;
     public long createDate;
-    public String id;
     public int module;
-    public String title;
-    public List<WorkListItemBean> imageList;
+    public List<String> workTags;
 }

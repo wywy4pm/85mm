@@ -363,8 +363,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void shareWorkDetail(WorkListBean workListBean) {
-        ShareWindow.show(this, workListBean.workTitle, ShareParaUtils.getWorkDetailShareDescription(workListBean.authorName),
-                ShareParaUtils.getWorkDetailShareUrl(workListBean.workId), workListBean.coverUrl, eventStatisticsHelper);
+        ShareWindow.show(this, workListBean.title, ShareParaUtils.getWorkDetailShareDescription(workListBean.authorName),
+                ShareParaUtils.getWorkDetailShareUrl(workListBean.id), workListBean.coverUrl, eventStatisticsHelper);
     }
 
 }

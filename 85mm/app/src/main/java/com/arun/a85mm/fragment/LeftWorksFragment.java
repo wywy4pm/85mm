@@ -12,6 +12,7 @@ import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.adapter.CommunityAdapter;
 import com.arun.a85mm.bean.CommonApiResponse;
+import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
@@ -32,7 +33,7 @@ import java.util.Map;
 /**
  * Created by WY on 2017/5/7.
  */
-public class LeftWorksFragment extends BaseFragment implements OnImageClick, CommonView4<CommonApiResponse> {
+public class LeftWorksFragment extends BaseFragment implements OnImageClick, CommonView4<List<WorkListBean>> {
 
     public ExpandableListView expandableListView;
     public SwipeToLoadLayout swipeToLoadLayout;
@@ -44,9 +45,8 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     private List<WorkListBean> workLists = new ArrayList<>();
     private CommunityPresenter communityPresenter;
     private boolean isHaveMore = true;
-    private String userId;
-    private int originStart;
-    private int start;
+    private String originLastWorkId;
+    private String lastWorkId;
     private String date;
 
     @Override
@@ -66,12 +66,7 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
         communityAdapter.setEventListener(this);
         expandableListView.setAdapter(communityAdapter);
         communityAdapter.setOnImageClick(this);
-        /*swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshData();
-            }
-        });*/
+
         setRefresh(swipeToLoadLayout);
         setExpandableListViewCommon(expandableListView, next_group_img, workLists);
         setHideReadTips();
@@ -86,8 +81,8 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
             Map<String, String> map = (Map<String, String>) getArguments().getSerializable(FragmentCommonActivity.EXTRAS);
             if (map != null) {
                 date = map.get(Constant.INTENT_WORKS_LEFT_DATE);
-                start = Integer.parseInt(map.get(Constant.INTENT_WORKS_LEFT_START));
-                originStart = start;
+                lastWorkId = map.get(Constant.INTENT_WORKS_LEFT_START);
+                originLastWorkId = lastWorkId;
             }
         }
         refreshData();
@@ -111,8 +106,8 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
             hideNetWorkErrorView(expandableListView);
             if (communityPresenter != null) {
                 setLoading(true);
-                start = originStart;
-                communityPresenter.getWorksLeft(date, start, true);
+                lastWorkId = originLastWorkId;
+                communityPresenter.getWorksLeft(date, lastWorkId, true);
             }
         } else {
             if (swipeToLoadLayout.isRefreshing()) {
@@ -125,17 +120,17 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     private void formatData(List<WorkListBean> workList) {
         setCurrentResponseCount(workList.size());
         for (int i = 0; i < workList.size(); i++) {
-            if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
+            if (workList.get(i) != null && workList.get(i).imageList != null && workList.get(i).imageList.size() > 0) {
                 workList.get(i).backgroundColor = RandomColorHelper.getRandomColor();
-                for (int j = 0; j < workList.get(i).workDetail.size(); j++) {
-                    workList.get(i).workDetail.get(j).backgroundColor = RandomColorHelper.getRandomColor();
-                    if (j == workList.get(i).workDetail.size() - 1) {
-                        if (workList.get(i).workDetail.get(j) != null) {
-                            workList.get(i).workDetail.get(j).authorHeadImg = workList.get(i).authorHeadImg;
-                            workList.get(i).workDetail.get(j).authorName = workList.get(i).authorName;
-                            workList.get(i).workDetail.get(j).authorPageUrl = workList.get(i).authorPageUrl;
-                            workList.get(i).workDetail.get(j).workTitle = workList.get(i).workTitle;
-                            workList.get(i).workDetail.get(j).sourceUrl = workList.get(i).sourceUrl;
+                for (int j = 0; j < workList.get(i).imageList.size(); j++) {
+                    workList.get(i).imageList.get(j).backgroundColor = RandomColorHelper.getRandomColor();
+                    if (j == workList.get(i).imageList.size() - 1) {
+                        if (workList.get(i).imageList.get(j) != null) {
+                            workList.get(i).imageList.get(j).authorHeadImg = workList.get(i).authorHeadImg;
+                            workList.get(i).imageList.get(j).authorName = workList.get(i).authorName;
+                            workList.get(i).imageList.get(j).authorPageUrl = workList.get(i).authorPageUrl;
+                            workList.get(i).imageList.get(j).workTitle = workList.get(i).title;
+                            workList.get(i).imageList.get(j).sourceUrl = workList.get(i).sourceUrl;
                         }
                     }
                 }
@@ -148,10 +143,14 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
                 itemBean.authorHeadImg = workList.get(i).authorHeadImg;
                 itemBean.authorName = workList.get(i).authorName;
                 itemBean.authorPageUrl = workList.get(i).authorPageUrl;
-                itemBean.workTitle = workList.get(i).workTitle;
+                itemBean.workTitle = workList.get(i).title;
                 itemBean.sourceUrl = workList.get(i).sourceUrl;
                 items.add(itemBean);
-                workList.get(i).workDetail = items;
+                workList.get(i).imageList = items;
+            }
+
+            if (i == workList.size() - 1) {
+                lastWorkId = workList.get(i).id;
             }
         }
         if (NetUtils.isWifi(getActivity())) {
@@ -178,7 +177,7 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     private void loadMore() {
         setLoading(true);
         if (communityPresenter != null) {
-            communityPresenter.getWorksLeft(date, start, false);
+            communityPresenter.getWorksLeft(date, lastWorkId, false);
         }
     }
 
@@ -200,36 +199,23 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
 
     @Override
     public void onMoreLinkClick(String workId, String sourceUrl) {
-        //DialogHelper.showBottomSourceLink(getActivity(), sourceUrl, workId, eventStatisticsHelper);
         DialogHelper.showBottom(getActivity(), Constant.TYPE_WORK, sourceUrl, workId, "", eventStatisticsHelper);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void refresh(CommonApiResponse data) {
-        if (data != null && data.body != null) {
-            if (data.body instanceof List) {
-                List<WorkListBean> list = (List<WorkListBean>) data.body;
-                if (list.size() > 0) {
-                    start = data.start;
-                    workLists.clear();
-                    formatData(list);
-                }
-            }
+    public void refresh(List<WorkListBean> data) {
+        if (data != null && data.size() > 0) {
+            workLists.clear();
+            formatData(data);
         }
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void refreshMore(CommonApiResponse data) {
-        if (data != null && data.body != null) {
-            if (data.body instanceof List) {
-                List<WorkListBean> list = (List<WorkListBean>) data.body;
-                if (list.size() > 0) {
-                    start = data.start;
-                    formatData(list);
-                }
-            }
+    public void refreshMore(List<WorkListBean> data) {
+        if (data != null && data.size() > 0) {
+            formatData(data);
         }
     }
 
@@ -253,11 +239,6 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
         }
     }
 
-    /*@Override
-    public void onError(String error, String tag) {
-        showNetWorkErrorView(expandableListView);
-    }*/
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -265,4 +246,5 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
             communityPresenter.detachView();
         }
     }
+
 }

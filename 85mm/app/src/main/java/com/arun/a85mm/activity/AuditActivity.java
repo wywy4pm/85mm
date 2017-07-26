@@ -299,8 +299,8 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
                     bean.coverUrl = work.coverUrl;
                     bean.backgroundColor = RandomColorHelper.getRandomColor();
                     bean.totalImageNum = work.totalImageNum;
-                    bean.workId = work.workId;
-                    bean.workTitle = work.workTitle;
+                    bean.workId = work.id;
+                    bean.workTitle = work.title;
                     auditWorks.add(bean);
                 }
             }

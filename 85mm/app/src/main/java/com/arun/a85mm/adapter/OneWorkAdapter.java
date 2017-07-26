@@ -146,7 +146,7 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
         private void setData(final Context context, final WorkListItemBean bean, final WorkListBean workListBean, final OnImageClick onImageClick) {
 
             int imageHeight = 0;
-            if (TextUtils.isEmpty(bean.imageUrl)) {
+            if (TextUtils.isEmpty(bean.url)) {
                 work_list_item_img.setVisibility(View.GONE);
             } else {
                 if (bean.width > 0) {
@@ -162,7 +162,7 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
                     if (work_list_item_img.getLayoutParams() != null) {
                         work_list_item_img.getLayoutParams().height = imageHeight;
                     }
-                    Glide.with(context).load(bean.imageUrl).centerCrop()
+                    Glide.with(context).load(bean.url).centerCrop()
                             .placeholder(bean.backgroundColor).error(bean.backgroundColor)
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
                         @Override
@@ -189,11 +189,11 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
                     if (bean.isLoad) {
                         rippleView.setRippleDuration(300);
                         if (onImageClick != null) {
-                            onImageClick.onCoverClick(workListBean.workId, bean.imageUrl, screenWidth, finalSaveImageHeight);
+                            onImageClick.onCoverClick(workListBean.id, bean.url, screenWidth, finalSaveImageHeight);
                         }
                     } else {
                         rippleView.setRippleDuration(0);
-                        Glide.with(context).load(bean.imageUrl).centerCrop()
+                        Glide.with(context).load(bean.url).centerCrop()
                                 .placeholder(bean.backgroundColor).error(bean.backgroundColor)
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
                             @Override
@@ -215,7 +215,7 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
                 public boolean onLongClick(View v) {
                     rippleView.setRippleDuration(0);
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(workListBean.workId, workListBean.sourceUrl);
+                        onImageClick.onMoreLinkClick(workListBean.id, workListBean.sourceUrl);
                     }
                     return false;
                 }

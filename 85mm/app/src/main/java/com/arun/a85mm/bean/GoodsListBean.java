@@ -9,11 +9,11 @@ import java.util.List;
 public class GoodsListBean {
 
     public int browseNum;
-    public String date;
+    public String displayDate;
     public String searchDate;
     public int downloadNum;
     public int leftWorkNum;
-    public int start;
+    //public int start;
     public int workNum;
 
     public List<WorkListBean> workList;

@@ -36,5 +36,6 @@ public class RetrofitUrl {
     public static final String CONFIG_QUERY = CONFIG + V1 + "/query";
 
     public static final String TAG_UPDATE_LIST = TAG + "/update/mylist";
+    public static final String TAG_TAG_WORK = TAG + "/tagWork";
     //public static final String TAG_WORK_LIST = TAG + "/worklist";
 }

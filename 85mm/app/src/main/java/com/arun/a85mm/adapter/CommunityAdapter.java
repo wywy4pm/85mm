@@ -99,7 +99,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     } else {
                         type = EventConstant.WORK_BROWSE_ONEDAY;
                     }
-                    eventListener.onEvent(type, previousBean.workId);
+                    eventListener.onEvent(type, previousBean.id);
                 }
             }
         }
@@ -234,7 +234,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 if (bean.isExpand) {
                     finalWorkListHeadHolder.rippleView.setRippleDuration(300);
                     if (onImageClick != null) {
-                        onImageClick.onCoverClick(bean.workId, bean.coverUrl, screenWidth, finalImageHeight);
+                        onImageClick.onCoverClick(bean.id, bean.coverUrl, screenWidth, finalImageHeight);
                     }
                 } else {
                     if (bean.isCoverLoad) {
@@ -251,7 +251,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                         }
                         //作品点击展开
                         if (eventListener != null) {
-                            eventListener.onEvent(EventConstant.WORK_CLICK_EXPAND, bean.workId);
+                            eventListener.onEvent(EventConstant.WORK_CLICK_EXPAND, bean.id);
                         }
                     } else {//加载异常时点击重新加载
                         if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemImageView.getLayoutParams() != null) {
@@ -301,7 +301,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             public boolean onLongClick(View v) {
                 finalWorkListHeadHolder.rippleView.setRippleDuration(0);
                 if (onImageClick != null) {
-                    onImageClick.onMoreLinkClick(bean.workId, bean.sourceUrl);
+                    onImageClick.onMoreLinkClick(bean.id, bean.sourceUrl);
                     Log.d("TAG", "onMoreLinkClick = " + bean.sourceUrl);
                 }
                 return false;
@@ -324,12 +324,12 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             workListItemHolder = (WorkListItemHolder) convertView.getTag();
         }*/
         final WorkListBean workGroup = workList.get(groupPosition);
-        final List<WorkListItemBean> workListBean = workGroup.workDetail;
+        final List<WorkListItemBean> workListBean = workGroup.imageList;
         final WorkListItemBean bean = workListBean.get(childPosition);
-        int detailSize = workList.get(groupPosition).workDetail.size();
+        int detailSize = workList.get(groupPosition).imageList.size();
         final WorkListItemHolder finalWorkListItemHolder = workListItemHolder;
         int imageHeight = 0;
-        if (TextUtils.isEmpty(bean.imageUrl)) {
+        if (TextUtils.isEmpty(bean.url)) {
             workListItemHolder.work_list_item_img.setVisibility(View.GONE);
         } else {
             if (bean.width > 0) {
@@ -345,7 +345,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 if (workListItemHolder.work_list_item_img.getLayoutParams() != null) {
                     workListItemHolder.work_list_item_img.getLayoutParams().height = imageHeight;
                 }
-                Glide.with(contexts.get()).load(bean.imageUrl).centerCrop()
+                Glide.with(contexts.get()).load(bean.url).centerCrop()
                         .placeholder(bean.backgroundColor).error(bean.backgroundColor)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
                     @Override
@@ -366,7 +366,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                             @Override
                             public void run() {
                                 for (int i = 1; i < workListBean.size(); i++) {
-                                    Glide.with(contexts.get()).load(workListBean.get(i).imageUrl).downloadOnly(workListBean.get(i).width, workListBean.get(i).height);
+                                    Glide.with(contexts.get()).load(workListBean.get(i).url).downloadOnly(workListBean.get(i).width, workListBean.get(i).height);
                                 }
                             }
                         });
@@ -413,7 +413,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(workGroup.workId, bean.sourceUrl);
+                        onImageClick.onMoreLinkClick(workGroup.id, bean.sourceUrl);
                     }
                 }
             });
@@ -431,7 +431,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(workGroup.workId, bean.sourceUrl);
+                        onImageClick.onMoreLinkClick(workGroup.id, bean.sourceUrl);
                     }
                 }
             });
@@ -473,11 +473,11 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 if (bean.isLoad) {
                     finalWorkListItemHolder.rippleView.setRippleDuration(300);
                     if (onImageClick != null) {
-                        onImageClick.onCoverClick(workList.get(groupPosition).workId, bean.imageUrl, screenWidth, finalSaveImageHeight);
+                        onImageClick.onCoverClick(workList.get(groupPosition).id, bean.url, screenWidth, finalSaveImageHeight);
                     }
                 } else {
                     finalWorkListItemHolder.rippleView.setRippleDuration(0);
-                    Glide.with(contexts.get()).load(bean.imageUrl).centerCrop()
+                    Glide.with(contexts.get()).load(bean.url).centerCrop()
                             .placeholder(bean.backgroundColor).error(bean.backgroundColor)
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
                         @Override
@@ -499,7 +499,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             public boolean onLongClick(View v) {
                 finalWorkListItemHolder.rippleView.setRippleDuration(0);
                 if (onImageClick != null) {
-                    onImageClick.onMoreLinkClick(workGroup.workId, bean.sourceUrl);
+                    onImageClick.onMoreLinkClick(workGroup.id, bean.sourceUrl);
                 }
                 return false;
             }
@@ -515,7 +515,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         String title = resources.getString(R.string.one_day_left_works_title, bean.date, bean.leftWorkNum);
         Map<String, String> map = new HashMap<>();
         map.put(Constant.INTENT_WORKS_LEFT_DATE, bean.searchDate);
-        map.put(Constant.INTENT_WORKS_LEFT_START, String.valueOf(bean.start));
+        map.put(Constant.INTENT_WORKS_LEFT_START, bean.id);
         FragmentCommonActivity.jumpToFragmentCommonActivity(contexts.get(),
                 FragmentCommonActivity.FRAGMENT_LEFT_WORKS, title, map);
     }
@@ -608,7 +608,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return workList.get(groupPosition).workDetail.size();
+        return workList.get(groupPosition).imageList.size();
     }
 
     @Override
@@ -618,7 +618,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return workList.get(groupPosition).workDetail.get(childPosition);
+        return workList.get(groupPosition).imageList.get(childPosition);
     }
 
     @Override

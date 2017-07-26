@@ -10,6 +10,7 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.adapter.ProductListAdapter;
+import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
@@ -18,10 +19,11 @@ import com.arun.a85mm.event.UpdateProductEvent;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.listener.OnImageClick;
+import com.arun.a85mm.listener.OnTagWorkListener;
 import com.arun.a85mm.presenter.TagWorkPresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
-import com.arun.a85mm.view.CommonView;
+import com.arun.a85mm.view.CommonView4;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,7 +37,7 @@ import java.util.Map;
  * Created by wy on 2017/7/19.
  */
 
-public class TagWorkFragment extends BaseFragment implements OnImageClick, CommonView<List<WorkListBean>> {
+public class TagWorkFragment extends BaseFragment implements OnImageClick, CommonView4<List<WorkListBean>>, OnTagWorkListener {
     private SwipeToLoadLayout swipeToLoadLayout;
     private ExpandableListView expandableListView;
     private ProductListAdapter productListAdapter;
@@ -71,6 +73,7 @@ public class TagWorkFragment extends BaseFragment implements OnImageClick, Commo
         expandableListView.setAdapter(productListAdapter);
         productListAdapter.setOnImageClick(this);
         productListAdapter.setEventListener(this);
+        productListAdapter.setOnTagWorkListener(this);
 
         setRefresh(swipeToLoadLayout);
         setExpandableListViewCommon(expandableListView, next_group_img, workLists);
@@ -150,20 +153,29 @@ public class TagWorkFragment extends BaseFragment implements OnImageClick, Commo
         }
     }
 
+    @Override
+    public void refresh(int type, Object data) {
+        if (type == TagWorkPresenter.TYPE_TAG_WORK) {
+            if (data instanceof UserTagBean) {
+                showTop("打标成功");
+            }
+        }
+    }
+
     private void formatData(List<WorkListBean> workList) {
         setCurrentResponseCount(workList.size());
         for (int i = 0; i < workList.size(); i++) {
-            if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
+            if (workList.get(i) != null && workList.get(i).imageList != null && workList.get(i).imageList.size() > 0) {
                 workList.get(i).backgroundColor = RandomColorHelper.getRandomColor();
-                for (int j = 0; j < workList.get(i).workDetail.size(); j++) {
-                    workList.get(i).workDetail.get(j).backgroundColor = RandomColorHelper.getRandomColor();
-                    if (j == workList.get(i).workDetail.size() - 1) {
-                        if (workList.get(i).workDetail.get(j) != null) {
-                            workList.get(i).workDetail.get(j).authorHeadImg = workList.get(i).authorHeadImg;
-                            workList.get(i).workDetail.get(j).authorName = workList.get(i).authorName;
-                            workList.get(i).workDetail.get(j).authorPageUrl = workList.get(i).authorPageUrl;
-                            workList.get(i).workDetail.get(j).workTitle = workList.get(i).workTitle;
-                            workList.get(i).workDetail.get(j).sourceUrl = workList.get(i).sourceUrl;
+                for (int j = 0; j < workList.get(i).imageList.size(); j++) {
+                    workList.get(i).imageList.get(j).backgroundColor = RandomColorHelper.getRandomColor();
+                    if (j == workList.get(i).imageList.size() - 1) {
+                        if (workList.get(i).imageList.get(j) != null) {
+                            workList.get(i).imageList.get(j).authorHeadImg = workList.get(i).authorHeadImg;
+                            workList.get(i).imageList.get(j).authorName = workList.get(i).authorName;
+                            workList.get(i).imageList.get(j).authorPageUrl = workList.get(i).authorPageUrl;
+                            workList.get(i).imageList.get(j).workTitle = workList.get(i).title;
+                            workList.get(i).imageList.get(j).sourceUrl = workList.get(i).sourceUrl;
                         }
                     }
                 }
@@ -176,10 +188,10 @@ public class TagWorkFragment extends BaseFragment implements OnImageClick, Commo
                 itemBean.authorHeadImg = workList.get(i).authorHeadImg;
                 itemBean.authorName = workList.get(i).authorName;
                 itemBean.authorPageUrl = workList.get(i).authorPageUrl;
-                itemBean.workTitle = workList.get(i).workTitle;
+                itemBean.workTitle = workList.get(i).title;
                 itemBean.sourceUrl = workList.get(i).sourceUrl;
                 items.add(itemBean);
-                workList.get(i).workDetail = items;
+                workList.get(i).imageList = items;
             }
             if (i == workList.size() - 1) {
                 lastWorkId = workList.get(i).id;
@@ -249,4 +261,15 @@ public class TagWorkFragment extends BaseFragment implements OnImageClick, Commo
         }
     }
 
+    @Override
+    public void onClickMyTag(UserTagBean tagBean, String workId) {
+        if (tagWorkPresenter != null) {
+            tagWorkPresenter.tagWork(tagBean, workId);
+        }
+    }
+
+    public void resetUserTag(UserTagBean tagBean) {
+        tagBean.tagType = tagBean.tagType == 1 ? 0 : 1;
+        productListAdapter.notifyDataSetChanged();
+    }
 }

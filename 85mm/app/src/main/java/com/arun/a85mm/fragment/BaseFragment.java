@@ -269,8 +269,8 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
                 int lastVisiblePosition = listView.getLastVisiblePosition();
                 int currentChildCount = 0;
                 if (worksList != null && worksList.size() > 0) {
-                    if (worksList.get(currentGroupPosition) != null && worksList.get(currentGroupPosition).workDetail != null) {
-                        currentChildCount = worksList.get(currentGroupPosition).workDetail.size();
+                    if (worksList.get(currentGroupPosition) != null && worksList.get(currentGroupPosition).imageList != null) {
+                        currentChildCount = worksList.get(currentGroupPosition).imageList.size();
                     }
                     //int currentRangeMin = currentGroupAllPosition;
                     int currentRangeMax = currentGroupAllPosition + currentChildCount;
@@ -298,7 +298,7 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
             public void onGroupExpand(int groupPosition) {
                 isSingleExpand = true;
                 currentGroupPosition = groupPosition;
-                if (worksList.get(groupPosition) != null && worksList.get(groupPosition).workDetail != null && worksList.get(groupPosition).totalImageNum > 5) {
+                if (worksList.get(groupPosition) != null && worksList.get(groupPosition).imageList != null && worksList.get(groupPosition).totalImageNum > 5) {
                     if (groupPosition < worksList.size() - 1) {
                         //Log.d(TAG, "currentGroupPosition = " + currentGroupPosition);
                         next_group_img.setVisibility(View.VISIBLE);
@@ -386,13 +386,13 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
                             WorkListBean workListBean = workList.get(i);
                             //int coverHeight = (workListBean.coverHeight * screenWidth) / workListBean.coverWidth;
                             Glide.with(getActivity()).load(workListBean.coverUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
-                            if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
-                                WorkListItemBean bean = workList.get(i).workDetail.get(0);
+                            if (workList.get(i) != null && workList.get(i).imageList != null && workList.get(i).imageList.size() > 0) {
+                                WorkListItemBean bean = workList.get(i).imageList.get(0);
                                 if (bean != null) {
                                     if (bean.width > 0) {
                                         //int imageHeight = (bean.height * screenWidth) / bean.width;
-                                        Glide.with(getActivity()).load(bean.imageUrl).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
-                                        Log.d("TAG", "imageUrl = " + bean.imageUrl);
+                                        Glide.with(getActivity()).load(bean.url).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                                        Log.d("TAG", "imageUrl = " + bean.url);
                                     }
                                 }
                             }
@@ -445,7 +445,7 @@ public abstract class BaseFragment extends Fragment implements EventListener, Mv
         if (worksList.size() >= 2) {
             for (int i = worksList.size() - 1; i >= worksList.size() - 2; i--) {
                 if (worksList.get(i) != null) {
-                    onEvent(type, worksList.get(i).workId);
+                    onEvent(type, worksList.get(i).id);
                 }
             }
         }

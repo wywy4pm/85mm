@@ -1,6 +1,7 @@
 package com.arun.a85mm.activity;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.StringRes;
@@ -265,6 +266,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                 }
                 isJumpToWebView = true;
                 WebViewActivity.jumpToWebViewActivity(SplashActivity.this, bean.linkUrl, String.valueOf(true));
+                finish();
             }
         });
     }

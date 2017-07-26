@@ -16,4 +16,6 @@ public class UserTagBean implements Serializable{
     public int isShow;
 
     public String type;
+
+    public int tagType;
 }

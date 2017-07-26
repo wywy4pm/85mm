@@ -43,9 +43,10 @@ public class AutoLineLinearLayout extends ViewGroup {
         //布局的宽度采用建议宽度（match_parent或者size），如果设置wrap_content也是match_parent的效果
         int width = MeasureSpec.getSize(widthMeasureSpec);
 
-        int height;
+        int height = 0;
+        int childAllHeight = 0;
         if (heightMode == MeasureSpec.EXACTLY) {
-            //如果高度模式为EXACTLY（match_perent或者size），则使用建议高度
+            //如果高度模式为EXACTLY（match_parent或者size），则使用建议高度
             height = heightSize;
         } else {
             //其他情况下（AT_MOST、UNSPECIFIED）需要计算计算高度
@@ -60,6 +61,9 @@ public class AutoLineLinearLayout extends ViewGroup {
                     //获取标签宽度
                     int childW = view.getMeasuredWidth();
                     //Log.v(TAG , "标签宽度:"+childW +" 行数："+row+"  剩余宽度："+widthSpace);
+                    if (i == 0) {
+                        childAllHeight += getChildAt(i).getMeasuredHeight();
+                    }
                     if (widthSpace >= childW) {
                         //如果剩余的宽度大于此标签的宽度，那就将此标签放到本行
                         widthSpace -= childW;
@@ -67,16 +71,16 @@ public class AutoLineLinearLayout extends ViewGroup {
                         row++;    //增加一行
                         //如果剩余的宽度不能摆放此标签，那就将此标签放入一行
                         widthSpace = width - childW;
+                        childAllHeight += getChildAt(i).getMeasuredHeight();
                     }
                     //减去标签左右间距
                     widthSpace -= LEFT_RIGHT_SPACE;
                 }
-                //由于每个标签的高度是相同的，所以直接获取第一个标签的高度即可
+               /* //由于每个标签的高度是相同的，所以直接获取第一个标签的高度即可
                 int childH = getChildAt(0).getMeasuredHeight();
                 //最终布局的高度=标签高度*行数+行距*(行数-1)
-                height = (childH * row) + ROW_SPACE * (row - 1);
-
-                //Log.v(TAG , "总高度:"+height +" 行数："+row+"  标签高度："+childH);
+                height = (childH * row) + ROW_SPACE * (row - 1);*/
+                height = childAllHeight + ROW_SPACE * (row - 1);
             }
         }
 
@@ -86,28 +90,32 @@ public class AutoLineLinearLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int row = 0;
+        int row = 1;
         int right = 0;   // 标签相对于布局的右侧位置
-        int botom;       // 标签相对于布局的底部位置
+        int bottom = 0;       // 标签相对于布局的底部位置
+        int preLineBottom = 0;//上一行的bottom
         for (int i = 0; i < getChildCount(); i++) {
             View childView = getChildAt(i);
             int childW = childView.getMeasuredWidth();
             int childH = childView.getMeasuredHeight();
             //右侧位置=本行已经占有的位置+当前标签的宽度
             right += childW;
-            //底部位置=已经摆放的行数*（标签高度+行距）+当前标签高度
-            botom = row * (childH + ROW_SPACE) + childH;
+
             // 如果右侧位置已经超出布局右边缘，跳到下一行
-            // if it can't drawing on a same line , skip to next line
             if (right > (r - LEFT_RIGHT_SPACE)) {
                 row++;
                 right = childW;
-                botom = row * (childH + ROW_SPACE) + childH;
+                preLineBottom = bottom;
+                bottom = preLineBottom + (childH + ROW_SPACE);
+            } else {
+                //底部位置=上一行的bottom +（标签高度+行距）
+                if (row == 1) {
+                    bottom = preLineBottom + childH;
+                } else {
+                    bottom = preLineBottom + (childH + ROW_SPACE);
+                }
             }
-            /*Log.d(TAG, "left = " + (right - childW) +" top = " + (botom - childH)+
-                    " right = " + right + " botom = " + botom);*/
-            childView.layout(right - childW, botom - childH, right, botom);
-
+            childView.layout(right - childW, bottom - childH, right, bottom);
             right += LEFT_RIGHT_SPACE;
         }
     }

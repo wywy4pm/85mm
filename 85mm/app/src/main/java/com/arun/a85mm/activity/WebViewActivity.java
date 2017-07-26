@@ -50,7 +50,11 @@ public class WebViewActivity extends BaseActivity {
             }
         }
         context.startActivity(intent);
-        ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+        if (context instanceof SplashActivity) {
+            ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        } else {
+            ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+        }
     }
 
     @Override

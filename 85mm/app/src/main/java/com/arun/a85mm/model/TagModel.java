@@ -34,6 +34,10 @@ public class TagModel extends BaseModel {
     }
 
     public Subscriber getTagWorkList(String lastId, String tagName, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().getTagWorkList(lastId, "", tagName, 5), listener);
+        return request(RetrofitInit.getApi().getWorkList(lastId, "", tagName, 5), listener);
+    }
+
+    public Subscriber tagWork(String tagName, String workId, int type, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().tagWork(tagName, workId, type), listener);
     }
 }

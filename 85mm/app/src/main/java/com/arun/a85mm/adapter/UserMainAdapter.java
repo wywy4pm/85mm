@@ -78,10 +78,10 @@ public class UserMainAdapter extends BaseRecyclerAdapter<WorkListBean> {
                 @Override
                 public void onClick(View v) {
                     Map<String, String> map = new HashMap<>();
-                    map.put(UrlJumpHelper.WORK_ID, bean.workId);
+                    map.put(UrlJumpHelper.WORK_ID, bean.id);
                     map.put(OneWorkActivity.KEY_TYPE, Constant.TYPE_COMMUNITY);
 
-                    OneWorkActivity.jumpToOneWorkActivity(context, OneWorkActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, OneWorkActivity.BACK_MODE_COM);
+                    OneWorkActivity.jumpToOneWorkActivity(context, OneWorkActivity.FRAGMENT_ONE_WORK, bean.title, map, OneWorkActivity.BACK_MODE_COM);
                 }
             });
         }

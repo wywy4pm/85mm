@@ -276,29 +276,29 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
                         workList.get(i).backgroundColor = RandomColorHelper.getRandomColor();
                         if (i == 0) {
                             workList.get(i).isTitle = true;
-                            workList.get(i).date = goodsListBean.date;
+                            workList.get(i).date = goodsListBean.displayDate;
                             workList.get(i).browseNum = goodsListBean.browseNum;
                             workList.get(i).workNum = goodsListBean.workNum;
                             workList.get(i).allDownloadNum = goodsListBean.downloadNum;
                         }
                         if (i == workList.size() - 1) {
                             workList.get(i).isBottom = true;
-                            workList.get(i).date = goodsListBean.date;
+                            workList.get(i).date = goodsListBean.displayDate;
                             workList.get(i).searchDate = goodsListBean.searchDate;
-                            workList.get(i).start = goodsListBean.start;
+                            //workList.get(i).start = goodsListBean.start;
                             workList.get(i).leftWorkNum = goodsListBean.leftWorkNum;
                         }
 
-                        if (workList.get(i) != null && workList.get(i).workDetail != null && workList.get(i).workDetail.size() > 0) {
-                            for (int j = 0; j < workList.get(i).workDetail.size(); j++) {
-                                workList.get(i).workDetail.get(j).backgroundColor = RandomColorHelper.getRandomColor();
-                                if (j == workList.get(i).workDetail.size() - 1) {
-                                    if (workList.get(i).workDetail.get(j) != null) {
-                                        workList.get(i).workDetail.get(j).authorHeadImg = workList.get(i).authorHeadImg;
-                                        workList.get(i).workDetail.get(j).authorName = workList.get(i).authorName;
-                                        workList.get(i).workDetail.get(j).authorPageUrl = workList.get(i).authorPageUrl;
-                                        workList.get(i).workDetail.get(j).workTitle = workList.get(i).workTitle;
-                                        workList.get(i).workDetail.get(j).sourceUrl = workList.get(i).sourceUrl;
+                        if (workList.get(i) != null && workList.get(i).imageList != null && workList.get(i).imageList.size() > 0) {
+                            for (int j = 0; j < workList.get(i).imageList.size(); j++) {
+                                workList.get(i).imageList.get(j).backgroundColor = RandomColorHelper.getRandomColor();
+                                if (j == workList.get(i).imageList.size() - 1) {
+                                    if (workList.get(i).imageList.get(j) != null) {
+                                        workList.get(i).imageList.get(j).authorHeadImg = workList.get(i).authorHeadImg;
+                                        workList.get(i).imageList.get(j).authorName = workList.get(i).authorName;
+                                        workList.get(i).imageList.get(j).authorPageUrl = workList.get(i).authorPageUrl;
+                                        workList.get(i).imageList.get(j).workTitle = workList.get(i).title;
+                                        workList.get(i).imageList.get(j).sourceUrl = workList.get(i).sourceUrl;
                                     }
                                 }
                             }
@@ -311,10 +311,10 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
                             itemBean.authorHeadImg = workList.get(i).authorHeadImg;
                             itemBean.authorName = workList.get(i).authorName;
                             itemBean.authorPageUrl = workList.get(i).authorPageUrl;
-                            itemBean.workTitle = workList.get(i).workTitle;
+                            itemBean.workTitle = workList.get(i).title;
                             itemBean.sourceUrl = workList.get(i).sourceUrl;
                             items.add(itemBean);
-                            workList.get(i).workDetail = items;
+                            workList.get(i).imageList = items;
                         }
                         if (i == workList.size() - 1) {
                             lastWorkDate = goodsListBean.searchDate;
@@ -330,15 +330,15 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
                     WorkListBean bean = new WorkListBean();
 
                     bean.isTitle = true;
-                    bean.date = goodsListBean.date;
+                    bean.date = goodsListBean.displayDate;
                     bean.browseNum = goodsListBean.browseNum;
                     bean.workNum = goodsListBean.workNum;
                     bean.allDownloadNum = goodsListBean.downloadNum;
 
                     bean.isBottom = true;
-                    bean.date = goodsListBean.date;
+                    bean.date = goodsListBean.displayDate;
                     bean.searchDate = goodsListBean.searchDate;
-                    bean.start = goodsListBean.start;
+                    //bean.start = goodsListBean.start;
                     bean.leftWorkNum = goodsListBean.leftWorkNum;
 
                     lastWorkDate = goodsListBean.searchDate;

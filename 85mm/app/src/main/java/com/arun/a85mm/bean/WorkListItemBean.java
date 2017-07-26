@@ -8,7 +8,7 @@ import java.util.List;
  */
 
 public class WorkListItemBean implements Serializable {
-    public String imageUrl;
+    public String url;
     public int height;
     public int width;
     public int backgroundColor;

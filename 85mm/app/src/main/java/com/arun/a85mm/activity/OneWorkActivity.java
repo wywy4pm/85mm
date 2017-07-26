@@ -237,7 +237,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
             sourceUrl = bean.sourceUrl;
             authorUid = bean.uid;
 
-            setShare(bean.workTitle, ShareParaUtils.getWorkDetailShareDescription(bean.authorName),
+            setShare(bean.title, ShareParaUtils.getWorkDetailShareDescription(bean.authorName),
                     ShareParaUtils.getWorkDetailShareUrl(workId), bean.coverUrl);
             setShowBottomRight(sourceUrl, workId, showBottomType, authorUid);
 
@@ -245,7 +245,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
             oneWorkAdapter.setWorkListBean(bean);
 
             addCoverImage(bean);
-            addImage(bean.workDetail);
+            addImage(bean.imageList);
 
             addHead(bean);
 
@@ -298,7 +298,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     private void addCoverImage(WorkListBean bean) {
         WorkListItemBean itemBean = new WorkListItemBean();
         itemBean.type = OneWorkAdapter.DATA_TYPE_IMAGE;
-        itemBean.imageUrl = bean.coverUrl;
+        itemBean.url = bean.coverUrl;
         itemBean.width = bean.coverWidth;
         itemBean.height = bean.coverHeight;
         itemBean.backgroundColor = RandomColorHelper.getRandomColor();
@@ -319,7 +319,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     private void addDescription(WorkListBean bean) {
         WorkListItemBean itemDesBean = new WorkListItemBean();
         itemDesBean.type = OneWorkAdapter.DATA_TYPE_DESCRIPTION;
-        itemDesBean.workTitle = bean.workTitle;
+        itemDesBean.workTitle = bean.title;
         itemDesBean.description = bean.description;
         workListItems.add(itemDesBean);
     }

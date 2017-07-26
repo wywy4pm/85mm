@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -85,12 +86,51 @@
             android:src="@mipmap/comment_more" />
     </RelativeLayout>
 
+    <com.arun.a85mm.widget.AutoLineLinearLayout
+        android:id="@+id/layout_work_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/work_list_item_author"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="7dp"
+        android:visibility="gone"
+        app:leftAndRightSpace="15dp"
+        app:rowSpace="10dp" />
+
+    <LinearLayout
+        android:id="@+id/layout_user_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_work_tags"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:text="#"
+            android:textColor="@color/text_right_tips"
+            android:textSize="15sp" />
+
+        <com.arun.a85mm.widget.AutoLineLinearLayout
+            android:id="@+id/user_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            app:leftAndRightSpace="15dp"
+            app:rowSpace="8dp" />
+    </LinearLayout>
+
     <include
         android:id="@+id/layout_works_more"
         layout="@layout/layout_works_more"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/work_list_item_author"
+        android:layout_below="@+id/layout_user_tags"
         android:visibility="gone" />
 
     <View

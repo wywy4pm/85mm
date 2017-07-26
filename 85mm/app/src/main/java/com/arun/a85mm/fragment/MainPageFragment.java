@@ -90,7 +90,7 @@ public class MainPageFragment extends BaseFragment implements CommonView4<UserMa
                 if (workList.get(i) != null) {
                     workList.get(i).backgroundColor = RandomColorHelper.getRandomColor();
                     if (i == workList.size() - 1) {
-                        lastWorkId = workList.get(i).workId;
+                        lastWorkId = workList.get(i).id;
                     }
                 }
             }
