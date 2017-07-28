@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.OneWorkAdapter;
+import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
@@ -29,6 +30,8 @@ import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.listener.OnImageClick;
+import com.arun.a85mm.listener.OnTagWorkListener;
+import com.arun.a85mm.presenter.CommunityPresenter;
 import com.arun.a85mm.presenter.OneWorkPresenter;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.FullyLinearLayoutManager;
@@ -42,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class OneWorkActivity extends BaseActivity implements CommonView3, OnImageClick, View.OnClickListener {
+public class OneWorkActivity extends BaseActivity implements CommonView3, OnImageClick, View.OnClickListener, OnTagWorkListener {
 
     public static final String FRAGMENT_ONE_WORK = "fragment_one_work";
     public static final String TYPE = "type";
@@ -160,6 +163,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
 
         oneWorkAdapter = new OneWorkAdapter(this, workListItems);
         oneWorkAdapter.setOnImageClick(this);
+        oneWorkAdapter.setOnTagWorkListener(this);
         recyclerView.setAdapter(oneWorkAdapter);
         FullyLinearLayoutManager manager = new FullyLinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
@@ -252,15 +256,20 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
             if (Constant.TYPE_COMMUNITY.equals(showBottomType)) {
                 addDescription(bean);
                 addHead(bean);
-
+                addTagView(bean);
                 addComments(bean);
             } else {
                 addHead(bean);
+                addTagView(bean);
             }
             oneWorkAdapter.notifyDataSetChanged();
         } else if (dataType == OneWorkPresenter.TYPE_ADD_COMMENT) {
             showTop("评论成功");
             refreshData();
+        } else if (dataType == OneWorkPresenter.TYPE_TAG_WORK) {
+            if (data instanceof UserTagBean) {
+                showTop("打标成功");
+            }
         }
 
     }
@@ -326,6 +335,14 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
         itemDesBean.workTitle = bean.title;
         itemDesBean.description = bean.description;
         workListItems.add(itemDesBean);
+    }
+
+    private void addTagView(WorkListBean bean) {
+        WorkListItemBean itemComBean = new WorkListItemBean();
+        itemComBean.type = OneWorkAdapter.DATA_TYPE_ADD_TAG;
+        itemComBean.workTags = bean.workTags;
+        itemComBean.id = workId;
+        workListItems.add(itemComBean);
     }
 
     private void addComments(WorkListBean bean) {
@@ -415,5 +432,17 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
                 }
             });
         }
+    }
+
+    @Override
+    public void onClickMyTag(UserTagBean tagBean, String workId) {
+        if (oneWorkPresenter != null) {
+            oneWorkPresenter.tagWork(tagBean, workId);
+        }
+    }
+
+    public void resetUserTag(UserTagBean tagBean) {
+        tagBean.tagType = tagBean.tagType == 1 ? 0 : 1;
+        oneWorkAdapter.notifyDataSetChanged();
     }
 }

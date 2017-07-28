@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.CommonApiResponse;
@@ -248,7 +249,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        jumpToMain(false);
+                        //jumpToMain(false);
                         return false;
                     }
 
@@ -263,12 +264,14 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
         cover_Image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (helper != null) {
-                    helper.recordUserAction(SplashActivity.this, EventConstant.CLICK_SPLASH);
+                if (isConfigComplete) {
+                    if (helper != null) {
+                        helper.recordUserAction(SplashActivity.this, EventConstant.CLICK_SPLASH);
+                    }
+                    isJumpToWebView = true;
+                    WebViewActivity.jumpToWebViewActivity(SplashActivity.this, bean.linkUrl, String.valueOf(true));
+                    finish();
                 }
-                isJumpToWebView = true;
-                WebViewActivity.jumpToWebViewActivity(SplashActivity.this, bean.linkUrl, String.valueOf(true));
-                finish();
             }
         });
     }
@@ -280,7 +283,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
 
     @Override
     public void onError(int errorType, @StringRes int errorMsg) {
-        //errorIn();
+        //Toast.makeText(this, "网络异常，请退出重试", Toast.LENGTH_LONG).show();
     }
 
     @Override

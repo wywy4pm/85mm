@@ -112,6 +112,9 @@ public class AssociationAdapter extends BaseRecyclerAdapter<WorkListBean> {
             this.layout_head_tags = (LinearLayout) itemView.findViewById(R.id.layout_head_tags);
 
             int dataType = SharedPreferencesUtils.getConfigInt(context, SharedPreferencesUtils.KEY_ASSOCIATION_TAG);
+            if (dataType == 0) {
+                dataType = 2;
+            }
             if (tagsList != null && tagsList.size() > 0) {
                 for (int i = 0; i < tagsList.size(); i++) {
                     final TextView tv = new TextView(context);

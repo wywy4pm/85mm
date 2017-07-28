@@ -2,11 +2,15 @@ package com.arun.a85mm.presenter;
 
 import android.content.Context;
 
+import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.bean.CommonApiResponse;
+import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkDetailBean;
 import com.arun.a85mm.common.ErrorCode;
+import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.listener.RequestListenerImpl;
 import com.arun.a85mm.model.ProductModel;
+import com.arun.a85mm.model.TagModel;
 import com.arun.a85mm.view.CommonView3;
 
 /**
@@ -16,6 +20,7 @@ import com.arun.a85mm.view.CommonView3;
 public class OneWorkPresenter extends BasePresenter<CommonView3> {
     public static final int TYPE_DETAIL = 0;
     public static final int TYPE_ADD_COMMENT = 1;
+    public static final int TYPE_TAG_WORK = 2;
 
     public OneWorkPresenter(Context context) {
         super(context);
@@ -44,6 +49,32 @@ public class OneWorkPresenter extends BasePresenter<CommonView3> {
                     public void onSuccess(CommonApiResponse data) {
                         if (getMvpView() != null && data != null && data.code == ErrorCode.SUCCESS) {
                             getMvpView().refresh(TYPE_ADD_COMMENT, data.body);
+                        }
+                    }
+                }));
+    }
+
+    public void tagWork(final UserTagBean tagBean, String workId) {
+        addSubscriber(TagModel.getInstance()
+                .tagWork(tagBean.name, workId, tagBean.tagType, new RequestListenerImpl(getMvpView()) {
+
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    public void onSuccess(CommonApiResponse data) {
+                        if (getMvpView() != null && data != null) {
+                            if (data.code == ErrorCode.SUCCESS) {
+                                getMvpView().refresh(TYPE_TAG_WORK, tagBean);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(int errorType, int errorMsg) {
+                        super.onError(errorType, errorMsg);
+                        if (getMvpView() != null) {
+                            if (getMvpView() instanceof OneWorkActivity) {
+                                ((OneWorkActivity) getMvpView()).resetUserTag(tagBean);
+                            }
                         }
                     }
                 }));

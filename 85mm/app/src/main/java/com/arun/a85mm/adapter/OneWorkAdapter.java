@@ -4,20 +4,26 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.CommentsBean;
+import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.listener.OnImageClick;
+import com.arun.a85mm.listener.OnTagWorkListener;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
+import com.arun.a85mm.widget.AutoLineLinearLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -39,10 +45,12 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
     public static String DATA_TYPE_IMAGE = "image";
     public static String DATA_TYPE_DESCRIPTION = "description";
     public static String DATA_TYPE_COMMENTS = "comments";
+    public static String DATA_TYPE_ADD_TAG = "add_tag";
     private static int VIEW_TYPE_HEAD = 0;
     private static int VIEW_TYPE_IMAGE = 1;
     private static int VIEW_TYPE_DESCRIPTION = 3;
     private static int VIEW_TYPE_COMMENTS = 4;
+    private static int VIEW_TYPE_ADD_TAG = 5;
 
     public OneWorkAdapter(Context context, List<WorkListItemBean> list) {
         super(context, list);
@@ -55,6 +63,12 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
 
     public void setOnImageClick(OnImageClick onImageClick) {
         this.onImageClick = onImageClick;
+    }
+
+    public OnTagWorkListener onTagWorkListener;
+
+    public void setOnTagWorkListener(OnTagWorkListener onTagWorkListener) {
+        this.onTagWorkListener = onTagWorkListener;
     }
 
     @Override
@@ -71,6 +85,9 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
         } else if (viewType == VIEW_TYPE_COMMENTS) {
             View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_one_work_comments, parent, false);
             return new CommentsHolder(contexts.get(), itemView);
+        } else if (viewType == VIEW_TYPE_ADD_TAG) {
+            View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_add_tag, parent, false);
+            return new AddTagHolder(itemView);
         }
         return null;
     }
@@ -89,6 +106,9 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
         } else if (holder instanceof CommentsHolder) {
             CommentsHolder commentsHolder = (CommentsHolder) holder;
             commentsHolder.setData(getItem(position).comments);
+        } else if (holder instanceof AddTagHolder) {
+            AddTagHolder addTagHolder = (AddTagHolder) holder;
+            addTagHolder.setData(contexts.get(), getItem(position), onTagWorkListener);
         }
     }
 
@@ -103,6 +123,8 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
             type = VIEW_TYPE_DESCRIPTION;
         } else if (DATA_TYPE_COMMENTS.equals(getItem(position).type)) {
             type = VIEW_TYPE_COMMENTS;
+        } else if (DATA_TYPE_ADD_TAG.equals(getItem(position).type)) {
+            type = VIEW_TYPE_ADD_TAG;
         }
         return type;
     }
@@ -265,6 +287,64 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
                 commentAdapter.notifyDataSetChanged();
             } else {
                 comment_count.setText("评论 " + 0);
+            }
+        }
+    }
+
+    private static class AddTagHolder extends RecyclerView.ViewHolder {
+        private AutoLineLinearLayout layout_work_tags;
+        private LinearLayout layout_user_tags;
+        private AutoLineLinearLayout user_tags;
+
+        private AddTagHolder(View itemView) {
+            super(itemView);
+            layout_work_tags = (AutoLineLinearLayout) itemView.findViewById(R.id.layout_work_tags);
+            layout_user_tags = (LinearLayout) itemView.findViewById(R.id.layout_user_tags);
+            user_tags = (AutoLineLinearLayout) itemView.findViewById(R.id.user_tags);
+        }
+
+        private void setData(final Context context, final WorkListItemBean bean, final OnTagWorkListener onTagWorkListener) {
+            if (bean.workTags != null && bean.workTags.size() > 0) {
+                layout_work_tags.setVisibility(View.VISIBLE);
+                layout_work_tags.removeAllViews();
+                for (int i = 0; i < bean.workTags.size(); i++) {
+                    View itemView = LayoutInflater.from(context).inflate(R.layout.layout_work_tag_item_gray, layout_work_tags, false);
+                    TextView work_tag_name = (TextView) itemView.findViewById(R.id.work_tag_name);
+                    work_tag_name.setText(bean.workTags.get(i));
+                    layout_work_tags.addView(itemView);
+                }
+            } else {
+                layout_work_tags.setVisibility(View.GONE);
+            }
+
+            if (ConfigHelper.userTags != null && ConfigHelper.userTags.size() > 0) {
+                layout_user_tags.setVisibility(View.VISIBLE);
+                user_tags.removeAllViews();
+                final List<UserTagBean> userTags = new ArrayList<>();
+                userTags.addAll(ConfigHelper.userTags);
+                for (int i = 0; i < userTags.size(); i++) {
+                    final UserTagBean tagBean = userTags.get(i);
+                    if (tagBean != null && tagBean.isShow == 1) {
+                        tagBean.tagType = 0;
+                        final TextView myTag = new TextView(context);
+                        myTag.setTextColor(context.getResources().getColor(R.color.text_right_tips));
+                        myTag.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+                        myTag.setText(tagBean.name);
+                        myTag.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (onTagWorkListener != null) {
+                                    onTagWorkListener.onClickMyTag(tagBean, bean.id);
+                                }
+                                tagBean.tagType = tagBean.tagType == 0 ? 1 : 0;
+                                myTag.setTextColor(context.getResources().getColor(tagBean.tagType == 1 ? R.color.more_yellow : R.color.text_right_tips));
+                            }
+                        });
+                        user_tags.addView(myTag);
+                    }
+                }
+            } else {
+                layout_user_tags.setVisibility(View.GONE);
             }
         }
     }

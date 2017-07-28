@@ -13,7 +13,7 @@ public class WorkListItemBean implements Serializable {
     public int width;
     public int backgroundColor;
 
-    public String workId;
+    public String id;
     public String workTitle;
     public String description;
     public String authorName;
@@ -21,6 +21,7 @@ public class WorkListItemBean implements Serializable {
     public String authorPageUrl;
     public String sourceUrl;
     public List<CommentsBean> comments;
+    public List<String> workTags;
 
     public boolean isLoad;
 

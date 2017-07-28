@@ -87,6 +87,9 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
     protected void initData() {
         addHeadTags();
         dataType = SharedPreferencesUtils.getConfigInt(getActivity(), SharedPreferencesUtils.KEY_ASSOCIATION_TAG);
+        if (dataType == 0) {
+            dataType = 2;
+        }
         presenter = new AssociationPresenter(getActivity());
         presenter.attachView(this);
         refreshData();
