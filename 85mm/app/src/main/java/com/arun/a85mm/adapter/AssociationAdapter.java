@@ -16,9 +16,9 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.activity.UserMainActivity;
-import com.arun.a85mm.bean.AssociationBean;
 import com.arun.a85mm.bean.CommentsBean;
 import com.arun.a85mm.bean.CommunityTagBean;
+import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
@@ -36,7 +36,7 @@ import java.util.Map;
  * Created by wy on 2017/6/24.
  */
 
-public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
+public class AssociationAdapter extends BaseRecyclerAdapter<WorkListBean> {
     public static final String DATA_TYPE_HEAD = "head";
     public static final String DATA_TYPE_CONTENT = "content";
 
@@ -57,7 +57,7 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
         AssociationAdapter.onTagClick = onTagClick;
     }
 
-    public AssociationAdapter(Context context, List<AssociationBean> list, List<CommunityTagBean> tagsList, EventStatisticsHelper eventStatisticsHelper) {
+    public AssociationAdapter(Context context, List<WorkListBean> list, List<CommunityTagBean> tagsList, EventStatisticsHelper eventStatisticsHelper) {
         super(context, list);
         screenWidth = DensityUtil.getScreenWidth(context);
         this.tagsList = tagsList;
@@ -214,24 +214,24 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
             this.comment_more = (ImageView) itemView.findViewById(R.id.comment_more);
         }
 
-        private void setData(final Context context, final AssociationBean bean, int screenWidth, final EventStatisticsHelper eventStatisticsHelper) {
+        private void setData(final Context context, final WorkListBean bean, int screenWidth, final EventStatisticsHelper eventStatisticsHelper) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Map<String, String> map = new HashMap<>();
-                    map.put(UrlJumpHelper.WORK_ID, bean.workId);
+                    map.put(UrlJumpHelper.WORK_ID, bean.id);
                     map.put(OneWorkActivity.KEY_TYPE, Constant.TYPE_COMMUNITY);
                     /*FragmentCommonActivity.jumpToFragmentCommonActivity(context,
                             FragmentCommonActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, FragmentCommonActivity.BACK_MODE_COM);*/
 
-                    OneWorkActivity.jumpToOneWorkActivity(context, OneWorkActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, OneWorkActivity.BACK_MODE_COM);
+                    OneWorkActivity.jumpToOneWorkActivity(context, OneWorkActivity.FRAGMENT_ONE_WORK, bean.title, map, OneWorkActivity.BACK_MODE_COM);
                 }
             });
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    DialogHelper.showBottom(context, Constant.TYPE_COMMUNITY, "", bean.workId, bean.uid, eventStatisticsHelper);
+                    DialogHelper.showBottom(context, Constant.TYPE_COMMUNITY, "", bean.id, bean.uid, eventStatisticsHelper);
                     return false;
                 }
             });
@@ -279,26 +279,26 @@ public class AssociationAdapter extends BaseRecyclerAdapter<AssociationBean> {
                 layout_cover_Image.setVisibility(View.GONE);
             }
 
-            community_title.setText(bean.workTitle);
+            community_title.setText(bean.title);
             community_detail.setText(bean.description);
 
             comment_more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //DialogHelper.showBottomSourceLink(context, "", bean.workId, eventStatisticsHelper, Constant.TYPE_COMMUNITY, bean.uid);
-                    DialogHelper.showBottom(context, Constant.TYPE_COMMUNITY, "", bean.workId, bean.uid, eventStatisticsHelper);
+                    DialogHelper.showBottom(context, Constant.TYPE_COMMUNITY, "", bean.id, bean.uid, eventStatisticsHelper);
                 }
             });
-            if (bean.comments != null && bean.comments.size() > 0) {
+            if (bean.commentList != null && bean.commentList.size() > 0) {
                 comment_shadow.setVisibility(View.VISIBLE);
                 layout_comment.setVisibility(View.VISIBLE);
                 layout_comment.removeAllViews();
-                for (int i = 0; i < bean.comments.size(); i++) {
-                    if (bean.comments.get(i) != null) {
-                        CommentsBean commentItem = bean.comments.get(i);
+                for (int i = 0; i < bean.commentList.size(); i++) {
+                    if (bean.commentList.get(i) != null) {
+                        CommentsBean commentItem = bean.commentList.get(i);
                         View commentView = LayoutInflater.from(context).inflate(R.layout.list_commnet_item, layout_comment, false);
                         if (commentView.getLayoutParams() != null && commentView.getLayoutParams() instanceof LinearLayout.LayoutParams) {
-                            if (i < bean.comments.size() - 1) {
+                            if (i < bean.commentList.size() - 1) {
                                 ((LinearLayout.LayoutParams) commentView.getLayoutParams()).setMargins(0, 0, 0, DensityUtil.dp2px(context, 12));
                             } else {
                                 ((LinearLayout.LayoutParams) commentView.getLayoutParams()).setMargins(0, 0, 0, 0);

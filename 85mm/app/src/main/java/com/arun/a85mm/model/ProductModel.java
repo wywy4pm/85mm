@@ -39,8 +39,8 @@ public class ProductModel extends BaseModel {
         return request(RetrofitInit.getApi().getSingleWork(workId), listener);
     }
 
-    public Subscriber getAuditWorkList(String searchName, String orderType, String start, String lastWorkId, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().getAuditWorkList(searchName, orderType, start, lastWorkId), listener);
+    public Subscriber getAuditWorkList(String searchName, String orderType, String lastId, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getAuditWorkList(searchName, orderType, lastId), listener);
     }
 
     public Subscriber addComment(String workId, String comment, CommonRequestListener listener) {

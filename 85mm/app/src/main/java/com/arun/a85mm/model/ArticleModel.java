@@ -23,8 +23,8 @@ public class ArticleModel extends BaseModel {
         return instance;
     }
 
-    public Subscriber getArticleListData(int pageNum, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().getArticleList(pageNum), listener);
+    public Subscriber getArticleListData(String lastId, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getArticleList(lastId), listener);
     }
 
     public Subscriber getArticleDetailData(String articleId, CommonRequestListener listener) {

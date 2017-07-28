@@ -59,6 +59,9 @@ public class Constant {
     public static final int REQUEST_CODE_ALBUM_HEAD = 1003;
     public static final int REQUEST_CODE_ALBUM_COVER = 1004;
 
+    /**
+     * bottom_dialog_type
+     */
     public static final String TYPE_WORK = "0";
     public static final String TYPE_AUDIT = "1";
     public static final String TYPE_COMMUNITY = "2";

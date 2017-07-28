@@ -23,6 +23,8 @@ import java.util.List;
  */
 
 public class ProductFragmentPresenter extends BasePresenter<CommonView4> {
+    public static final int TYPE_TAG_WORK = 0;
+
     public ProductFragmentPresenter(Context context) {
         super(context);
     }
@@ -87,7 +89,7 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView4> {
                     public void onSuccess(CommonApiResponse data) {
                         if (getMvpView() != null && data != null) {
                             if (data.code == ErrorCode.SUCCESS) {
-                                getMvpView().refresh(TagWorkPresenter.TYPE_TAG_WORK, tagBean);
+                                getMvpView().refresh(TYPE_TAG_WORK, tagBean);
                             }
                         }
                     }

@@ -79,12 +79,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
 
     private void initView() {
         layout_detail = (RelativeLayout) findViewById(R.id.layout_detail);
-        /*head_image = (ImageView) findViewById(R.id.head_image);
-        article_title = (TextView) findViewById(R.id.article_title);
-        article_author = (RelativeLayout) findViewById(R.id.article_author);
-        author_head_image = (ImageView) findViewById(R.id.author_head_image);
-        author_name = (TextView) findViewById(R.id.author_name);
-        article_create_time = (TextView) findViewById(R.id.article_create_time);*/
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         back = (ImageView) findViewById(R.id.back);
         setBack(back);

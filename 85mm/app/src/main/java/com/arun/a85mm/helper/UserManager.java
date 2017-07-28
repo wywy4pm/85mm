@@ -39,7 +39,7 @@ public class UserManager {
 
     public void setUserHead(String headUrl) {
         if (userInfoBean != null) {
-            userInfoBean.headerUrl = headUrl;
+            userInfoBean.headUrl = headUrl;
         }
     }
 

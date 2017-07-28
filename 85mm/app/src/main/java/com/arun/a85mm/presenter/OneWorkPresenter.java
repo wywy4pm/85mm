@@ -3,6 +3,7 @@ package com.arun.a85mm.presenter;
 import android.content.Context;
 
 import com.arun.a85mm.bean.CommonApiResponse;
+import com.arun.a85mm.bean.WorkDetailBean;
 import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.listener.RequestListenerImpl;
 import com.arun.a85mm.model.ProductModel;
@@ -27,7 +28,9 @@ public class OneWorkPresenter extends BasePresenter<CommonView3> {
                     public void onSuccess(CommonApiResponse data) {
                         if (getMvpView() != null) {
                             if (data != null && data.code == ErrorCode.SUCCESS) {
-                                getMvpView().refresh(TYPE_DETAIL, data.body);
+                                if (data.body != null && data.body instanceof WorkDetailBean) {
+                                    getMvpView().refresh(TYPE_DETAIL, ((WorkDetailBean) data.body).workInfo);
+                                }
                             }
                         }
                     }

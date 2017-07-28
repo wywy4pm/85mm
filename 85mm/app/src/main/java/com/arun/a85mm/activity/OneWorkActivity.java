@@ -247,11 +247,15 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
             addCoverImage(bean);
             addImage(bean.imageList);
 
-            addHead(bean);
+            //addHead(bean);
 
             if (Constant.TYPE_COMMUNITY.equals(showBottomType)) {
                 addDescription(bean);
+                addHead(bean);
+
                 addComments(bean);
+            } else {
+                addHead(bean);
             }
             oneWorkAdapter.notifyDataSetChanged();
         } else if (dataType == OneWorkPresenter.TYPE_ADD_COMMENT) {
@@ -327,7 +331,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     private void addComments(WorkListBean bean) {
         WorkListItemBean itemComBean = new WorkListItemBean();
         itemComBean.type = OneWorkAdapter.DATA_TYPE_COMMENTS;
-        itemComBean.comments = bean.comments;
+        itemComBean.comments = bean.commentList;
         workListItems.add(itemComBean);
     }
 

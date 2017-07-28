@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.CommonApiResponse;
+import com.arun.a85mm.bean.ConfigBean;
 import com.arun.a85mm.bean.GuidePageBean;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.AppHelper;
@@ -183,8 +184,8 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
     @Override
     public void refresh(int type, Object data) {
         if (type == SettingPresenter.TYPE_CONFIG) {
-            if (data instanceof CommonApiResponse) {
-                final CommonApiResponse config = (CommonApiResponse) data;
+            if (data instanceof ConfigBean) {
+                final ConfigBean config = (ConfigBean) data;
                 SharedPreferencesUtils.saveUid(this, config.uid);
                 if (AppHelper.getInstance().getAppConfig() != null && TextUtils.isEmpty(AppHelper.getInstance().getAppConfig().uid)) {
                     AppHelper.getInstance().getAppConfig().setUid(config.uid);
@@ -194,13 +195,14 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                     SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_OPENED, config.hideRead.hideReadOpen);
                 }
 
-                if (config.auditInfo != null) {
+                /*if (config.auditInfo != null) {
                     ConfigHelper.tipsPosition = config.auditInfo.tipsPosition;
                     ConfigHelper.tags = config.auditInfo.tags;
-                }
+                }*/
+
                 ConfigHelper.userTags = config.userTagList;
                 SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE, config.hasNewMsg);
-                UserManager.getInstance().setLogin(config.wechatLogin == 1);
+                UserManager.getInstance().setLogin(config.isLogin == 1);
                 UserManager.getInstance().setUserInfoBean(config.userInfo);
                 new Thread(
                         new Runnable() {
@@ -210,10 +212,10 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                             }
                         }
                 ).start();
-                if (config.body != null && config.body instanceof List) {
-                    List<GuidePageBean> list = (List<GuidePageBean>) config.body;
+                if (config.guideList != null) {
+                    List<GuidePageBean> list = config.guideList;
                     if (list.size() == 2) {
-                        CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE, (Serializable) config.body);
+                        CacheUtils.saveObject(this, CacheUtils.KEY_OBJECT_PRODUCT_RESPONSE, (Serializable) list);
                     }
                     isConfigComplete = true;
                     if (!isShowCache) {

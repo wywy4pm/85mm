@@ -26,8 +26,12 @@ public class AssociationModel extends BaseModel {
         return instance;
     }
 
-    public Subscriber getCommunityList(int start, int dataType, CommonRequestListener listener) {
+    /*public Subscriber getCommunityList(int start, int dataType, CommonRequestListener listener) {
         return request(RetrofitInit.getApi().getCommunityList(start, dataType), listener);
+    }*/
+
+    public Subscriber getCommunityList(String lastWorkId, int type, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getWorkList(lastWorkId, "", "", type), listener);
     }
 
     public Subscriber addCommunity(String title, String description, List<MsgImgRequest> imageList, CommonRequestListener listener) {

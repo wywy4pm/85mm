@@ -242,7 +242,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         if (bean != null) {
             GradientDrawable drawable = DrawableUtils.getHeadBgDrawable(user_head);
             Glide.with(this)
-                    .load(bean.headerUrl)
+                    .load(bean.headUrl)
                     .placeholder(drawable)
                     .error(drawable)
                     .centerCrop()

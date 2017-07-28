@@ -29,7 +29,7 @@ public class WorkListBean implements Serializable {
     public boolean isCoverLoad;
     public int backgroundColor;
     public String description;
-    public List<CommentsBean> comments;
+    public List<CommentsBean> commentList;
     public String uid;
 
     public int browseNum;
@@ -59,4 +59,6 @@ public class WorkListBean implements Serializable {
     public long createDate;
     public int module;
     public List<String> workTags;
+
+    public String type;
 }

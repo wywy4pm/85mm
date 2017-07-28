@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.AuditListAdapter;
+import com.arun.a85mm.bean.AuditBean;
 import com.arun.a85mm.bean.AuditInfoBean;
 import com.arun.a85mm.bean.AuditItemBean;
 import com.arun.a85mm.bean.WorkListBean;
@@ -31,7 +32,7 @@ import com.arun.a85mm.view.CommonView4;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AuditActivity extends BaseActivity implements CommonView4<List<WorkListBean>> {
+public class AuditActivity extends BaseActivity implements CommonView4<AuditBean> {
 
     private TextView image_right;
     //private AutoLineLinearLayout layout_tags;
@@ -41,7 +42,6 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
     private List<AuditItemBean> auditWorks = new ArrayList<>();
     //private List<AuditInfoBean.TagItemBean> tags;
     private int auditSortType = 0;//0：按时间，1：按热度
-    public int start;
     public String lastWorkId;
     private AuditPresenter auditPresenter;
 
@@ -136,45 +136,13 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
         if (eventStatisticsHelper != null) {
             eventStatisticsHelper.recordUserAction(this, EventConstant.OPEN_AUDIT);
         }
-        /*tags = ConfigHelper.tags;
-        if (tags != null && tags.size() > 0) {
-            String selectName = SharedPreferencesUtils.getConfigString(this, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG);
-            if (TextUtils.isEmpty(selectName)) {
-                searchName = tags.get(0).searchName;
-            } else {
-                searchName = selectName;
-            }
 
-            for (int i = 0; i < tags.size(); i++) {
-                final TextView tv = new TextView(this);
-                tv.setTag(i);
-                tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                tv.setTextColor(getResources().getColor(R.color.charcoalgrey));
-                tv.setPadding(DensityUtil.dp2px(this, 10), DensityUtil.dp2px(this, 5), DensityUtil.dp2px(this, 10), DensityUtil.dp2px(this, 5));
-                tv.setGravity(Gravity.CENTER);
-                tv.setBackgroundResource(R.drawable.selector_audit_flow_tags);
-                final int finalI = i;
-                tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        tv.setSelected(true);
-                        tv.setTextColor(getResources().getColor(R.color.white));
-                        resetSelect(tv.getTag());
-                        searchName = tags.get(finalI).searchName;
-                        requestData();
-                    }
-                });
-                tv.setText(tags.get(i).showName);
+        auditPresenter = new AuditPresenter(this);
+        auditPresenter.attachView(this);
+        requestData();
+    }
 
-                if ((!TextUtils.isEmpty(selectName) && selectName.equals(tags.get(i).searchName))
-                        || (TextUtils.isEmpty(selectName) && i == 0)) {
-                    tv.setSelected(true);
-                    tv.setTextColor(getResources().getColor(R.color.white));
-                }
-                layout_tags.addView(tv);
-            }
-        }*/
-        List<AuditInfoBean.TagItemBean> tags = ConfigHelper.tags;
+    private void addHead(List<AuditInfoBean.TagItemBean> tags) {
         if (tags != null && tags.size() > 0) {
             String selectName = SharedPreferencesUtils.getConfigString(this, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG);
             if (TextUtils.isEmpty(selectName)) {
@@ -185,13 +153,10 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
         }
 
         //创建头部
+        auditListAdapter.setTags(tags);
         AuditItemBean bean = new AuditItemBean();
         bean.type = AuditListAdapter.TYPE_AUDIT_HEAD;
         auditWorks.add(bean);
-
-        auditPresenter = new AuditPresenter(this);
-        auditPresenter.attachView(this);
-        requestData();
     }
 
     public void setSearchName(String searchName) {
@@ -207,10 +172,9 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
 
             recyclerView.scrollToPosition(0);
             setLoading(true);
-            start = 0;
             lastWorkId = "";
             isHaveMore = true;
-            auditPresenter.getAuditWorkList(searchName, auditSortType, start, lastWorkId);
+            auditPresenter.getAuditWorkList(searchName, auditSortType, lastWorkId);
             SharedPreferencesUtils.setConfigString(this, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG, searchName);
 
             lastSearchName = searchName;
@@ -221,7 +185,7 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
     private void loadMore() {
         if (auditPresenter != null) {
             setLoading(true);
-            auditPresenter.getAuditWorkList(searchName, auditSortType, start, lastWorkId);
+            auditPresenter.getAuditWorkList(searchName, auditSortType, lastWorkId);
 
             lastSearchName = searchName;
             lastSearchType = auditSortType;
@@ -258,30 +222,42 @@ public class AuditActivity extends BaseActivity implements CommonView4<List<Work
     }
 
     @Override
-    public void refresh(List<WorkListBean> data) {
+    public void refresh(AuditBean data) {
         if (data != null) {
-            if ((!(!TextUtils.isEmpty(lastSearchName) && !lastSearchName.equals(searchName)))
-                    || lastSearchType == auditSortType) {
-                clearAndAddHead();
+            if (data.workList != null) {
+                if (auditWorks.size() == 0) {
+                    if (data.auditInfo != null) {
+                        addHead(data.auditInfo.tags);
+                    }
+                } else {
+                    if ((!(!TextUtils.isEmpty(lastSearchName) && !lastSearchName.equals(searchName)))
+                            || lastSearchType == auditSortType) {
+                        clearAndAddHead();
+                    }
+                }
+                formatData(data.workList);
+                auditListAdapter.notifyDataSetChanged();
+            } else {
+                auditListAdapter.notifyDataSetChanged();
             }
-            formatData(data);
-            auditListAdapter.notifyDataSetChanged();
-        } else {
-            auditListAdapter.notifyDataSetChanged();
         }
     }
 
     private void clearAndAddHead() {
-        AuditItemBean bean = auditWorks.get(0);
-        auditWorks.clear();
-        auditWorks.add(bean);
+        if (auditWorks.size() > 0) {
+            AuditItemBean bean = auditWorks.get(0);
+            auditWorks.clear();
+            auditWorks.add(bean);
+        }
     }
 
     @Override
-    public void refreshMore(List<WorkListBean> data) {
+    public void refreshMore(AuditBean data) {
         if (data != null) {
-            formatData(data);
-            auditListAdapter.notifyDataSetChanged();
+            if (data.workList != null) {
+                formatData(data.workList);
+                auditListAdapter.notifyDataSetChanged();
+            }
         }
     }
 

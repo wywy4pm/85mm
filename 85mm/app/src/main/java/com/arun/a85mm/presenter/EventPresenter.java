@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.arun.a85mm.bean.CommonApiResponse;
+import com.arun.a85mm.bean.EventBackBean;
 import com.arun.a85mm.bean.request.ActionRequest;
 import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.common.EventConstant;
@@ -53,7 +54,9 @@ public class EventPresenter extends BasePresenter<EventView> {
                                     || type == EventConstant.WORK_ASSOCIATION_DELETE) {
                                 getMvpView().eventDone(type);
                             }
-                            getMvpView().eventSuccess(commonApiResponse.hasNewMsg);
+                            if (commonApiResponse.body != null && commonApiResponse.body instanceof EventBackBean) {
+                                getMvpView().eventSuccess(((EventBackBean) commonApiResponse.body).hasNewMsg);
+                            }
                         }
                     }
                 }

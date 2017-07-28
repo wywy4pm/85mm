@@ -27,8 +27,8 @@ public class MessageModel extends BaseModel {
         return instance;
     }
 
-    public Subscriber getMessageList(String uid, int msgType, int lastMsgId, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().getMessageList(uid, msgType, lastMsgId), listener);
+    public Subscriber getMessageList(int msgType, int lastMsgId, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getMessageList(msgType, lastMsgId), listener);
     }
 
     public Subscriber addMessage(String sender, String receiver, String content, List<MsgImgRequest> imageList, CommonRequestListener listener) {

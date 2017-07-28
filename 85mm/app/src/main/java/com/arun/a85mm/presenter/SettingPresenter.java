@@ -34,31 +34,13 @@ public class SettingPresenter extends BasePresenter<CommonView3> {
                         if (data != null) {
                             if (data.code == ErrorCode.SUCCESS) {
                                 if (getMvpView() != null) {
-                                    getMvpView().refresh(TYPE_CONFIG, data);
+                                    getMvpView().refresh(TYPE_CONFIG, data.body);
                                 }
                             }
                         }
                     }
                 }));
     }
-
-    /*public void getWorksGoods(final String lastDate) {
-        addSubscriber(ProductModel.getInstance()
-                .getWorksGoods(lastDate, new RequestListenerImpl(getMvpView()) {
-
-                    @SuppressWarnings("unchecked")
-                    @Override
-                    public void onSuccess(CommonApiResponse data) {
-                        if (getMvpView() != null) {
-                            if (data != null && data.code == ErrorCode.SUCCESS) {
-                                if (TextUtils.isEmpty(lastDate)) {
-                                    getMvpView().refresh(TYPE_WORKS, data);
-                                }
-                            }
-                        }
-                    }
-                }));
-    }*/
 
     public void getWorkMix() {
         addSubscriber(ProductModel.getInstance()

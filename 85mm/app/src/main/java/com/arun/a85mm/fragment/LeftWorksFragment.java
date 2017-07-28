@@ -20,6 +20,7 @@ import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.listener.OnImageClick;
+import com.arun.a85mm.listener.OnTagWorkListener;
 import com.arun.a85mm.presenter.CommunityPresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
@@ -33,7 +34,7 @@ import java.util.Map;
 /**
  * Created by WY on 2017/5/7.
  */
-public class LeftWorksFragment extends BaseFragment implements OnImageClick, CommonView4<List<WorkListBean>> {
+public class LeftWorksFragment extends BaseFragment implements OnImageClick, CommonView4<List<WorkListBean>>, OnTagWorkListener {
 
     public ExpandableListView expandableListView;
     public SwipeToLoadLayout swipeToLoadLayout;
@@ -66,6 +67,7 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
         communityAdapter.setEventListener(this);
         expandableListView.setAdapter(communityAdapter);
         communityAdapter.setOnImageClick(this);
+        communityAdapter.setOnTagWorkListener(this);
 
         setRefresh(swipeToLoadLayout);
         setExpandableListViewCommon(expandableListView, next_group_img, workLists);
@@ -221,7 +223,11 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
 
     @Override
     public void refresh(int type, Object data) {
-
+        if (type == CommunityPresenter.TYPE_TAG_WORK) {
+            if (data instanceof UserTagBean) {
+                showTop("打标成功");
+            }
+        }
     }
 
     public void setHaveMore(boolean isHaveMore) {
@@ -247,4 +253,15 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
         }
     }
 
+    @Override
+    public void onClickMyTag(UserTagBean tagBean, String workId) {
+        if (communityPresenter != null) {
+            communityPresenter.tagWork(tagBean, workId);
+        }
+    }
+
+    public void resetUserTag(UserTagBean tagBean) {
+        tagBean.tagType = tagBean.tagType == 1 ? 0 : 1;
+        communityAdapter.notifyDataSetChanged();
+    }
 }

@@ -56,8 +56,8 @@ public class UserMainActivity extends BaseActivity implements CommonView4<UserMa
     private List<Fragment> list = new ArrayList<>();
     private MainPageFragment publishFragment;
     private MainPageFragment downloadFragment;
-    public static final int TYPE_PUBLISH = 0;
-    public static final int TYPE_DOWNLOAD = 1;
+    public static final int TYPE_PUBLISH = 7;
+    public static final int TYPE_DOWNLOAD = 8;
     private String nickName;
 
     public static void jumpToUserMain(Context context, String authorId) {
@@ -197,10 +197,10 @@ public class UserMainActivity extends BaseActivity implements CommonView4<UserMa
                 user_brief.setText(authorInfo.description);
             }
             publishFragment.setData(data.publishWorkList);
-            publishFragment.setAuthorId(authorId);
+            //publishFragment.setAuthorId(authorId);
 
             downloadFragment.setData(data.downloadWorkList);
-            downloadFragment.setAuthorId(authorId);
+            //downloadFragment.setAuthorId(authorId);
         }
     }
 

@@ -40,7 +40,11 @@ public class UserModel extends BaseModel {
         return request(RetrofitInit.getApi().getUserMainPage(authorId), listener);
     }
 
-    public Subscriber getUserMainPageMore(String authorId, String lastWorkId, int type, CommonRequestListener listener) {
+    /*public Subscriber getUserMainPageMore(String authorId, String lastWorkId, int type, CommonRequestListener listener) {
         return request(RetrofitInit.getApi().getUserMainPageMore(authorId, lastWorkId, type), listener);
+    }*/
+
+    public Subscriber getUserMainPageMore(String lastWorkId, int type, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getWorkList(lastWorkId, "", "", type), listener);
     }
 }

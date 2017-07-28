@@ -38,6 +38,7 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
     private int msgType;
     private int lastMsgId = 0;
     private RelativeLayout layout_no_data;
+    private boolean isHaveMore = true;
 
     public static MessageFragment getInstance(int msgType) {
         MessageFragment messageFragment = new MessageFragment();
@@ -82,8 +83,9 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
     private void requestData() {
         setHaveData();
         if (messagePresenter != null) {
+            isHaveMore = true;
             lastMsgId = 0;
-            messagePresenter.getMessageList(userId, msgType, lastMsgId);
+            messagePresenter.getMessageList(msgType, lastMsgId);
         }
     }
 
@@ -94,8 +96,10 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
 
     @Override
     public void setLoadMore() {
-        if (messagePresenter != null) {
-            messagePresenter.getMessageList(userId, msgType, lastMsgId);
+        if (isHaveMore) {
+            if (messagePresenter != null) {
+                messagePresenter.getMessageList(msgType, lastMsgId);
+            }
         }
     }
 
@@ -104,9 +108,13 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
         swipeToLoadLayout.setVisibility(View.VISIBLE);
     }
 
-    private void setNoData() {
+    public void setNoData() {
         layout_no_data.setVisibility(View.VISIBLE);
         swipeToLoadLayout.setVisibility(View.GONE);
+    }
+
+    public void setHaveMore(boolean isHaveMore) {
+        this.isHaveMore = isHaveMore;
     }
 
     @Override
@@ -114,8 +122,6 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
         if (data != null && data.size() > 0) {
             messages.clear();
             formatData(data);
-        } else {
-            setNoData();
         }
     }
 
@@ -138,9 +144,9 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
                 MessageItem itemTop = new MessageItem();
                 itemTop.type = Constant.MESSAGE_LIST_TOP;
                 itemTop.content = bean.content;
-                itemTop.sender = bean.sender;
-                itemTop.receiver = bean.receiver;
-                itemTop.msgId = bean.msgId;
+                itemTop.sender = bean.senderId;
+                itemTop.receiver = bean.receiverId;
+                itemTop.msgId = bean.id;
                 itemTop.sendTime = bean.sendTime;
                 messages.add(itemTop);
                 if (bean.imageList != null) {
@@ -158,7 +164,7 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
                     }
                 }
                 if (i == data.size() - 1) {
-                    lastMsgId = bean.msgId;
+                    lastMsgId = bean.id;
                 }
             }
         }

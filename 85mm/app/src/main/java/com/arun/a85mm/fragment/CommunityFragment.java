@@ -18,6 +18,7 @@ import com.arun.a85mm.adapter.CommunityAdapter;
 import com.arun.a85mm.bean.ColumnBean;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.GoodsListBean;
+import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.bean.WorkMixBean;
@@ -30,7 +31,9 @@ import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.listener.OnImageClick;
+import com.arun.a85mm.listener.OnTagWorkListener;
 import com.arun.a85mm.presenter.CommunityPresenter;
+import com.arun.a85mm.presenter.TagWorkPresenter;
 import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.DensityUtil;
@@ -50,7 +53,7 @@ import java.util.List;
 /**
  * Created by WY on 2017/4/14.
  */
-public class CommunityFragment extends BaseFragment implements CommonView4<List<GoodsListBean>>, OnImageClick {
+public class CommunityFragment extends BaseFragment implements CommonView4<List<GoodsListBean>>, OnImageClick, OnTagWorkListener {
     public ExpandableListView expandableListView;
     public SwipeToLoadLayout swipeToLoadLayout;
     public ImageView not_network_image;
@@ -89,6 +92,7 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
         expandableListView.setAdapter(communityAdapter);
         communityAdapter.setOnImageClick(this);
         communityAdapter.setEventListener(this);
+        communityAdapter.setOnTagWorkListener(this);
         addHeadView();
 
         setRefresh(swipeToLoadLayout);
@@ -195,11 +199,17 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
 
     @Override
     public void refresh(int type, Object data) {
-        if (data != null && data instanceof WorkMixBean) {
-            worksList.clear();
-            WorkMixBean workMixBean = (WorkMixBean) data;
-            setColumns(workMixBean.columns);
-            formatData(workMixBean.historyList);
+        if (type == CommunityPresenter.TYPE_WORK_MIX) {
+            if (data != null && data instanceof WorkMixBean) {
+                worksList.clear();
+                WorkMixBean workMixBean = (WorkMixBean) data;
+                setColumns(workMixBean.columns);
+                formatData(workMixBean.historyList);
+            }
+        } else if (type == CommunityPresenter.TYPE_TAG_WORK) {
+            if (data instanceof UserTagBean) {
+                showTop("打标成功");
+            }
         }
     }
 
@@ -402,4 +412,15 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
         }
     }
 
+    @Override
+    public void onClickMyTag(UserTagBean tagBean, String workId) {
+        if (communityPresenter != null) {
+            communityPresenter.tagWork(tagBean, workId);
+        }
+    }
+
+    public void resetUserTag(UserTagBean tagBean) {
+        tagBean.tagType = tagBean.tagType == 1 ? 0 : 1;
+        communityAdapter.notifyDataSetChanged();
+    }
 }

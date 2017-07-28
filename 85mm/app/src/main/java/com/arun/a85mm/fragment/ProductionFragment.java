@@ -148,7 +148,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
 
     @Override
     public void refresh(int type, Object data) {
-        if (type == TagWorkPresenter.TYPE_TAG_WORK) {
+        if (type == ProductFragmentPresenter.TYPE_TAG_WORK) {
             if (data instanceof UserTagBean) {
                 showTop("打标成功");
             }

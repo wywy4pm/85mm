@@ -5,11 +5,13 @@ import android.content.res.Resources;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,17 +21,21 @@ import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.activity.WebViewActivity;
+import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.listener.OnImageClick;
+import com.arun.a85mm.listener.OnTagWorkListener;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.arun.a85mm.utils.GlideRoundTransform;
 import com.arun.a85mm.utils.NetUtils;
+import com.arun.a85mm.widget.AutoLineLinearLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -37,6 +43,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +77,12 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
 
     public void setEventListener(EventListener eventListener) {
         this.eventListener = eventListener;
+    }
+
+    public OnTagWorkListener onTagWorkListener;
+
+    public void setOnTagWorkListener(OnTagWorkListener onTagWorkListener) {
+        this.onTagWorkListener = onTagWorkListener;
     }
 
     @Override
@@ -435,6 +448,50 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     }
                 }
             });
+
+            if (workGroup.workTags != null && workGroup.workTags.size() > 0) {
+                workListItemHolder.layout_work_tags.setVisibility(View.VISIBLE);
+                workListItemHolder.layout_work_tags.removeAllViews();
+                for (int i = 0; i < workGroup.workTags.size(); i++) {
+                    View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_tag_item_gray, workListItemHolder.layout_work_tags, false);
+                    TextView work_tag_name = (TextView) itemView.findViewById(R.id.work_tag_name);
+                    work_tag_name.setText(workGroup.workTags.get(i));
+                    workListItemHolder.layout_work_tags.addView(itemView);
+                }
+            } else {
+                workListItemHolder.layout_work_tags.setVisibility(View.GONE);
+            }
+
+            if (ConfigHelper.userTags != null && ConfigHelper.userTags.size() > 0) {
+                workListItemHolder.layout_user_tags.setVisibility(View.VISIBLE);
+                workListItemHolder.user_tags.removeAllViews();
+                final List<UserTagBean> userTags = new ArrayList<>();
+                userTags.addAll(ConfigHelper.userTags);
+                for (int i = 0; i < userTags.size(); i++) {
+                    final UserTagBean tagBean = userTags.get(i);
+                    if (tagBean != null && tagBean.isShow == 1) {
+                        tagBean.tagType = 0;
+                        final TextView myTag = new TextView(contexts.get());
+                        myTag.setTextColor(contexts.get().getResources().getColor(R.color.text_right_tips));
+                        myTag.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+                        myTag.setText(tagBean.name);
+                        myTag.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (onTagWorkListener != null) {
+                                    onTagWorkListener.onClickMyTag(tagBean, workGroup.id);
+                                }
+                                tagBean.tagType = tagBean.tagType == 0 ? 1 : 0;
+                                myTag.setTextColor(contexts.get().getResources().getColor(tagBean.tagType == 1 ? R.color.more_yellow : R.color.text_right_tips));
+                            }
+                        });
+                        workListItemHolder.user_tags.addView(myTag);
+                    }
+                }
+            } else {
+                workListItemHolder.layout_user_tags.setVisibility(View.GONE);
+            }
+
             if (isCommunity) {
                 if (workList.get(groupPosition).isBottom) {
                     workListItemHolder.layout_works_more.setVisibility(View.VISIBLE);
@@ -580,6 +637,9 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         private RelativeLayout layout_works_more;
         private TextView query_more_works;
         private View bg_line;
+        private AutoLineLinearLayout layout_work_tags;
+        private LinearLayout layout_user_tags;
+        private AutoLineLinearLayout user_tags;
 
         private WorkListItemHolder(View rootView) {
             rippleView = (RippleView) rootView.findViewById(R.id.rippleView);
@@ -598,6 +658,9 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
                 }
             });
+            layout_work_tags = (AutoLineLinearLayout) rootView.findViewById(R.id.layout_work_tags);
+            layout_user_tags = (LinearLayout) rootView.findViewById(R.id.layout_user_tags);
+            user_tags = (AutoLineLinearLayout) rootView.findViewById(R.id.user_tags);
         }
     }
 

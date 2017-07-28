@@ -1,9 +1,6 @@
 package com.arun.a85mm.fragment;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,13 +10,9 @@ import com.arun.a85mm.R;
 import com.arun.a85mm.activity.AddCommunityActivity;
 import com.arun.a85mm.activity.LoginActivity;
 import com.arun.a85mm.adapter.AssociationAdapter;
-import com.arun.a85mm.bean.AssociationBean;
-import com.arun.a85mm.bean.AuditItemBean;
-import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.CommunityTagBean;
-import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.event.UpdateAssociateEvent;
-import com.arun.a85mm.helper.MatisseHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.presenter.AssociationPresenter;
@@ -38,17 +31,17 @@ import java.util.List;
  * Created by wy on 2017/6/24.
  */
 
-public class AssociationFragment extends BaseFragment implements CommonView4<List<AssociationBean>>, AssociationAdapter.OnTagClick {
+public class AssociationFragment extends BaseFragment implements CommonView4<List<WorkListBean>>, AssociationAdapter.OnTagClick {
     private RecyclerView recyclerView;
     private SwipeToLoadLayout swipeToLoad;
     private AssociationPresenter presenter;
-    private List<AssociationBean> associationList = new ArrayList<>();
+    private List<WorkListBean> associationList = new ArrayList<>();
     private AssociationAdapter associationAdapter;
     private ImageView btn_add_community;
-    public int start;
-    private int dataType = 0;
+    public String lastWorkId;
+    private int dataType = 2;
     private String[] tags = new String[]{"精选", "最新", "最热"};
-    private int[] types = new int[]{0, 1, 2};
+    private int[] types = new int[]{2, 3, 4};
     private boolean isHaveMore = true;
 
     public static AssociationFragment getInstance() {
@@ -111,20 +104,20 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
     }
 
     private void addHeadTags() {
-        AssociationBean bean = new AssociationBean();
+        WorkListBean bean = new WorkListBean();
         bean.type = AssociationAdapter.DATA_TYPE_HEAD;
         associationList.add(bean);
     }
 
     public void refreshData() {
         recyclerView.scrollToPosition(0);
-        start = 0;
+        lastWorkId = "";
         isHaveMore = true;
-        presenter.getCommunityList(start, dataType);
+        presenter.getCommunityList(lastWorkId, dataType);
     }
 
     private void loadMore() {
-        presenter.getCommunityList(start, dataType);
+        presenter.getCommunityList(lastWorkId, dataType);
     }
 
     @Override
@@ -141,9 +134,9 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
 
     @SuppressWarnings("unchecked")
     @Override
-    public void refresh(List<AssociationBean> data) {
+    public void refresh(List<WorkListBean> data) {
         if (data != null && data.size() > 0) {
-            AssociationBean bean = associationList.get(0);
+            WorkListBean bean = associationList.get(0);
             associationList.clear();
             associationList.add(bean);
 
@@ -151,7 +144,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
             associationList.addAll(data);
             associationAdapter.notifyDataSetChanged();
         } else {
-            AssociationBean bean = associationList.get(0);
+            WorkListBean bean = associationList.get(0);
             associationList.clear();
             associationList.add(bean);
             associationAdapter.notifyDataSetChanged();
@@ -159,7 +152,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
     }
 
     @Override
-    public void refreshMore(List<AssociationBean> data) {
+    public void refreshMore(List<WorkListBean> data) {
         if (data != null && data.size() > 0) {
             formatData(data);
             associationList.addAll(data);
@@ -167,12 +160,15 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
         }
     }
 
-    private void formatData(List<AssociationBean> list) {
+    private void formatData(List<WorkListBean> list) {
         for (int i = 0; i < list.size(); i++) {
-            AssociationBean bean = list.get(i);
+            WorkListBean bean = list.get(i);
             if (bean != null) {
                 bean.type = AssociationAdapter.DATA_TYPE_CONTENT;
                 bean.backgroundColor = RandomColorHelper.getRandomColor();
+            }
+            if (i == list.size() - 1 && bean != null) {
+                lastWorkId = bean.id;
             }
         }
     }

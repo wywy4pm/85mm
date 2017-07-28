@@ -5,11 +5,17 @@ import android.text.TextUtils;
 
 import com.arun.a85mm.activity.AuditActivity;
 import com.arun.a85mm.bean.CommonApiResponse;
+import com.arun.a85mm.bean.CommonWorkListBean;
+import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.fragment.AssociationFragment;
+import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.listener.RequestListenerImpl;
 import com.arun.a85mm.model.AssociationModel;
+import com.arun.a85mm.model.ProductModel;
 import com.arun.a85mm.view.CommonView4;
+
+import java.util.List;
 
 /**
  * Created by wy on 2017/6/24.
@@ -20,22 +26,22 @@ public class AssociationPresenter extends BasePresenter<CommonView4> {
         super(context);
     }
 
-    public void getCommunityList(final int start, int dataType) {
+    public void getCommunityList(final String lastId, int dataType) {
         addSubscriber(AssociationModel.getInstance()
-                .getCommunityList(start, dataType, new RequestListenerImpl(getMvpView()) {
+                .getCommunityList(lastId, dataType, new RequestListenerImpl(getMvpView()) {
                     @SuppressWarnings("unchecked")
                     @Override
                     public void onSuccess(CommonApiResponse data) {
                         if (getMvpView() != null) {
                             if (data.code == ErrorCode.SUCCESS) {
-                                ((AssociationFragment) getMvpView()).start = data.start;
-                                if (start == 0) {
-                                    getMvpView().refresh(data.body);
+                                List<WorkListBean> workList = ((CommonWorkListBean) data.body).workList;
+                                if (TextUtils.isEmpty(lastId)) {
+                                    getMvpView().refresh(workList);
                                 } else {
-                                    getMvpView().refreshMore(data.body);
+                                    getMvpView().refreshMore(workList);
                                 }
                             } else if (data.code == ErrorCode.NO_DATA) {
-                                if (start == 0) {
+                                if (TextUtils.isEmpty(lastId)) {
                                     getMvpView().refresh(null);
                                 } else {
                                     ((AssociationFragment) getMvpView()).setHaveMore(false);
@@ -45,4 +51,30 @@ public class AssociationPresenter extends BasePresenter<CommonView4> {
                     }
                 }));
     }
+
+    /*public void getProductListData(final String lastWorkId) {
+        addSubscriber(ProductModel.getInstance()
+                .getWorksList(lastWorkId, new RequestListenerImpl(getMvpView()) {
+
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    public void onSuccess(CommonApiResponse data) {
+                        if (getMvpView() != null && data != null) {
+                            if (data.code == ErrorCode.SUCCESS) {
+                                if (data.body != null && data.body instanceof CommonWorkListBean) {
+                                    List<WorkListBean> workList = ((CommonWorkListBean) data.body).workList;
+                                    if (TextUtils.isEmpty(lastWorkId)) {
+                                        getMvpView().refresh(workList);
+                                    } else {
+                                        getMvpView().refreshMore(workList);
+                                    }
+                                }
+                            } else if (data.code == ErrorCode.NO_DATA) {
+                                ((ProductionFragment) getMvpView()).setHaveMore(false);
+                            }
+                        }
+                    }
+                }));
+    }*/
+
 }

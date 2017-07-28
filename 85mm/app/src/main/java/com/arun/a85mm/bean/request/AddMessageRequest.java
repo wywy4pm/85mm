@@ -1,7 +1,5 @@
 package com.arun.a85mm.bean.request;
 
-import com.arun.a85mm.bean.MessageItem;
-
 import java.util.List;
 
 /**
@@ -13,12 +11,12 @@ public class AddMessageRequest {
     /**
      * 发件方uid
      */
-    public String sender;
+    public String senderId;
 
     /**
      * 收件方uid
      */
-    public String receiver;
+    public String receiverId;
 
     /**
      * 消息内容
@@ -31,8 +29,8 @@ public class AddMessageRequest {
     public List<MsgImgRequest> imageList;
 
     public AddMessageRequest(String sender, String receiver, String content, List<MsgImgRequest> imageList) {
-        this.sender = sender;
-        this.receiver = receiver;
+        this.senderId = sender;
+        this.receiverId = receiver;
         this.content = content;
         this.imageList = imageList;
     }

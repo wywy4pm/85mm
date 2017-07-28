@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.arun.a85mm.activity.AuditActivity;
+import com.arun.a85mm.bean.AuditBean;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.listener.RequestListenerImpl;
@@ -19,17 +20,15 @@ public class AuditPresenter extends BasePresenter<CommonView4> {
         super(context);
     }
 
-    public void getAuditWorkList(String searchName, int orderType, int start, final String lastWorkId) {
+    public void getAuditWorkList(String searchName, int orderType, final String lastWorkId) {
         addSubscriber(ProductModel.getInstance()
-                .getAuditWorkList(searchName, String.valueOf(orderType), String.valueOf(start), lastWorkId,
+                .getAuditWorkList(searchName, String.valueOf(orderType), lastWorkId,
                         new RequestListenerImpl(getMvpView()) {
                             @SuppressWarnings("unchecked")
                             @Override
                             public void onSuccess(CommonApiResponse data) {
                                 if (getMvpView() != null && data != null) {
                                     if (data.code == ErrorCode.SUCCESS) {
-                                        ((AuditActivity) getMvpView()).start = data.start;
-                                        ((AuditActivity) getMvpView()).lastWorkId = data.lastWorkId;
                                         if (TextUtils.isEmpty(lastWorkId)) {
                                             getMvpView().refresh(data.body);
                                         } else {

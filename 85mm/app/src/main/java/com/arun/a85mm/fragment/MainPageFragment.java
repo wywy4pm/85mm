@@ -33,8 +33,8 @@ public class MainPageFragment extends BaseFragment implements CommonView4<UserMa
     private int pageType;
     private UserMainPagePresenter presenter;
     private String lastWorkId;
-    private String authorId;
-    private boolean isHaveMore;
+    //private String authorId;
+    private boolean isHaveMore = true;
 
     public static MainPageFragment getInstance(int type) {
         MainPageFragment mainPageFragment = new MainPageFragment();
@@ -107,9 +107,9 @@ public class MainPageFragment extends BaseFragment implements CommonView4<UserMa
         recyclerView.setVisibility(View.GONE);
     }
 
-    public void setAuthorId(String authorId) {
+    /*public void setAuthorId(String authorId) {
         this.authorId = authorId;
-    }
+    }*/
 
     @Override
     public void reloadData() {
@@ -120,7 +120,7 @@ public class MainPageFragment extends BaseFragment implements CommonView4<UserMa
     public void setLoadMore() {
         if (isHaveMore) {
             if (presenter != null) {
-                presenter.getMoreMainPage(authorId, lastWorkId, pageType);
+                presenter.getMoreMainPage(lastWorkId, pageType);
             }
         }
     }

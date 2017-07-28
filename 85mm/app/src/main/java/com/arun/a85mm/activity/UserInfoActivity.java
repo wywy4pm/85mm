@@ -85,7 +85,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         user = UserManager.getInstance().getUserInfoBean();
         if (user != null) {
             updateName(user.name);
-            updateImage(user.headerUrl);
+            updateImage(user.headUrl);
         }
     }
 

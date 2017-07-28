@@ -2,6 +2,8 @@ package com.arun.a85mm.presenter;
 
 import android.content.Context;
 
+import com.arun.a85mm.bean.ArticleDetailBody;
+import com.arun.a85mm.bean.ArticleListBody;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.listener.RequestListenerImpl;
@@ -26,7 +28,9 @@ public class ArticleActivityPresenter extends BasePresenter<CommonView2> {
                     public void onSuccess(CommonApiResponse data) {
                         if (getMvpView() != null) {
                             if (data != null && data.code == ErrorCode.SUCCESS) {
-                                getMvpView().refresh(data.body);
+                                if (data.body instanceof ArticleDetailBody) {
+                                    getMvpView().refresh(((ArticleDetailBody) data.body).articleInfo);
+                                }
                             }
                         }
                     }

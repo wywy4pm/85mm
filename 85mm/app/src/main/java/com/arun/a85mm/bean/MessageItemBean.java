@@ -16,10 +16,14 @@ public class MessageItemBean {
      * msgId : 6
      */
 
-    public String sender;
+    public String senderId;
+    public String senderName;
+    public String senderHeadImg;
     public String content;
-    public String receiver;
-    public int msgId;
+    public String receiverId;
+    public String receiverName;
+    public String receiverHeadImg;
+    public int id;
     public String sendTime;
     public List<MessageItem> imageList;
 

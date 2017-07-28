@@ -29,7 +29,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
     private ArticleListAdapter articleListAdapter;
     private List<ArticleListBean> articles = new ArrayList<>();
     private ArticleFragmentPresenter articleFragmentPresenter;
-    private int currentPageNum;
+    private String lastArticleId;
     private boolean isHaveMore = true;
 
     public static ArticleFragment newIntense() {
@@ -52,12 +52,6 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
         articleListAdapter.setEventListener(this);
         recyclerView.setAdapter(articleListAdapter);
         setRecyclerViewScrollListener(recyclerView);
-        /*swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshData();
-            }
-        });*/
         setRefresh(swipeToLoadLayout);
 
     }
@@ -72,12 +66,12 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
     public void refreshData() {
         recyclerView.smoothScrollToPosition(0);
         setHaveMore(true);
-        currentPageNum = 1;
+        lastArticleId = "";
         if (NetUtils.isConnected(getActivity())) {
             hideNetWorkErrorView(recyclerView);
             if (articleFragmentPresenter != null) {
                 setLoading(true);
-                articleFragmentPresenter.getArticleListData(currentPageNum);
+                articleFragmentPresenter.getArticleListData(lastArticleId);
             }
         } else {
             if (swipeToLoadLayout.isRefreshing()) {
@@ -90,8 +84,7 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
     private void loadMore() {
         if (articleFragmentPresenter != null) {
             setLoading(true);
-            currentPageNum += 1;
-            articleFragmentPresenter.getArticleListData(currentPageNum);
+            articleFragmentPresenter.getArticleListData(lastArticleId);
         }
     }
 
@@ -129,6 +122,9 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
     private void formatData(List<ArticleListBean> data) {
         for (int i = 0; i < data.size(); i++) {
             data.get(i).backgroundColor = RandomColorHelper.getRandomColor();
+            if (i == data.size() - 1) {
+                lastArticleId = data.get(i).id;
+            }
         }
     }
 

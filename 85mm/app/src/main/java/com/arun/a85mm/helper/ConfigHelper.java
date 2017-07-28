@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public class ConfigHelper {
-    public static int tipsPosition = 0;
+    //public static int tipsPosition = 0;
     public static List<AuditInfoBean.TagItemBean> tags;
     public static List<UserTagBean> userTags;
 }

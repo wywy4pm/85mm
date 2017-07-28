@@ -43,6 +43,7 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
     private static final int TYPE_HEAD = 0;
     private static final int TYPE_LIST = 1;
     public EventListener eventListener;
+    public List<AuditInfoBean.TagItemBean> tags;
 
     public void setEventListener(EventListener eventListener) {
         this.eventListener = eventListener;
@@ -52,11 +53,15 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
         super(context, list);
     }
 
+    public void setTags(List<AuditInfoBean.TagItemBean> tags) {
+        this.tags = tags;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_HEAD) {
             View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_audit_head, parent, false);
-            return new AuditHeadHolder(contexts.get(), itemView);
+            return new AuditHeadHolder(contexts.get(), itemView, tags);
         } else if (viewType == TYPE_LIST) {
             View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_audit_work_item, parent, false);
             return new AuditHolder(contexts.get(), itemView);
@@ -99,11 +104,11 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
         private AutoLineLinearLayout layout_tags;
         private List<AuditInfoBean.TagItemBean> tags;
 
-        private AuditHeadHolder(final Context context, View itemView) {
+        private AuditHeadHolder(final Context context, View itemView, final List<AuditInfoBean.TagItemBean> tags) {
             super(itemView);
             layout_tags = (AutoLineLinearLayout) itemView.findViewById(R.id.layout_tags);
 
-            tags = ConfigHelper.tags;
+            this.tags = tags;
             String selectName = SharedPreferencesUtils.getConfigString(context, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG);
             if (tags != null) {
                 for (int i = 0; i < tags.size(); i++) {
@@ -142,7 +147,7 @@ public class AuditListAdapter extends BaseRecyclerAdapter<AuditItemBean> {
             String selectName = SharedPreferencesUtils.getConfigString(context, SharedPreferencesUtils.KEY_AUDIT_SELECT_TAG);
             for (int i = 0; i < layout_tags.getChildCount(); i++) {
                 TextView tv = (TextView) layout_tags.getChildAt(i);
-                if ((!TextUtils.isEmpty(selectName) && selectName.equals(tags.get(i).searchName))
+                if ((!TextUtils.isEmpty(selectName) && selectName.equals(this.tags.get(i).searchName))
                         || (TextUtils.isEmpty(selectName) && i == 0)) {
                     tv.setSelected(true);
                     tv.setTextColor(context.getResources().getColor(R.color.white));

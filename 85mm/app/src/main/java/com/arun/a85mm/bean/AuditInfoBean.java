@@ -7,7 +7,7 @@ import java.util.List;
  */
 
 public class AuditInfoBean {
-    public int tipsPosition;
+    //public int tipsPosition;
     public List<TagItemBean> tags;
 
     public static class TagItemBean {

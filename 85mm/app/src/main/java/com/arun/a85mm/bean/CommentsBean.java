@@ -5,16 +5,11 @@ package com.arun.a85mm.bean;
  */
 
 public class CommentsBean {
-    /**
-     * content : 85mm 真棒
-     * createTime : 6月23日 21:21
-     * authorName : SHQ
-     * commentId : 4
-     */
 
     public String content;
     public String createTime;
+    public String authorId;
     public String authorName;
-    public int commentId;
+    public int id;
     public String headUrl;
 }

@@ -6,13 +6,13 @@ package com.arun.a85mm.bean;
 
 public class UserInfoBean {
     public String name;
-    public String headerUrl;
+    public String headUrl;
     public String description;
     public String coverUrl;
 
-    public UserInfoBean(String name, String headerUrl, String description, String coverUrl) {
+    public UserInfoBean(String name, String headUrl, String description, String coverUrl) {
         this.name = name;
-        this.headerUrl = headerUrl;
+        this.headUrl = headUrl;
         this.description = description;
         this.coverUrl = coverUrl;
     }
