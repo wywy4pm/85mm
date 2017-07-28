@@ -113,6 +113,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
     }
 
     public void refreshData() {
+        setLoading(true);
         recyclerView.scrollToPosition(0);
         lastWorkId = "";
         isHaveMore = true;
@@ -120,6 +121,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
     }
 
     private void loadMore() {
+        setLoading(true);
         presenter.getCommunityList(lastWorkId, dataType);
     }
 
@@ -182,6 +184,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
 
     @Override
     public void onRefreshComplete() {
+        setLoading(false);
         if (swipeToLoad != null) {
             swipeToLoad.setRefreshing(false);
         }
