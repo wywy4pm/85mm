@@ -278,6 +278,9 @@ public class AuditActivity extends BaseActivity implements CommonView4<AuditBean
                     bean.workId = work.id;
                     bean.workTitle = work.title;
                     auditWorks.add(bean);
+                    if (i == data.size() - 1) {
+                        lastWorkId = data.get(i).id;
+                    }
                 }
             }
         }
