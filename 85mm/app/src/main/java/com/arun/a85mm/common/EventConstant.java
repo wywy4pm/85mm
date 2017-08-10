@@ -47,6 +47,7 @@ public class EventConstant {
     public static final int WORK_ASSOCIATION_DELETE = 3009;
     public static final int WORK_MOVE_TO_AUDIT = 3010;
 
+    public static final int ASSOCIATION_COMMENT_DELETE = 3011;
 
     public static final int BTN_SHARE = 5001;
     public static final int BTN_CLEAR_CACHE = 5002;

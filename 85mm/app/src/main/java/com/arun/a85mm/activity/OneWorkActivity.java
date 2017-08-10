@@ -23,7 +23,10 @@ import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.event.DeleteCommentEvent;
 import com.arun.a85mm.helper.DialogHelper;
+import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.ShareWindow;
@@ -33,12 +36,19 @@ import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.listener.OnTagWorkListener;
 import com.arun.a85mm.presenter.CommunityPresenter;
 import com.arun.a85mm.presenter.OneWorkPresenter;
+import com.arun.a85mm.utils.AppUtils;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.FullyLinearLayoutManager;
 import com.arun.a85mm.utils.KeyBoardUtils;
+import com.arun.a85mm.utils.PatternUtils;
 import com.arun.a85mm.utils.ShareParaUtils;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.CommonView3;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -87,6 +97,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     private int keyboardHeight;
     // 软键盘的显示状态
     private boolean isShowKeyboard;
+    private String newUid;
 
     public static void jumpToOneWorkActivity(Context context, String type, String title, Map<String, String> extras, int backMode) {
         Intent intent = new Intent(context, OneWorkActivity.class);
@@ -121,6 +132,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_one_work);
+        EventBus.getDefault().register(this);
         initView();
         initData();
     }
@@ -270,6 +282,11 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
             if (data instanceof UserTagBean) {
                 showTop("打标成功");
             }
+        } else if (dataType == OneWorkPresenter.TYPE_LOG_OUT) {
+            /*UserManager.getInstance().setUserInfoBean(null);
+            UserManager.getInstance().setLogin(false);*/
+            AppUtils.restartApp(this);
+            SharedPreferencesUtils.setUid(this, newUid);
         }
 
     }
@@ -391,6 +408,15 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
                     showTop("请输入评论内容");
                     return;
                 }
+                if (!TextUtils.isEmpty(SharedPreferencesUtils.getUid(this))
+                        && SharedPreferencesUtils.getUid(this).equals("3")) {
+                    if (PatternUtils.judgeChangeUser(edit_add_comment.getText().toString())) {
+                        newUid = edit_add_comment.getText().toString().replace("c ", "");
+                        if (oneWorkPresenter != null) {
+                            oneWorkPresenter.userLogout();
+                        }
+                    }
+                }
                 if (oneWorkPresenter != null) {
                     oneWorkPresenter.addComment(workId, edit_add_comment.getText().toString());
                 }
@@ -404,6 +430,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         if (oneWorkPresenter != null) {
             oneWorkPresenter.detachView();
         }
@@ -444,5 +471,28 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     public void resetUserTag(UserTagBean tagBean) {
         tagBean.tagType = tagBean.tagType == 1 ? 0 : 1;
         oneWorkAdapter.notifyDataSetChanged();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDeleteComment(DeleteCommentEvent event) {
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.recordUserAction(this, EventConstant.ASSOCIATION_COMMENT_DELETE, event.commentId);
+        }
+    }
+
+    public void refreshComments(String commentId) {
+        //refreshData();
+        for (int i = 0; i < workListItems.size(); i++) {
+            if (workListItems.get(i) != null && workListItems.get(i).comments != null) {
+                for (int j = 0; j < workListItems.get(i).comments.size(); j++) {
+                    String id = String.valueOf(workListItems.get(i).comments.get(j).id);
+                    if (!TextUtils.isEmpty(commentId) && commentId.equals(id)) {
+                        workListItems.get(i).comments.remove(j);
+                        oneWorkAdapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.helper.ConfigHelper;
+import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.listener.OnTagWorkListener;
 import com.arun.a85mm.utils.DensityUtil;

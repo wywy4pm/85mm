@@ -23,7 +23,7 @@ public class EventPresenter extends BasePresenter<EventView> {
         super(context);
     }
 
-    public void recordUserAction(final int type, ActionRequest actionRequest) {
+    public void recordUserAction(final int type, final ActionRequest actionRequest) {
         Subscriber<CommonApiResponse> subscriber = new Subscriber<CommonApiResponse>() {
             @Override
             public void onCompleted() {
@@ -53,6 +53,8 @@ public class EventPresenter extends BasePresenter<EventView> {
                                     || type == EventConstant.WORK_MOVE_TO_AUDIT
                                     || type == EventConstant.WORK_ASSOCIATION_DELETE) {
                                 getMvpView().eventDone(type);
+                            } else if (type == EventConstant.ASSOCIATION_COMMENT_DELETE) {
+                                getMvpView().eventDoneExtra(type,actionRequest.actionList);
                             }
                             if (commonApiResponse.body != null && commonApiResponse.body instanceof EventBackBean) {
                                 getMvpView().eventSuccess(((EventBackBean) commonApiResponse.body).hasNewMsg);

@@ -2,6 +2,7 @@ package com.arun.a85mm.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -123,5 +124,11 @@ public class AppUtils {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static void restartApp(Context context) {
+        Intent i = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(i);
     }
 }

@@ -298,7 +298,7 @@ public class AssociationAdapter extends BaseRecyclerAdapter<WorkListBean> {
                 layout_comment.removeAllViews();
                 for (int i = 0; i < bean.commentList.size(); i++) {
                     if (bean.commentList.get(i) != null) {
-                        CommentsBean commentItem = bean.commentList.get(i);
+                        final CommentsBean commentItem = bean.commentList.get(i);
                         View commentView = LayoutInflater.from(context).inflate(R.layout.list_commnet_item, layout_comment, false);
                         if (commentView.getLayoutParams() != null && commentView.getLayoutParams() instanceof LinearLayout.LayoutParams) {
                             if (i < bean.commentList.size() - 1) {
@@ -311,6 +311,18 @@ public class AssociationAdapter extends BaseRecyclerAdapter<WorkListBean> {
                         TextView detail = (TextView) commentView.findViewById(R.id.comment_detail);
                         author.setText(commentItem.authorName + " : ");
                         detail.setText(commentItem.content);
+
+                        if (!TextUtils.isEmpty(commentItem.authorId)
+                                && commentItem.authorId.equals(SharedPreferencesUtils.getUid(context))) {
+                            commentView.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View v) {
+                                    DialogHelper.showDeleteCommentBottom(context, String.valueOf(commentItem.id));
+                                    return false;
+                                }
+                            });
+                        }
+
                         layout_comment.addView(commentView);
                     }
                 }

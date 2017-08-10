@@ -130,6 +130,19 @@ public class EventStatisticsHelper implements EventView {
     }
 
     @Override
+    public void eventDoneExtra(int type, List<ActionBean> actionList) {
+        if (type == EventConstant.ASSOCIATION_COMMENT_DELETE) {
+            if (actionList.get(0) != null) {
+                if (context instanceof OneWorkActivity) {
+                    ((OneWorkActivity) context).refreshComments(actionList.get(0).resourceId);
+                } else if (context instanceof MainActivity) {
+                    ((MainActivity) context).refreshComments(actionList.get(0).resourceId);
+                }
+            }
+        }
+    }
+
+    @Override
     public void onError(int errorType, String errorMsg) {
 
     }

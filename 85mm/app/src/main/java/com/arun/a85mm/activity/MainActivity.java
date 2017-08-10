@@ -367,4 +367,10 @@ public class MainActivity extends AppCompatActivity {
                 ShareParaUtils.getWorkDetailShareUrl(workListBean.id), workListBean.coverUrl, eventStatisticsHelper);
     }
 
+    public void refreshComments(String commentId) {
+        if (associationFragment != null) {
+            associationFragment.refreshComments(commentId);
+        }
+    }
+
 }

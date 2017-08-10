@@ -18,9 +18,12 @@ import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.dialog.UploadImageDialog;
+import com.arun.a85mm.event.DeleteCommentEvent;
 import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by wy on 2017/5/5.
@@ -207,6 +210,35 @@ public class DialogHelper {
     public static void showUploadImageBottom(Context context, int requestCode) {
         UploadImageDialog dialog = new UploadImageDialog(context, R.style.ActionSheetDialogStyle, requestCode);
 
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+        Window dialogWindow = dialog.getWindow();
+        if (dialogWindow != null) {
+            dialogWindow.getDecorView().setPadding(0, 0, 0, 0);
+            dialogWindow.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+            lp.x = 0; // 新位置X坐标
+            lp.y = 0; // 新位置Y坐标
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            dialogWindow.setAttributes(lp);
+            dialog.show();
+        }
+    }
+
+    public static void showDeleteCommentBottom(final Context context, final String commentId) {
+        final Dialog dialog = new Dialog(context, R.style.ActionSheetDialogStyle);
+        View deleteView = LayoutInflater.from(context).inflate(R.layout.dialog_upload_image, null);
+        TextView delete = (TextView) deleteView.findViewById(R.id.btn_album_upload);
+        delete.setText("删除");
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new DeleteCommentEvent(commentId));
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setContentView(deleteView);
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
         Window dialogWindow = dialog.getWindow();

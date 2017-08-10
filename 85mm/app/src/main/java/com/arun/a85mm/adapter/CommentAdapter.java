@@ -2,6 +2,7 @@ package com.arun.a85mm.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,10 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.CommentsBean;
+import com.arun.a85mm.helper.DialogHelper;
+import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.utils.GlideCircleTransform;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -46,16 +50,18 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentsBean> {
         private TextView comment_author;
         public TextView create_time;
         private TextView comment_detail;
+        private View itemView;
 
         private CommentHolder(View rootView) {
             super(rootView);
+            itemView = rootView;
             this.comment_head = (ImageView) rootView.findViewById(R.id.comment_head);
             this.comment_author = (TextView) rootView.findViewById(R.id.comment_author);
             this.create_time = (TextView) rootView.findViewById(R.id.create_time);
             this.comment_detail = (TextView) rootView.findViewById(R.id.comment_detail);
         }
 
-        private void setData(Context context, CommentsBean bean) {
+        private void setData(final Context context, final CommentsBean bean) {
             Glide.with(context)
                     .load(bean.headUrl)
                     .centerCrop()
@@ -65,6 +71,16 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentsBean> {
             comment_author.setText(bean.authorName);
             create_time.setText(bean.createTime);
             comment_detail.setText(bean.content);
+            if (!TextUtils.isEmpty(bean.authorId)
+                    && bean.authorId.equals(SharedPreferencesUtils.getUid(context))) {
+                itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        DialogHelper.showDeleteCommentBottom(context, String.valueOf(bean.id));
+                        return false;
+                    }
+                });
+            }
         }
     }
 }

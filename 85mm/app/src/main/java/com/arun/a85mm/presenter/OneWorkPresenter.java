@@ -11,6 +11,7 @@ import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.listener.RequestListenerImpl;
 import com.arun.a85mm.model.ProductModel;
 import com.arun.a85mm.model.TagModel;
+import com.arun.a85mm.model.UserModel;
 import com.arun.a85mm.view.CommonView3;
 
 /**
@@ -21,6 +22,7 @@ public class OneWorkPresenter extends BasePresenter<CommonView3> {
     public static final int TYPE_DETAIL = 0;
     public static final int TYPE_ADD_COMMENT = 1;
     public static final int TYPE_TAG_WORK = 2;
+    public static final int TYPE_LOG_OUT = 3;
 
     public OneWorkPresenter(Context context) {
         super(context);
@@ -74,6 +76,20 @@ public class OneWorkPresenter extends BasePresenter<CommonView3> {
                         if (getMvpView() != null) {
                             if (getMvpView() instanceof OneWorkActivity) {
                                 ((OneWorkActivity) getMvpView()).resetUserTag(tagBean);
+                            }
+                        }
+                    }
+                }));
+    }
+
+    public void userLogout() {
+        addSubscriber(UserModel.getInstance()
+                .userLogout(new RequestListenerImpl(getMvpView()) {
+                    @Override
+                    public void onSuccess(CommonApiResponse data) {
+                        if (getMvpView() != null) {
+                            if (data != null && data.code == ErrorCode.SUCCESS) {
+                                getMvpView().refresh(TYPE_LOG_OUT, data);
                             }
                         }
                     }

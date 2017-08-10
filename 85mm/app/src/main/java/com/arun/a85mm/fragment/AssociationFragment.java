@@ -3,6 +3,7 @@ package com.arun.a85mm.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -12,6 +13,8 @@ import com.arun.a85mm.activity.LoginActivity;
 import com.arun.a85mm.adapter.AssociationAdapter;
 import com.arun.a85mm.bean.CommunityTagBean;
 import com.arun.a85mm.bean.WorkListBean;
+import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.event.DeleteCommentEvent;
 import com.arun.a85mm.event.UpdateAssociateEvent;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.UserManager;
@@ -215,6 +218,28 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateList(UpdateAssociateEvent event) {
         refreshData();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDeleteComment(DeleteCommentEvent event) {
+        if (eventStatisticsHelper != null) {
+            eventStatisticsHelper.recordUserAction(getActivity(), EventConstant.ASSOCIATION_COMMENT_DELETE, event.commentId);
+        }
+    }
+
+    public void refreshComments(String commentId) {
+        for (int i = 0; i < associationList.size(); i++) {
+            if (associationList.get(i) != null && associationList.get(i).commentList != null) {
+                for (int j = 0; j < associationList.get(i).commentList.size(); j++) {
+                    String id = String.valueOf(associationList.get(i).commentList.get(j).id);
+                    if (!TextUtils.isEmpty(commentId) && commentId.equals(id)) {
+                        associationList.get(i).commentList.remove(j);
+                        associationAdapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public void setHaveMore(boolean isHaveMore) {
