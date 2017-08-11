@@ -276,17 +276,17 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
             }
             oneWorkAdapter.notifyDataSetChanged();
         } else if (dataType == OneWorkPresenter.TYPE_ADD_COMMENT) {
-            showTop("评论成功");
-            refreshData();
+            if (TextUtils.isEmpty(newUid)) {
+                showTop("评论成功");
+                refreshData();
+            } else {
+                SharedPreferencesUtils.setUid(this, newUid);
+                AppUtils.restartApp(this);
+            }
         } else if (dataType == OneWorkPresenter.TYPE_TAG_WORK) {
             if (data instanceof UserTagBean) {
                 showTop("打标成功");
             }
-        } else if (dataType == OneWorkPresenter.TYPE_LOG_OUT) {
-            /*UserManager.getInstance().setUserInfoBean(null);
-            UserManager.getInstance().setLogin(false);*/
-            AppUtils.restartApp(this);
-            SharedPreferencesUtils.setUid(this, newUid);
         }
 
     }
@@ -412,9 +412,9 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
                         && SharedPreferencesUtils.getUid(this).equals("3")) {
                     if (PatternUtils.judgeChangeUser(edit_add_comment.getText().toString())) {
                         newUid = edit_add_comment.getText().toString().replace("c ", "");
-                        if (oneWorkPresenter != null) {
+                        /*if (oneWorkPresenter != null) {
                             oneWorkPresenter.userLogout();
-                        }
+                        }*/
                     }
                 }
                 if (oneWorkPresenter != null) {
