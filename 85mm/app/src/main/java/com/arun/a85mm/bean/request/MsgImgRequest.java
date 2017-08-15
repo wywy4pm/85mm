@@ -5,9 +5,9 @@ package com.arun.a85mm.bean.request;
  */
 
 public class MsgImgRequest {
-    public String url;
+    public String imageUrl;
 
     public MsgImgRequest(String imageUrl) {
-        this.url = imageUrl;
+        this.imageUrl = imageUrl;
     }
 }
