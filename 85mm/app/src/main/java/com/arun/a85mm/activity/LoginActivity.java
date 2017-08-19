@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.GuidePageBean;
+import com.arun.a85mm.bean.LoginBodyBean;
 import com.arun.a85mm.bean.UserInfo;
 import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.common.Constant;
@@ -21,6 +22,7 @@ import com.arun.a85mm.presenter.LoginPresenter;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DateUtils;
 import com.arun.a85mm.utils.DensityUtil;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView2;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -139,6 +141,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void refresh(Object data) {
+        if (data instanceof LoginBodyBean) {
+            LoginBodyBean bean = (LoginBodyBean) data;
+            SharedPreferencesUtils.setUid(this, bean.uid);
+        }
         if (UserManager.getInstance() != null) {
             UserManager.getInstance().setLogin(true);
             UserInfoBean userInfoBean = new UserInfoBean(userName, headUrl, "", "");

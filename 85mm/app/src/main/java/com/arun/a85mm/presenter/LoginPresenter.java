@@ -25,7 +25,7 @@ public class LoginPresenter extends BasePresenter<CommonView2> {
                     @Override
                     public void onSuccess(CommonApiResponse data) {
                         if (getMvpView() != null && data != null && data.code == ErrorCode.SUCCESS) {
-                            getMvpView().refresh(data);
+                            getMvpView().refresh(data.body);
                         }
                     }
                 }));
