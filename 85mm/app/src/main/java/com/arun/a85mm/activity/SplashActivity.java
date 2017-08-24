@@ -188,7 +188,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
             if (data instanceof ConfigBean) {
                 final ConfigBean config = (ConfigBean) data;
                 SharedPreferencesUtils.saveUid(this, config.uid);
-                if (AppHelper.getInstance().getAppConfig() != null && TextUtils.isEmpty(AppHelper.getInstance().getAppConfig().uid)) {
+                if (AppHelper.getInstance().getAppConfig() != null) {
                     AppHelper.getInstance().getAppConfig().setUid(config.uid);
                 }
                 if (config.hideRead != null) {

@@ -127,9 +127,13 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         layout_clear.setOnClickListener(this);
         layout_user_info.setOnClickListener(this);
         layout_my_tags.setOnClickListener(this);
-        setTitle("欢迎你，我们的第" + SharedPreferencesUtils.getUid(this) + "号用户");
+        setHeadTitle(SharedPreferencesUtils.getUid(this));
         setBack();
         setCommonShow();
+    }
+
+    private void setHeadTitle(String uid) {
+        setTitle("欢迎你，我们的第" + uid + "号用户");
     }
 
     private void showHideReadDialog() {
@@ -198,6 +202,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
+        setHeadTitle(SharedPreferencesUtils.getUid(this));
         setUser();
     }
 

@@ -25,6 +25,7 @@ import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.event.DeleteCommentEvent;
+import com.arun.a85mm.helper.AppHelper;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
@@ -280,7 +281,8 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
                 showTop("评论成功");
                 refreshData();
             } else {
-                SharedPreferencesUtils.setUid(this, newUid);
+                SharedPreferencesUtils.saveUid(this, newUid);
+                AppHelper.getInstance().getAppConfig().setUid(newUid);
                 AppUtils.restartApp(this);
             }
         } else if (dataType == OneWorkPresenter.TYPE_TAG_WORK) {
@@ -408,8 +410,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
                     showTop("请输入评论内容");
                     return;
                 }
-                if (!TextUtils.isEmpty(SharedPreferencesUtils.getUid(this))
-                        && SharedPreferencesUtils.getUid(this).equals("3")) {
+                if (!TextUtils.isEmpty(SharedPreferencesUtils.getUid(this))) {
                     if (PatternUtils.judgeChangeUser(edit_add_comment.getText().toString())) {
                         newUid = edit_add_comment.getText().toString().replace("c ", "");
                         /*if (oneWorkPresenter != null) {

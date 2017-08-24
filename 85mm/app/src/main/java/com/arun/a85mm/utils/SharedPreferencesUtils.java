@@ -23,7 +23,7 @@ public class SharedPreferencesUtils {
     public static final String KEY_WECHAT_LOGIN = "wechat_login";
 
     public static void saveUid(Context context, String uid) {
-        if (!TextUtils.isEmpty(uid) && TextUtils.isEmpty(SharedPreferencesUtils.getUid(context))) {
+        if (!TextUtils.isEmpty(uid)) {
             SharedPreferencesUtils.setUid(context, uid);
         }
     }

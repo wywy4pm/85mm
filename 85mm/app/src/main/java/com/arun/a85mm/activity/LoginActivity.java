@@ -15,6 +15,7 @@ import com.arun.a85mm.bean.LoginBodyBean;
 import com.arun.a85mm.bean.UserInfo;
 import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.helper.AppHelper;
 import com.arun.a85mm.helper.LoginHelper;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.listener.LoginListener;
@@ -143,7 +144,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void refresh(Object data) {
         if (data instanceof LoginBodyBean) {
             LoginBodyBean bean = (LoginBodyBean) data;
-            SharedPreferencesUtils.setUid(this, bean.uid);
+            SharedPreferencesUtils.saveUid(this, bean.uid);
+            AppHelper.getInstance().getAppConfig().setUid(bean.uid);
         }
         if (UserManager.getInstance() != null) {
             UserManager.getInstance().setLogin(true);
