@@ -116,6 +116,17 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
         refreshData();
     }
 
+    public void scrollToTop() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (expandableListView != null) {
+                    expandableListView.setSelection(0);
+                }
+            }
+        }, 50);
+    }
+
     @SuppressWarnings("unchecked")
     public void refreshData() {
         new Handler().postDelayed(new Runnable() {

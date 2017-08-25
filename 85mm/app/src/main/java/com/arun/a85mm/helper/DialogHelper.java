@@ -229,6 +229,12 @@ public class DialogHelper {
         final Dialog dialog = new Dialog(context, R.style.ActionSheetDialogStyle);
         View deleteView = LayoutInflater.from(context).inflate(R.layout.dialog_upload_image, null);
         TextView delete = (TextView) deleteView.findViewById(R.id.btn_album_upload);
+        deleteView.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
         delete.setText("删除");
         delete.setOnClickListener(new View.OnClickListener() {
             @Override

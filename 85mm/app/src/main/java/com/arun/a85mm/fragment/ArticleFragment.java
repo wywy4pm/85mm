@@ -63,8 +63,14 @@ public class ArticleFragment extends BaseFragment implements CommonView<List<Art
         refreshData();
     }
 
+    public void scrollToTop() {
+        if (recyclerView != null) {
+            recyclerView.scrollToPosition(0);
+        }
+    }
+
     public void refreshData() {
-        recyclerView.smoothScrollToPosition(0);
+        recyclerView.scrollToPosition(0);
         setHaveMore(true);
         lastArticleId = "";
         if (NetUtils.isConnected(getActivity())) {

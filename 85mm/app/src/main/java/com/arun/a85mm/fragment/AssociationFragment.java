@@ -115,6 +115,12 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
         associationList.add(bean);
     }
 
+    public void scrollToTop() {
+        if (recyclerView != null) {
+            recyclerView.scrollToPosition(0);
+        }
+    }
+
     public void refreshData() {
         setLoading(true);
         recyclerView.scrollToPosition(0);
