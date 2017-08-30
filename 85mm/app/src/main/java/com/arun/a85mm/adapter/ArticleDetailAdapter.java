@@ -120,7 +120,11 @@ public class ArticleDetailAdapter extends RecyclerView.Adapter {
                 if (position == 0) {
                     imageHeight = (int) (DensityUtil.getScreenWidth(context) * 0.56);
                 } else {
-                    imageHeight = (bean.imageHeight * DensityUtil.getScreenWidth(context)) / bean.imageWidth;
+                    if (bean.imageWidth > 0) {
+                        imageHeight = (bean.imageHeight * DensityUtil.getScreenWidth(context)) / bean.imageWidth;
+                    } else {
+                        imageHeight = (int) (DensityUtil.getScreenWidth(context) * 0.56);
+                    }
                 }
                 item_fullImage.getLayoutParams().height = imageHeight;
                 item_fullImage.getLayoutParams().width = imageWidth;

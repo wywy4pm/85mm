@@ -71,15 +71,17 @@ public class CommentAdapter extends BaseRecyclerAdapter<CommentsBean> {
             comment_author.setText(bean.authorName);
             create_time.setText(bean.createTime);
             comment_detail.setText(bean.content);
-            if (!TextUtils.isEmpty(bean.authorId)
-                    && bean.authorId.equals(SharedPreferencesUtils.getUid(context))) {
-                itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        DialogHelper.showDeleteCommentBottom(context, String.valueOf(bean.id));
-                        return false;
-                    }
-                });
+            if (!TextUtils.isEmpty(bean.authorId)) {
+                if (bean.authorId.equals(SharedPreferencesUtils.getUid(context))
+                        || "4".equals(SharedPreferencesUtils.getUid(context))) {
+                    itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            DialogHelper.showDeleteCommentBottom(context, String.valueOf(bean.id));
+                            return false;
+                        }
+                    });
+                }
             }
         }
     }

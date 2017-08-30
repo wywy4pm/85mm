@@ -125,7 +125,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommonView2<A
 
     private void showHeadTranslateAnimation() {
         imageView = new ImageView(this);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(DensityUtil.getScreenWidth(this), (int) (DensityUtil.getScreenWidth(this) * 0.6));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(DensityUtil.getScreenWidth(this), (int) (DensityUtil.getScreenWidth(this) * 0.56));
         imageView.setLayoutParams(params);
         imageView.setX(startX);
         imageView.setY(startX - DensityUtil.getStatusHeight(this));

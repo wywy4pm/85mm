@@ -312,15 +312,17 @@ public class AssociationAdapter extends BaseRecyclerAdapter<WorkListBean> {
                         author.setText(commentItem.authorName + " : ");
                         detail.setText(commentItem.content);
 
-                        if (!TextUtils.isEmpty(commentItem.authorId)
-                                && commentItem.authorId.equals(SharedPreferencesUtils.getUid(context))) {
-                            commentView.setOnLongClickListener(new View.OnLongClickListener() {
-                                @Override
-                                public boolean onLongClick(View v) {
-                                    DialogHelper.showDeleteCommentBottom(context, String.valueOf(commentItem.id));
-                                    return false;
-                                }
-                            });
+                        if (!TextUtils.isEmpty(commentItem.authorId)) {
+                            if (commentItem.authorId.equals(SharedPreferencesUtils.getUid(context))
+                                    || "4".equals(SharedPreferencesUtils.getUid(context))) {
+                                commentView.setOnLongClickListener(new View.OnLongClickListener() {
+                                    @Override
+                                    public boolean onLongClick(View v) {
+                                        DialogHelper.showDeleteCommentBottom(context, String.valueOf(commentItem.id));
+                                        return false;
+                                    }
+                                });
+                            }
                         }
 
                         layout_comment.addView(commentView);

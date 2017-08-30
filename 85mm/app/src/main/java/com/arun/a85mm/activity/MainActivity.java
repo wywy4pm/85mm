@@ -21,7 +21,9 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.CommonFragmentPagerAdapter;
 import com.arun.a85mm.bean.ActionBean;
+import com.arun.a85mm.bean.MenuListBean;
 import com.arun.a85mm.bean.ShowTopBean;
+import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
@@ -31,6 +33,7 @@ import com.arun.a85mm.fragment.AssociationFragment;
 import com.arun.a85mm.fragment.CommunityFragment;
 import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.handler.ShowTopHandler;
+import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
@@ -65,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SlidingTabLayout tabLayout;
     private ViewPager viewPager;
-    //private int[] titleIds = new int[]{R.string.main_tab_1, R.string.main_tab_2, R.string.main_tab_3};
-    private String[] titles = new String[]{"作品", "社区", "文章"};
+    //private String[] titles = new String[]{"作品", "社区", "文章"};
+    private String[] titles;
     private List<Fragment> list = new ArrayList<>();
     private TextView topCommonView;
     private TextView toastView;
@@ -150,17 +153,16 @@ public class MainActivity extends AppCompatActivity {
         dot_new_message = (TextView) findViewById(R.id.dot_new_message);
         eventStatisticsHelper = new EventStatisticsHelper(this);
         viewPager.setAdapter(new CommonFragmentPagerAdapter(getSupportFragmentManager(), list));
-        /*viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public int getCount() {
-                return list.size();
-            }
 
-            @Override
-            public Fragment getItem(int position) {
-                return list.get(position);
+        List<MenuListBean> menuList = ConfigHelper.menuList;
+        if (menuList != null) {
+            titles = new String[menuList.size()];
+            for (int i = 0; i < titles.length; i++) {
+                if (menuList.get(i) != null) {
+                    titles[i] = menuList.get(i).showName;
+                }
             }
-        });*/
+        }
 
         tabLayout.setViewPager(viewPager, titles);
         TextViewUtils.setTextBold(tabLayout.getTitleView(0), true);

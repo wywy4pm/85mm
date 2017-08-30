@@ -1,6 +1,6 @@
 package com.arun.a85mm.helper;
 
-import com.arun.a85mm.bean.AuditInfoBean;
+import com.arun.a85mm.bean.MenuListBean;
 import com.arun.a85mm.bean.UserTagBean;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public class ConfigHelper {
-    //public static int tipsPosition = 0;
-    //public static List<AuditInfoBean.TagItemBean> tags;
     public static List<UserTagBean> userTags;
+    public static List<MenuListBean> menuList;
+    public static List<MenuListBean> customMenuList;
 }

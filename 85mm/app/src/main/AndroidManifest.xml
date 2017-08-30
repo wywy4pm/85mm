@@ -87,7 +87,8 @@
             android:name=".activity.MoreSettingActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+        </activity>
         <activity
             android:name=".WBShareActivity"
             android:configChanges="keyboardHidden|orientation"

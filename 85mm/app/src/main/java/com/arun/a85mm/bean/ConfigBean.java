@@ -49,5 +49,10 @@ public class ConfigBean {
     /**
      * 导航栏菜单列表
      */
-    public List<ChannelListBean> channelList;
+    public List<MenuListBean> menuList;
+
+    /**
+     * 自定义菜单列表
+     */
+    public List<MenuListBean> customMenuList;
 }

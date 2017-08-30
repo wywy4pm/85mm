@@ -196,12 +196,9 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                     SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_OPENED, config.hideRead.hideReadOpen);
                 }
 
-                /*if (config.auditInfo != null) {
-                    ConfigHelper.tipsPosition = config.auditInfo.tipsPosition;
-                    ConfigHelper.tags = config.auditInfo.tags;
-                }*/
-
                 ConfigHelper.userTags = config.userTagList;
+                ConfigHelper.menuList = config.menuList;
+                ConfigHelper.customMenuList = config.customMenuList;
                 SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE, config.hasNewMsg);
                 UserManager.getInstance().setLogin(config.isLogin == 1);
                 UserManager.getInstance().setUserInfoBean(config.userInfo);
