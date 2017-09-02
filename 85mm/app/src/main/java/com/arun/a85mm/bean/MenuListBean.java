@@ -7,4 +7,6 @@ package com.arun.a85mm.bean;
 public class MenuListBean {
     public String showName;
     public String url;
+    public String tagName;
+    public int dataType;
 }

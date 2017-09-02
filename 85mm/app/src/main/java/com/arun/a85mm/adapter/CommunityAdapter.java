@@ -182,7 +182,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
                             .transform(new GlideRoundTransform(contexts.get(), 5))
                             .into(headHolder.source_logo);
-                    headHolder.create_time.setText(resources.getString(R.string.works_download_count_one, bean.downloadNum));
+                    headHolder.create_time.setText(bean.copy);//resources.getString(R.string.works_download_count_one, bean.downloadNum)
                 } else {
                     headHolder.work_list_cover_count.setVisibility(View.GONE);
                     headHolder.layout_source.setVisibility(View.GONE);
@@ -218,7 +218,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                             Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
                                     .transform(new GlideRoundTransform(contexts.get(), 5))
                                     .into(headHolder.source_logo);
-                            headHolder.create_time.setText(resources.getString(R.string.works_download_count_one, bean.downloadNum));
+                            headHolder.create_time.setText(bean.copy);//resources.getString(R.string.works_download_count_one, bean.downloadNum)
                         } else {
                             headHolder.work_list_cover_count.setVisibility(View.GONE);
                             headHolder.layout_source.setVisibility(View.GONE);
@@ -295,7 +295,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                                     Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
                                             .transform(new GlideRoundTransform(contexts.get(), 5))
                                             .into(headHolder.source_logo);
-                                    headHolder.create_time.setText(resources.getString(R.string.works_download_count_one, bean.downloadNum));
+                                    headHolder.create_time.setText(bean.copy);//resources.getString(R.string.works_download_count_one, bean.downloadNum)
                                 } else {
                                     headHolder.work_list_cover_count.setVisibility(View.GONE);
                                     headHolder.layout_source.setVisibility(View.GONE);

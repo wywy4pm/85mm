@@ -23,8 +23,8 @@ public class ProductModel extends BaseModel {
         return instance;
     }
 
-    public Subscriber getWorksList(String lastWorkId, CommonRequestListener listener) {
-        return request(RetrofitInit.getApi().getWorkList(lastWorkId, "", "", 0), listener);
+    public Subscriber getWorksList(int dataType, String tagName, String lastWorkId, CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getWorkList(lastWorkId, "", tagName, dataType), listener);
     }
 
     public Subscriber getWorksGoods(String lastDate, CommonRequestListener listener) {

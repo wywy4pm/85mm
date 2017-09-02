@@ -55,9 +55,9 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView4> {
                 }));
     }*/
 
-    public void getProductListData(final String lastWorkId) {
+    public void getProductListData(int dataType, String tagName, final String lastWorkId) {
         addSubscriber(ProductModel.getInstance()
-                .getWorksList(lastWorkId, new RequestListenerImpl(getMvpView()) {
+                .getWorksList(dataType, tagName, lastWorkId, new RequestListenerImpl(getMvpView()) {
 
                     @SuppressWarnings("unchecked")
                     @Override

@@ -48,8 +48,21 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     private ProductFragmentPresenter productFragmentPresenter;
     private boolean isHaveMore = true;
     private String lastWorkId;
-    private static final String TAG = "ProductionFragment";
+    //private static final String TAG = "ProductionFragment";
+    private static final String INTENT_KEY_TYPE = "type";
+    private static final String INTENT_KEY_TAG = "name";
     private ImageView next_group_img;
+    private int dataType;
+    private String tagName;
+
+    public static ProductionFragment newInstance(int dataType, String tagName) {
+        ProductionFragment productionFragment = new ProductionFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(INTENT_KEY_TYPE, dataType);
+        bundle.putString(INTENT_KEY_TAG, tagName);
+        productionFragment.setArguments(bundle);
+        return productionFragment;
+    }
 
     public static ProductionFragment newInstance() {
         ProductionFragment productionFragment = new ProductionFragment();
@@ -83,6 +96,14 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
 
     @Override
     protected void initData() {
+        if (getArguments() != null) {
+            if (getArguments().containsKey(INTENT_KEY_TYPE)) {
+                dataType = getArguments().getInt(INTENT_KEY_TYPE);
+            }
+            if (getArguments().containsKey(INTENT_KEY_TAG)) {
+                tagName = getArguments().getString(INTENT_KEY_TAG);
+            }
+        }
         productFragmentPresenter = new ProductFragmentPresenter(getActivity());
         productFragmentPresenter.attachView(this);
         refreshData();
@@ -107,7 +128,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
             if (productFragmentPresenter != null) {
                 setLoading(true);
                 lastWorkId = "";
-                productFragmentPresenter.getProductListData(lastWorkId);
+                productFragmentPresenter.getProductListData(dataType, tagName, lastWorkId);
             }
         } else {
             if (swipeToLoadLayout.isRefreshing()) {
@@ -127,7 +148,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     private void loadMore() {
         setLoading(true);
         if (productFragmentPresenter != null) {
-            productFragmentPresenter.getProductListData(lastWorkId);
+            productFragmentPresenter.getProductListData(dataType, tagName, lastWorkId);
         }
     }
 

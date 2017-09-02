@@ -146,7 +146,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                         .centerCrop()
                         .transform(new GlideRoundTransform(contexts.get(), 5))
                         .into(headHolder.source_logo);
-                headHolder.create_time.setText(bean.createTime);
+                headHolder.create_time.setText(bean.copy);
 
             } else {
                 if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemView.getLayoutParams() != null) {
@@ -179,7 +179,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                         headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
                         Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop().
                                 transform(new GlideRoundTransform(contexts.get(), 5)).into(headHolder.source_logo);
-                        headHolder.create_time.setText(bean.createTime);
+                        headHolder.create_time.setText(bean.copy);
 
                         bean.isCoverLoad = true;
                         return false;
@@ -243,7 +243,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                                 Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
                                         .transform(new GlideRoundTransform(contexts.get(), 5))
                                         .into(headHolder.source_logo);
-                                headHolder.create_time.setText(bean.createTime);
+                                headHolder.create_time.setText(bean.copy);
 
                                 bean.isCoverLoad = true;
                                 return false;

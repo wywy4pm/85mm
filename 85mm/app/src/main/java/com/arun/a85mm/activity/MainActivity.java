@@ -31,7 +31,9 @@ import com.arun.a85mm.event.UpdateMesDotEvent;
 import com.arun.a85mm.fragment.ArticleFragment;
 import com.arun.a85mm.fragment.AssociationFragment;
 import com.arun.a85mm.fragment.CommunityFragment;
+import com.arun.a85mm.fragment.LeftWorksFragment;
 import com.arun.a85mm.fragment.ProductionFragment;
+import com.arun.a85mm.fragment.WebViewFragment;
 import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
@@ -121,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         PushAgent.getInstance(this).onAppStart();
         StatusBarUtils.statusBarLightMode(this);
         EventBus.getDefault().register(this);
-        initData();
+        //initData();
         init();
         setListener();
         DataCleanManager.clearOver50MBSize(this);
@@ -152,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         dot_new_message = (TextView) findViewById(R.id.dot_new_message);
         eventStatisticsHelper = new EventStatisticsHelper(this);
-        viewPager.setAdapter(new CommonFragmentPagerAdapter(getSupportFragmentManager(), list));
 
         List<MenuListBean> menuList = ConfigHelper.menuList;
         if (menuList != null) {
@@ -160,10 +161,27 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < titles.length; i++) {
                 if (menuList.get(i) != null) {
                     titles[i] = menuList.get(i).showName;
+                    int type = menuList.get(i).dataType;
+                    Fragment fragment = null;
+                    if (type == -3) {
+                        fragment = CommunityFragment.newInstance();
+                    } else if (type == -2) {
+                        fragment = ArticleFragment.newIntense();
+                    } else if (type == -1) {
+                        fragment = WebViewFragment.getInstance(menuList.get(i).url);
+                    } else if (type == 0 || type == 9) {
+                        fragment = ProductionFragment.newInstance(type, menuList.get(i).tagName);
+                    } else if (type == 1) {
+                        fragment = new LeftWorksFragment();
+                    } else if (type == 3) {
+                        fragment = AssociationFragment.getInstance();
+                    }
+                    list.add(fragment);
                 }
             }
         }
 
+        viewPager.setAdapter(new CommonFragmentPagerAdapter(getSupportFragmentManager(), list));
         tabLayout.setViewPager(viewPager, titles);
         TextViewUtils.setTextBold(tabLayout.getTitleView(0), true);
         viewPager.setCurrentItem(0);

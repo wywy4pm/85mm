@@ -14,10 +14,12 @@
         android:id="@+id/tabLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/layout_status_place"
         android:layout_marginBottom="6dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="12dp"
+        android:layout_toLeftOf="@+id/tab_right"
         android:paddingBottom="7dp"
         app:tl_indicator_anim_duration="100"
         app:tl_indicator_anim_enable="true"
@@ -31,6 +33,7 @@
         app:tl_textsize="16sp" />
 
     <RelativeLayout
+        android:id="@+id/tab_right"
         android:layout_width="94dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
