@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     private static String type;
     private static Map<String, String> map;
     private TextView dot_new_message;
+    private List<MenuListBean> menuList;
     //public static final String KEY_RESPONSE = "productListResponse";
 
     public static void jumpToMain(Context context) {
@@ -155,11 +156,17 @@ public class MainActivity extends AppCompatActivity {
         dot_new_message = (TextView) findViewById(R.id.dot_new_message);
         eventStatisticsHelper = new EventStatisticsHelper(this);
 
-        List<MenuListBean> menuList = ConfigHelper.menuList;
+        menuList = ConfigHelper.menuList;
+        String lastSelectName = SharedPreferencesUtils.getConfigString(this, SharedPreferencesUtils.KEY_MAIN_TAB_POS);
+        int lastSelectPos = 0;
         if (menuList != null) {
             titles = new String[menuList.size()];
             for (int i = 0; i < titles.length; i++) {
                 if (menuList.get(i) != null) {
+                    if (!TextUtils.isEmpty(menuList.get(i).showName)
+                            && menuList.get(i).showName.equals(lastSelectName)) {
+                        lastSelectPos = i;
+                    }
                     titles[i] = menuList.get(i).showName;
                     int type = menuList.get(i).dataType;
                     Fragment fragment = null;
@@ -183,8 +190,8 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setAdapter(new CommonFragmentPagerAdapter(getSupportFragmentManager(), list));
         tabLayout.setViewPager(viewPager, titles);
-        TextViewUtils.setTextBold(tabLayout.getTitleView(0), true);
-        viewPager.setCurrentItem(0);
+        TextViewUtils.setTextBold(tabLayout.getTitleView(lastSelectPos), true);
+        viewPager.setCurrentItem(lastSelectPos);
         setSaveImage();
     }
 
@@ -226,15 +233,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 int type = -1;
-                if (position == 0) {
-                    type = EventConstant.CHANGE_WORK;
-                } else if (position == 1) {
-                    type = EventConstant.CHANGE_ASSOCIATION;
-                } else if (position == 2) {
-                    type = EventConstant.CHANGE_ARTICLE;
-                }
-                if (eventStatisticsHelper != null) {
-                    eventStatisticsHelper.recordUserAction(MainActivity.this, type);
+                if (menuList != null && position <= menuList.size()) {
+                    MenuListBean bean = menuList.get(position);
+                    if (bean != null) {
+                        SharedPreferencesUtils.setConfigString(MainActivity.this, SharedPreferencesUtils.KEY_MAIN_TAB_POS, bean.showName);
+                        int dataType = bean.dataType;
+                        if (dataType == -3) {
+                            type = EventConstant.CHANGE_WORK;
+                        } else if (position == -2) {
+                            type = EventConstant.CHANGE_ARTICLE;
+                        } else if (dataType == 0) {
+                            type = EventConstant.OPEN_LATEST;
+                        } else if (position == 1) {
+                            type = EventConstant.CHANGE_ASSOCIATION;
+                        } else if (dataType == 9) {
+                            type = EventConstant.CHANGE_AUDIT;
+                        }
+                    }
+                    if (eventStatisticsHelper != null) {
+                        eventStatisticsHelper.recordUserAction(MainActivity.this, type);
+                    }
                 }
                 for (int i = 0; i < tabLayout.getTabCount(); i++) {
                     if (i == position) {
@@ -251,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initData() {
+    /*private void initData() {
         //productionFragment = ProductionFragment.newInstance();
         CommunityFragment communityFragment = CommunityFragment.newInstance();
         associationFragment = AssociationFragment.getInstance();
@@ -260,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
         list.add(communityFragment);
         list.add(associationFragment);
         list.add(articleFragment);
-    }
+    }*/
 
     private void setSaveImage() {
         initToastView();

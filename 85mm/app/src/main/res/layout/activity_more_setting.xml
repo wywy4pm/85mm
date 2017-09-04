@@ -64,12 +64,25 @@
                 android:layout_height="10dp"
                 android:background="@color/area_divide" />
 
+            <LinearLayout
+                android:id="@+id/custom_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone" />
+
+            <View
+                android:id="@+id/line_custom_menu"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/area_divide"
+                android:visibility="gone" />
+
             <RelativeLayout
                 android:id="@+id/layout_hide_read"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
+                android:layout_marginLeft="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -85,22 +98,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true" />
-            </RelativeLayout>
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp" />
 
-            <View
-                android:id="@+id/line_hide_read_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="10dp"
-                android:background="@color/line_divide" />
+                <View
+                    android:id="@+id/line_hide_read_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/line_divide" />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/layout_my_tags"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="15dp">
+                android:layout_marginLeft="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -111,38 +124,28 @@
                     android:textColor="@color/charcoalgrey"
                     android:textSize="15sp" />
 
-                <!--<TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@+id/image_tags_right"
-                    android:text="好人有好报喔"
-                    android:textColor="@color/text_right_tips"
-                    android:textSize="12sp" />-->
-
                 <ImageView
                     android:id="@+id/image_tags_right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
                     android:src="@mipmap/ic_right" />
-            </RelativeLayout>
 
-            <View
-                android:id="@+id/line_tags_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="10dp"
-                android:background="@color/line_divide" />
+                <View
+                    android:id="@+id/line_tags_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/line_divide" />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/layout_share"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="15dp">
+                android:layout_marginLeft="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -169,15 +172,17 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
                     android:src="@mipmap/ic_right" />
-            </RelativeLayout>
 
-            <View
-                android:id="@+id/line_share_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="10dp"
-                android:background="@color/line_divide" />
+                <View
+                    android:id="@+id/line_share_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/line_divide" />
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/layout_clear"
@@ -220,8 +225,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:background="@color/area_divide" />
-
-            <!--<include layout="@layout/layout_more_detail" />-->
 
             <ImageView
                 android:id="@+id/more_detail"

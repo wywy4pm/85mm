@@ -267,8 +267,11 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
 
     @Override
     public void onMoreLinkClick(String workId, String sourceUrl) {
-        //DialogHelper.showBottomSourceLink(getActivity(), sourceUrl, workId, eventStatisticsHelper);
-        DialogHelper.showBottom(getActivity(), Constant.TYPE_WORK, sourceUrl, workId, "", eventStatisticsHelper);
+        String type = Constant.TYPE_WORK;
+        if (dataType == 9) {
+            type = Constant.TYPE_AUDIT;
+        }
+        DialogHelper.showBottom(getActivity(), type, sourceUrl, workId, "", eventStatisticsHelper);
     }
 
     public void setHaveMore(boolean isHaveMore) {

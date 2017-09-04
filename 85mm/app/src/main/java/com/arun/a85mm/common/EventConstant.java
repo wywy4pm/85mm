@@ -20,6 +20,7 @@ public class EventConstant {
     public static final int CHANGE_MESSAGE = 15;
     public static final int CHANGE_ASSOCIATION = 16;
     public static final int OPEN_AUDIT = 17;
+    public static final int CHANGE_AUDIT = 18;
 
     public static final int WORK_BROWSE_NEWEST = 1001;
     public static final int WORK_BROWSE_HOTEST = 1101;

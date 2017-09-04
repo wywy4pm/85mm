@@ -10,17 +10,21 @@ import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.SwitchCompat;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.MenuListBean;
 import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.dialog.ContactDialog;
 import com.arun.a85mm.event.UpdateProductEvent;
+import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.helper.UserManager;
@@ -53,11 +57,10 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
 
     private TextView cache_size;
     private RelativeLayout layout_share, layout_clear, layout_user_info, layout_my_tags;
+    private LinearLayout custom_menu;
+    private View line_custom_menu;
     private ImageView user_head;
     private TextView user_name;
-    //private ListView configListView;
-    //private ConfigAdapter configAdapter;
-    private List<String> texts = new ArrayList<>();
     private ImageView more_detail;
     private SwitchCompat switchView;
     private MorePresenter morePresenter;
@@ -88,16 +91,10 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         switchView = (SwitchCompat) findViewById(R.id.switchView);
         layout_user_info = (RelativeLayout) findViewById(R.id.layout_user_info);
         layout_my_tags = (RelativeLayout) findViewById(R.id.layout_my_tags);
+        custom_menu = (LinearLayout) findViewById(R.id.custom_menu);
+        line_custom_menu = findViewById(R.id.line_custom_menu);
         user_head = (ImageView) findViewById(R.id.user_head);
         user_name = (TextView) findViewById(R.id.user_name);
-        /*switchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (morePresenter != null) {
-                    morePresenter.setHideReadStatus(userId, switchView.isChecked() ? 1 : 0);
-                }
-            }
-        });*/
         switchView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -119,9 +116,6 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                 return true;
             }
         });
-        /*configListView = (ListView) findViewById(R.id.configListView);
-        configAdapter = new ConfigAdapter(this, texts);
-        configListView.setAdapter(configAdapter);*/
 
         layout_share.setOnClickListener(this);
         layout_clear.setOnClickListener(this);
@@ -154,8 +148,6 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
             switchView.setChecked(false);
         }
         cache_size.setText(DataCleanManager.getImageCacheSize(this));
-        /*String moreImageUrl = SharedPreferencesUtils.getMoreImage(this);
-        Glide.with(this).load(moreImageUrl).diskCacheStrategy(DiskCacheStrategy.SOURCE).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(more_detail);*/
         Bitmap bitmap = CacheUtils.getBitmap(this, CacheUtils.KEY_BITMAP_CONFIG);
         if (bitmap != null) {
             more_detail.setImageBitmap(bitmap);
@@ -164,6 +156,41 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         morePresenter.attachView(this);
 
         setUser();
+        setCustomMenu();
+
+    }
+
+    private void setCustomMenu() {
+        List<MenuListBean> customMenuList = ConfigHelper.customMenuList;
+        if (customMenuList != null && customMenuList.size() > 0) {
+            custom_menu.removeAllViews();
+            custom_menu.setVisibility(View.VISIBLE);
+            line_custom_menu.setVisibility(View.VISIBLE);
+            for (int i = 0; i < customMenuList.size(); i++) {
+                final MenuListBean bean = customMenuList.get(i);
+                if (bean != null) {
+                    View itemMenu = LayoutInflater.from(this).inflate(R.layout.layout_custom_menu_item, custom_menu, false);
+                    TextView text_custom_menu = (TextView) itemMenu.findViewById(R.id.text_custom_menu);
+                    View line_divide = itemMenu.findViewById(R.id.line_menu_bottom);
+                    text_custom_menu.setText(bean.showName);
+                    itemMenu.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url);
+                        }
+                    });
+                    if (i == customMenuList.size() - 1) {
+                        line_divide.setVisibility(View.GONE);
+                    } else {
+                        line_divide.setVisibility(View.VISIBLE);
+                    }
+                    custom_menu.addView(itemMenu);
+                }
+            }
+        } else {
+            custom_menu.setVisibility(View.GONE);
+            line_custom_menu.setVisibility(View.GONE);
+        }
     }
 
     private void showShare() {

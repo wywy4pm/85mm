@@ -27,7 +27,7 @@
         app:tl_indicator_color="@color/more_yellow"
         app:tl_indicator_height="2dp"
         app:tl_indicator_width="12dp"
-        app:tl_tab_padding="15dp"
+        app:tl_tab_padding="8dp"
         app:tl_textSelectColor="@color/tab_select"
         app:tl_textUnselectColor="@color/tab_un_select"
         app:tl_textsize="16sp" />
