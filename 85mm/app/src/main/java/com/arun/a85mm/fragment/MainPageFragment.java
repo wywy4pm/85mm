@@ -23,7 +23,7 @@ import java.util.List;
  * Created by wy on 2017/7/12.
  */
 
-public class MainPageFragment extends BaseFragment implements CommonView4<UserMainPageBean> {
+public class MainPageFragment extends BaseFragment implements CommonView4<List<WorkListBean>> {
 
     private RecyclerView recyclerView;
     private RelativeLayout layout_no_data;
@@ -126,10 +126,10 @@ public class MainPageFragment extends BaseFragment implements CommonView4<UserMa
     }
 
     @Override
-    public void refresh(UserMainPageBean data) {
-        if (data != null && data.workList != null && data.workList.size() > 0) {
-            formatData(data.workList);
-            workList.addAll(data.workList);
+    public void refresh(List<WorkListBean> data) {
+        if (data != null && data.size() > 0) {
+            formatData(data);
+            workList.addAll(data);
             adapter.notifyDataSetChanged();
         }
     }
@@ -139,7 +139,7 @@ public class MainPageFragment extends BaseFragment implements CommonView4<UserMa
     }
 
     @Override
-    public void refreshMore(UserMainPageBean data) {
+    public void refreshMore(List<WorkListBean> data) {
     }
 
     @Override

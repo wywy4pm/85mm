@@ -19,11 +19,13 @@ import android.widget.TextView;
 import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
+import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.fragment.TagWorkFragment;
 import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.listener.OnImageClick;
@@ -42,7 +44,9 @@ import com.bumptech.glide.request.target.Target;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wy on 2017/4/18.
@@ -409,9 +413,18 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 workListItemHolder.layout_work_tags.setVisibility(View.VISIBLE);
                 workListItemHolder.layout_work_tags.removeAllViews();
                 for (int i = 0; i < workGroup.workTags.size(); i++) {
+                    final String tagName = workGroup.workTags.get(i);
                     View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_tag_item_gray, workListItemHolder.layout_work_tags, false);
                     TextView work_tag_name = (TextView) itemView.findViewById(R.id.work_tag_name);
-                    work_tag_name.setText(workGroup.workTags.get(i));
+                    work_tag_name.setText(tagName);
+                    itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Map<String, String> map = new HashMap<>();
+                            map.put(TagWorkFragment.KEY_TAG_NAME, tagName);
+                            FragmentCommonActivity.jumpToFragmentCommonActivity(contexts.get(), FragmentCommonActivity.FRAGMENT_TAG_WORKS, tagName, map);
+                        }
+                    });
                     workListItemHolder.layout_work_tags.addView(itemView);
                 }
             } else {

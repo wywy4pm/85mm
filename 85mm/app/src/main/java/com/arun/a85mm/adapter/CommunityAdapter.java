@@ -90,13 +90,6 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         WorkListHeadHolder workListHeadHolder = null;
         convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_goods_list, parent, false);
         workListHeadHolder = new WorkListHeadHolder(convertView);
-        /*if (convertView == null) {
-            convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_goods_list, parent, false);
-            workListHeadHolder = new WorkListHeadHolder(convertView);
-            convertView.setTag(workListHeadHolder);
-        } else {
-            workListHeadHolder = (WorkListHeadHolder) convertView.getTag();
-        }*/
 
         final WorkListHeadHolder headHolder = workListHeadHolder;
         final WorkListBean bean = workList.get(groupPosition);
@@ -173,21 +166,14 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .override(screenWidth, imageHeight).into(headHolder.work_list_cover_img);
 
-                if (!bean.isExpand) {
-                    headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
-                    headHolder.layout_source.setVisibility(View.VISIBLE);
-                    headHolder.shadow.setVisibility(View.VISIBLE);
-
-                    headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
-                    Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
-                            .transform(new GlideRoundTransform(contexts.get(), 5))
-                            .into(headHolder.source_logo);
-                    headHolder.create_time.setText(bean.copy);//resources.getString(R.string.works_download_count_one, bean.downloadNum)
-                } else {
-                    headHolder.work_list_cover_count.setVisibility(View.GONE);
-                    headHolder.layout_source.setVisibility(View.GONE);
-                    headHolder.shadow.setVisibility(View.GONE);
-                }
+                headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
+                headHolder.layout_source.setVisibility(View.VISIBLE);
+                headHolder.shadow.setVisibility(View.VISIBLE);
+                headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
+                Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
+                        .transform(new GlideRoundTransform(contexts.get(), 5))
+                        .into(headHolder.source_logo);
+                headHolder.create_time.setText(bean.copy);//resources.getString(R.string.works_download_count_one, bean.downloadNum)
             } else {
                 if (headHolder.work_list_cover_img.getLayoutParams() != null && headHolder.itemImageView.getLayoutParams() != null) {
                     headHolder.work_list_cover_img.getLayoutParams().height = imageHeight;
@@ -209,21 +195,14 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                             headHolder.itemImageView.getLayoutParams().height = finalImageHeight;
                         }
 
-                        if (!bean.isExpand) {
-                            headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
-                            headHolder.layout_source.setVisibility(View.VISIBLE);
-                            headHolder.shadow.setVisibility(View.VISIBLE);
-
-                            headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
-                            Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
-                                    .transform(new GlideRoundTransform(contexts.get(), 5))
-                                    .into(headHolder.source_logo);
-                            headHolder.create_time.setText(bean.copy);//resources.getString(R.string.works_download_count_one, bean.downloadNum)
-                        } else {
-                            headHolder.work_list_cover_count.setVisibility(View.GONE);
-                            headHolder.layout_source.setVisibility(View.GONE);
-                            headHolder.shadow.setVisibility(View.GONE);
-                        }
+                        headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
+                        headHolder.layout_source.setVisibility(View.VISIBLE);
+                        headHolder.shadow.setVisibility(View.VISIBLE);
+                        headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
+                        Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
+                                .transform(new GlideRoundTransform(contexts.get(), 5))
+                                .into(headHolder.source_logo);
+                        headHolder.create_time.setText(bean.copy);//resources.getString(R.string.works_download_count_one, bean.downloadNum)
                         bean.isCoverLoad = true;
                         return false;
                     }
@@ -251,9 +230,6 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                     }
                 } else {
                     if (bean.isCoverLoad) {
-                        headHolder.work_list_cover_count.setVisibility(View.GONE);
-                        headHolder.layout_source.setVisibility(View.GONE);
-                        headHolder.shadow.setVisibility(View.GONE);
                         bean.isExpand = true;
                         if (onImageClick != null) {
                             onImageClick.onCountClick(groupPosition);
@@ -286,21 +262,16 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                                     headHolder.itemImageView.getLayoutParams().height = finalImageHeight;
                                 }
 
-                                if (!bean.isExpand) {
-                                    headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
-                                    headHolder.layout_source.setVisibility(View.VISIBLE);
-                                    headHolder.shadow.setVisibility(View.VISIBLE);
 
-                                    headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
-                                    Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
-                                            .transform(new GlideRoundTransform(contexts.get(), 5))
-                                            .into(headHolder.source_logo);
-                                    headHolder.create_time.setText(bean.copy);//resources.getString(R.string.works_download_count_one, bean.downloadNum)
-                                } else {
-                                    headHolder.work_list_cover_count.setVisibility(View.GONE);
-                                    headHolder.layout_source.setVisibility(View.GONE);
-                                    headHolder.shadow.setVisibility(View.GONE);
-                                }
+                                headHolder.work_list_cover_count.setVisibility(View.VISIBLE);
+                                headHolder.layout_source.setVisibility(View.VISIBLE);
+                                headHolder.shadow.setVisibility(View.VISIBLE);
+                                headHolder.work_list_cover_count.setText(String.valueOf(bean.totalImageNum));
+                                Glide.with(contexts.get()).load(bean.sourceLogo).centerCrop()
+                                        .transform(new GlideRoundTransform(contexts.get(), 5))
+                                        .into(headHolder.source_logo);
+                                headHolder.create_time.setText(bean.copy);//resources.getString(R.string.works_download_count_one, bean.downloadNum)
+
                                 bean.isCoverLoad = true;
                                 return false;
                             }

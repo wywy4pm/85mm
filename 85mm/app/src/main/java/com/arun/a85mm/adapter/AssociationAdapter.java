@@ -325,6 +325,13 @@ public class AssociationAdapter extends BaseRecyclerAdapter<WorkListBean> {
                             }
                         }
 
+                        commentView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                UserMainActivity.jumpToUserMain(context, commentItem.authorId);
+                            }
+                        });
+
                         layout_comment.addView(commentView);
                     }
                 }
