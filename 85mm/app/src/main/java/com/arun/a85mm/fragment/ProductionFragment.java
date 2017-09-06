@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
+import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.adapter.ProductListAdapter;
 import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
@@ -243,9 +244,13 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     }
 
     @Override
-    public void onCoverClick(String workId, String coverUrl, int width, int height) {
-        if (getActivity() != null && getActivity() instanceof BaseActivity) {
-            ((BaseActivity) getActivity()).saveImageShowTop(workId, coverUrl, width, height);
+    public void onCoverClick(String workId, String coverUrl, String authorName) {
+        if (getActivity() != null) {
+            if (getActivity() instanceof BaseActivity) {
+                ((BaseActivity) getActivity()).saveImageShowTop(workId, coverUrl, authorName);
+            } else if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).saveImageShowTop(workId, coverUrl, authorName);
+            }
         }
     }
 

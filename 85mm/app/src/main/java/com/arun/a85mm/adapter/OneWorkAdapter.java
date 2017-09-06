@@ -212,7 +212,7 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
                     if (bean.isLoad) {
                         rippleView.setRippleDuration(300);
                         if (onImageClick != null) {
-                            onImageClick.onCoverClick(workListBean.id, bean.url, screenWidth, finalSaveImageHeight);
+                            onImageClick.onCoverClick(workListBean.id, bean.url, workListBean.authorName);
                         }
                     } else {
                         rippleView.setRippleDuration(0);

@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -127,6 +129,24 @@ public class FileUtils {
             //Toast.makeText(context, "请开启sd卡存储权限,方便保存图片", Toast.LENGTH_SHORT).show();
             return false;
         }
+    }
+
+    public static boolean wirteBitmapToDisk(Bitmap bitmapSrc, String fileName) {
+        if (hasSdcard()) {
+            File newFile = createDirAndFile(DIR_IMAGE_SAVE, fileName);
+            FileOutputStream out = null;
+            try {
+                out = new FileOutputStream(newFile);
+                bitmapSrc.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return false;
     }
 
     private static File createDirAndFile(String path, String fileName) {

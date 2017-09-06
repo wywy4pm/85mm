@@ -226,7 +226,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 if (bean.isExpand) {
                     finalWorkListHeadHolder.rippleView.setRippleDuration(300);
                     if (onImageClick != null) {
-                        onImageClick.onCoverClick(bean.id, bean.coverUrl, screenWidth, finalImageHeight);
+                        onImageClick.onCoverClick(bean.id, bean.coverUrl, bean.authorName);
                     }
                 } else {
                     if (bean.isCoverLoad) {
@@ -501,7 +501,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 if (bean.isLoad) {
                     finalWorkListItemHolder.rippleView.setRippleDuration(300);
                     if (onImageClick != null) {
-                        onImageClick.onCoverClick(workList.get(groupPosition).id, bean.url, screenWidth, finalSaveImageHeight);
+                        onImageClick.onCoverClick(workList.get(groupPosition).id, bean.url, workList.get(groupPosition).authorName);
                     }
                 } else {
                     finalWorkListItemHolder.rippleView.setRippleDuration(0);

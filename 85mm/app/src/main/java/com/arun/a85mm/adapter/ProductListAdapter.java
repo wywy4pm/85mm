@@ -209,7 +209,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 if (bean.isExpand) {
                     finalWorkListHeadHolder.rippleView.setRippleDuration(300);
                     if (onImageClick != null) {
-                        onImageClick.onCoverClick(bean.id, bean.coverUrl, screenWidth, finalImageHeight);
+                        onImageClick.onCoverClick(bean.id, bean.coverUrl, bean.authorName);
                     }
                 } else {
                     if (bean.isCoverLoad) {
@@ -476,7 +476,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 if (bean.isLoad) {
                     finalWorkListItemHolder.rippleView.setRippleDuration(300);
                     if (onImageClick != null) {
-                        onImageClick.onCoverClick(works.get(groupPosition).id, bean.url, screenWidth, finalSaveImageHeight);
+                        onImageClick.onCoverClick(works.get(groupPosition).id, bean.url, works.get(groupPosition).authorName);
                     }
                 } else {
                     finalWorkListItemHolder.rippleView.setRippleDuration(0);

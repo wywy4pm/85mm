@@ -377,8 +377,8 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     }
 
     @Override
-    public void onCoverClick(String workId, String coverUrl, int width, int height) {
-        saveImageShowTop(workId, coverUrl, width, height);
+    public void onCoverClick(String workId, String coverUrl, String authorName) {
+        saveImageShowTop(workId, coverUrl, authorName);
     }
 
     @Override

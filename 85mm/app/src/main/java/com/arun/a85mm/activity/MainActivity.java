@@ -301,12 +301,12 @@ public class MainActivity extends AppCompatActivity {
         showTopToastView(showTopBean);
     }
 
-    public void saveImageShowTop(String workId, String coverUrl, int width, int height) {
+    public void saveImageShowTop(String workId, String coverUrl, String authorName) {
         if (saveImageHelper != null && showTopHandler != null) {
             if (!TextUtils.isEmpty(workId)) {
                 onActionEvent(EventConstant.WORK_IMAGE_DOWNLOAD, EventStatisticsHelper.createOneActionList(EventConstant.WORK_IMAGE_DOWNLOAD, workId, coverUrl));
             }
-            saveImageHelper.saveImageShowTop(this, coverUrl, width, height, showTopHandler, isShowingTop);
+            saveImageHelper.saveImage(this, coverUrl, showTopHandler, isShowingTop, authorName);
         }
     }
 

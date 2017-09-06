@@ -107,12 +107,12 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
         }
     }
 
-    public void saveImageShowTop(String workId, String coverUrl, int width, int height) {
+    public void saveImageShowTop(String workId, String coverUrl, String authorName) {
         if (saveImageHelper != null && showTopHandler != null) {
             if (!TextUtils.isEmpty(workId)) {
                 onEvent(EventConstant.WORK_IMAGE_DOWNLOAD, workId, coverUrl);
             }
-            saveImageHelper.saveImageShowTop(this, coverUrl, width, height, showTopHandler, isShowingTop);
+            saveImageHelper.saveImage(this, coverUrl, showTopHandler, isShowingTop, authorName);
         }
     }
 

@@ -397,9 +397,9 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
     }
 
     @Override
-    public void onCoverClick(String workId, String coverUrl, int width, int height) {
+    public void onCoverClick(String workId, String coverUrl, String authorName) {
         if (getActivity() != null && getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).saveImageShowTop(workId, coverUrl, width, height);
+            ((MainActivity) getActivity()).saveImageShowTop(workId, coverUrl, authorName);
         }
     }
 
