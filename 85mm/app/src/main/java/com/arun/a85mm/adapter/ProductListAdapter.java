@@ -20,6 +20,7 @@ import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
+import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
@@ -397,6 +398,8 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
                     if (contexts.get() instanceof BaseActivity) {
                         ((BaseActivity) contexts.get()).shareWorkDetail(workGroup);
+                    } else if (contexts.get() instanceof MainActivity) {
+                        ((MainActivity) contexts.get()).shareWorkDetail(workGroup);
                     }
                 }
             });
