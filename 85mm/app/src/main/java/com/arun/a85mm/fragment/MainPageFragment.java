@@ -120,6 +120,7 @@ public class MainPageFragment extends BaseFragment implements CommonView4<List<W
     public void setLoadMore() {
         if (isHaveMore) {
             if (presenter != null) {
+                setLoading(true);
                 presenter.getMoreMainPage(lastWorkId, pageType);
             }
         }
@@ -152,5 +153,10 @@ public class MainPageFragment extends BaseFragment implements CommonView4<List<W
         if (presenter != null) {
             presenter.detachView();
         }
+    }
+
+    @Override
+    public void onRefreshComplete() {
+        setLoading(false);
     }
 }

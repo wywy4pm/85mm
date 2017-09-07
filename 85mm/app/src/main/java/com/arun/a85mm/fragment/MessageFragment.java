@@ -85,6 +85,7 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
         if (messagePresenter != null) {
             isHaveMore = true;
             lastMsgId = 0;
+            setLoading(true);
             messagePresenter.getMessageList(msgType, lastMsgId);
         }
     }
@@ -98,6 +99,7 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
     public void setLoadMore() {
         if (isHaveMore) {
             if (messagePresenter != null) {
+                setLoading(true);
                 messagePresenter.getMessageList(msgType, lastMsgId);
             }
         }
@@ -173,6 +175,7 @@ public class MessageFragment extends BaseFragment implements CommonView4<List<Me
 
     @Override
     public void onRefreshComplete() {
+        setLoading(false);
         if (swipeToLoadLayout != null) {
             swipeToLoadLayout.setRefreshing(false);
         }
