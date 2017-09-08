@@ -39,7 +39,8 @@ public class OssUploadImageHelper {
         put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
             @Override
             public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
-                Log.d("PutObject", "currentSize: " + currentSize + " totalSize: " + totalSize);
+                /*int progress = (int) ((double) currentSize / totalSize * 100);
+                Log.d("onProgress", "progress = " + progress + "%");*/
             }
         });
         OSSAsyncTask task = MMApplication.oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
@@ -82,7 +83,8 @@ public class OssUploadImageHelper {
         put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
             @Override
             public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
-                Log.d("PutObject", "currentSize: " + currentSize + " totalSize: " + totalSize);
+                /*int progress = (int) ((double) currentSize / totalSize * 100);
+                Log.d("onProgress", "progress = " + progress + "%");*/
             }
         });
         OSSAsyncTask task = MMApplication.oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
