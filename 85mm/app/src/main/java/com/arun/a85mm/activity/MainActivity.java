@@ -169,21 +169,24 @@ public class MainActivity extends AppCompatActivity {
                     }
                     titles[i] = menuList.get(i).showName;
                     int type = menuList.get(i).dataType;
-                    Fragment fragment = null;
-                    if (type == -3) {
-                        fragment = CommunityFragment.newInstance();
-                    } else if (type == -2) {
-                        fragment = ArticleFragment.newIntense();
-                    } else if (type == -1) {
-                        fragment = WebViewFragment.getInstance(menuList.get(i).url);
-                    } else if (type == 0 || type == 9) {
-                        fragment = ProductionFragment.newInstance(type, menuList.get(i).tagName);
-                    } else if (type == 1) {
-                        fragment = new LeftWorksFragment();
+                    if (type == -3 || type == -2 || type == -1 || type == 0 || type == 9 || type == 1) {
+                        Fragment fragment = null;
+                        if (type == -3) {
+                            fragment = CommunityFragment.newInstance();
+                        } else if (type == -2) {
+                            fragment = ArticleFragment.newIntense();
+                        } else if (type == -1) {
+                            fragment = WebViewFragment.getInstance(menuList.get(i).url);
+                        } else if (type == 0 || type == 9) {
+                            fragment = ProductionFragment.newInstance(type, menuList.get(i).tagName);
+                        } else {
+                            fragment = new LeftWorksFragment();
+                        }
+                        list.add(fragment);
                     } else if (type == 3) {
-                        fragment = AssociationFragment.getInstance();
+                        associationFragment = AssociationFragment.getInstance();
+                        list.add(associationFragment);
                     }
-                    list.add(fragment);
                 }
             }
         }
@@ -394,7 +397,7 @@ public class MainActivity extends AppCompatActivity {
                 AddCommunityActivity.jumpToAddCommunityForResult(this);
             } else if (requestCode == Constant.REQUEST_CODE_ASSOCIATE_MAIN) {//跳到最新
                 if (associationFragment != null) {
-                    associationFragment.setTagSelect(1);
+                    associationFragment.setTagSelect(3);
                 }
             }
         }

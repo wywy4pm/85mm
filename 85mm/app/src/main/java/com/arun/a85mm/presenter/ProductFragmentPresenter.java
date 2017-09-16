@@ -74,6 +74,7 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView4> {
                                 }
                             } else if (data.code == ErrorCode.NO_DATA) {
                                 ((ProductionFragment) getMvpView()).setHaveMore(false);
+                                ((ProductionFragment) getMvpView()).setNoDataView();
                             }
                         }
                     }

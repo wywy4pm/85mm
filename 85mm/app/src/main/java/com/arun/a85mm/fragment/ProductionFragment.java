@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
@@ -44,6 +46,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
 
     private SwipeToLoadLayout swipeToLoadLayout;
     private ExpandableListView expandableListView;
+    private RelativeLayout layout_no_data;
     private ProductListAdapter productListAdapter;
     private List<WorkListBean> workLists = new ArrayList<>();
     private ProductFragmentPresenter productFragmentPresenter;
@@ -84,6 +87,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         swipeToLoadLayout = (SwipeToLoadLayout) findViewById(R.id.swipeToLoad);
         expandableListView = (ExpandableListView) findViewById(R.id.swipe_target);
         next_group_img = (ImageView) findViewById(R.id.next_group_img);
+        layout_no_data = (RelativeLayout) findViewById(R.id.layout_no_data);
         productListAdapter = new ProductListAdapter(getActivity(), workLists);
         expandableListView.setAdapter(productListAdapter);
         productListAdapter.setOnImageClick(this);
@@ -156,6 +160,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     @Override
     public void refresh(List<WorkListBean> data) {
         if (data != null && data.size() > 0) {
+            layout_no_data.setVisibility(View.GONE);
             workLists.clear();
             formatData(data);
         }
@@ -284,6 +289,13 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         if (!isHaveMore) {
             setLeftWorkBrowse(EventConstant.WORK_BROWSE_NEWEST, workLists);
         }
+    }
+
+    public void setNoDataView() {
+        layout_no_data.setVisibility(View.VISIBLE);
+        TextView text_no_data = (TextView) layout_no_data.findViewById(R.id.text_no_data);
+        text_no_data.setText("没有更多了");
+        expandableListView.setEmptyView(layout_no_data);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

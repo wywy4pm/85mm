@@ -21,6 +21,11 @@
         layout="@layout/layout_no_network"
         android:visibility="gone" />
 
+    <include
+        android:id="@+id/layout_no_data"
+        layout="@layout/layout_no_data"
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/next_group_img"
         android:layout_width="60dp"

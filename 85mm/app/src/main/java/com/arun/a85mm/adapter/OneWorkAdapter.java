@@ -14,10 +14,12 @@ import android.widget.TextView;
 
 import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.bean.CommentsBean;
 import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.fragment.TagWorkFragment;
 import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.listener.OnImageClick;
@@ -32,7 +34,9 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wy on 2017/6/21.
@@ -277,7 +281,7 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
     }
 
     private static class CommentsHolder extends RecyclerView.ViewHolder {
-        private View itemView;
+        //private View itemView;
         private TextView comment_count;
         private RecyclerView comment_list;
         private CommentAdapter commentAdapter;
@@ -285,7 +289,7 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
 
         private CommentsHolder(Context context, View itemView) {
             super(itemView);
-            this.itemView = itemView;
+            //this.itemView = itemView;
             comment_count = (TextView) itemView.findViewById(R.id.comment_count);
             comment_list = (RecyclerView) itemView.findViewById(R.id.comment_list);
             commentAdapter = new CommentAdapter(context, commentList);
@@ -323,9 +327,18 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
                 layout_work_tags.setVisibility(View.VISIBLE);
                 layout_work_tags.removeAllViews();
                 for (int i = 0; i < bean.workTags.size(); i++) {
+                    final String tagName = bean.workTags.get(i);
                     View itemView = LayoutInflater.from(context).inflate(R.layout.layout_work_tag_item_gray, layout_work_tags, false);
                     TextView work_tag_name = (TextView) itemView.findViewById(R.id.work_tag_name);
                     work_tag_name.setText(bean.workTags.get(i));
+                    itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Map<String, String> map = new HashMap<>();
+                            map.put(TagWorkFragment.KEY_TAG_NAME, tagName);
+                            FragmentCommonActivity.jumpToFragmentCommonActivity(context, FragmentCommonActivity.FRAGMENT_TAG_WORKS, tagName, map);
+                        }
+                    });
                     layout_work_tags.addView(itemView);
                 }
             } else {

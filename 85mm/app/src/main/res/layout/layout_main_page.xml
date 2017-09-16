@@ -10,6 +10,6 @@
 
     <include
         android:id="@+id/layout_no_data"
-        layout="@layout/layout_no_data"
+        layout="@layout/layout_no_data_top"
         android:visibility="gone" />
 </RelativeLayout>

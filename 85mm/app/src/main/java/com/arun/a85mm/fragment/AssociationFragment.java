@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.AddCommunityActivity;
@@ -37,6 +38,7 @@ import java.util.List;
 public class AssociationFragment extends BaseFragment implements CommonView4<List<WorkListBean>>, AssociationAdapter.OnTagClick {
     private RecyclerView recyclerView;
     private SwipeToLoadLayout swipeToLoad;
+    //private RelativeLayout layout_no_data;
     private AssociationPresenter presenter;
     private List<WorkListBean> associationList = new ArrayList<>();
     private AssociationAdapter associationAdapter;
@@ -63,6 +65,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
         recyclerView = (RecyclerView) findViewById(R.id.swipe_target);
         swipeToLoad = (SwipeToLoadLayout) findViewById(R.id.swipeToLoad);
         btn_add_community = (ImageView) findViewById(R.id.btn_add_community);
+        //layout_no_data = (RelativeLayout) findViewById(R.id.layout_no_data);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -162,6 +165,7 @@ public class AssociationFragment extends BaseFragment implements CommonView4<Lis
             associationList.clear();
             associationList.add(bean);
             associationAdapter.notifyDataSetChanged();
+
         }
     }
 
