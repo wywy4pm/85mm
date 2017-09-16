@@ -275,6 +275,9 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
                 addHead(bean);
                 addTagView(bean);
             }
+            if (bean.imageList == null || bean.imageList.size() == 0) {
+                oneWorkAdapter.setNoImage(true);
+            }
             oneWorkAdapter.notifyDataSetChanged();
         } else if (dataType == OneWorkPresenter.TYPE_ADD_COMMENT) {
             if (TextUtils.isEmpty(newUid)) {

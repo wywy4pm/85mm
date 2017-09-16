@@ -52,6 +52,7 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
     private static int VIEW_TYPE_DESCRIPTION = 3;
     private static int VIEW_TYPE_COMMENTS = 4;
     private static int VIEW_TYPE_ADD_TAG = 5;
+    private boolean isNoImage = false;
 
     public OneWorkAdapter(Context context, List<WorkListItemBean> list) {
         super(context, list);
@@ -70,6 +71,10 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
 
     public void setOnTagWorkListener(OnTagWorkListener onTagWorkListener) {
         this.onTagWorkListener = onTagWorkListener;
+    }
+
+    public void setNoImage(boolean isNoImage) {
+        this.isNoImage = isNoImage;
     }
 
     @Override
@@ -103,7 +108,7 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
             oneWorkAuthorHolder.setData(contexts.get(), getItem(position));
         } else if (holder instanceof DescriptionHolder) {
             DescriptionHolder descriptionHolder = (DescriptionHolder) holder;
-            descriptionHolder.setData(getItem(position));
+            descriptionHolder.setData(contexts.get(), getItem(position), isNoImage);
         } else if (holder instanceof CommentsHolder) {
             CommentsHolder commentsHolder = (CommentsHolder) holder;
             commentsHolder.setData(getItem(position).comments);
@@ -249,14 +254,23 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
     private static class DescriptionHolder extends RecyclerView.ViewHolder {
         private TextView community_title;
         private TextView community_detail;
+        private View itemView;
 
         private DescriptionHolder(View itemView) {
             super(itemView);
             this.community_title = (TextView) itemView.findViewById(R.id.community_title);
             this.community_detail = (TextView) itemView.findViewById(R.id.community_detail);
+            this.itemView = itemView;
         }
 
-        public void setData(WorkListItemBean bean) {
+        public void setData(Context context, WorkListItemBean bean, boolean isNoImage) {
+            if (itemView.getLayoutParams() instanceof RecyclerView.LayoutParams) {
+                if (isNoImage) {
+                    ((RecyclerView.LayoutParams) itemView.getLayoutParams()).setMargins(0, DensityUtil.getStatusHeight(context) + DensityUtil.dp2px(context, 40), 0, 0);
+                } else {
+                    ((RecyclerView.LayoutParams) itemView.getLayoutParams()).setMargins(0, 0, 0, 0);
+                }
+            }
             community_title.setText(bean.workTitle);
             community_detail.setText(bean.description);
         }

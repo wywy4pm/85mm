@@ -1,5 +1,6 @@
 package com.arun.a85mm.utils;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -130,5 +131,6 @@ public class AppUtils {
         Intent i = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(i);
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 }
