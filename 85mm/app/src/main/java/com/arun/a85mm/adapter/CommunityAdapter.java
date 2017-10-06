@@ -26,6 +26,7 @@ import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.fragment.TagWorkFragment;
 import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.listener.EventListener;
@@ -424,10 +425,19 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 workListItemHolder.layout_work_tags.setVisibility(View.VISIBLE);
                 workListItemHolder.layout_work_tags.removeAllViews();
                 for (int i = 0; i < workGroup.workTags.size(); i++) {
+                    final String tagName = workGroup.workTags.get(i);
                     View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_tag_item_gray, workListItemHolder.layout_work_tags, false);
                     TextView work_tag_name = (TextView) itemView.findViewById(R.id.work_tag_name);
                     work_tag_name.setText(workGroup.workTags.get(i));
                     workListItemHolder.layout_work_tags.addView(itemView);
+                    itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Map<String, String> map = new HashMap<>();
+                            map.put(TagWorkFragment.KEY_TAG_NAME, tagName);
+                            FragmentCommonActivity.jumpToFragmentCommonActivity(contexts.get(), FragmentCommonActivity.FRAGMENT_TAG_WORKS, tagName, map);
+                        }
+                    });
                 }
             } else {
                 workListItemHolder.layout_work_tags.setVisibility(View.GONE);
