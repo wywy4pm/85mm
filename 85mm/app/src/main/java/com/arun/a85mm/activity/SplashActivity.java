@@ -258,7 +258,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                 })
                 .into(cover_Image);
         text_author.setText(bean.author);
-        cover_Image.setOnClickListener(new View.OnClickListener() {
+        layout_author.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isConfigComplete) {
