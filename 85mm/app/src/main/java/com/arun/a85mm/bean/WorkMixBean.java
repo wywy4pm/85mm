@@ -10,5 +10,6 @@ public class WorkMixBean {
 
     public List<GoodsListBean> historyList;
     public List<ColumnBean> columns;
+    public List<NewColumnBean> newColumnList;
 
 }

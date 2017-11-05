@@ -3,19 +3,14 @@ package com.arun.a85mm.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
@@ -23,7 +18,6 @@ import com.arun.a85mm.adapter.CommonFragmentPagerAdapter;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.MenuListBean;
 import com.arun.a85mm.bean.ShowTopBean;
-import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
@@ -55,12 +49,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -235,26 +223,26 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                int type = -1;
+                //int type = -1;
                 if (menuList != null && position <= menuList.size()) {
                     MenuListBean bean = menuList.get(position);
                     if (bean != null) {
                         SharedPreferencesUtils.setConfigString(MainActivity.this, SharedPreferencesUtils.KEY_MAIN_TAB_POS, bean.showName);
-                        int dataType = bean.dataType;
+                       /* int dataType = bean.dataType;
                         if (dataType == -3) {
                             type = EventConstant.CHANGE_WORK;
-                        } else if (position == -2) {
+                        } else if (dataType == -2) {
                             type = EventConstant.CHANGE_ARTICLE;
                         } else if (dataType == 0) {
                             type = EventConstant.OPEN_LATEST;
-                        } else if (position == 1) {
+                        } else if (dataType == 1) {
                             type = EventConstant.CHANGE_ASSOCIATION;
                         } else if (dataType == 9) {
                             type = EventConstant.CHANGE_AUDIT;
+                        }*/
+                        if (eventStatisticsHelper != null) {
+                            eventStatisticsHelper.recordUserAction(MainActivity.this, EventConstant.TAB_CHANGE, "", bean.showName);
                         }
-                    }
-                    if (eventStatisticsHelper != null) {
-                        eventStatisticsHelper.recordUserAction(MainActivity.this, type);
                     }
                 }
                 for (int i = 0; i < tabLayout.getTabCount(); i++) {

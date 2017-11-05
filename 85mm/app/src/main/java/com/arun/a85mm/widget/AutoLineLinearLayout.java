@@ -31,6 +31,14 @@ public class AutoLineLinearLayout extends ViewGroup {
         ta.recycle(); //回收
     }
 
+    public void setLeftRightSpace(int leftRightSpace) {
+        LEFT_RIGHT_SPACE = leftRightSpace;
+    }
+
+    public void setRowSpace(int rowSpace) {
+        ROW_SPACE = rowSpace;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         //为所有的标签childView计算宽和高

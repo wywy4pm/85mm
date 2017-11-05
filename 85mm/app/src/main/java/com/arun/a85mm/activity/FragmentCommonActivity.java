@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -19,7 +18,6 @@ import com.arun.a85mm.fragment.LeftWorksFragment;
 import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.fragment.TagWorkFragment;
 import com.arun.a85mm.utils.StatusBarUtils;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -90,13 +88,24 @@ public class FragmentCommonActivity extends BaseActivity {
                 }
             });
         }
-
     }
 
     private void initFragment(String type, Map<String, String> map) {
         Fragment fragment = createFragment(type);
         putData(map, fragment);
         setFragment(fragment);
+    }
+
+    private Fragment createFragment(String type) {
+        fragment = null;
+        if (FRAGMENT_LEFT_WORKS.equals(type)) {
+            fragment = new LeftWorksFragment();
+        } else if (FRAGMENT_LATEST_WORKS.equals(type)) {
+            fragment = ProductionFragment.newInstance();
+        } else if (FRAGMENT_TAG_WORKS.equals(type)) {
+            fragment = TagWorkFragment.newInstance();
+        }
+        return fragment;
     }
 
     private void putData(Map<String, String> map, Fragment fragment) {
@@ -120,18 +129,6 @@ public class FragmentCommonActivity extends BaseActivity {
                 }
             }
         }
-    }
-
-    private Fragment createFragment(String type) {
-        fragment = null;
-        if (FRAGMENT_LEFT_WORKS.equals(type)) {
-            fragment = new LeftWorksFragment();
-        } else if (FRAGMENT_LATEST_WORKS.equals(type)) {
-            fragment = ProductionFragment.newInstance();
-        } else if (FRAGMENT_TAG_WORKS.equals(type)) {
-            fragment = TagWorkFragment.newInstance();
-        }
-        return fragment;
     }
 
 }

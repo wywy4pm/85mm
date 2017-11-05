@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="35dp"
+    android:background="@drawable/shape_hot_tag"
+    android:orientation="vertical">
+
+
+    <com.arun.a85mm.widget.AnyCircleImageView
+        android:id="@+id/column_icon"
+        android:layout_width="35dp"
+        android:layout_height="35dp" />
+
+    <TextView
+        android:id="@+id/column_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_toRightOf="@+id/column_icon"
+        android:textColor="@color/charcoalgrey"
+        android:textSize="15sp"
+        android:layout_centerVertical="true"/>
+
+</RelativeLayout>

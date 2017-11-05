@@ -2,22 +2,21 @@ package com.arun.a85mm.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.adapter.CommunityAdapter;
-import com.arun.a85mm.bean.ColumnBean;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.GoodsListBean;
+import com.arun.a85mm.bean.NewColumnBean;
 import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
@@ -27,28 +26,25 @@ import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.event.UpdateProductEvent;
 import com.arun.a85mm.helper.CommunityListCacheManager;
 import com.arun.a85mm.helper.DialogHelper;
-import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
-import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.listener.OnTagWorkListener;
 import com.arun.a85mm.presenter.CommunityPresenter;
-import com.arun.a85mm.presenter.TagWorkPresenter;
-import com.arun.a85mm.refresh.OnRefreshListener;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
-import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.NetUtils;
-import com.arun.a85mm.view.CommonView;
 import com.arun.a85mm.view.CommonView4;
+import com.arun.a85mm.widget.AnyCircleImageView;
+import com.arun.a85mm.widget.AutoLineLinearLayout;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by WY on 2017/4/14.
@@ -67,7 +63,8 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
     private ImageView next_group_img;
     private CommunityAdapter communityAdapter;
     private CommonApiResponse response;
-    private LinearLayout headView;
+    //private LinearLayout headView;
+    private RelativeLayout newHeaderView;
 
     public static CommunityFragment newInstance() {
         CommunityFragment communityFragment = new CommunityFragment();
@@ -93,7 +90,8 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
         communityAdapter.setOnImageClick(this);
         communityAdapter.setEventListener(this);
         communityAdapter.setOnTagWorkListener(this);
-        addHeadView();
+        //addHeadView();
+        addNewHeadView();
 
         setRefresh(swipeToLoadLayout);
         setExpandableListViewCommon(expandableListView, next_group_img, worksList);
@@ -101,11 +99,16 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
 
     }
 
-    private void addHeadView() {
+    /*private void addHeadView() {
         headView = new LinearLayout(getActivity());
         headView.setOrientation(LinearLayout.VERTICAL);
         headView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
         expandableListView.addHeaderView(headView);
+    }*/
+
+    private void addNewHeadView() {
+        newHeaderView = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.layout_hot_new_column, expandableListView, false);
+        expandableListView.addHeaderView(newHeaderView);
     }
 
     @Override
@@ -155,7 +158,8 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
                         if (response.body instanceof WorkMixBean) {
                             worksList.clear();
                             WorkMixBean workMixBean = (WorkMixBean) response.body;
-                            setColumns(workMixBean.columns);
+                            //setColumns(workMixBean.columns);
+                            setNewColumns(workMixBean.newColumnList);
                             formatData(workMixBean.historyList);
                             response = null;
                         } else {
@@ -214,7 +218,8 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
             if (data != null && data instanceof WorkMixBean) {
                 worksList.clear();
                 WorkMixBean workMixBean = (WorkMixBean) data;
-                setColumns(workMixBean.columns);
+                //setColumns(workMixBean.columns);
+                setNewColumns(workMixBean.newColumnList);
                 formatData(workMixBean.historyList);
             }
         } else if (type == CommunityPresenter.TYPE_TAG_WORK) {
@@ -232,7 +237,57 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
     }
 
 
-    private void setColumns(final List<ColumnBean> columns) {
+    private void setNewColumns(final List<NewColumnBean> columns) {
+        if (columns != null && columns.size() > 0) {
+            AutoLineLinearLayout autoLineLinearLayout = (AutoLineLinearLayout) newHeaderView.findViewById(R.id.autoLinearLayout);
+            autoLineLinearLayout.removeAllViews();
+            for (int i = 0; i < columns.size(); i++) {
+                final int type = columns.get(i).dataType;
+                if (type != -4) {
+                    View columnView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_main_hot_tag, newHeaderView, false);
+                    AnyCircleImageView column_icon = (AnyCircleImageView) columnView.findViewById(R.id.column_icon);
+
+                    TextView column_text = (TextView) columnView.findViewById(R.id.column_text);
+                    Glide.with(this)
+                            .load(columns.get(i).coverUrl)
+                            .placeholder(RandomColorHelper.getRandomColor())
+                            .error(RandomColorHelper.getRandomColor())
+                            .centerCrop()
+                            .into(column_icon);
+                    String showName = "";
+                    if (columns.get(i).texts != null && columns.get(i).texts.size() > 0) {
+                        showName = columns.get(i).texts.get(0);
+                        column_text.setText(showName);
+                    }
+
+                    final String titleName = showName;
+                    final String tagName = columns.get(i).tagName;
+                    columnView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (eventStatisticsHelper != null) {
+                                eventStatisticsHelper.recordUserAction(getActivity(), EventConstant.TAB_CHANGE, "", titleName);
+                            }
+                            if (type == 0) {
+                                FragmentCommonActivity.jumpToFragmentCommonActivity(getActivity(), FragmentCommonActivity.FRAGMENT_LATEST_WORKS, titleName, null);
+                            } else if (type == 6 && !TextUtils.isEmpty(tagName)) {
+                                Map<String, String> map = new HashMap<>();
+                                map.put(TagWorkFragment.KEY_TAG_NAME, tagName);
+                                FragmentCommonActivity.jumpToFragmentCommonActivity(getActivity(), FragmentCommonActivity.FRAGMENT_TAG_WORKS, tagName, map);
+                            } else if (type == 10 || type == 11) {
+                                Map<String, String> map = new HashMap<>();
+                                map.put(ProductionFragment.INTENT_KEY_TYPE, String.valueOf(type));
+                                FragmentCommonActivity.jumpToFragmentCommonActivity(getActivity(), FragmentCommonActivity.FRAGMENT_LATEST_WORKS, titleName, map);
+                            }
+                        }
+                    });
+                    autoLineLinearLayout.addView(columnView);
+                }
+            }
+        }
+    }
+
+    /*private void setColumns(final List<ColumnBean> columns) {
         if (columns != null && columns.size() > 0) {
             headView.removeAllViews();
             int imageWidthHeight = screenWidth / 3;
@@ -284,7 +339,7 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
                 headView.addView(columnView);
             }
         }
-    }
+    }*/
 
     private void formatData(List<GoodsListBean> goodsList) {
         int currentListAddCount = 0;

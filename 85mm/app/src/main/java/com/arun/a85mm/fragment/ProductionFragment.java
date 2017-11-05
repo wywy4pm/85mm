@@ -3,7 +3,6 @@ package com.arun.a85mm.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.BaseActivity;
+import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.adapter.ProductListAdapter;
 import com.arun.a85mm.bean.UserTagBean;
@@ -21,15 +21,11 @@ import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.event.UpdateProductEvent;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
-import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.listener.OnTagWorkListener;
 import com.arun.a85mm.presenter.ProductFragmentPresenter;
-import com.arun.a85mm.presenter.TagWorkPresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
-import com.arun.a85mm.utils.ShareParaUtils;
-import com.arun.a85mm.view.CommonView;
 import com.arun.a85mm.view.CommonView4;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,6 +34,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by WY on 2017/4/14.
@@ -53,8 +50,8 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     private boolean isHaveMore = true;
     private String lastWorkId;
     //private static final String TAG = "ProductionFragment";
-    private static final String INTENT_KEY_TYPE = "type";
-    private static final String INTENT_KEY_TAG = "name";
+    public static final String INTENT_KEY_TYPE = "type";
+    public static final String INTENT_KEY_TAG = "name";
     private ImageView next_group_img;
     private int dataType;
     private String tagName;
@@ -99,6 +96,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         setHideReadTips();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void initData() {
         if (getArguments() != null) {
@@ -107,6 +105,12 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
             }
             if (getArguments().containsKey(INTENT_KEY_TAG)) {
                 tagName = getArguments().getString(INTENT_KEY_TAG);
+            }
+            if (getArguments().containsKey(FragmentCommonActivity.EXTRAS)) {
+                Map<String, String> extras = (Map<String, String>) getArguments().get(FragmentCommonActivity.EXTRAS);
+                if (extras != null && extras.containsKey(INTENT_KEY_TYPE)) {
+                    dataType = Integer.parseInt(extras.get(INTENT_KEY_TYPE));
+                }
             }
         }
         productFragmentPresenter = new ProductFragmentPresenter(getActivity());

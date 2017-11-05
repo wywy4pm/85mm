@@ -21,6 +21,7 @@
     <color name="white00">#00FFFFFF</color>//透明度00%
     <color name="black">#000000</color>
     <color name="inner_black">#222222</color>
+    <color name="hot_tag_stroke">#E6E6E6</color>
 
     <color name="black0">#00000000</color>//透明度0%
 
