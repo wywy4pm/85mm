@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.arun.a85mm.MMApplication;
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.UploadImageAdapter;
+import com.arun.a85mm.bean.AmountBean;
 import com.arun.a85mm.bean.UploadImageBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.helper.MatisseHelper;
@@ -41,15 +42,17 @@ import java.util.List;
 
 public class AddCommunityActivity extends BaseActivity implements ImagePickerListener, CommonView3 {
 
-    public TextView image_right;
-    public EditText community_description;
-    public EditText community_title;
-    public GridViewForScrollView gridView;
+    private TextView image_right;
+    private EditText community_description;
+    private EditText community_title;
+    private TextView text_add_amount;
+    private GridViewForScrollView gridView;
     private List<UploadImageBean> images = new ArrayList<>();
     private UploadImageAdapter uploadImageAdapter;
     private List<Uri> mSelected;
     private AddCommunityPresenter presenter;
     public static final String BACK_MODE_ADD_COMMUNITY = "add_community";
+    private AmountBean amountBean;
 
     public static void jumpToAddCommunity(Context context) {
         Intent intent = new Intent(context, AddCommunityActivity.class);
@@ -59,7 +62,7 @@ public class AddCommunityActivity extends BaseActivity implements ImagePickerLis
 
     public static void jumpToAddCommunityForResult(Context context) {
         Intent intent = new Intent(context, AddCommunityActivity.class);
-        ((Activity)context).startActivityForResult(intent, Constant.REQUEST_CODE_ASSOCIATE_MAIN);
+        ((Activity) context).startActivityForResult(intent, Constant.REQUEST_CODE_ASSOCIATE_MAIN);
         ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
@@ -74,6 +77,7 @@ public class AddCommunityActivity extends BaseActivity implements ImagePickerLis
 
     private void initView() {
         image_right = (TextView) findViewById(R.id.image_right);
+        text_add_amount = (TextView) findViewById(R.id.text_add_amount);
         community_title = (EditText) findViewById(R.id.community_title);
         community_description = (EditText) findViewById(R.id.community_description);
         gridView = (GridViewForScrollView) findViewById(R.id.gridView);
@@ -110,7 +114,7 @@ public class AddCommunityActivity extends BaseActivity implements ImagePickerLis
     }
 
     private void initData() {
-        images.add(new UploadImageBean(false, null));
+        images.add(new UploadImageBean(0, null));
         uploadImageAdapter.notifyDataSetChanged();
 
         presenter = new AddCommunityPresenter(this);
@@ -128,7 +132,7 @@ public class AddCommunityActivity extends BaseActivity implements ImagePickerLis
         String title = community_title.getText().toString();
         String description = community_description.getText().toString();
         if (presenter != null) {
-            presenter.addCommunity(title, description, UploadImageUtils.getUploadImages(images));
+            presenter.addCommunity(title, description, UploadImageUtils.getUploadImages(images), amountBean);
         }
     }
 
@@ -160,7 +164,7 @@ public class AddCommunityActivity extends BaseActivity implements ImagePickerLis
                         String fileType = FileUtils.getFileTypeByPath(realFilePath);
                         String objectKey = MMApplication.OSS_UPLOAD_IMAGE_FOLDER + userId + "_" + System.currentTimeMillis() + "." + fileType;
 
-                        UploadImageBean bean = new UploadImageBean(true, mSelected.get(i));
+                        UploadImageBean bean = new UploadImageBean(1, mSelected.get(i));
                         bean.imageUrl = MMApplication.IMAGE_URL_BASE + objectKey;
                         images.add(bean);
 
@@ -178,7 +182,7 @@ public class AddCommunityActivity extends BaseActivity implements ImagePickerLis
                     }
                 }
                 if (images.size() < 9) {
-                    images.add(new UploadImageBean(false, null));
+                    images.add(new UploadImageBean(0, null));
                 }
                 uploadImageAdapter.notifyDataSetChanged();
             }
@@ -190,7 +194,7 @@ public class AddCommunityActivity extends BaseActivity implements ImagePickerLis
         if (images != null && images.size() > 0 && position <= images.size() - 1) {
             images.remove(position);
             if (UploadImageUtils.getSelectCount(images) == 8) {
-                images.add(new UploadImageBean(false, null));
+                images.add(new UploadImageBean(0, null));
             }
             uploadImageAdapter.notifyDataSetChanged();
         }
@@ -214,6 +218,25 @@ public class AddCommunityActivity extends BaseActivity implements ImagePickerLis
         super.onDestroy();
         if (presenter != null) {
             presenter.detachView();
+        }
+    }
+
+    public void jumpToAddAmount(View view) {
+        AddAmountActivity.jumpToAddAmountForResult(this, Constant.REQUEST_CODE_ADD_AMOUNT, amountBean);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == Constant.REQUEST_CODE_ADD_AMOUNT) {
+                if (data != null && data.getExtras() != null) {
+                    amountBean = data.getExtras().getParcelable(Constant.INTENT_ADD_AMOUNT);
+                    if (amountBean != null) {
+                        text_add_amount.setText("编辑收费内容");
+                    }
+                }
+            }
         }
     }
 }

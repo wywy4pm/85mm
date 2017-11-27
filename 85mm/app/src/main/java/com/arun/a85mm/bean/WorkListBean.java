@@ -30,6 +30,7 @@ public class WorkListBean implements Serializable {
     public int backgroundColor;
     public String description;
     public List<CommentsBean> commentList;
+    public AmountInfoBean productInfo;
     public String uid;
 
     public int browseNum;

@@ -34,6 +34,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.AddAmountActivity;
 import com.arun.a85mm.activity.AddCommunityActivity;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.activity.SendMessageActivity;
@@ -226,6 +227,8 @@ public class MatisseActivity extends AppCompatActivity implements
                 result = new Intent(MatisseActivity.this, SendMessageActivity.class);
             } else if (AddCommunityActivity.BACK_MODE_ADD_COMMUNITY.equals(backMode)) {
                 result = new Intent(MatisseActivity.this, AddCommunityActivity.class);
+            } else if (AddAmountActivity.BACK_MODE_ADD_AMOUNT.equals(backMode)) {
+                result = new Intent(MatisseActivity.this, AddAmountActivity.class);
             } else {//如果出错，跳回首页
                 result = new Intent(MatisseActivity.this, MainActivity.class);
             }
@@ -330,6 +333,8 @@ public class MatisseActivity extends AppCompatActivity implements
             backToSendMsg();
         } else if (AddCommunityActivity.BACK_MODE_ADD_COMMUNITY.equals(backMode)) {
             backToAddCommunity();
+        } else if (AddAmountActivity.BACK_MODE_ADD_AMOUNT.equals(backMode)) {
+            backToAddAmount();
         }
     }
 
@@ -341,6 +346,12 @@ public class MatisseActivity extends AppCompatActivity implements
 
     public void backToAddCommunity() {
         Intent intent = new Intent(MatisseActivity.this, AddCommunityActivity.class);
+        startActivity(intent);
+        overridePendingTransition(0, R.anim.slide_out_right);
+    }
+
+    public void backToAddAmount() {
+        Intent intent = new Intent(MatisseActivity.this, AddAmountActivity.class);
         startActivity(intent);
         overridePendingTransition(0, R.anim.slide_out_right);
     }

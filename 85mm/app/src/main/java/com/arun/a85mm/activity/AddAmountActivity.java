@@ -4,81 +4,79 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arun.a85mm.MMApplication;
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.UploadImageAdapter;
+import com.arun.a85mm.bean.AmountBean;
 import com.arun.a85mm.bean.UploadImageBean;
-import com.arun.a85mm.event.UpdateSendMsg;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.helper.MatisseHelper;
 import com.arun.a85mm.helper.OssUploadImageHelper;
 import com.arun.a85mm.listener.ImagePickerListener;
 import com.arun.a85mm.listener.UploadImageListener;
 import com.arun.a85mm.matisse.ui.MatisseActivity;
-import com.arun.a85mm.presenter.AddMessagePresenter;
+import com.arun.a85mm.presenter.AddCommunityPresenter;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.FileUtils;
+import com.arun.a85mm.utils.InputUtils;
 import com.arun.a85mm.utils.PermissionUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.utils.UploadImageUtils;
-import com.arun.a85mm.view.CommonView3;
 import com.arun.a85mm.widget.GridViewForScrollView;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SendMessageActivity extends BaseActivity implements ImagePickerListener, CommonView3 {
-    private EditText reply_receiver;
-    private EditText reply_description;
-    private GridViewForScrollView gridView;
-    private TextView image_right;
-    public static final String KEY_SEND_UID = "send_uid";
+public class AddAmountActivity extends BaseActivity implements ImagePickerListener {
+
+    public TextView image_right;
+    public EditText amount_description;
+    public EditText edit_amount;
+    public GridViewForScrollView gridView;
     private List<UploadImageBean> images = new ArrayList<>();
     private UploadImageAdapter uploadImageAdapter;
-    //private static final int REQUEST_CODE_CHOOSE = 1;
     private List<Uri> mSelected;
-    //存放需要上传服务器的imageUrl
-    //private List<MsgImgRequest> uploadImages = new ArrayList<>();
-    private AddMessagePresenter addMessagePresenter;
-    public static final String BACK_MODE_SEND_MSG = "send_message";
+    private static final String INTENT_KEY_DATA = "data";
+    public static final String BACK_MODE_ADD_AMOUNT = "add_amount";
+    private AmountBean amountBean;
 
-    public static void jumpToSendMessage(Context context, String uid) {
-        Intent intent = new Intent(context, SendMessageActivity.class);
-        intent.putExtra(KEY_SEND_UID, uid);
-        context.startActivity(intent);
-        ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+    public static void jumpToAddAmountForResult(Activity context, int requestCode, AmountBean amountBean) {
+        Intent intent = new Intent(context, AddAmountActivity.class);
+        intent.putExtra(INTENT_KEY_DATA, amountBean);
+        context.startActivityForResult(intent, requestCode);
+        context.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtils.setStatusBarColor(this, R.color.white);
-        setContentView(R.layout.layout_send_message);
+        setContentView(R.layout.activity_add_amount);
         initView();
         initData();
     }
 
     private void initView() {
-        reply_receiver = (EditText) findViewById(R.id.reply_receiver);
-        reply_description = (EditText) findViewById(R.id.reply_description);
+        image_right = (TextView) findViewById(R.id.image_right);
+        edit_amount = (EditText) findViewById(R.id.edit_amount);
+        amount_description = (EditText) findViewById(R.id.amount_description);
         gridView = (GridViewForScrollView) findViewById(R.id.gridView);
         uploadImageAdapter = new UploadImageAdapter(this, images);
         uploadImageAdapter.setImagePickerListener(this);
         gridView.setAdapter(uploadImageAdapter);
 
-        setTitle("发私信");
         setRight();
         setBack();
         setCommonShow();
@@ -94,7 +92,7 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
                     .setMargins(DensityUtil.dp2px(this, 10), DensityUtil.dp2px(this, 10), DensityUtil.dp2px(this, 10), DensityUtil.dp2px(this, 10));
         }
         image_right.setVisibility(View.VISIBLE);
-        image_right.setText("发送");
+        image_right.setText("完成");
         image_right.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         image_right.setBackgroundResource(R.drawable.shape_btn_reply);
         image_right.setTextColor(getResources().getColor(R.color.white));
@@ -102,45 +100,44 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
         image_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMessage();
+                addAmount();
             }
         });
     }
 
-    @SuppressWarnings("unchecked")
     private void initData() {
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            String uid = getIntent().getExtras().getString(KEY_SEND_UID);
-            if (TextUtils.isEmpty(uid)) {
-                reply_receiver.setEnabled(true);
-            } else {
-                reply_receiver.setEnabled(false);
-                reply_receiver.setText(uid);
+        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().containsKey(INTENT_KEY_DATA)) {
+            amountBean = getIntent().getExtras().getParcelable(INTENT_KEY_DATA);
+        }
+        if (amountBean != null) {
+            amount_description.setText(amountBean.paidText);
+            InputUtils.setInputEditEnd(amount_description);
+            edit_amount.setText(String.valueOf(amountBean.coin));
+            if (amountBean.paidImageList != null && amountBean.paidImageList.size() > 0) {
+                images.addAll(amountBean.paidImageList);
             }
-            //InputUtils.setInputEditEnd(reply_receiver);
+        } else {
+            images.add(new UploadImageBean(0, null));
         }
-        images.add(new UploadImageBean(0, null));
         uploadImageAdapter.notifyDataSetChanged();
-        if (addMessagePresenter == null) {
-            addMessagePresenter = new AddMessagePresenter(this);
-            addMessagePresenter.attachView(this);
-        }
     }
 
+    private void addAmount() {
+        if (TextUtils.isEmpty(amount_description.getText())) {
+            showTop("请输入收费内容信息");
+            return;
+        } else if (TextUtils.isEmpty(edit_amount.getText())) {
+            showTop("请输入金币数");
+            return;
+        }
+        String amount = edit_amount.getText().toString();
+        String description = amount_description.getText().toString();
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        /*if (requestCode == REQUEST_CODE_CHOOSE && resultCode == Activity.RESULT_OK) {
-            mSelected = Matisse.obtainResult(data);
-            Log.d("Matisse", "mSelected: " + mSelected);
-            if (mSelected != null && mSelected.size() > 0) {
-                for (int i = 0; i < mSelected.size(); i++) {
-                    UploadImageBean bean = new UploadImageBean(true, mSelected.get(i));
-                    images.add(bean);
-                }
-            }
-        }*/
+        Intent resultIntent = new Intent();
+        AmountBean bean = new AmountBean(Integer.parseInt(amount), description, images);
+        resultIntent.putExtra(Constant.INTENT_ADD_AMOUNT, bean);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
     }
 
     @Override
@@ -184,13 +181,12 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
                 uploadImageAdapter.notifyDataSetChanged();
             }
         }
-
     }
 
     @Override
     public void openImagePicker() {
         if (FileUtils.hasSdcard() && PermissionUtils.hasPermission(this, PermissionUtils.WRITE_EXTERNAL_STORAGE)) {
-            MatisseHelper.startPicturePicker(this, BACK_MODE_SEND_MSG);
+            MatisseHelper.startPicturePicker(this, BACK_MODE_ADD_AMOUNT);
         } else {
             showTop("请开启sd卡存储权限");
         }
@@ -199,7 +195,6 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
     @Override
     public void removeSelect(int position) {
         if (images != null && images.size() > 0 && position <= images.size() - 1) {
-
             images.remove(position);
             if (UploadImageUtils.getSelectCount(images) == 8) {
                 images.add(new UploadImageBean(0, null));
@@ -207,35 +202,4 @@ public class SendMessageActivity extends BaseActivity implements ImagePickerList
             uploadImageAdapter.notifyDataSetChanged();
         }
     }
-
-    public void sendMessage() {
-        if (addMessagePresenter != null) {
-            if (TextUtils.isEmpty(reply_receiver.getText())) {
-                showTop("请填写收件人");
-                return;
-            } else if (TextUtils.isEmpty(reply_description.getText()) && (images.size() < 2)) {
-                showTop("请填写消息内容或图片");
-                return;
-            }
-            addMessagePresenter.addMessage(userId, reply_receiver.getText().toString(), reply_description.getText().toString(), UploadImageUtils.getUploadImages(images));
-        }
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (addMessagePresenter != null) {
-            addMessagePresenter.detachView();
-        }
-    }
-
-    @Override
-    public void refresh(int type, Object data) {
-        //showTop("发送成功");
-        Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
-        onBackPressed();
-        EventBus.getDefault().post(new UpdateSendMsg());
-    }
-
 }

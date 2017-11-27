@@ -1,9 +1,11 @@
 package com.arun.a85mm.model;
 
+import com.arun.a85mm.bean.AmountBean;
 import com.arun.a85mm.bean.request.AddCommunityRequest;
 import com.arun.a85mm.bean.request.MsgImgRequest;
 import com.arun.a85mm.listener.CommonRequestListener;
 import com.arun.a85mm.retrofit.RetrofitInit;
+import com.arun.a85mm.utils.UploadImageUtils;
 
 import java.util.List;
 
@@ -34,8 +36,14 @@ public class AssociationModel extends BaseModel {
         return request(RetrofitInit.getApi().getWorkList(lastWorkId, "", "", type), listener);
     }
 
-    public Subscriber addCommunity(String title, String description, List<MsgImgRequest> imageList, CommonRequestListener listener) {
-        AddCommunityRequest addCommunityRequest = new AddCommunityRequest(title, description, imageList);
+    public Subscriber addCommunity(String title, String description, List<MsgImgRequest> imageList, AmountBean amountBean, CommonRequestListener listener) {
+        AddCommunityRequest addCommunityRequest = null;
+        if (amountBean == null) {
+            addCommunityRequest = new AddCommunityRequest(title, description, imageList);
+        } else {
+            addCommunityRequest = new AddCommunityRequest(title, description, imageList, amountBean.coin, amountBean.paidText,
+                    UploadImageUtils.getUploadImages(amountBean.paidImageList));
+        }
         return request(RetrofitInit.getApi().addCommunity(addCommunityRequest), listener);
     }
 }
