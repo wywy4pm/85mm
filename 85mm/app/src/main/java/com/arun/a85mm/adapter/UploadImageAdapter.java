@@ -41,7 +41,7 @@ public class UploadImageAdapter extends BaseListAdapter<UploadImageBean> {
             uploadImageHolder = (UploadImageHolder) convertView.getTag();
         }
         UploadImageBean bean = getItem(position);
-        if (bean.isUpload) {
+        if (bean.isUpload == 1) {
             uploadImageHolder.photo_close.setVisibility(View.VISIBLE);
             uploadImageHolder.layout_add_photo.setVisibility(View.GONE);
             uploadImageHolder.image_picture.setVisibility(View.VISIBLE);

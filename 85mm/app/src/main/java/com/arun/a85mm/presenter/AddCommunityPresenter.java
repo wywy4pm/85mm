@@ -2,6 +2,7 @@ package com.arun.a85mm.presenter;
 
 import android.content.Context;
 
+import com.arun.a85mm.bean.AmountBean;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.request.MsgImgRequest;
 import com.arun.a85mm.common.ErrorCode;
@@ -20,9 +21,9 @@ public class AddCommunityPresenter extends BasePresenter<CommonView3> {
         super(context);
     }
 
-    public void addCommunity(String title, String description, List<MsgImgRequest> imageList) {
+    public void addCommunity(String title, String description, List<MsgImgRequest> imageList, AmountBean amountBean) {
         addSubscriber(AssociationModel.getInstance()
-                .addCommunity(title, description, imageList, new RequestListenerImpl(getMvpView()) {
+                .addCommunity(title, description, imageList, amountBean, new RequestListenerImpl(getMvpView()) {
                     @Override
                     public void onSuccess(CommonApiResponse data) {
                         if (getMvpView() != null && data != null && data.code == ErrorCode.SUCCESS) {

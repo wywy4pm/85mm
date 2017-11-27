@@ -29,6 +29,8 @@ public class Constant {
     public static final String STRING_TRUE = "true";
     public static final String STRING_FALSE = "'false";
 
+    public static final String INTENT_ADD_AMOUNT = "add_amount";
+
     /**
      * data type
      */
@@ -58,6 +60,7 @@ public class Constant {
     public static final int REQUEST_CODE_ASSOCIATE_MAIN = 1002;
     public static final int REQUEST_CODE_ALBUM_HEAD = 1003;
     public static final int REQUEST_CODE_ALBUM_COVER = 1004;
+    public static final int REQUEST_CODE_ADD_AMOUNT = 1005;
 
     /**
      * bottom_dialog_type

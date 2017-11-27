@@ -21,7 +21,7 @@ public class UploadImageUtils {
     public static int getSelectCount(List<UploadImageBean> images) {
         int count = 0;
         for (int i = 0; i < images.size(); i++) {
-            if (images.get(i).isUpload) {
+            if (images.get(i).isUpload == 1) {
                 count += 1;
             }
         }

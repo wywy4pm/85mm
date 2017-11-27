@@ -26,41 +26,18 @@
             android:layout_marginLeft="12dp"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/community_title"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="8dp"
-                android:background="@null"
-                android:ellipsize="end"
-                android:hint="标题"
-                android:includeFontPadding="false"
-                android:inputType="text"
-                android:lineSpacingExtra="0dp"
-                android:maxLines="1"
-                android:text=""
-                android:textColor="@color/grey"
-                android:textColorHint="@color/lightgrey"
-                android:textSize="17sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/plain" />
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp">
 
                 <EditText
-                    android:id="@+id/community_description"
+                    android:id="@+id/amount_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:gravity="top"
-                    android:hint="说说你的拍摄经历、心得体会、修图技巧"
+                    android:hint="请输入收费内容信息(如资源下载地址),用户付费完成后可见"
                     android:includeFontPadding="false"
                     android:lineSpacingExtra="0dp"
                     android:maxLength="1000"
@@ -74,43 +51,61 @@
                     android:textSize="15sp" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp">
+
+                <TextView
+                    android:id="@+id/text_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="用户需支付金币数："
+                    android:textColor="@color/charcoalgrey"
+                    android:includeFontPadding="false"
+                    android:lineSpacingExtra="0dp"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/edit_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:layout_toRightOf="@+id/text_amount"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:hint="请输入金币数"
+                    android:includeFontPadding="false"
+                    android:inputType="number"
+                    android:lineSpacingExtra="0dp"
+                    android:maxLength="4"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="@color/grey"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_amount"
+                    android:layout_marginTop="6dp"
+                    android:text="注：1金币  约等于 1 元（实际金额可能随时变动）"
+                    android:textColor="@color/text_right_tips"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
             <com.arun.a85mm.widget.GridViewForScrollView
                 android:id="@+id/gridView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="13dp"
                 android:layout_marginRight="12dp"
+                android:layout_marginTop="19dp"
                 android:horizontalSpacing="2dp"
                 android:listSelector="@android:color/transparent"
                 android:numColumns="3"
                 android:stretchMode="columnWidth"
                 android:verticalSpacing="2dp" />
-
-            <RelativeLayout
-                android:id="@+id/layout_add_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:onClick="jumpToAddAmount">
-
-                <ImageView
-                    android:id="@+id/icon_amount"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/work_amount_icon" />
-
-                <TextView
-                    android:id="@+id/text_add_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/icon_amount"
-                    android:text="添加收费内容"
-                    android:textColor="@color/more_yellow"
-                    android:textSize="15sp" />
-            </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>

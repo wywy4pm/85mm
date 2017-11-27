@@ -12,6 +12,18 @@ public class AddCommunityRequest {
     public String title;
     public String description;
     public List<MsgImgRequest> imageList;
+    public int coin;
+    public String paidText;
+    public List<MsgImgRequest> paidImageList;
+
+    public AddCommunityRequest(String title, String description, List<MsgImgRequest> imageList, int coin, String paidText, List<MsgImgRequest> paidImageList) {
+        this.title = title;
+        this.description = description;
+        this.imageList = imageList;
+        this.coin = coin;
+        this.paidText = paidText;
+        this.paidImageList = paidImageList;
+    }
 
     public AddCommunityRequest(String title, String description, List<MsgImgRequest> imageList) {
         this.title = title;
