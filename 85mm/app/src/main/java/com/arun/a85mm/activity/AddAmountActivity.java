@@ -69,6 +69,10 @@ public class AddAmountActivity extends BaseActivity implements ImagePickerListen
     }
 
     private void initView() {
+        setBack();
+        if (image_back != null) {
+            image_back.setVisibility(View.GONE);
+        }
         image_right = (TextView) findViewById(R.id.image_right);
         edit_amount = (EditText) findViewById(R.id.edit_amount);
         amount_description = (EditText) findViewById(R.id.amount_description);
@@ -137,6 +141,11 @@ public class AddAmountActivity extends BaseActivity implements ImagePickerListen
         AmountBean bean = new AmountBean(Integer.parseInt(amount), description, images);
         resultIntent.putExtra(Constant.INTENT_ADD_AMOUNT, bean);
         setResult(Activity.RESULT_OK, resultIntent);
+        finish();
+    }
+
+    public void cancelAmount(View view) {
+        setResult(Activity.RESULT_OK);
         finish();
     }
 

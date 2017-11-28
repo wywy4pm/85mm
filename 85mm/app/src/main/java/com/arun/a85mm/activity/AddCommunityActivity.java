@@ -234,7 +234,12 @@ public class AddCommunityActivity extends BaseActivity implements ImagePickerLis
                     amountBean = data.getExtras().getParcelable(Constant.INTENT_ADD_AMOUNT);
                     if (amountBean != null) {
                         text_add_amount.setText("编辑收费内容");
+                    } else {
+                        text_add_amount.setText("添加收费内容");
                     }
+                } else {
+                    amountBean = null;
+                    text_add_amount.setText("添加收费内容");
                 }
             }
         }

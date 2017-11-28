@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.OneWorkAdapter;
+import com.arun.a85mm.bean.AmountBean;
+import com.arun.a85mm.bean.AmountInfoBean;
 import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
@@ -89,6 +91,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     private TextView btn_add_comment;
     private OneWorkAdapter oneWorkAdapter;
     public static final String KEY_TYPE = "show_bottom_type";
+    public static final String KEY_AMOUNT = "amount";
     private List<WorkListItemBean> workListItems = new ArrayList<>();
     private String type;
     private String showBottomType;
@@ -99,8 +102,9 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     // 软键盘的显示状态
     private boolean isShowKeyboard;
     private String newUid;
+    private AmountInfoBean amountInfoBean;
 
-    public static void jumpToOneWorkActivity(Context context, String type, String title, Map<String, String> extras, int backMode) {
+    public static void jumpToOneWorkActivity(Context context, String type, String title, Map<String, Serializable> extras, int backMode) {
         Intent intent = new Intent(context, OneWorkActivity.class);
         intent.putExtra(TYPE, type);
         intent.putExtra(TITLE, title);
@@ -144,10 +148,11 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
             type = getIntent().getExtras().getString(TYPE);
             title = getIntent().getExtras().getString(TITLE);
             backMode = getIntent().getExtras().getInt(BACK_MODE);
-            Map<String, String> map = (Map<String, String>) getIntent().getExtras().getSerializable(EXTRAS);
+            Map<String, Serializable> map = (Map<String, Serializable>) getIntent().getExtras().getSerializable(EXTRAS);
             if (map != null) {
-                workId = map.get(UrlJumpHelper.WORK_ID);
-                showBottomType = map.get(KEY_TYPE);
+                workId = (String) map.get(UrlJumpHelper.WORK_ID);
+                showBottomType = (String) map.get(KEY_TYPE);
+                amountInfoBean = (AmountInfoBean) map.get(KEY_AMOUNT);
             }
         }
 
@@ -230,7 +235,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     }
 
     private void initData() {
-        if (Constant.TYPE_COMMUNITY.equals(showBottomType)) {
+        if (Constant.TYPE_COMMUNITY.equals(showBottomType) && amountInfoBean == null) {
             layout_add_comment.setVisibility(View.VISIBLE);
         } else {
             layout_add_comment.setVisibility(View.GONE);
@@ -270,7 +275,9 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
                 addDescription(bean);
                 addHead(bean);
                 addTagView(bean);
-                addComments(bean);
+                if (amountInfoBean == null) {
+                    addComments(bean);
+                }
             } else {
                 addHead(bean);
                 addTagView(bean);
