@@ -9,6 +9,7 @@ import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.listener.RequestListenerImpl;
 import com.arun.a85mm.model.ProductModel;
 import com.arun.a85mm.model.SettingModel;
+import com.arun.a85mm.model.UserModel;
 import com.arun.a85mm.view.CommonView3;
 
 /**
@@ -19,6 +20,7 @@ public class SettingPresenter extends BasePresenter<CommonView3> {
 
     public static final int TYPE_CONFIG = 1;
     public static final int TYPE_WORKS = 2;
+    public static final int TYPE_USER_INFO = 3;
 
     public SettingPresenter(Context context) {
         super(context);
@@ -52,6 +54,22 @@ public class SettingPresenter extends BasePresenter<CommonView3> {
                         if (getMvpView() != null) {
                             if (data != null && data.code == ErrorCode.SUCCESS) {
                                 getMvpView().refresh(TYPE_WORKS, data);
+                            }
+                        }
+                    }
+                }));
+    }
+
+    public void getUserInfo() {
+        addSubscriber(UserModel.getInstance()
+                .getUserInfo(new RequestListenerImpl(getMvpView()) {
+
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    public void onSuccess(CommonApiResponse data) {
+                        if (getMvpView() != null) {
+                            if (data != null && data.code == ErrorCode.SUCCESS) {
+                                getMvpView().refresh(TYPE_USER_INFO, data.body);
                             }
                         }
                     }

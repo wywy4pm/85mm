@@ -46,4 +46,6 @@
     <string name="repeat_detail">作品此前已经出现过</string>
     <string name="show_seq_detail">加载不出来等</string>
 
+    <string name="no_coins">您的金币余额为0，找客服妹妹免费要点金币来打赏Ta。请微信联系hello85mm</string>
+    <string name="no_enough_coins">您的金币余额为%1$d，联系客服购买金币。请微信联系hello85mm</string>
 </resources>

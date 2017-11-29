@@ -1,5 +1,6 @@
 package com.arun.a85mm.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +16,12 @@ import android.widget.TextView;
 import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.activity.FragmentCommonActivity;
+import com.arun.a85mm.bean.AllUserInfoBean;
 import com.arun.a85mm.bean.CommentsBean;
 import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.dialog.RewardDialog;
 import com.arun.a85mm.fragment.TagWorkFragment;
 import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
@@ -126,7 +129,7 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
             addTagHolder.setData(contexts.get(), getItem(position), onTagWorkListener);
         } else if (holder instanceof RewardHolder) {
             RewardHolder rewardHolder = (RewardHolder) holder;
-            rewardHolder.setData();
+            rewardHolder.setData(contexts.get(), getItem(position));
         }
     }
 
@@ -395,8 +398,31 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
             text_reward = (TextView) itemView.findViewById(R.id.text_reward);
         }
 
-        private void setData() {
+        private void setData(final Context context, final WorkListItemBean item) {
+            if (item != null && item.productInfo != null) {
+                /*if (item.productInfo.coin > 0) {
+                    text_reward.setText("打赏" + item.productInfo.coin + "金币");
+                }*/
+                text_reward.setText("打赏" + item.productInfo.coin + "金币");
+                text_reward.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AllUserInfoBean allUserInfoBean = ConfigHelper.userInfoBean;
+                        if (allUserInfoBean != null) {
+                            if (allUserInfoBean.leftCoin == 0) {
+                                showDialog(context, RewardDialog.TYPE_NO_COINS, allUserInfoBean.leftCoin);
+                            } else if (allUserInfoBean.leftCoin > 0 && allUserInfoBean.leftCoin < item.productInfo.coin) {
+                                showDialog(context, RewardDialog.TYPE_NO_ENOUGH_COINS, allUserInfoBean.leftCoin);
+                            }
+                        }
+                    }
+                });
+            }
+        }
 
+        private void showDialog(Context context, int type, int leftCoin) {
+            RewardDialog rewardDialog = new RewardDialog(context, R.style.CustomDialog, type, leftCoin);
+            rewardDialog.show();
         }
     }
 }

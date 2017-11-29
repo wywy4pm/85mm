@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.AllUserBodyBean;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.ConfigBean;
 import com.arun.a85mm.bean.GuidePageBean;
@@ -97,6 +98,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
             settingPresenter = new SettingPresenter(this);
             settingPresenter.attachView(this);
             settingPresenter.getWorkMix();
+            settingPresenter.getUserInfo();
         }
         showSplash();
         if (getIntent() != null && getIntent().getExtras() != null) {
@@ -232,6 +234,13 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
         } else if (type == SettingPresenter.TYPE_WORKS) {
             if (data instanceof CommonApiResponse) {
                 CommunityListCacheManager.setCommonApiResponse((CommonApiResponse) data);
+            }
+        } else if (type == SettingPresenter.TYPE_USER_INFO) {
+            if (data instanceof AllUserBodyBean) {
+                AllUserBodyBean bean = (AllUserBodyBean) data;
+                if (bean.userInfo != null) {
+                    ConfigHelper.userInfoBean = bean.userInfo;
+                }
             }
         }
     }

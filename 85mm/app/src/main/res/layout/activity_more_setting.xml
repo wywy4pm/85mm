@@ -79,6 +79,51 @@
                 android:visibility="gone" />
 
             <RelativeLayout
+                android:id="@+id/layout_my_coins"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:onClick="onClick">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="我的金币"
+                    android:textColor="@color/charcoalgrey"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/text_coins"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/image_coins_right"
+                    android:text=""
+                    android:textColor="@color/text_right_tips"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/image_coins_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/ic_right" />
+
+                <View
+                    android:id="@+id/line_coins_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/line_divide" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/layout_hide_read"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"

@@ -1,5 +1,6 @@
 package com.arun.a85mm.helper;
 
+import com.arun.a85mm.bean.AllUserInfoBean;
 import com.arun.a85mm.bean.MenuListBean;
 import com.arun.a85mm.bean.UserTagBean;
 
@@ -13,4 +14,5 @@ public class ConfigHelper {
     public static List<UserTagBean> userTags;
     public static List<MenuListBean> menuList;
     public static List<MenuListBean> customMenuList;
+    public static AllUserInfoBean userInfoBean;
 }

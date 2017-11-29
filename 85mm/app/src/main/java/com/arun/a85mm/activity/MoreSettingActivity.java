@@ -57,7 +57,7 @@ import java.util.List;
 
 public class MoreSettingActivity extends BaseActivity implements View.OnClickListener, CommonView3 {
 
-    private TextView cache_size, current_server;
+    private TextView cache_size, text_coins,current_server;
     private RelativeLayout layout_share, layout_clear, layout_user_info, layout_my_tags, layout_change_server;
     private LinearLayout custom_menu;
     private View line_custom_menu;
@@ -90,6 +90,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         layout_share = (RelativeLayout) findViewById(R.id.layout_share);
         layout_clear = (RelativeLayout) findViewById(R.id.layout_clear);
         cache_size = (TextView) findViewById(R.id.cache_size);
+        text_coins = (TextView) findViewById(R.id.text_coins);
         current_server = (TextView) findViewById(R.id.current_server);
         more_detail = (ImageView) findViewById(R.id.more_detail);
         switchView = (SwitchCompat) findViewById(R.id.switchView);

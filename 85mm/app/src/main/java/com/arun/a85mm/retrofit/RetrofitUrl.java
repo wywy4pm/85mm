@@ -13,7 +13,7 @@ public class RetrofitUrl {
     public static final String ARTICLE_DETAIL = ARTICLE + "/detail";
 
     //public static final String WORKS_LIST = WORKS +  "/list";
-    public static final String WORKS_GOODS = WORKS +  "/goods";
+    public static final String WORKS_GOODS = WORKS + "/goods";
     //public static final String WORKS_ONE_DAY_LEFT = WORKS + "/onedayGoods";
     public static final String WORKS_SINGLE_DETAIL = WORKS + "/single";
     public static final String WORKS_AUDIT = WORKS + "/getAuditList";
@@ -32,6 +32,7 @@ public class RetrofitUrl {
     public static final String USER_UPDATE_INFO = USER + "/update";
     public static final String USER_LOG_OUT = USER + "/logout";
     public static final String USER_MAIN_PAGE = USER + "/page";
+    public static final String USER_INFO = USER + "/info";
 
     public static final String CONFIG_QUERY = CONFIG + "/query";
 

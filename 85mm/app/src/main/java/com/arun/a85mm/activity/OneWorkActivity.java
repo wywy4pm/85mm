@@ -91,7 +91,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     private TextView btn_add_comment;
     private OneWorkAdapter oneWorkAdapter;
     public static final String KEY_TYPE = "show_bottom_type";
-    public static final String KEY_AMOUNT = "amount";
+    //public static final String KEY_AMOUNT = "amount";
     private List<WorkListItemBean> workListItems = new ArrayList<>();
     private String type;
     private String showBottomType;
@@ -102,7 +102,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     // 软键盘的显示状态
     private boolean isShowKeyboard;
     private String newUid;
-    private AmountInfoBean amountInfoBean;
+    //private AmountInfoBean amountInfoBean;
 
     public static void jumpToOneWorkActivity(Context context, String type, String title, Map<String, Serializable> extras, int backMode) {
         Intent intent = new Intent(context, OneWorkActivity.class);
@@ -152,7 +152,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
             if (map != null) {
                 workId = (String) map.get(UrlJumpHelper.WORK_ID);
                 showBottomType = (String) map.get(KEY_TYPE);
-                amountInfoBean = (AmountInfoBean) map.get(KEY_AMOUNT);
+                //amountInfoBean = (AmountInfoBean) map.get(KEY_AMOUNT);
             }
         }
 
@@ -235,14 +235,22 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     }
 
     private void initData() {
+        /*if (Constant.TYPE_COMMUNITY.equals(showBottomType)) {
+            layout_add_comment.setVisibility(View.VISIBLE);
+        } else {
+            layout_add_comment.setVisibility(View.GONE);
+        }*/
+        oneWorkPresenter = new OneWorkPresenter(this);
+        oneWorkPresenter.attachView(this);
+        refreshData();
+    }
+
+    private void setAddCommentView(AmountInfoBean amountInfoBean) {
         if (Constant.TYPE_COMMUNITY.equals(showBottomType) && amountInfoBean == null) {
             layout_add_comment.setVisibility(View.VISIBLE);
         } else {
             layout_add_comment.setVisibility(View.GONE);
         }
-        oneWorkPresenter = new OneWorkPresenter(this);
-        oneWorkPresenter.attachView(this);
-        refreshData();
     }
 
     private void refreshData() {
@@ -270,21 +278,22 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
             addImage(bean.imageList);
 
             //addHead(bean);
-
             if (Constant.TYPE_COMMUNITY.equals(showBottomType)) {
                 addDescription(bean);
                 addHead(bean);
                 addTagView(bean);
-                if (amountInfoBean == null) {
+                if (bean.productInfo == null) {
                     addComments(bean);
                 }
             } else {
                 addHead(bean);
                 addTagView(bean);
             }
-            if (amountInfoBean != null) {
+            if (bean.productInfo != null) {
                 addReward(bean);
             }
+            addReward(bean);
+            setAddCommentView(bean.productInfo);
 
             if (bean.imageList == null || bean.imageList.size() == 0) {
                 oneWorkAdapter.setNoImage(true);

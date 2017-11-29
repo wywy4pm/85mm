@@ -225,10 +225,9 @@ public class AssociationAdapter extends BaseRecyclerAdapter<WorkListBean> {
                     Map<String, Serializable> map = new HashMap<>();
                     map.put(UrlJumpHelper.WORK_ID, bean.id);
                     map.put(OneWorkActivity.KEY_TYPE, Constant.TYPE_COMMUNITY);
-                    if (bean.productInfo != null) {
+                    /*if (bean.productInfo != null) {
                         map.put(OneWorkActivity.KEY_AMOUNT, bean.productInfo);
-                    }
-
+                    }*/
                     /*FragmentCommonActivity.jumpToFragmentCommonActivity(context,
                             FragmentCommonActivity.FRAGMENT_ONE_WORK, bean.workTitle, map, FragmentCommonActivity.BACK_MODE_COM);*/
 

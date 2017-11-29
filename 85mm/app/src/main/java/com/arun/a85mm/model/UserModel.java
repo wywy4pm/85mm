@@ -4,6 +4,8 @@ import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.listener.CommonRequestListener;
 import com.arun.a85mm.retrofit.RetrofitInit;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import rx.Subscriber;
 
 /**
@@ -46,5 +48,9 @@ public class UserModel extends BaseModel {
 
     public Subscriber getUserMainPageMore(String lastWorkId, int type, CommonRequestListener listener) {
         return request(RetrofitInit.getApi().getWorkList(lastWorkId, "", "", type), listener);
+    }
+
+    public Subscriber getUserInfo(CommonRequestListener listener) {
+        return request(RetrofitInit.getApi().getUserInfo(), listener);
     }
 }

@@ -1,5 +1,6 @@
 package com.arun.a85mm.retrofit;
 
+import com.arun.a85mm.bean.AllUserBodyBean;
 import com.arun.a85mm.bean.ArticleDetailBody;
 import com.arun.a85mm.bean.ArticleListBody;
 import com.arun.a85mm.bean.AuditBean;
@@ -127,7 +128,9 @@ public interface RetrofitApi {
     @GET(RetrofitUrl.WORK_COMMON_LIST)
     Observable<CommonApiResponse<CommonWorkListBean>> getWorkList(@Query("lastId") String lastId, @Query("date") String date, @Query("tagName") String tagName, @Query("dataType") int dataType);
 
-
     @GET(RetrofitUrl.TAG_TAG_WORK)
     Observable<CommonApiResponse> tagWork(@Query("tagName") String tagName, @Query("workId") String workId, @Query("type") int type);
+
+    @GET(RetrofitUrl.USER_INFO)
+    Observable<CommonApiResponse<AllUserBodyBean>> getUserInfo();
 }

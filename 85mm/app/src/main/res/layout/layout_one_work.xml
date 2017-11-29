@@ -99,7 +99,7 @@
         android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:background="@color/bg_line"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/edit_add_comment"

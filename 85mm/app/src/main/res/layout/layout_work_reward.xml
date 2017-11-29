@@ -10,7 +10,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="18dp"
         android:layout_marginTop="18dp"
-        android:background="@drawable/shape_yellow_stroke"
+        android:background="@drawable/shape_jump_to_wechat"
         android:gravity="center"
         android:paddingLeft="75dp"
         android:paddingRight="75dp"
