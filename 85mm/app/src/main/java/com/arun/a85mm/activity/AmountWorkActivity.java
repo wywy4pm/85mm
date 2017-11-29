@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.AwardBodyBean;
 import com.arun.a85mm.utils.SystemServiceUtils;
 
 public class AmountWorkActivity extends Activity {
@@ -15,7 +16,7 @@ public class AmountWorkActivity extends Activity {
     public TextView image_right;
     private TextView amount_description;
 
-    public static void jumpToAmountWork(Context context) {
+    public static void jumpToAmountWork(Context context, AwardBodyBean awardBodyBean) {
         Intent intent = new Intent(context, AmountWorkActivity.class);
 
         context.startActivity(intent);

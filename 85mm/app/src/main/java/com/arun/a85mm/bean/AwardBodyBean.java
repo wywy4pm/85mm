@@ -6,4 +6,5 @@ package com.arun.a85mm.bean;
 public class AwardBodyBean {
     public OrderInfoBean orderInfo;
     public AmountBean productInfo;
+    public int leftCoin;
 }

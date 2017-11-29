@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.OneWorkAdapter;
-import com.arun.a85mm.bean.AllUserInfoBean;
+import com.arun.a85mm.bean.AmountBean;
 import com.arun.a85mm.bean.AmountInfoBean;
 import com.arun.a85mm.bean.AwardBodyBean;
 import com.arun.a85mm.bean.UserTagBean;
@@ -28,7 +28,6 @@ import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.dialog.RewardDialog;
 import com.arun.a85mm.event.DeleteCommentEvent;
 import com.arun.a85mm.helper.AppHelper;
-import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
 import com.arun.a85mm.helper.RandomColorHelper;
@@ -314,27 +313,21 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
                 AwardBodyBean bean = (AwardBodyBean) data;
                 int coins = 0;
                 if (bean.productInfo != null) {
-                    coins = bean.productInfo.coin;
+                    coins = bean.leftCoin;
                 }
-
-                AllUserInfoBean allUserInfoBean = ConfigHelper.userInfoBean;
-                if (allUserInfoBean != null) {
-                    if (allUserInfoBean.leftCoin == 0) {
-                        showDialog(this, RewardDialog.TYPE_NO_COINS, allUserInfoBean.leftCoin);
-                    } else if (allUserInfoBean.leftCoin > 0 && allUserInfoBean.leftCoin < coins) {
-                        showDialog(this, RewardDialog.TYPE_NO_ENOUGH_COINS, allUserInfoBean.leftCoin);
-                    } else {
-                        AmountWorkActivity.jumpToAmountWork(this);
-                    }
+                if (coins == 0) {
+                    showDialog(this, RewardDialog.TYPE_NO_COINS, coins);
+                } else {
+                    showDialog(this, RewardDialog.TYPE_NO_ENOUGH_COINS, coins);
                 }
             }
         }
 
     }
 
-    /*public void showTips(int type, int leftCoin) {
-        showDialog(this, type, leftCoin);
-    }*/
+    public void awardDone(AwardBodyBean awardBodyBean) {
+        AmountWorkActivity.jumpToAmountWork(this,awardBodyBean);
+    }
 
     private void showDialog(Context context, int type, int leftCoin) {
         RewardDialog rewardDialog = new RewardDialog(context, R.style.CustomDialog, type, leftCoin);
