@@ -57,7 +57,7 @@ import java.util.List;
 
 public class MoreSettingActivity extends BaseActivity implements View.OnClickListener, CommonView3 {
 
-    private TextView cache_size, text_coins,current_server;
+    private TextView cache_size, text_coins, current_server;
     private RelativeLayout layout_share, layout_clear, layout_user_info, layout_my_tags, layout_change_server;
     private LinearLayout custom_menu;
     private View line_custom_menu;
@@ -277,7 +277,8 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                 } else {
                     SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_SERVER, Constant.SERVER_TYPE_TEST);
                 }
-                AppUtils.restartApp(this);
+                showTop("切换成功，请清除进程后重启app");
+                //AppUtils.restartApp(this);
                 break;
         }
     }
