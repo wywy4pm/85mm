@@ -18,6 +18,7 @@ import com.arun.a85mm.utils.DensityUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,7 @@ public class UserMainAdapter extends BaseRecyclerAdapter<WorkListBean> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Map<String, String> map = new HashMap<>();
+                    Map<String, Serializable> map = new HashMap<>();
                     map.put(UrlJumpHelper.WORK_ID, bean.id);
                     map.put(OneWorkActivity.KEY_TYPE, Constant.TYPE_COMMUNITY);
 

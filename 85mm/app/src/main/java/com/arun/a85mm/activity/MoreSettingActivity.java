@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.MenuListBean;
 import com.arun.a85mm.bean.UserInfoBean;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.dialog.ContactDialog;
 import com.arun.a85mm.event.UpdateProductEvent;
@@ -29,6 +30,7 @@ import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.presenter.MorePresenter;
+import com.arun.a85mm.utils.AppUtils;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.DensityUtil;
@@ -55,8 +57,8 @@ import java.util.List;
 
 public class MoreSettingActivity extends BaseActivity implements View.OnClickListener, CommonView3 {
 
-    private TextView cache_size;
-    private RelativeLayout layout_share, layout_clear, layout_user_info, layout_my_tags;
+    private TextView cache_size, current_server;
+    private RelativeLayout layout_share, layout_clear, layout_user_info, layout_my_tags, layout_change_server;
     private LinearLayout custom_menu;
     private View line_custom_menu;
     private ImageView user_head;
@@ -67,6 +69,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     private int hideReadEnable = 0;
     private ContactDialog contactDialog;
     private UserInfoBean userInfoBean;
+    private int currentServer = 1;
 
     public static void jumpToMoreSettingActivity(Context context) {
         Intent intent = new Intent(context, MoreSettingActivity.class);
@@ -87,10 +90,12 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         layout_share = (RelativeLayout) findViewById(R.id.layout_share);
         layout_clear = (RelativeLayout) findViewById(R.id.layout_clear);
         cache_size = (TextView) findViewById(R.id.cache_size);
+        current_server = (TextView) findViewById(R.id.current_server);
         more_detail = (ImageView) findViewById(R.id.more_detail);
         switchView = (SwitchCompat) findViewById(R.id.switchView);
         layout_user_info = (RelativeLayout) findViewById(R.id.layout_user_info);
         layout_my_tags = (RelativeLayout) findViewById(R.id.layout_my_tags);
+        layout_change_server = (RelativeLayout) findViewById(R.id.layout_change_server);
         custom_menu = (LinearLayout) findViewById(R.id.custom_menu);
         line_custom_menu = findViewById(R.id.line_custom_menu);
         user_head = (ImageView) findViewById(R.id.user_head);
@@ -124,6 +129,11 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         setHeadTitle(SharedPreferencesUtils.getUid(this));
         setBack();
         setCommonShow();
+        if (AppUtils.isApkDebug(this)) {
+            layout_change_server.setVisibility(View.VISIBLE);
+        } else {
+            layout_change_server.setVisibility(View.GONE);
+        }
     }
 
     private void setHeadTitle(String uid) {
@@ -158,6 +168,12 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         setUser();
         setCustomMenu();
 
+        currentServer = SharedPreferencesUtils.getConfigInt(this, SharedPreferencesUtils.KEY_SERVER);
+        if (currentServer == Constant.SERVER_TYPE_TEST) {
+            current_server.setText("测试服务器");
+        } else {
+            current_server.setText("正式服务器");
+        }
     }
 
     private void setCustomMenu() {
@@ -253,6 +269,14 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.layout_my_tags:
                 TagsActivity.jumpToMyTags(this);
+                break;
+            case R.id.layout_change_server:
+                if (currentServer == Constant.SERVER_TYPE_TEST) {
+                    SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_SERVER, Constant.SERVER_TYPE_PROD);
+                } else {
+                    SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_SERVER, Constant.SERVER_TYPE_TEST);
+                }
+                AppUtils.restartApp(this);
                 break;
         }
     }

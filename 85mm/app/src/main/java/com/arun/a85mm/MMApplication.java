@@ -12,6 +12,7 @@ import com.alibaba.sdk.android.oss.OSSClient;
 import com.alibaba.sdk.android.oss.common.OSSLog;
 import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.helper.AppHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
@@ -60,6 +61,7 @@ public class MMApplication extends Application implements Application.ActivityLi
     public void onCreate() {
         super.onCreate();
         application = this;
+        getCurrentServer();
         //Config.DEBUG = true;
         UMShareAPI.get(this);
         AppHelper.getInstance().setAppConfig(getApplicationContext());
@@ -94,6 +96,17 @@ public class MMApplication extends Application implements Application.ActivityLi
         initOSSConfig();
 
         registerActivityLifecycleCallbacks(this);
+    }
+
+    private void getCurrentServer() {
+        int currentServer = SharedPreferencesUtils.getConfigInt(this, SharedPreferencesUtils.KEY_SERVER);
+        if (currentServer == Constant.SERVER_TYPE_TEST) {
+            Constant.API_BASE_URL = Constant.BASE_URL_TEST;
+            Constant.WEB_BASE_URL = Constant.BASE_URL_TEST;
+        } else {
+            Constant.API_BASE_URL = Constant.BASE_URL_PROD;
+            Constant.WEB_BASE_URL = Constant.BASE_URL_PROD;
+        }
     }
 
     private void initOSSConfig() {

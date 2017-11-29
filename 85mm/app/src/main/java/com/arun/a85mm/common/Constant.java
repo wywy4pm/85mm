@@ -5,9 +5,11 @@ package com.arun.a85mm.common;
  */
 public class Constant {
 
-    public static final String API_BASE_URL = "http://api.link365.cn:38888";
-    public static final String WEB_BASE_URL = "http://api.link365.cn:38888";
+    public static final String BASE_URL_TEST = "http://121.40.75.136:38888";
+    public static final String BASE_URL_PROD = "http://api.link365.cn:38888";
 
+    public static String API_BASE_URL = BASE_URL_PROD;
+    public static String WEB_BASE_URL = BASE_URL_PROD;
 
     public static final String PATH_WORK_DETAIL = "/works/detail";
     public static final String PATH_AUDIT_LIST = "/audit/list";
@@ -69,4 +71,13 @@ public class Constant {
     public static final String TYPE_AUDIT = "1";
     public static final String TYPE_COMMUNITY = "2";
     public static final String TYPE_PUSH = "3";
+
+
+    /**
+     * server type
+     * 1.生产环境
+     * 2.测试环境
+     */
+    public static final int SERVER_TYPE_PROD = 0;
+    public static final int SERVER_TYPE_TEST = 1;
 }

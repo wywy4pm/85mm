@@ -221,6 +221,37 @@
                     android:src="@mipmap/ic_right" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/layout_change_server"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
+                android:onClick="onClick"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="切换服务器"
+                    android:textColor="@color/charcoalgrey"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/current_server"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:text=""
+                    android:textColor="@color/text_right_tips"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"

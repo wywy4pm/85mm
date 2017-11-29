@@ -21,6 +21,7 @@ public class WorkListItemBean implements Serializable {
     public String authorPageUrl;
     public String sourceUrl;
     public List<CommentsBean> comments;
+    public AmountInfoBean productInfo;
     public List<String> workTags;
 
     public boolean isLoad;

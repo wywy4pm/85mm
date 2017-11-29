@@ -51,11 +51,13 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
     public static String DATA_TYPE_DESCRIPTION = "description";
     public static String DATA_TYPE_COMMENTS = "comments";
     public static String DATA_TYPE_ADD_TAG = "add_tag";
+    public static String DATA_TYPE_REWARD = "reward";
     private static int VIEW_TYPE_HEAD = 0;
     private static int VIEW_TYPE_IMAGE = 1;
     private static int VIEW_TYPE_DESCRIPTION = 3;
     private static int VIEW_TYPE_COMMENTS = 4;
     private static int VIEW_TYPE_ADD_TAG = 5;
+    private static int VIEW_TYPE_REWARD = 6;
     private boolean isNoImage = false;
 
     public OneWorkAdapter(Context context, List<WorkListItemBean> list) {
@@ -98,6 +100,9 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
         } else if (viewType == VIEW_TYPE_ADD_TAG) {
             View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_add_tag, parent, false);
             return new AddTagHolder(itemView);
+        } else if (viewType == VIEW_TYPE_REWARD) {
+            View itemView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_reward, parent, false);
+            return new RewardHolder(itemView);
         }
         return null;
     }
@@ -119,6 +124,9 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
         } else if (holder instanceof AddTagHolder) {
             AddTagHolder addTagHolder = (AddTagHolder) holder;
             addTagHolder.setData(contexts.get(), getItem(position), onTagWorkListener);
+        } else if (holder instanceof RewardHolder) {
+            RewardHolder rewardHolder = (RewardHolder) holder;
+            rewardHolder.setData();
         }
     }
 
@@ -135,6 +143,8 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
             type = VIEW_TYPE_COMMENTS;
         } else if (DATA_TYPE_ADD_TAG.equals(getItem(position).type)) {
             type = VIEW_TYPE_ADD_TAG;
+        } else if (DATA_TYPE_REWARD.equals(getItem(position).type)) {
+            type = VIEW_TYPE_REWARD;
         }
         return type;
     }
@@ -374,6 +384,19 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
             } else {
                 layout_user_tags.setVisibility(View.GONE);
             }
+        }
+    }
+
+    private static class RewardHolder extends RecyclerView.ViewHolder {
+        private TextView text_reward;
+
+        private RewardHolder(View itemView) {
+            super(itemView);
+            text_reward = (TextView) itemView.findViewById(R.id.text_reward);
+        }
+
+        private void setData() {
+
         }
     }
 }
