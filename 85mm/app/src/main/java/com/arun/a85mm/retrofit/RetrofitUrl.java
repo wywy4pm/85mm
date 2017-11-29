@@ -33,6 +33,7 @@ public class RetrofitUrl {
     public static final String USER_LOG_OUT = USER + "/logout";
     public static final String USER_MAIN_PAGE = USER + "/page";
     public static final String USER_INFO = USER + "/info";
+    public static final String USER_AWARD = USER + "/award";
 
     public static final String CONFIG_QUERY = CONFIG + "/query";
 

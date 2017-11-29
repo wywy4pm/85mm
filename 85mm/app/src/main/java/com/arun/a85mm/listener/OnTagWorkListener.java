@@ -9,4 +9,6 @@ import com.arun.a85mm.bean.UserTagBean;
 public interface OnTagWorkListener {
 
     void onClickMyTag(UserTagBean tagBean, String id);
+
+    void onUserAward(String workId);
 }

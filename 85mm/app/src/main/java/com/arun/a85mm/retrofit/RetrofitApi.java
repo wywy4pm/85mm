@@ -4,6 +4,8 @@ import com.arun.a85mm.bean.AllUserBodyBean;
 import com.arun.a85mm.bean.ArticleDetailBody;
 import com.arun.a85mm.bean.ArticleListBody;
 import com.arun.a85mm.bean.AuditBean;
+import com.arun.a85mm.bean.AwardBodyBean;
+import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.CommonWorkListBean;
 import com.arun.a85mm.bean.ConfigBean;
 import com.arun.a85mm.bean.EventBackBean;
@@ -16,7 +18,6 @@ import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkDetailBean;
 import com.arun.a85mm.bean.WorkMixBean;
 import com.arun.a85mm.bean.request.ActionRequest;
-import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.request.AddCommentRequest;
 import com.arun.a85mm.bean.request.AddCommunityRequest;
 import com.arun.a85mm.bean.request.AddMessageRequest;
@@ -133,4 +134,10 @@ public interface RetrofitApi {
 
     @GET(RetrofitUrl.USER_INFO)
     Observable<CommonApiResponse<AllUserBodyBean>> getUserInfo();
+
+    @Headers({"Content-Type:application/json;charset=UTF-8"})
+    @POST(RetrofitUrl.USER_AWARD)
+    Observable<CommonApiResponse<AwardBodyBean>> userAward(@Query("workId") String workId);
+
+
 }

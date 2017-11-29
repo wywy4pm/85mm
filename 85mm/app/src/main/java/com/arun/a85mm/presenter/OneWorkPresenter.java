@@ -7,7 +7,7 @@ import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkDetailBean;
 import com.arun.a85mm.common.ErrorCode;
-import com.arun.a85mm.fragment.ProductionFragment;
+import com.arun.a85mm.dialog.RewardDialog;
 import com.arun.a85mm.listener.RequestListenerImpl;
 import com.arun.a85mm.model.ProductModel;
 import com.arun.a85mm.model.TagModel;
@@ -22,6 +22,7 @@ public class OneWorkPresenter extends BasePresenter<CommonView3> {
     public static final int TYPE_DETAIL = 0;
     public static final int TYPE_ADD_COMMENT = 1;
     public static final int TYPE_TAG_WORK = 2;
+    public static final int TYPE_USER_AWARD = 3;
     //public static final int TYPE_LOG_OUT = 3;
 
     public OneWorkPresenter(Context context) {
@@ -95,4 +96,25 @@ public class OneWorkPresenter extends BasePresenter<CommonView3> {
                     }
                 }));
     }*/
+
+
+    public void userAward(String workId) {
+        addSubscriber(UserModel.getInstance()
+                .userAward(workId, new RequestListenerImpl(getMvpView()) {
+
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    public void onSuccess(CommonApiResponse data) {
+                        if (getMvpView() != null && getMvpView() instanceof OneWorkActivity
+                                && data != null) {
+                            if (data.code == ErrorCode.SUCCESS) {
+                                getMvpView().refresh(TYPE_USER_AWARD, data.body);
+                            } else if (data.code == ErrorCode.AWARD_DONE) {
+                                //((OneWorkActivity) getMvpView()).showTips(RewardDialog.TYPE_NO_ENOUGH_COINS, );
+                            }
+                        }
+                    }
+                }));
+    }
+
 }

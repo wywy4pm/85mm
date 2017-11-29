@@ -260,6 +260,11 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
         }
     }
 
+    @Override
+    public void onUserAward(String workId) {
+
+    }
+
     public void resetUserTag(UserTagBean tagBean) {
         tagBean.tagType = tagBean.tagType == 1 ? 0 : 1;
         communityAdapter.notifyDataSetChanged();

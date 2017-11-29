@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -19,17 +17,19 @@ import android.widget.TextView;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.OneWorkAdapter;
-import com.arun.a85mm.bean.AmountBean;
+import com.arun.a85mm.bean.AllUserInfoBean;
 import com.arun.a85mm.bean.AmountInfoBean;
+import com.arun.a85mm.bean.AwardBodyBean;
 import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.dialog.RewardDialog;
 import com.arun.a85mm.event.DeleteCommentEvent;
 import com.arun.a85mm.helper.AppHelper;
+import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.DialogHelper;
-import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.ObjectAnimatorManager;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.helper.ShareWindow;
@@ -37,7 +37,6 @@ import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.listener.OnTagWorkListener;
-import com.arun.a85mm.presenter.CommunityPresenter;
 import com.arun.a85mm.presenter.OneWorkPresenter;
 import com.arun.a85mm.utils.AppUtils;
 import com.arun.a85mm.utils.DensityUtil;
@@ -46,7 +45,6 @@ import com.arun.a85mm.utils.KeyBoardUtils;
 import com.arun.a85mm.utils.PatternUtils;
 import com.arun.a85mm.utils.ShareParaUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
-import com.arun.a85mm.utils.StatusBarUtils;
 import com.arun.a85mm.view.CommonView3;
 
 import org.greenrobot.eventbus.EventBus;
@@ -292,7 +290,6 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
             if (bean.productInfo != null) {
                 addReward(bean);
             }
-            addReward(bean);
             setAddCommentView(bean.productInfo);
 
             if (bean.imageList == null || bean.imageList.size() == 0) {
@@ -312,8 +309,43 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
             if (data instanceof UserTagBean) {
                 showTop("打标成功");
             }
+        } else if (dataType == OneWorkPresenter.TYPE_USER_AWARD) {
+            if (data instanceof AwardBodyBean) {
+                AwardBodyBean bean = (AwardBodyBean) data;
+                int coins = 0;
+                if (bean.productInfo != null) {
+                    coins = bean.productInfo.coin;
+                }
+
+                AllUserInfoBean allUserInfoBean = ConfigHelper.userInfoBean;
+                if (allUserInfoBean != null) {
+                    if (allUserInfoBean.leftCoin == 0) {
+                        showDialog(this, RewardDialog.TYPE_NO_COINS, allUserInfoBean.leftCoin);
+                    } else if (allUserInfoBean.leftCoin > 0 && allUserInfoBean.leftCoin < coins) {
+                        showDialog(this, RewardDialog.TYPE_NO_ENOUGH_COINS, allUserInfoBean.leftCoin);
+                    } else {
+                        AmountWorkActivity.jumpToAmountWork(this);
+                    }
+                }
+            }
         }
 
+    }
+
+    /*public void showTips(int type, int leftCoin) {
+        showDialog(this, type, leftCoin);
+    }*/
+
+    private void showDialog(Context context, int type, int leftCoin) {
+        RewardDialog rewardDialog = new RewardDialog(context, R.style.CustomDialog, type, leftCoin);
+        rewardDialog.show();
+    }
+
+    @Override
+    public void onUserAward(String workId) {
+        if (oneWorkPresenter != null) {
+            oneWorkPresenter.userAward(workId);
+        }
     }
 
     private void setShare(final String shareTitle, final String shareDescription, final String shareUrl, final String shareImageUrl) {
@@ -397,6 +429,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     private void addReward(WorkListBean bean) {
         WorkListItemBean itemComBean = new WorkListItemBean();
         itemComBean.type = OneWorkAdapter.DATA_TYPE_REWARD;
+        itemComBean.id = bean.id;
         itemComBean.productInfo = bean.productInfo;
         workListItems.add(itemComBean);
     }

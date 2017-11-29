@@ -323,6 +323,11 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         }
     }
 
+    @Override
+    public void onUserAward(String workId) {
+
+    }
+
     public void resetUserTag(UserTagBean tagBean) {
         tagBean.tagType = tagBean.tagType == 1 ? 0 : 1;
         productListAdapter.notifyDataSetChanged();
