@@ -7,21 +7,28 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.AwardBodyBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.dialog.ContactDialog;
 import com.arun.a85mm.helper.ShareWindow;
+import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.StatusBarUtils;
 
 public class WebViewActivity extends BaseActivity {
@@ -29,8 +36,12 @@ public class WebViewActivity extends BaseActivity {
     private String url;
     private ImageView image_back;
     private TextView titleText;
-    private boolean isFromSplash;
+    //private int isFromSplash;
     private String title;
+    private int type;
+    public static final int TYPE_COMMON = 0;
+    public static final int TYPE_SPLASH = 1;
+    public static final int TYPE_MY_COIN = 2;
 
     public static void jumpToWebViewActivity(Context context, String webUrl) {
         Intent intent = new Intent(context, WebViewActivity.class);
@@ -39,14 +50,13 @@ public class WebViewActivity extends BaseActivity {
         ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
-    public static void jumpToWebViewActivity(Context context, String webUrl, String... args) {
+    public static void jumpToWebViewActivity(Context context, String webUrl, int type, String... args) {
         Intent intent = new Intent(context, WebViewActivity.class);
         intent.putExtra(Constant.INTENT_WEB_URL, webUrl);
+        intent.putExtra(Constant.INTENT_WEB_TYPE, type);
         if (args != null && args.length > 0) {
             if (args.length == 1) {
-                if (Constant.STRING_TRUE.equals(args[0])) {
-                    intent.putExtra(Constant.STRING_TRUE, true);
-                }
+                intent.putExtra(Constant.INTENT_WEB_ARGS, args[0]);
             }
         }
         context.startActivity(intent);
@@ -69,7 +79,7 @@ public class WebViewActivity extends BaseActivity {
 
     private void initData() {
         if (getIntent() != null && getIntent().getExtras() != null) {
-            isFromSplash = getIntent().getExtras().getBoolean(Constant.STRING_TRUE);
+            type = getIntent().getExtras().getInt(Constant.INTENT_WEB_TYPE);
         }
     }
 
@@ -77,7 +87,7 @@ public class WebViewActivity extends BaseActivity {
         image_back = (ImageView) findViewById(R.id.image_back);
         titleText = (TextView) findViewById(R.id.title);
         webView = (WebView) findViewById(R.id.webView);
-        if (!isFromSplash) {
+        if (type != TYPE_SPLASH) {
             setBack(image_back);
         } else {
             setSwipeBackEnable(false);
@@ -89,10 +99,45 @@ public class WebViewActivity extends BaseActivity {
                 }
             });
         }
-        setRight();
+        if (type == TYPE_MY_COIN) {
+            setRightText("充值");
+        } else if (type == TYPE_COMMON) {
+            setRightImage();
+        }
+
     }
 
-    private void setRight() {
+    private void setRightText(final String text) {
+        TextView text_right = (TextView) findViewById(R.id.text_right);
+        if (text_right.getLayoutParams() != null
+                && text_right.getLayoutParams() instanceof RelativeLayout.LayoutParams) {
+            text_right.getLayoutParams().height = DensityUtil.dp2px(this, 22);
+            text_right.getLayoutParams().width = DensityUtil.dp2px(this, 46);
+            ((RelativeLayout.LayoutParams) text_right.getLayoutParams())
+                    .setMargins(DensityUtil.dp2px(this, 10), DensityUtil.dp2px(this, 10), DensityUtil.dp2px(this, 10), DensityUtil.dp2px(this, 10));
+        }
+        text_right.setVisibility(View.VISIBLE);
+        text_right.setText(text);
+        text_right.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        text_right.setBackgroundResource(R.drawable.shape_btn_reply);
+        text_right.setTextColor(getResources().getColor(R.color.white));
+        text_right.setGravity(Gravity.CENTER);
+        text_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(text) && text.equals("充值")) {
+                    showContactDialog();
+                }
+            }
+        });
+    }
+
+    private void showContactDialog() {
+        ContactDialog contactDialog = new ContactDialog(this, R.style.CustomDialog);
+        contactDialog.show();
+    }
+
+    private void setRightImage() {
         ImageView image_right = (ImageView) findViewById(R.id.image_right);
         image_right.setVisibility(View.VISIBLE);
         image_right.setOnClickListener(new View.OnClickListener() {
@@ -111,11 +156,15 @@ public class WebViewActivity extends BaseActivity {
         loadWebView(webView);
         if (getIntent().getExtras() != null) {
             url = getIntent().getExtras().getString(Constant.INTENT_WEB_URL);
+            title = getIntent().getExtras().getString(Constant.INTENT_WEB_ARGS);
             if (eventStatisticsHelper != null) {
                 eventStatisticsHelper.recordUserAction(this, EventConstant.OPEN_WEBVIEW, "", url);
             }
             if (!TextUtils.isEmpty(url)) {
                 webView.loadUrl(url);
+            }
+            if (!TextUtils.isEmpty(title)) {
+                titleText.setText(title);
             }
         }
     }
@@ -153,12 +202,18 @@ public class WebViewActivity extends BaseActivity {
         };
         webView.setDownloadListener(new MyWebViewDownLoadListener());
         webView.setWebChromeClient(webChromeClient);
+        webView.addJavascriptInterface(this, "mm");
+    }
+
+    @JavascriptInterface
+    public void jumToAwardDetail(String titleName, AwardBodyBean awardBodyBean) {
+        AmountWorkActivity.jumpToAmountWork(this, titleName, awardBodyBean);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (isFromSplash) {
+            if (type == TYPE_SPLASH) {
                 MainActivity.jumpToMain(this);
                 finish();
             }

@@ -55,6 +55,7 @@ public class BaseModel {
                         if (object != null) {
                             if (object.code == ErrorCode.SUCCESS
                                     || object.code == ErrorCode.NO_DATA
+                                    || object.code == ErrorCode.AWARD_NO_ENOUGH
                                     || object.code == ErrorCode.AWARD_DONE) {
                                 listener.onSuccess(object);
                             }

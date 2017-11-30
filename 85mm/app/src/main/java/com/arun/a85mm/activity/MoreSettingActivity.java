@@ -280,6 +280,9 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                 showTop("切换成功，请清除进程后重启app");
                 //AppUtils.restartApp(this);
                 break;
+            case R.id.layout_my_coins:
+                WebViewActivity.jumpToWebViewActivity(this, "", WebViewActivity.TYPE_MY_COIN, "我的金币");
+                break;
         }
     }
 

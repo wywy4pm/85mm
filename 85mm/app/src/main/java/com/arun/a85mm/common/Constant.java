@@ -18,12 +18,17 @@ public class Constant {
     /**
      * intent key
      */
+    public static final String INTENT_KEY = "key";
+    public static final String INTENT_DATA = "data";
+
     public static final String INTENT_ARTICLE_ID = "article_id";
     public static final String INTENT_ARTICLE_HEAD_IMAGE = "article_head_image";
     public static final String INTENT_ARTICLE_IMAGE_POSITIONX = "position_x";
     public static final String INTENT_ARTICLE_IMAGE_POSITIONY = "position_y";
 
     public static final String INTENT_WEB_URL = "'url";
+    public static final String INTENT_WEB_TYPE = "web_type";
+    public static final String INTENT_WEB_ARGS = "web_args";
 
     public static final String INTENT_WORKS_LEFT_DATE = "left_date";
     public static final String INTENT_WORKS_LEFT_START = "left_start";

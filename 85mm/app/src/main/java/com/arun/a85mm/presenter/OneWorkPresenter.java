@@ -111,7 +111,9 @@ public class OneWorkPresenter extends BasePresenter<CommonView3> {
                             if (data.code == ErrorCode.SUCCESS) {
                                 getMvpView().refresh(TYPE_USER_AWARD, data.body);
                             } else if (data.code == ErrorCode.AWARD_DONE) {
-                                ((OneWorkActivity) getMvpView()).awardDone((AwardBodyBean)data.body);
+                                ((OneWorkActivity) getMvpView()).jumpToAmountWork((AwardBodyBean) data.body);
+                            } else if (data.code == ErrorCode.AWARD_NO_ENOUGH) {
+                                ((OneWorkActivity) getMvpView()).noEnoughCoins((AwardBodyBean) data.body);
                             }
                         }
                     }
