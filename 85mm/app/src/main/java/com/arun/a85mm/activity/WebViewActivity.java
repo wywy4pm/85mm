@@ -109,6 +109,7 @@ public class WebViewActivity extends BaseActivity {
 
     private void setRightText(final String text) {
         TextView text_right = (TextView) findViewById(R.id.text_right);
+        text_right.setVisibility(View.VISIBLE);
         if (text_right.getLayoutParams() != null
                 && text_right.getLayoutParams() instanceof RelativeLayout.LayoutParams) {
             text_right.getLayoutParams().height = DensityUtil.dp2px(this, 22);
