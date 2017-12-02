@@ -64,6 +64,7 @@ public class AmountWorkActivity extends BaseActivity implements OnImageClick {
         imageRecyclerView.setLayoutManager(manager);
         imageRecyclerView.setAdapter(adapter);
         setCommonShow();
+        setSaveImage(false);
     }
 
     private void initData() {
