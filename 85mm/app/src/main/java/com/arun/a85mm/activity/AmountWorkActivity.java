@@ -26,15 +26,20 @@ import java.util.List;
 public class AmountWorkActivity extends BaseActivity implements OnImageClick {
 
     //private TextView image_right;
-    private TextView amount_description;
+    private TextView amount_description, pay_done_tips;
     private RecyclerView imageRecyclerView;
     private AwardBodyBean awardBodyBean;
     private AmountImageAdapter adapter;
     private List<WorkListItemBean> imageList = new ArrayList<>();
+    private int type;
+    private String titleName;
+    public static final int TYPE_COMMON = 0;
+    public static final int TYPE_PAY = 1;
 
-    public static void jumpToAmountWork(Context context, String titleName, AwardBodyBean awardBodyBean) {
+    public static void jumpToAmountWork(Context context, int type, String titleName, AwardBodyBean awardBodyBean) {
         Intent intent = new Intent(context, AmountWorkActivity.class);
-        intent.putExtra(Constant.INTENT_KEY, titleName);
+        intent.putExtra(Constant.INTENT_TYPE, type);
+        intent.putExtra(Constant.INTENT_TITLE, titleName);
         intent.putExtra(Constant.INTENT_DATA, awardBodyBean);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
@@ -50,6 +55,7 @@ public class AmountWorkActivity extends BaseActivity implements OnImageClick {
     }
 
     private void initView() {
+        pay_done_tips = (TextView) findViewById(R.id.pay_done_tips);
         amount_description = (TextView) findViewById(R.id.amount_description);
         imageRecyclerView = (RecyclerView) findViewById(R.id.imageRecyclerView);
         LinearLayoutManager manager = new LinearLayoutManager(this);
@@ -57,14 +63,33 @@ public class AmountWorkActivity extends BaseActivity implements OnImageClick {
         adapter.setOnImageClick(this);
         imageRecyclerView.setLayoutManager(manager);
         imageRecyclerView.setAdapter(adapter);
+        setCommonShow();
     }
 
     private void initData() {
         if (getIntent() != null && getIntent().getExtras() != null) {
+            if (getIntent().getExtras().containsKey(Constant.INTENT_TYPE)) {
+                type = getIntent().getExtras().getInt(Constant.INTENT_TYPE);
+            }
+            if (getIntent().getExtras().containsKey(Constant.INTENT_TITLE)) {
+                titleName = getIntent().getExtras().getString(Constant.INTENT_TITLE);
+                setTitle(titleName);
+            }
             if (getIntent().getExtras().containsKey(Constant.INTENT_DATA)) {
                 awardBodyBean = (AwardBodyBean) getIntent().getExtras().getSerializable(Constant.INTENT_DATA);
             }
         }
+
+        if (type == TYPE_PAY && awardBodyBean != null
+                && awardBodyBean.orderInfo != null) {
+            pay_done_tips.setVisibility(View.VISIBLE);
+            int payCoins = awardBodyBean.orderInfo.paidCoin;
+            int leftCoins = awardBodyBean.orderInfo.buyerLeftCoin;
+            pay_done_tips.setText(getResources().getString(R.string.award_pay_done, payCoins, leftCoins));
+        } else {
+            pay_done_tips.setVisibility(View.GONE);
+        }
+
         if (awardBodyBean != null) {
             if (awardBodyBean.productInfo != null) {
                 if (!TextUtils.isEmpty(awardBodyBean.productInfo.paidText)) {

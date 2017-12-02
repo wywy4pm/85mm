@@ -29,7 +29,9 @@ import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.dialog.ContactDialog;
 import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.utils.DensityUtil;
+import com.arun.a85mm.utils.GsonUtils;
 import com.arun.a85mm.utils.StatusBarUtils;
+import com.google.gson.reflect.TypeToken;
 
 public class WebViewActivity extends BaseActivity {
     private WebView webView;
@@ -207,8 +209,12 @@ public class WebViewActivity extends BaseActivity {
     }
 
     @JavascriptInterface
-    public void jumToAwardDetail(String titleName, AwardBodyBean awardBodyBean) {
-        AmountWorkActivity.jumpToAmountWork(this, titleName, awardBodyBean);
+    public void jumToAwardDetail(String titleName, String awardJson) {
+        AwardBodyBean awardBodyBean = GsonUtils.fromJson(awardJson, new TypeToken<AwardBodyBean>() {
+        }.getType());
+        if (awardBodyBean != null) {
+            AmountWorkActivity.jumpToAmountWork(this, AmountWorkActivity.TYPE_COMMON, titleName, awardBodyBean);
+        }
     }
 
     @Override

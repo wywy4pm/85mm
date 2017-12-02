@@ -48,4 +48,6 @@
 
     <string name="no_coins">您的金币余额为0，找客服妹妹免费要点金币来打赏Ta。请微信联系hello85mm</string>
     <string name="no_enough_coins">您的金币余额为%1$d，联系客服购买金币。请微信联系hello85mm</string>
+
+    <string name="award_pay_done">已扣除 %1$d 金币，还剩余 %2$d 金币</string>
 </resources>

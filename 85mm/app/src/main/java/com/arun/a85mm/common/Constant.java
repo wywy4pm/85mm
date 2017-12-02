@@ -18,7 +18,8 @@ public class Constant {
     /**
      * intent key
      */
-    public static final String INTENT_KEY = "key";
+    public static final String INTENT_TYPE = "type";
+    public static final String INTENT_TITLE = "key";
     public static final String INTENT_DATA = "data";
 
     public static final String INTENT_ARTICLE_ID = "article_id";

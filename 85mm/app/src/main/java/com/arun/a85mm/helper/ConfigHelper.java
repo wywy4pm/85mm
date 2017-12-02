@@ -13,6 +13,6 @@ import java.util.List;
 public class ConfigHelper {
     public static List<UserTagBean> userTags;
     public static List<MenuListBean> menuList;
-    public static List<MenuListBean> customMenuList;
+    //public static List<MenuListBean> customMenuList;
     public static AllUserInfoBean userInfoBean;
 }

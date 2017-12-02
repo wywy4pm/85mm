@@ -311,7 +311,7 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
         } else if (dataType == OneWorkPresenter.TYPE_USER_AWARD) {
             if (data instanceof AwardBodyBean) {
                 AwardBodyBean bean = (AwardBodyBean) data;
-                jumpToAmountWork(bean);
+                jumpToAmountWork(bean, AmountWorkActivity.TYPE_PAY);
             }
         }
     }
@@ -328,9 +328,9 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
         }
     }
 
-    public void jumpToAmountWork(AwardBodyBean awardBodyBean) {
+    public void jumpToAmountWork(AwardBodyBean awardBodyBean, int type) {
         String titleName = workId + "号收费内容";
-        AmountWorkActivity.jumpToAmountWork(this, titleName, awardBodyBean);
+        AmountWorkActivity.jumpToAmountWork(this, type, titleName, awardBodyBean);
     }
 
     private void showDialog(Context context, int type, int leftCoin) {

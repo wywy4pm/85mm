@@ -9,6 +9,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.SwitchCompat;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -57,8 +58,8 @@ import java.util.List;
 
 public class MoreSettingActivity extends BaseActivity implements View.OnClickListener, CommonView3 {
 
-    private TextView cache_size, text_coins, current_server;
-    private RelativeLayout layout_share, layout_clear, layout_user_info, layout_my_tags, layout_change_server;
+    private TextView cache_size, current_server;
+    private RelativeLayout layout_share, layout_clear, layout_my_tags, layout_change_server;
     private LinearLayout custom_menu;
     private View line_custom_menu;
     private ImageView user_head;
@@ -90,11 +91,9 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         layout_share = (RelativeLayout) findViewById(R.id.layout_share);
         layout_clear = (RelativeLayout) findViewById(R.id.layout_clear);
         cache_size = (TextView) findViewById(R.id.cache_size);
-        text_coins = (TextView) findViewById(R.id.text_coins);
         current_server = (TextView) findViewById(R.id.current_server);
         more_detail = (ImageView) findViewById(R.id.more_detail);
         switchView = (SwitchCompat) findViewById(R.id.switchView);
-        layout_user_info = (RelativeLayout) findViewById(R.id.layout_user_info);
         layout_my_tags = (RelativeLayout) findViewById(R.id.layout_my_tags);
         layout_change_server = (RelativeLayout) findViewById(R.id.layout_change_server);
         custom_menu = (LinearLayout) findViewById(R.id.custom_menu);
@@ -125,7 +124,6 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
 
         layout_share.setOnClickListener(this);
         layout_clear.setOnClickListener(this);
-        layout_user_info.setOnClickListener(this);
         layout_my_tags.setOnClickListener(this);
         setHeadTitle(SharedPreferencesUtils.getUid(this));
         setBack();
@@ -178,7 +176,10 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setCustomMenu() {
-        List<MenuListBean> customMenuList = ConfigHelper.customMenuList;
+        List<MenuListBean> customMenuList = null;
+        if (ConfigHelper.userInfoBean != null) {
+            customMenuList = ConfigHelper.userInfoBean.customMenuList;
+        }
         if (customMenuList != null && customMenuList.size() > 0) {
             custom_menu.removeAllViews();
             custom_menu.setVisibility(View.VISIBLE);
@@ -193,7 +194,11 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                     itemMenu.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url);
+                            if (!TextUtils.isEmpty(bean.showName) && bean.showName.equals("我的金币")) {
+                                WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url, WebViewActivity.TYPE_MY_COIN, "我的金币");
+                            } else {
+                                WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url);
+                            }
                         }
                     });
                     if (i == customMenuList.size() - 1) {
@@ -280,9 +285,9 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                 showTop("切换成功，请清除进程后重启app");
                 //AppUtils.restartApp(this);
                 break;
-            case R.id.layout_my_coins:
+           /* case R.id.layout_my_coins:
                 WebViewActivity.jumpToWebViewActivity(this, "", WebViewActivity.TYPE_MY_COIN, "我的金币");
-                break;
+                break;*/
         }
     }
 
