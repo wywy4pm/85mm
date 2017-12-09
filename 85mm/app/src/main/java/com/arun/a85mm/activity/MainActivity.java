@@ -35,6 +35,7 @@ import com.arun.a85mm.helper.ObjectAnimatorHelper;
 import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.helper.UrlJumpHelper;
+import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.ShareParaUtils;
@@ -167,6 +168,9 @@ public class MainActivity extends AppCompatActivity {
                             fragment = WebViewFragment.getInstance(menuList.get(i).url);
                         } else if (type == 0 || type == 9) {
                             fragment = ProductionFragment.newInstance(type, menuList.get(i).tagName);
+                            /*if (type == 0) {
+                                productionFragment = (ProductionFragment) fragment;
+                            }*/
                         } else {
                             fragment = new LeftWorksFragment();
                         }
@@ -181,8 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setAdapter(new CommonFragmentPagerAdapter(getSupportFragmentManager(), list));
         tabLayout.setViewPager(viewPager, titles);
-        TextViewUtils.setTextBold(tabLayout.getTitleView(lastSelectPos), true);
-        viewPager.setCurrentItem(lastSelectPos);
+        setCurrentTab(lastSelectPos);
         setSaveImage();
     }
 
@@ -337,6 +340,16 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE, 0);
     }
 
+    public void addWorkClick(View view) {
+        if (UserManager.getInstance() != null) {
+            if (UserManager.getInstance().isLogin()) {
+                AddCommunityActivity.jumpToAddCommunityForResult(this);
+            } else {
+                LoginActivity.jumpToLoginForResult(this);
+            }
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -384,11 +397,19 @@ public class MainActivity extends AppCompatActivity {
             if (requestCode == Constant.REQUEST_CODE_ASSOCIATE_LOGIN) {
                 AddCommunityActivity.jumpToAddCommunityForResult(this);
             } else if (requestCode == Constant.REQUEST_CODE_ASSOCIATE_MAIN) {//跳到最新
-                if (associationFragment != null) {
+                /*if (associationFragment != null) {
                     associationFragment.setTagSelect(3);
-                }
+                }*/
+                /*if (productionFragment != null) {
+                    productionFragment.refreshData();
+                }*/
             }
         }
+    }
+
+    private void setCurrentTab(int currentTabPos) {
+        TextViewUtils.setTextBold(tabLayout.getTitleView(currentTabPos), true);
+        viewPager.setCurrentItem(currentTabPos);
     }
 
     public void shareWorkDetail(WorkListBean workListBean) {

@@ -3,6 +3,8 @@ package com.arun.a85mm.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.arun.a85mm.activity.OneWorkActivity;
+import com.arun.a85mm.bean.AwardBodyBean;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.CommonWorkListBean;
 import com.arun.a85mm.bean.UserTagBean;
@@ -13,6 +15,7 @@ import com.arun.a85mm.fragment.TagWorkFragment;
 import com.arun.a85mm.listener.RequestListenerImpl;
 import com.arun.a85mm.model.ProductModel;
 import com.arun.a85mm.model.TagModel;
+import com.arun.a85mm.model.UserModel;
 import com.arun.a85mm.view.CommonView;
 import com.arun.a85mm.view.CommonView4;
 
@@ -24,6 +27,7 @@ import java.util.List;
 
 public class ProductFragmentPresenter extends BasePresenter<CommonView4> {
     public static final int TYPE_TAG_WORK = 0;
+    public static final int TYPE_USER_AWARD = 1;
 
     public ProductFragmentPresenter(Context context) {
         super(context);
@@ -101,6 +105,25 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView4> {
                         if (getMvpView() != null) {
                             if (getMvpView() instanceof ProductionFragment) {
                                 ((ProductionFragment) getMvpView()).resetUserTag(tagBean);
+                            }
+                        }
+                    }
+                }));
+    }
+
+    public void userAward(String workId) {
+        addSubscriber(UserModel.getInstance()
+                .userAward(workId, new RequestListenerImpl(getMvpView()) {
+
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    public void onSuccess(CommonApiResponse data) {
+                        if (getMvpView() != null && getMvpView() instanceof OneWorkActivity
+                                && data != null) {
+                            if (data.code == ErrorCode.SUCCESS) {
+                                getMvpView().refresh(TYPE_USER_AWARD, data.body);
+                            } else if (data.code == ErrorCode.AWARD_DONE) {
+                                ((ProductionFragment) getMvpView()).awardDone((AwardBodyBean)data.body);
                             }
                         }
                     }

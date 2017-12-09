@@ -463,7 +463,20 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             } else {
                 workListItemHolder.layout_user_tags.setVisibility(View.GONE);
             }
-
+            if (workGroup.productInfo != null) {
+                workListItemHolder.layout_work_reward.setVisibility(View.VISIBLE);
+                workListItemHolder.text_reward.setText("打赏" + workGroup.productInfo.coin + "金币");
+                workListItemHolder.text_reward.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onTagWorkListener != null) {
+                            onTagWorkListener.onUserAward(workGroup.id);
+                        }
+                    }
+                });
+            } else {
+                workListItemHolder.layout_work_reward.setVisibility(View.GONE);
+            }
         } else {
             workListItemHolder.work_list_item_title.setVisibility(View.GONE);
             workListItemHolder.work_list_item_author.setVisibility(View.GONE);
@@ -545,6 +558,8 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         private AutoLineLinearLayout layout_work_tags;
         private LinearLayout layout_user_tags;
         private AutoLineLinearLayout user_tags;
+        private RelativeLayout layout_work_reward;
+        private TextView text_reward;
 
         private WorkListItemHolder(View rootView) {
             rippleView = (RippleView) rootView.findViewById(R.id.rippleView);
@@ -564,7 +579,8 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             layout_work_tags = (AutoLineLinearLayout) rootView.findViewById(R.id.layout_work_tags);
             layout_user_tags = (LinearLayout) rootView.findViewById(R.id.layout_user_tags);
             user_tags = (AutoLineLinearLayout) rootView.findViewById(R.id.user_tags);
-
+            layout_work_reward = (RelativeLayout) rootView.findViewById(R.id.layout_work_reward);
+            text_reward = (TextView) rootView.findViewById(R.id.text_reward);
         }
     }
 

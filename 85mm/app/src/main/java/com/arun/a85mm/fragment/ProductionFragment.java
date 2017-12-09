@@ -1,5 +1,6 @@
 package com.arun.a85mm.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -9,20 +10,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.activity.AmountWorkActivity;
 import com.arun.a85mm.activity.BaseActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
 import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.adapter.ProductListAdapter;
+import com.arun.a85mm.bean.AwardBodyBean;
 import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.dialog.RewardDialog;
 import com.arun.a85mm.event.UpdateProductEvent;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.listener.OnTagWorkListener;
+import com.arun.a85mm.presenter.OneWorkPresenter;
 import com.arun.a85mm.presenter.ProductFragmentPresenter;
 import com.arun.a85mm.refresh.SwipeToLoadLayout;
 import com.arun.a85mm.utils.NetUtils;
@@ -183,7 +188,29 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
             if (data instanceof UserTagBean) {
                 showTop("打标成功");
             }
+        } else if (type == OneWorkPresenter.TYPE_USER_AWARD) {
+            if (data instanceof AwardBodyBean) {
+                AwardBodyBean bean = (AwardBodyBean) data;
+                int coins = 0;
+                if (bean.productInfo != null) {
+                    coins = bean.leftCoin;
+                }
+                if (coins == 0) {
+                    showDialog(getActivity(), RewardDialog.TYPE_NO_COINS, coins);
+                } else {
+                    showDialog(getActivity(), RewardDialog.TYPE_NO_ENOUGH_COINS, coins);
+                }
+            }
         }
+    }
+
+    public void awardDone(AwardBodyBean awardBodyBean) {
+        AmountWorkActivity.jumpToAmountWork(getActivity(),awardBodyBean);
+    }
+
+    private void showDialog(Context context, int type, int leftCoin) {
+        RewardDialog rewardDialog = new RewardDialog(context, R.style.CustomDialog, type, leftCoin);
+        rewardDialog.show();
     }
 
     private void formatData(List<WorkListBean> workList) {
@@ -325,7 +352,9 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
 
     @Override
     public void onUserAward(String workId) {
-
+        if (productFragmentPresenter != null) {
+            productFragmentPresenter.userAward(workId);
+        }
     }
 
     public void resetUserTag(UserTagBean tagBean) {

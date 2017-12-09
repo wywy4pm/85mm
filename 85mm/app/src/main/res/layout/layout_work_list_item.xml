@@ -126,6 +126,11 @@
     </LinearLayout>
 
     <include
+        android:id="@+id/layout_work_reward"
+        layout="@layout/layout_work_reward"
+        android:visibility="gone" />
+
+    <include
         android:id="@+id/layout_works_more"
         layout="@layout/layout_works_more"
         android:layout_width="match_parent"

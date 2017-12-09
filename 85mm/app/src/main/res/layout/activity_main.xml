@@ -10,16 +10,27 @@
         android:id="@+id/layout_status_place"
         layout="@layout/layout_status_place" />
 
+    <ImageView
+        android:id="@+id/home_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_status_place"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="14dp"
+        android:onClick="moreClick"
+        android:layout_alignParentLeft="true"
+        android:src="@mipmap/setting" />
+
     <com.flyco.tablayout.SlidingTabLayout
         android:id="@+id/tabLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/layout_status_place"
         android:layout_marginBottom="6dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="12dp"
         android:layout_toLeftOf="@+id/tab_right"
+        android:layout_toRightOf="@+id/home_more"
         android:paddingBottom="7dp"
         app:tl_indicator_anim_duration="100"
         app:tl_indicator_anim_enable="true"
@@ -64,15 +75,15 @@
         </FrameLayout>
 
         <ImageView
-            android:id="@+id/home_more"
+            android:id="@+id/home_add_work"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="11dp"
-            android:onClick="moreClick"
-            android:src="@mipmap/ic_home_more" />
+            android:layout_marginTop="14dp"
+            android:onClick="addWorkClick"
+            android:src="@mipmap/add_work" />
     </RelativeLayout>
 
     <View
