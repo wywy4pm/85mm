@@ -128,6 +128,9 @@
     <include
         android:id="@+id/layout_work_reward"
         layout="@layout/layout_work_reward"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_user_tags"
         android:visibility="gone" />
 
     <include
@@ -135,7 +138,7 @@
         layout="@layout/layout_works_more"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/layout_user_tags"
+        android:layout_below="@+id/layout_work_reward"
         android:visibility="gone" />
 
     <View
