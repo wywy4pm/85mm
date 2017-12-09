@@ -16,10 +16,24 @@
         android:layout_below="@+id/layout_status_place" />
 
     <TextView
-        android:id="@+id/amount_description"
+        android:id="@+id/pay_done_tips"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_title_bar"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/more_yellow"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/amount_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_done_tips"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="14dp"
@@ -34,17 +48,16 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="12dp"
+        android:onClick="copyText"
         android:text="点击复制"
         android:textColor="@color/more_yellow"
-        android:textSize="15sp"
-        android:onClick="copyText"/>
+        android:textSize="15sp" />
 
-    <ListView
-        android:id="@+id/imageListView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/imageRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/copy_text"
         android:layout_marginTop="14dp"
-        android:divider="@null"
         android:scrollbars="none" />
 </RelativeLayout>

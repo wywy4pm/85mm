@@ -19,12 +19,12 @@
         android:layout_width="wrap_content"
         android:layout_height="46dp"
         android:layout_centerInParent="true"
-        android:padding="12dp"
         android:layout_toLeftOf="@+id/image_right"
         android:layout_toRightOf="@+id/image_back"
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
+        android:padding="12dp"
         android:text=""
         android:textColor="@color/charcoalgrey"
         android:textSize="16sp"
@@ -38,6 +38,15 @@
         android:layout_centerVertical="true"
         android:padding="12dp"
         android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/text_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:minWidth="46dp"
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"

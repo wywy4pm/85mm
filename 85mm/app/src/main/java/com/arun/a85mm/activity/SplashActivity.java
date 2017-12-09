@@ -200,7 +200,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
 
                 ConfigHelper.userTags = config.userTagList;
                 ConfigHelper.menuList = config.menuList;
-                ConfigHelper.customMenuList = config.customMenuList;
+                //ConfigHelper.customMenuList = config.customMenuList;
                 SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE, config.hasNewMsg);
                 UserManager.getInstance().setLogin(config.isLogin == 1);
                 UserManager.getInstance().setUserInfoBean(config.userInfo);
@@ -275,7 +275,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                         helper.recordUserAction(SplashActivity.this, EventConstant.CLICK_SPLASH);
                     }
                     isJumpToWebView = true;
-                    WebViewActivity.jumpToWebViewActivity(SplashActivity.this, bean.linkUrl, String.valueOf(true));
+                    WebViewActivity.jumpToWebViewActivity(SplashActivity.this, bean.linkUrl, WebViewActivity.TYPE_SPLASH);
                     finish();
                 }
             }

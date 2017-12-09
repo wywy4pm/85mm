@@ -2,6 +2,7 @@ package com.arun.a85mm.presenter;
 
 import android.content.Context;
 
+import com.arun.a85mm.activity.AmountWorkActivity;
 import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.bean.AwardBodyBean;
 import com.arun.a85mm.bean.CommonApiResponse;
@@ -111,7 +112,9 @@ public class OneWorkPresenter extends BasePresenter<CommonView3> {
                             if (data.code == ErrorCode.SUCCESS) {
                                 getMvpView().refresh(TYPE_USER_AWARD, data.body);
                             } else if (data.code == ErrorCode.AWARD_DONE) {
-                                ((OneWorkActivity) getMvpView()).awardDone((AwardBodyBean)data.body);
+                                ((OneWorkActivity) getMvpView()).jumpToAmountWork((AwardBodyBean) data.body, AmountWorkActivity.TYPE_COMMON);
+                            } else if (data.code == ErrorCode.AWARD_NO_ENOUGH) {
+                                ((OneWorkActivity) getMvpView()).noEnoughCoins((AwardBodyBean) data.body);
                             }
                         }
                     }
