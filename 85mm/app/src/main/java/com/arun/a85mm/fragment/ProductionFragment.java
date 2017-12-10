@@ -204,8 +204,9 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         }
     }
 
-    public void awardDone(AwardBodyBean awardBodyBean) {
-        AmountWorkActivity.jumpToAmountWork(getActivity(),awardBodyBean);
+    public void awardDone(AwardBodyBean awardBodyBean, String workId) {
+        String titleName = workId + "号收费内容";
+        AmountWorkActivity.jumpToAmountWork(getActivity(), AmountWorkActivity.TYPE_PAY, titleName, awardBodyBean);
     }
 
     private void showDialog(Context context, int type, int leftCoin) {

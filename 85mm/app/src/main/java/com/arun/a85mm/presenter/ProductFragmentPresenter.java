@@ -11,12 +11,10 @@ import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.common.ErrorCode;
 import com.arun.a85mm.fragment.ProductionFragment;
-import com.arun.a85mm.fragment.TagWorkFragment;
 import com.arun.a85mm.listener.RequestListenerImpl;
 import com.arun.a85mm.model.ProductModel;
 import com.arun.a85mm.model.TagModel;
 import com.arun.a85mm.model.UserModel;
-import com.arun.a85mm.view.CommonView;
 import com.arun.a85mm.view.CommonView4;
 
 import java.util.List;
@@ -111,7 +109,7 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView4> {
                 }));
     }
 
-    public void userAward(String workId) {
+    public void userAward(final String workId) {
         addSubscriber(UserModel.getInstance()
                 .userAward(workId, new RequestListenerImpl(getMvpView()) {
 
@@ -123,7 +121,7 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView4> {
                             if (data.code == ErrorCode.SUCCESS) {
                                 getMvpView().refresh(TYPE_USER_AWARD, data.body);
                             } else if (data.code == ErrorCode.AWARD_DONE) {
-                                ((ProductionFragment) getMvpView()).awardDone((AwardBodyBean)data.body);
+                                ((ProductionFragment) getMvpView()).awardDone((AwardBodyBean) data.body, workId);
                             }
                         }
                     }
