@@ -188,25 +188,35 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
             if (data instanceof UserTagBean) {
                 showTop("打标成功");
             }
-        } else if (type == OneWorkPresenter.TYPE_USER_AWARD) {
+        } else if (type == ProductFragmentPresenter.TYPE_USER_AWARD) {
             if (data instanceof AwardBodyBean) {
                 AwardBodyBean bean = (AwardBodyBean) data;
-                int coins = 0;
-                if (bean.productInfo != null) {
-                    coins = bean.leftCoin;
-                }
-                if (coins == 0) {
-                    showDialog(getActivity(), RewardDialog.TYPE_NO_COINS, coins);
-                } else {
-                    showDialog(getActivity(), RewardDialog.TYPE_NO_ENOUGH_COINS, coins);
-                }
+                jumpToAmountWork(bean, AmountWorkActivity.TYPE_PAY);
             }
         }
     }
 
-    public void awardDone(AwardBodyBean awardBodyBean, String workId) {
+    private String workId;
+
+    public void setWorkId(String workId) {
+        this.workId = workId;
+    }
+
+    public void noEnoughCoins(AwardBodyBean bean) {
+        int coins = 0;
+        if (bean.productInfo != null) {
+            coins = bean.leftCoin;
+        }
+        if (coins == 0) {
+            showDialog(getActivity(), RewardDialog.TYPE_NO_COINS, coins);
+        } else {
+            showDialog(getActivity(), RewardDialog.TYPE_NO_ENOUGH_COINS, coins);
+        }
+    }
+
+    public void jumpToAmountWork(AwardBodyBean awardBodyBean, int type) {
         String titleName = workId + "号收费内容";
-        AmountWorkActivity.jumpToAmountWork(getActivity(), AmountWorkActivity.TYPE_PAY, titleName, awardBodyBean);
+        AmountWorkActivity.jumpToAmountWork(getActivity(), type, titleName, awardBodyBean);
     }
 
     private void showDialog(Context context, int type, int leftCoin) {

@@ -45,7 +45,7 @@
 
     <RelativeLayout
         android:id="@+id/tab_right"
-        android:layout_width="94dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/layout_status_place"
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="12dp"
             android:onClick="messageClick">

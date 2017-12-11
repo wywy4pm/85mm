@@ -3,6 +3,7 @@ package com.arun.a85mm.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.arun.a85mm.activity.AmountWorkActivity;
 import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.bean.AwardBodyBean;
 import com.arun.a85mm.bean.CommonApiResponse;
@@ -116,12 +117,16 @@ public class ProductFragmentPresenter extends BasePresenter<CommonView4> {
                     @SuppressWarnings("unchecked")
                     @Override
                     public void onSuccess(CommonApiResponse data) {
-                        if (getMvpView() != null && getMvpView() instanceof OneWorkActivity
+                        if (getMvpView() != null && getMvpView() instanceof ProductionFragment
                                 && data != null) {
                             if (data.code == ErrorCode.SUCCESS) {
+                                ((ProductionFragment) getMvpView()).setWorkId(workId);
                                 getMvpView().refresh(TYPE_USER_AWARD, data.body);
                             } else if (data.code == ErrorCode.AWARD_DONE) {
-                                ((ProductionFragment) getMvpView()).awardDone((AwardBodyBean) data.body, workId);
+                                ((ProductionFragment) getMvpView()).setWorkId(workId);
+                                ((ProductionFragment) getMvpView()).jumpToAmountWork((AwardBodyBean) data.body, AmountWorkActivity.TYPE_COMMON);
+                            } else if (data.code == ErrorCode.AWARD_NO_ENOUGH) {
+                                ((ProductionFragment) getMvpView()).noEnoughCoins((AwardBodyBean) data.body);
                             }
                         }
                     }
