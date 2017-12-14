@@ -237,6 +237,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
                             workList.get(i).imageList.get(j).authorName = workList.get(i).authorName;
                             workList.get(i).imageList.get(j).authorPageUrl = workList.get(i).authorPageUrl;
                             workList.get(i).imageList.get(j).workTitle = workList.get(i).title;
+                            workList.get(i).imageList.get(j).description = workList.get(i).description;
                             workList.get(i).imageList.get(j).sourceUrl = workList.get(i).sourceUrl;
                         }
                     }
@@ -251,6 +252,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
                 itemBean.authorName = workList.get(i).authorName;
                 itemBean.authorPageUrl = workList.get(i).authorPageUrl;
                 itemBean.workTitle = workList.get(i).title;
+                itemBean.description = workList.get(i).description;
                 itemBean.sourceUrl = workList.get(i).sourceUrl;
                 items.add(itemBean);
                 workList.get(i).imageList = items;

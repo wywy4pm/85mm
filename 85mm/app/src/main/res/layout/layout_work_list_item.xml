@@ -36,11 +36,26 @@
         android:textStyle="bold"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/work_list_item_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/work_list_item_title"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="5dp"
+        android:maxLines="3"
+        android:textColor="@color/article_list_brief"
+        android:textSize="15sp"
+        android:visibility="gone" />
+
     <RelativeLayout
         android:id="@+id/work_list_item_author"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@+id/work_list_item_title"
+        android:layout_below="@+id/work_list_item_detail"
         android:background="@color/white"
         android:paddingBottom="8dp"
         android:paddingLeft="10dp"

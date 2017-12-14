@@ -366,6 +366,12 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             workListItemHolder.work_list_item_author.setVisibility(View.VISIBLE);
             workListItemHolder.bg_line.setVisibility(View.VISIBLE);
             workListItemHolder.work_list_item_title.setText(bean.workTitle);
+            if (!TextUtils.isEmpty(bean.description)) {
+                workListItemHolder.work_list_item_detail.setVisibility(View.VISIBLE);
+                workListItemHolder.work_list_item_detail.setText(bean.description);
+            } else {
+                workListItemHolder.work_list_item_detail.setVisibility(View.GONE);
+            }
             workListItemHolder.author_name.setText(bean.authorName);
 
             Glide.with(contexts.get()).load(bean.authorHeadImg).centerCrop()
@@ -404,6 +410,14 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
                 }
             });
             workListItemHolder.work_list_item_title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onImageClick != null) {
+                        onImageClick.onMoreLinkClick(workGroup.id, bean.sourceUrl);
+                    }
+                }
+            });
+            workListItemHolder.work_list_item_detail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
@@ -479,6 +493,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             }
         } else {
             workListItemHolder.work_list_item_title.setVisibility(View.GONE);
+            workListItemHolder.work_list_item_detail.setVisibility(View.GONE);
             workListItemHolder.work_list_item_author.setVisibility(View.GONE);
             workListItemHolder.bg_line.setVisibility(View.GONE);
         }
@@ -549,6 +564,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
     private static class WorkListItemHolder {
         private ImageView work_list_item_img;
         private TextView work_list_item_title;
+        private TextView work_list_item_detail;
         public RelativeLayout work_list_item_author;
         private RippleView rippleView;
         private ImageView author_image;
@@ -565,6 +581,7 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
             rippleView = (RippleView) rootView.findViewById(R.id.rippleView);
             work_list_item_img = (ImageView) rootView.findViewById(R.id.work_list_item_img);
             work_list_item_title = (TextView) rootView.findViewById(R.id.work_list_item_title);
+            work_list_item_detail = (TextView) rootView.findViewById(R.id.work_list_item_detail);
             work_list_item_author = (RelativeLayout) rootView.findViewById(R.id.work_list_item_author);
             author_image = (ImageView) rootView.findViewById(R.id.author_image);
             author_name = (TextView) rootView.findViewById(R.id.author_name);
