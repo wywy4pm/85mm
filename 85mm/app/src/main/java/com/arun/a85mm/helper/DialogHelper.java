@@ -9,17 +9,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
-import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.dialog.UploadImageDialog;
 import com.arun.a85mm.event.DeleteCommentEvent;
-import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 
@@ -39,39 +36,38 @@ public class DialogHelper {
 
         for (int i = 0; i < 12; i++) {
             if (Constant.TYPE_AUDIT.equals(type)) {
-                if ("4".equals(uid)) {
-                    if (i == 7) {
-                        setView(context, i, root, dialog, workId, linkUrl, helper);
-                    }
+                if (i == 7 && "4".equals(uid)) {
+                    setView(context, i, root, dialog, workId, linkUrl, helper, type);
                 }
                 if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 8 || i == 10 || i == 11) {
-                    setView(context, i, root, dialog, workId, linkUrl, helper);
+                    setView(context, i, root, dialog, workId, linkUrl, helper, type);
                 }
             } else if (Constant.TYPE_WORK.equals(type)) {
-                if ("4".equals(uid)) {
-                    if (i == 5 || i == 7) {
-                        setView(context, i, root, dialog, workId, linkUrl, helper);
-                    }
+                if ((i == 5 || i == 7) && "4".equals(uid)) {
+                    setView(context, i, root, dialog, workId, linkUrl, helper, type);
                 }
-                if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 8 || i == 11) {
-                    setView(context, i, root, dialog, workId, linkUrl, helper);
+                if (i == 9 && !TextUtils.isEmpty(authorUid) && authorUid.equals(uid)) {
+                    setView(context, i, root, dialog, workId, linkUrl, helper, type);
+                }
+                if (i == 0 && !TextUtils.isEmpty(linkUrl)) {
+                    setView(context, i, root, dialog, workId, linkUrl, helper, type);
+                }
+                if (i == 1 || i == 2 || i == 3 || i == 4 || i == 8 || i == 11) {
+                    setView(context, i, root, dialog, workId, linkUrl, helper, type);
                 }
             } else if (Constant.TYPE_COMMUNITY.equals(type)) {
-                if ("4".equals(uid)) {
-                    if (i == 5 || i == 6 || i == 9) {
-                        setView(context, i, root, dialog, workId, linkUrl, helper);
-                    }
-                } else if (!TextUtils.isEmpty(authorUid) && authorUid.equals(uid)) {
-                    if (i == 9) {
-                        setView(context, i, root, dialog, workId, linkUrl, helper);
-                    }
+                if ((i == 5 || i == 6 || i == 9) && "4".equals(uid)) {
+                    setView(context, i, root, dialog, workId, linkUrl, helper, type);
+                }
+                if (i == 9 && !TextUtils.isEmpty(authorUid) && authorUid.equals(uid)) {
+                    setView(context, i, root, dialog, workId, linkUrl, helper, type);
                 }
                 if (i == 1 || i == 2 || i == 3 || i == 4 || i == 11) {
-                    setView(context, i, root, dialog, workId, linkUrl, helper);
+                    setView(context, i, root, dialog, workId, linkUrl, helper, type);
                 }
             } else if (Constant.TYPE_PUSH.equals(type)) {
                 if (i == 3 || i == 11) {
-                    setView(context, i, root, dialog, workId, linkUrl, helper);
+                    setView(context, i, root, dialog, workId, linkUrl, helper, type);
                 }
             }
         }
@@ -93,12 +89,12 @@ public class DialogHelper {
         }
     }
 
-    private static void setView(Context context, int position, LinearLayout root, Dialog dialog, String workId, String linkUrl, EventStatisticsHelper helper) {
+    private static void setView(Context context, int position, LinearLayout root, Dialog dialog, String workId, String linkUrl, EventStatisticsHelper helper, String type) {
         View layout_item = LayoutInflater.from(context).inflate(R.layout.layout_bottom_item, root, false);
         TextView text_big = (TextView) layout_item.findViewById(R.id.text_big);
         TextView text_small = (TextView) layout_item.findViewById(R.id.text_small);
         setOneText(context, position, layout_item, text_big, text_small, workId);
-        setOneClick(context, position, layout_item, dialog, workId, linkUrl, helper);
+        setOneClick(context, position, layout_item, dialog, workId, linkUrl, helper, type);
         root.addView(layout_item);
     }
 
@@ -160,7 +156,8 @@ public class DialogHelper {
         bigText.setText(big);
     }
 
-    private static void setOneClick(final Context context, final int position, View itemView, final Dialog dialog, final String workId, final String linkUrl, final EventStatisticsHelper helper) {
+    private static void setOneClick(final Context context, final int position, View itemView, final Dialog dialog,
+                                    final String workId, final String linkUrl, final EventStatisticsHelper helper, final String viewType) {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,7 +187,7 @@ public class DialogHelper {
                         type = EventConstant.WORK_ASSOCIATION_DELETE;
                     }
                     if (helper != null) {
-                        helper.recordUserAction(context, type, workId, "");
+                        helper.recordUserAction(context, type, workId, viewType);
                     }
                     dialog.cancel();
                 } else if (position == 0) {

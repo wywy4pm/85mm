@@ -286,7 +286,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             public boolean onLongClick(View v) {
                 finalWorkListHeadHolder.rippleView.setRippleDuration(0);
                 if (onImageClick != null) {
-                    onImageClick.onMoreLinkClick(bean.id, bean.sourceUrl);
+                    onImageClick.onMoreLinkClick(bean.id, bean.sourceUrl, bean.uid);
                     Log.d("TAG", "onMoreLinkClick = " + bean.sourceUrl);
                 }
                 return false;
@@ -404,7 +404,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(workGroup.id, bean.sourceUrl);
+                        onImageClick.onMoreLinkClick(workGroup.id, bean.sourceUrl, workGroup.uid);
                     }
                 }
             });
@@ -422,7 +422,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(workGroup.id, bean.sourceUrl);
+                        onImageClick.onMoreLinkClick(workGroup.id, bean.sourceUrl, workGroup.uid);
                     }
                 }
             });
@@ -430,7 +430,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(workGroup.id, bean.sourceUrl);
+                        onImageClick.onMoreLinkClick(workGroup.id, bean.sourceUrl, workGroup.uid);
                     }
                 }
             });
@@ -552,7 +552,7 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             public boolean onLongClick(View v) {
                 finalWorkListItemHolder.rippleView.setRippleDuration(0);
                 if (onImageClick != null) {
-                    onImageClick.onMoreLinkClick(workGroup.id, bean.sourceUrl);
+                    onImageClick.onMoreLinkClick(workGroup.id, bean.sourceUrl, workGroup.uid);
                 }
                 return false;
             }

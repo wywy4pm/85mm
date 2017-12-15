@@ -202,8 +202,8 @@ public class LeftWorksFragment extends BaseFragment implements OnImageClick, Com
     }
 
     @Override
-    public void onMoreLinkClick(String workId, String sourceUrl) {
-        DialogHelper.showBottom(getActivity(), Constant.TYPE_WORK, sourceUrl, workId, "", eventStatisticsHelper);
+    public void onMoreLinkClick(String workId, String sourceUrl, String authorUid) {
+        DialogHelper.showBottom(getActivity(), Constant.TYPE_WORK, sourceUrl, workId, authorUid, eventStatisticsHelper);
     }
 
     @SuppressWarnings("unchecked")

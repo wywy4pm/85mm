@@ -19,6 +19,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class WebViewActivity extends BaseActivity {
     private WebView webView;
+    private ProgressBar progressBar;
     private String url;
     private ImageView image_back;
     private TextView titleText;
@@ -86,6 +88,7 @@ public class WebViewActivity extends BaseActivity {
     }
 
     private void initView() {
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         image_back = (ImageView) findViewById(R.id.image_back);
         titleText = (TextView) findViewById(R.id.title);
         webView = (WebView) findViewById(R.id.webView);
@@ -202,6 +205,19 @@ public class WebViewActivity extends BaseActivity {
                 WebViewActivity.this.title = title;
                 titleText.setText(title);
             }
+
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if (newProgress == 100) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                } else {
+                    if (progressBar.getVisibility() == View.INVISIBLE) {
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
+                    progressBar.setProgress(newProgress);
+                }
+                super.onProgressChanged(view, newProgress);
+            }
         };
         webView.setDownloadListener(new MyWebViewDownLoadListener());
         webView.setWebChromeClient(webChromeClient);
@@ -220,6 +236,10 @@ public class WebViewActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (webView.canGoBack()) {
+                webView.goBack();
+                return true;
+            }
             if (type == TYPE_SPLASH) {
                 MainActivity.jumpToMain(this);
                 finish();

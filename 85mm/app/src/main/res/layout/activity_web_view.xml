@@ -19,4 +19,11 @@
         android:layout_below="@+id/title_bar"
         android:background="@color/white" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/title_bar" />
+
 </RelativeLayout>

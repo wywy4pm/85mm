@@ -259,7 +259,7 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
                 public boolean onLongClick(View v) {
                     rippleView.setRippleDuration(0);
                     if (onImageClick != null) {
-                        onImageClick.onMoreLinkClick(workListBean.id, workListBean.sourceUrl);
+                        onImageClick.onMoreLinkClick(workListBean.id, workListBean.sourceUrl, workListBean.uid);
                     }
                     return false;
                 }

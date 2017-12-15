@@ -231,15 +231,15 @@ public class TagWorkFragment extends BaseFragment implements OnImageClick, Commo
     }
 
     @Override
-    public void onCoverClick(String workId, String coverUrl,String authorName) {
+    public void onCoverClick(String workId, String coverUrl, String authorName) {
         if (getActivity() != null && getActivity() instanceof BaseActivity) {
             ((BaseActivity) getActivity()).saveImageShowTop(workId, coverUrl, authorName);
         }
     }
 
     @Override
-    public void onMoreLinkClick(String workId, String sourceUrl) {
-        DialogHelper.showBottom(getActivity(), Constant.TYPE_WORK, sourceUrl, workId, "", eventStatisticsHelper);
+    public void onMoreLinkClick(String workId, String sourceUrl, String authorUid) {
+        DialogHelper.showBottom(getActivity(), Constant.TYPE_WORK, sourceUrl, workId, authorUid, eventStatisticsHelper);
     }
 
     public void setHaveMore(boolean isHaveMore) {

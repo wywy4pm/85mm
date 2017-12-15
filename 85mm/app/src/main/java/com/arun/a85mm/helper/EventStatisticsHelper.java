@@ -11,7 +11,9 @@ import com.arun.a85mm.activity.MainActivity;
 import com.arun.a85mm.activity.OneWorkActivity;
 import com.arun.a85mm.bean.ActionBean;
 import com.arun.a85mm.bean.request.ActionRequest;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.event.DeleteWorkEvent;
 import com.arun.a85mm.event.UpdateAssociateEvent;
 import com.arun.a85mm.event.UpdateMesDotEvent;
 import com.arun.a85mm.presenter.EventPresenter;
@@ -121,17 +123,26 @@ public class EventStatisticsHelper implements EventView {
                 ((BaseActivity) context).showTop("[" + tips + "]" + "操作成功");
             }
         }
-        if (type == EventConstant.WORK_ASSOCIATION_DELETE) {
-            EventBus.getDefault().post(new UpdateAssociateEvent());
-            if (context instanceof OneWorkActivity) {
-                ((Activity) context).onBackPressed();
-            }
-        }
     }
 
     @Override
     public void eventDoneExtra(int type, List<ActionBean> actionList) {
-        if (type == EventConstant.ASSOCIATION_COMMENT_DELETE) {
+        if (type == EventConstant.WORK_ASSOCIATION_DELETE) {
+            String remark = "";
+            String resourceId = "";
+            if (actionList.get(0) != null) {
+                remark = actionList.get(0).remark;
+                resourceId = actionList.get(0).resourceId;
+            }
+            if (Constant.TYPE_COMMUNITY.equals(remark)) {
+                EventBus.getDefault().post(new UpdateAssociateEvent());
+                if (context instanceof OneWorkActivity) {
+                    ((Activity) context).onBackPressed();
+                }
+            } else if (Constant.TYPE_WORK.equals(remark)) {
+                EventBus.getDefault().post(new DeleteWorkEvent(resourceId));
+            }
+        } else if (type == EventConstant.ASSOCIATION_COMMENT_DELETE) {
             if (actionList.get(0) != null) {
                 if (context instanceof OneWorkActivity) {
                     ((OneWorkActivity) context).refreshComments(actionList.get(0).resourceId);

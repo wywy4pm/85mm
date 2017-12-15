@@ -442,8 +442,8 @@ public class OneWorkActivity extends BaseActivity implements CommonView3, OnImag
     }
 
     @Override
-    public void onMoreLinkClick(String workId, String sourceUrl) {
-        DialogHelper.showBottom(this, showBottomType, sourceUrl, workId, authorUid, eventStatisticsHelper);
+    public void onMoreLinkClick(String workId, String sourceUrl, String authorUid) {
+        DialogHelper.showBottom(this, showBottomType, sourceUrl, workId, this.authorUid, eventStatisticsHelper);
     }
 
     @Override

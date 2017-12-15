@@ -137,6 +137,6 @@ public class AmountWorkActivity extends BaseActivity implements OnImageClick {
     }
 
     @Override
-    public void onMoreLinkClick(String workId, String sourceUrl) {
+    public void onMoreLinkClick(String workId, String sourceUrl, String authorUid) {
     }
 }

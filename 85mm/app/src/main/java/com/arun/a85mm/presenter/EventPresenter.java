@@ -50,11 +50,11 @@ public class EventPresenter extends BasePresenter<EventView> {
                                     || type == EventConstant.WORK_AUDIT_RECOMMEND
                                     || type == EventConstant.WORK_ASSOCIATION_RECOMMEND
                                     || type == EventConstant.WORK_MOVE_TO_ASSOCIATION
-                                    || type == EventConstant.WORK_MOVE_TO_AUDIT
-                                    || type == EventConstant.WORK_ASSOCIATION_DELETE) {
+                                    || type == EventConstant.WORK_MOVE_TO_AUDIT) {
                                 getMvpView().eventDone(type);
-                            } else if (type == EventConstant.ASSOCIATION_COMMENT_DELETE) {
-                                getMvpView().eventDoneExtra(type,actionRequest.actionList);
+                            } else if (type == EventConstant.WORK_ASSOCIATION_DELETE
+                                    || type == EventConstant.ASSOCIATION_COMMENT_DELETE) {
+                                getMvpView().eventDoneExtra(type, actionRequest.actionList);
                             }
                             if (commonApiResponse.body != null && commonApiResponse.body instanceof EventBackBean) {
                                 getMvpView().eventSuccess(((EventBackBean) commonApiResponse.body).hasNewMsg);

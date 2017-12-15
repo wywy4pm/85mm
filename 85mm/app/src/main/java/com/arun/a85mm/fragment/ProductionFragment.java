@@ -3,6 +3,7 @@ package com.arun.a85mm.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.dialog.RewardDialog;
+import com.arun.a85mm.event.DeleteWorkEvent;
 import com.arun.a85mm.event.UpdateProductEvent;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.RandomColorHelper;
@@ -196,6 +198,22 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void removeOneWork(DeleteWorkEvent event) {
+        if (event != null && !TextUtils.isEmpty(event.workId)) {
+            if (workLists != null && workLists.size() > 0) {
+                for (int i = 0; i < workLists.size(); i++) {
+                    if (!TextUtils.isEmpty(event.workId)
+                            && event.workId.equals(workLists.get(i).id)) {
+                        workLists.remove(i);
+                        break;
+                    }
+                }
+                productListAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
     private String workId;
 
     public void setWorkId(String workId) {
@@ -320,12 +338,12 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     }*/
 
     @Override
-    public void onMoreLinkClick(String workId, String sourceUrl) {
+    public void onMoreLinkClick(String workId, String sourceUrl, String authorUid) {
         String type = Constant.TYPE_WORK;
         if (dataType == 9) {
             type = Constant.TYPE_AUDIT;
         }
-        DialogHelper.showBottom(getActivity(), type, sourceUrl, workId, "", eventStatisticsHelper);
+        DialogHelper.showBottom(getActivity(), type, sourceUrl, workId, authorUid, eventStatisticsHelper);
     }
 
     public void setHaveMore(boolean isHaveMore) {

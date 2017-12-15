@@ -461,9 +461,9 @@ public class CommunityFragment extends BaseFragment implements CommonView4<List<
     }
 
     @Override
-    public void onMoreLinkClick(String workId, String sourceUrl) {
+    public void onMoreLinkClick(String workId, String sourceUrl, String authorUid) {
         //DialogHelper.showBottomSourceLink(getActivity(), sourceUrl, workId, eventStatisticsHelper);
-        DialogHelper.showBottom(getActivity(), Constant.TYPE_WORK, sourceUrl, workId, "", eventStatisticsHelper);
+        DialogHelper.showBottom(getActivity(), Constant.TYPE_WORK, sourceUrl, workId, authorUid, eventStatisticsHelper);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

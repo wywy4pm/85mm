@@ -11,5 +11,5 @@ public interface OnImageClick {
 
     void onCoverClick(String workId, String coverUrl, String authorName);
 
-    void onMoreLinkClick(String workId, String sourceUrl);
+    void onMoreLinkClick(String workId, String sourceUrl,String authorUid);
 }
