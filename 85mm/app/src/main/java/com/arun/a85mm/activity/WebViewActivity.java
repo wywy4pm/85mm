@@ -83,6 +83,8 @@ public class WebViewActivity extends BaseActivity {
 
     private void initData() {
         if (getIntent() != null && getIntent().getExtras() != null) {
+            url = getIntent().getExtras().getString(Constant.INTENT_WEB_URL);
+            title = getIntent().getExtras().getString(Constant.INTENT_WEB_ARGS);
             type = getIntent().getExtras().getInt(Constant.INTENT_WEB_TYPE);
         }
     }
@@ -107,9 +109,27 @@ public class WebViewActivity extends BaseActivity {
         if (type == TYPE_MY_COIN) {
             setRightText("充值");
         } else if (type == TYPE_COMMON) {
-            setRightImage();
+            if (isShowShareBtn(url)) {
+                setRightImage();
+            }
         }
 
+    }
+
+    public boolean isShowShareBtn(String url) {
+        boolean isShowShare = false;
+        if (!TextUtils.isEmpty(url)) {
+            Uri uri = Uri.parse(url);
+            if (uri != null) {
+                String shareValue = uri.getQueryParameter("share");
+                if (!TextUtils.isEmpty(shareValue) && shareValue.equals("n")) {
+                    isShowShare = false;
+                } else {
+                    isShowShare = true;
+                }
+            }
+        }
+        return isShowShare;
     }
 
     private void setRightText(final String text) {
@@ -160,18 +180,14 @@ public class WebViewActivity extends BaseActivity {
 
     private void initWebView() {
         loadWebView(webView);
-        if (getIntent().getExtras() != null) {
-            url = getIntent().getExtras().getString(Constant.INTENT_WEB_URL);
-            title = getIntent().getExtras().getString(Constant.INTENT_WEB_ARGS);
+        if (!TextUtils.isEmpty(url)) {
             if (eventStatisticsHelper != null) {
                 eventStatisticsHelper.recordUserAction(this, EventConstant.OPEN_WEBVIEW, "", url);
             }
-            if (!TextUtils.isEmpty(url)) {
-                webView.loadUrl(url);
-            }
-            if (!TextUtils.isEmpty(title)) {
-                titleText.setText(title);
-            }
+            webView.loadUrl(url);
+        }
+        if (!TextUtils.isEmpty(title)) {
+            titleText.setText(title);
         }
     }
 
