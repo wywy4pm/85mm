@@ -13,6 +13,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -60,6 +61,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     private TextView user_name;
     private ImageView more_detail;
     private SwitchCompat switchView;
+    private SwitchCompat switchView_wImg;
     private MorePresenter morePresenter;
     private int hideReadEnable = 0;
     private ContactDialog contactDialog;
@@ -88,6 +90,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         current_server = (TextView) findViewById(R.id.current_server);
         more_detail = (ImageView) findViewById(R.id.more_detail);
         switchView = (SwitchCompat) findViewById(R.id.switchView);
+        switchView_wImg = (SwitchCompat) findViewById(R.id.switchView_wImg);
         layout_user_info = (RelativeLayout) findViewById(R.id.layout_user_info);
         layout_my_tags = (RelativeLayout) findViewById(R.id.layout_my_tags);
         layout_change_server = (RelativeLayout) findViewById(R.id.layout_change_server);
@@ -114,6 +117,21 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                     return true;
                 }
                 return true;
+            }
+        });
+
+        switchView_wImg.setChecked(ConfigHelper.isShowWImage == Constant.VALUE_SHOW_WIMAGE);
+        switchView_wImg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ConfigHelper.isShowWImage = Constant.VALUE_SHOW_WIMAGE;
+                    SharedPreferencesUtils.setConfigInt(MoreSettingActivity.this, SharedPreferencesUtils.KEY_WIDTH_IMAGE, Constant.VALUE_SHOW_WIMAGE);
+                } else {
+                    ConfigHelper.isShowWImage = Constant.VALUE_SHOW_COMMON;
+                    SharedPreferencesUtils.setConfigInt(MoreSettingActivity.this, SharedPreferencesUtils.KEY_WIDTH_IMAGE, Constant.VALUE_SHOW_COMMON);
+                }
+                //showTop("操作成功");
             }
         });
 
@@ -187,16 +205,18 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                     TextView text_custom_menu = (TextView) itemMenu.findViewById(R.id.text_custom_menu);
                     View line_divide = itemMenu.findViewById(R.id.line_menu_bottom);
                     text_custom_menu.setText(bean.showName);
-                    itemMenu.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (!TextUtils.isEmpty(bean.showName) && bean.showName.equals("我的金币")) {
-                                WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url, WebViewActivity.TYPE_MY_COIN, "我的金币");
-                            } else {
-                                WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url);
+                    if(!TextUtils.isEmpty(bean.url)){
+                        itemMenu.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (!TextUtils.isEmpty(bean.showName) && bean.showName.equals("我的金币")) {
+                                    WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url, WebViewActivity.TYPE_MY_COIN, "我的金币");
+                                } else {
+                                    WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                     if (i == customMenuList.size() - 1) {
                         line_divide.setVisibility(View.GONE);
                     } else {

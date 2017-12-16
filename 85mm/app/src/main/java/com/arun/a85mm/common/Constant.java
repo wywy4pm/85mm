@@ -86,4 +86,8 @@ public class Constant {
      */
     public static final int SERVER_TYPE_PROD = 0;
     public static final int SERVER_TYPE_TEST = 1;
+
+
+    public static final int VALUE_SHOW_WIMAGE = 0;
+    public static final int VALUE_SHOW_COMMON = 1;
 }

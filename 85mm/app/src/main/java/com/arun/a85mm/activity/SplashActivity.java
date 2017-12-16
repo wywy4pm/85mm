@@ -105,6 +105,8 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
             type = getIntent().getExtras().getString(UrlJumpHelper.KEY_JUMP_APP);
             map = (Map<String, String>) getIntent().getExtras().getSerializable(UrlJumpHelper.KEY_JUMP_MAP);
         }
+
+        ConfigHelper.isShowWImage = SharedPreferencesUtils.getConfigInt(this, SharedPreferencesUtils.KEY_WIDTH_IMAGE);
     }
 
     private void showAnimator() {

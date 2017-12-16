@@ -10,6 +10,8 @@ import com.andexert.library.RippleView;
 import com.arun.a85mm.R;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.utils.DensityUtil;
 import com.bumptech.glide.Glide;
@@ -51,7 +53,11 @@ public class WorkListItemHolder extends RecyclerView.ViewHolder {
             if (bean.width > 0) {
                 work_list_item_img.setVisibility(View.VISIBLE);
                 if (bean.height < bean.width) {
-                    imageHeight = screenWidth;
+                    if (ConfigHelper.isShowWImage == Constant.VALUE_SHOW_WIMAGE) {
+                        imageHeight = screenWidth;
+                    } else {
+                        imageHeight = (bean.height * screenWidth) / bean.width;
+                    }
                 } else {
                     imageHeight = (bean.height * screenWidth) / bean.width;
                 }

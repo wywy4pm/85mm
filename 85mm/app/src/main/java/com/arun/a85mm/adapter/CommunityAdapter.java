@@ -150,7 +150,11 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         int imageHeight = 0;
         if (bean.coverWidth > 0) {
             if (bean.coverHeight < bean.coverWidth) {
-                imageHeight = screenWidth;
+                if (ConfigHelper.isShowWImage == Constant.VALUE_SHOW_WIMAGE) {
+                    imageHeight = screenWidth;
+                } else {
+                    imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
+                }
             } else {
                 imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
             }
@@ -320,7 +324,11 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
             if (bean.width > 0) {
                 workListItemHolder.work_list_item_img.setVisibility(View.VISIBLE);
                 if (bean.height < bean.width) {
-                    imageHeight = screenWidth;
+                    if (ConfigHelper.isShowWImage == Constant.VALUE_SHOW_WIMAGE) {
+                        imageHeight = screenWidth;
+                    } else {
+                        imageHeight = (bean.height * screenWidth) / bean.width;
+                    }
                 } else {
                     imageHeight = (bean.height * screenWidth) / bean.width;
                 }

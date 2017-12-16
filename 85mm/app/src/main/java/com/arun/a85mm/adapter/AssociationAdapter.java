@@ -20,6 +20,7 @@ import com.arun.a85mm.bean.CommentsBean;
 import com.arun.a85mm.bean.CommunityTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.common.Constant;
+import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
 import com.arun.a85mm.helper.UrlJumpHelper;
@@ -265,7 +266,11 @@ public class AssociationAdapter extends BaseRecyclerAdapter<WorkListBean> {
             if (bean.coverWidth > 0 && !TextUtils.isEmpty(bean.coverUrl)) {
                 layout_cover_Image.setVisibility(View.VISIBLE);
                 if (bean.coverHeight < bean.coverWidth) {
-                    imageHeight = screenWidth;
+                    if (ConfigHelper.isShowWImage == Constant.VALUE_SHOW_WIMAGE) {
+                        imageHeight = screenWidth;
+                    } else {
+                        imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
+                    }
                 } else {
                     imageHeight = (bean.coverHeight * screenWidth) / bean.coverWidth;
                 }

@@ -21,6 +21,7 @@ import com.arun.a85mm.bean.CommentsBean;
 import com.arun.a85mm.bean.UserTagBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
+import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.dialog.RewardDialog;
 import com.arun.a85mm.fragment.TagWorkFragment;
 import com.arun.a85mm.helper.ConfigHelper;
@@ -196,7 +197,11 @@ public class OneWorkAdapter extends BaseRecyclerAdapter<WorkListItemBean> {
                 if (bean.width > 0) {
                     work_list_item_img.setVisibility(View.VISIBLE);
                     if (bean.height < bean.width) {
-                        imageHeight = screenWidth;
+                        if (ConfigHelper.isShowWImage == Constant.VALUE_SHOW_WIMAGE) {
+                            imageHeight = screenWidth;
+                        } else {
+                            imageHeight = (bean.height * screenWidth) / bean.width;
+                        }
                     } else {
                         imageHeight = (bean.height * screenWidth) / bean.width;
                     }
