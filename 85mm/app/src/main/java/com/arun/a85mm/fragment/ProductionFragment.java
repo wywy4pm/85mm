@@ -242,9 +242,14 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         rewardDialog.show();
     }
 
+    private List<Integer> noCoverIndex = new ArrayList<>();
+
     private void formatData(List<WorkListBean> workList) {
         setCurrentResponseCount(workList.size());
         for (int i = 0; i < workList.size(); i++) {
+            if (workList.get(i) != null && workList.get(i).coverWidth == 0 && workList.get(i).coverHeight == 0) {
+                noCoverIndex.add(i);
+            }
             if (workList.get(i) != null && workList.get(i).imageList != null && workList.get(i).imageList.size() > 0) {
                 workList.get(i).backgroundColor = RandomColorHelper.getRandomColor();
                 for (int j = 0; j < workList.get(i).imageList.size(); j++) {
@@ -284,6 +289,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         }
 
         workLists.addAll(workList);
+        expandNoCover(noCoverIndex);
         productListAdapter.notifyDataSetChanged();
 
     }
@@ -299,6 +305,16 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
     @Override
     public void reloadData() {
         refreshData();
+    }
+
+    public void expandNoCover(List<Integer> noCoverIndex) {
+        if (noCoverIndex != null && noCoverIndex.size() > 0) {
+            for (int i = 0; i < noCoverIndex.size(); i++) {
+                if (!expandableListView.isGroupExpanded(noCoverIndex.get(i))) {
+                    expandableListView.expandGroup(noCoverIndex.get(i));
+                }
+            }
+        }
     }
 
     @Override
