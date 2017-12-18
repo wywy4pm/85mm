@@ -20,12 +20,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arun.a85mm.R;
+import com.arun.a85mm.bean.AllUserBodyBean;
 import com.arun.a85mm.bean.MenuListBean;
 import com.arun.a85mm.bean.UserInfoBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
 import com.arun.a85mm.dialog.ContactDialog;
 import com.arun.a85mm.event.UpdateProductEvent;
+import com.arun.a85mm.fragment.ProductionFragment;
+import com.arun.a85mm.fragment.TagWorkFragment;
 import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.helper.UserManager;
@@ -49,7 +52,9 @@ import com.umeng.socialize.UMShareAPI;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MoreSettingActivity extends BaseActivity implements View.OnClickListener, CommonView3 {
 
@@ -163,6 +168,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
 
     @SuppressWarnings("unchecked")
     private void initData() {
+
         hideReadEnable = SharedPreferencesUtils.getConfigInt(MoreSettingActivity.this, SharedPreferencesUtils.KEY_HIDE_READ_ENABLED);
         if (hideReadEnable == 1
                 && SharedPreferencesUtils.getConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_OPENED) == 1) {
@@ -177,10 +183,9 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         }
         morePresenter = new MorePresenter(this);
         morePresenter.attachView(this);
+        morePresenter.getUserInfo();
 
         setUser();
-        setCustomMenu();
-
         currentServer = SharedPreferencesUtils.getConfigInt(this, SharedPreferencesUtils.KEY_SERVER);
         if (currentServer == Constant.SERVER_TYPE_TEST) {
             current_server.setText("测试服务器");
@@ -189,11 +194,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void setCustomMenu() {
-        List<MenuListBean> customMenuList = null;
-        if (ConfigHelper.userInfoBean != null) {
-            customMenuList = ConfigHelper.userInfoBean.customMenuList;
-        }
+    private void setCustomMenu(List<MenuListBean> customMenuList) {
         if (customMenuList != null && customMenuList.size() > 0) {
             custom_menu.removeAllViews();
             custom_menu.setVisibility(View.VISIBLE);
@@ -205,18 +206,25 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                     TextView text_custom_menu = (TextView) itemMenu.findViewById(R.id.text_custom_menu);
                     View line_divide = itemMenu.findViewById(R.id.line_menu_bottom);
                     text_custom_menu.setText(bean.showName);
-                    if(!TextUtils.isEmpty(bean.url)){
-                        itemMenu.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (!TextUtils.isEmpty(bean.showName) && bean.showName.equals("我的金币")) {
-                                    WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url, WebViewActivity.TYPE_MY_COIN, "我的金币");
-                                } else {
-                                    WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url);
+                    itemMenu.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (bean.dataType == 7) {//个人主页已发布作品列表
+                                Map<String, String> map = new HashMap<>();
+                                map.put(ProductionFragment.INTENT_KEY_TYPE, String.valueOf(bean.dataType));
+                                FragmentCommonActivity.jumpToFragmentCommonActivity(MoreSettingActivity.this,
+                                        FragmentCommonActivity.FRAGMENT_LATEST_WORKS, bean.showName, map);
+                            } else {
+                                if (!TextUtils.isEmpty(bean.url)) {
+                                    if (!TextUtils.isEmpty(bean.showName) && bean.showName.equals("我的金币")) {
+                                        WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url, WebViewActivity.TYPE_MY_COIN, "我的金币");
+                                    } else {
+                                        WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url);
+                                    }
                                 }
                             }
-                        });
-                    }
+                        }
+                    });
                     if (i == customMenuList.size() - 1) {
                         line_divide.setVisibility(View.GONE);
                     } else {
@@ -357,7 +365,14 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void refresh(int type, Object data) {
-        if (type == MorePresenter.TYPE_HIDE_READ) {
+        if (type == MorePresenter.TYPE_USER_INFO) {
+            if (data instanceof AllUserBodyBean) {
+                AllUserBodyBean bean = (AllUserBodyBean) data;
+                if (bean.userInfo != null) {
+                    setCustomMenu(bean.userInfo.customMenuList);
+                }
+            }
+        } else if (type == MorePresenter.TYPE_HIDE_READ) {
             int isOpen = switchView.isChecked() ? 1 : 0;
             SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_HIDE_READ_OPENED, isOpen);
             EventBus.getDefault().post(new UpdateProductEvent());

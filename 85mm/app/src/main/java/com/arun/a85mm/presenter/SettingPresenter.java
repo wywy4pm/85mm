@@ -60,7 +60,7 @@ public class SettingPresenter extends BasePresenter<CommonView3> {
                 }));
     }
 
-    public void getUserInfo() {
+    /*public void getUserInfo() {
         addSubscriber(UserModel.getInstance()
                 .getUserInfo(new RequestListenerImpl(getMvpView()) {
 
@@ -74,5 +74,5 @@ public class SettingPresenter extends BasePresenter<CommonView3> {
                         }
                     }
                 }));
-    }
+    }*/
 }
