@@ -14,11 +14,13 @@
         android:id="@+id/home_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/layout_status_place"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="14dp"
-        android:onClick="moreClick"
         android:layout_alignParentLeft="true"
+        android:layout_below="@+id/layout_status_place"
+        android:onClick="moreClick"
+        android:paddingBottom="10dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="10dp"
+        android:paddingTop="14dp"
         android:src="@mipmap/setting" />
 
     <com.flyco.tablayout.SlidingTabLayout
@@ -27,7 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_status_place"
         android:layout_marginBottom="6dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="12dp"
         android:layout_toLeftOf="@+id/tab_right"
         android:layout_toRightOf="@+id/home_more"
@@ -54,11 +55,11 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="12dp"
-            android:onClick="messageClick">
+            android:onClick="messageClick"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="8dp"
+            android:paddingTop="12dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -79,10 +80,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="14dp"
             android:onClick="addWorkClick"
+            android:paddingBottom="10dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="10dp"
+            android:paddingTop="14dp"
             android:src="@mipmap/add_work" />
     </RelativeLayout>
 
