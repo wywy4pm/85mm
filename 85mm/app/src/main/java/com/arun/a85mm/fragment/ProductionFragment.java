@@ -248,7 +248,7 @@ public class ProductionFragment extends BaseFragment implements OnImageClick, Co
         setCurrentResponseCount(workList.size());
         noCoverIndex.clear();
         for (int i = 0; i < workList.size(); i++) {
-            if (workList.get(i) != null && workList.get(i).coverWidth == 0 && workList.get(i).coverHeight == 0) {
+            if (workList.get(i) != null && TextUtils.isEmpty(workList.get(i).authorPageUrl)) {
                 noCoverIndex.add(i);
             }
             if (workList.get(i) != null && workList.get(i).imageList != null && workList.get(i).imageList.size() > 0) {
