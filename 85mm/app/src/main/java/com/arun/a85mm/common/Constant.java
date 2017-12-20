@@ -15,6 +15,8 @@ public class Constant {
     public static final String PATH_AUDIT_LIST = "/audit/list";
     public static final String PATH_WORK_LATEST = "/works/latest";
 
+    public static final String PATH_ORDER_LIST = "/order/list";
+
     /**
      * intent key
      */

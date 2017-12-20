@@ -41,6 +41,13 @@ public class SettingPresenter extends BasePresenter<CommonView3> {
                             }
                         }
                     }
+
+                    @Override
+                    public void onError(int errorType, int errorMsg) {
+                        if (getMvpView() != null) {
+                            getMvpView().onError(TYPE_CONFIG, errorMsg);
+                        }
+                    }
                 }));
     }
 

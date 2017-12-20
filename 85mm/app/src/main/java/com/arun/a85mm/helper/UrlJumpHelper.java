@@ -9,7 +9,9 @@ import android.text.TextUtils;
 
 import com.arun.a85mm.activity.AuditActivity;
 import com.arun.a85mm.activity.FragmentCommonActivity;
+import com.arun.a85mm.activity.MoreSettingActivity;
 import com.arun.a85mm.activity.OneWorkActivity;
+import com.arun.a85mm.activity.WebViewActivity;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.utils.AppUtils;
 
@@ -49,6 +51,10 @@ public class UrlJumpHelper {
                 AuditActivity.jumpToAudit(context);
             } else if (path.contains(Constant.PATH_WORK_LATEST)) {
                 FragmentCommonActivity.jumpToFragmentCommonActivity(context, FragmentCommonActivity.FRAGMENT_LATEST_WORKS, title, null);
+            } else if (path.contains(Constant.PATH_ORDER_LIST)) {
+                WebViewActivity.jumpToWebViewActivity(context, url, WebViewActivity.TYPE_MY_COIN, title);
+            } else {//其它情况统一处理打开web页
+                WebViewActivity.jumpToWebViewActivity(context, url);
             }
         }
     }

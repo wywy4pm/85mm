@@ -1,13 +1,11 @@
 package com.arun.a85mm.activity;
 
 import android.animation.Animator;
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arun.a85mm.R;
-import com.arun.a85mm.bean.AllUserBodyBean;
 import com.arun.a85mm.bean.CommonApiResponse;
 import com.arun.a85mm.bean.ConfigBean;
 import com.arun.a85mm.bean.GuidePageBean;
@@ -35,7 +32,7 @@ import com.arun.a85mm.utils.BitmapUtils;
 import com.arun.a85mm.utils.CacheUtils;
 import com.arun.a85mm.utils.DateUtils;
 import com.arun.a85mm.utils.DensityUtil;
-import com.arun.a85mm.utils.GsonUtils;
+import com.arun.a85mm.utils.NetUtils;
 import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.view.CommonView3;
 import com.bumptech.glide.Glide;
@@ -66,6 +63,8 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
     private EventStatisticsHelper helper;
     private boolean isAnimationEnd;
     private boolean isConfigComplete;
+    private boolean isFirstConfigError = true;
+    //private static final int WHAT_CONFIG_ERROR = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,6 +291,35 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
     @Override
     public void onError(int errorType, @StringRes int errorMsg) {
         //Toast.makeText(this, "网络异常，请退出重试", Toast.LENGTH_LONG).show();
+        if (errorType == SettingPresenter.TYPE_CONFIG) {
+            if (isFirstConfigError) {
+                handlerConfigError();
+                isFirstConfigError = false;
+            } else {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        handlerConfigError();
+                    }
+                }, 2000);
+            }
+        }
+    }
+
+    public void handlerConfigError() {
+        if (NetUtils.isConnected(this)) {
+            Toast.makeText(this, "正在重试请求服务器，请检查网络", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "当前无网络连接，请开启", Toast.LENGTH_SHORT).show();
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (settingPresenter != null) {
+                    settingPresenter.queryConfig();
+                }
+            }
+        }, 3000);
     }
 
     @Override

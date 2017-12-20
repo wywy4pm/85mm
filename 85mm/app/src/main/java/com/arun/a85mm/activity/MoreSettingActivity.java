@@ -31,6 +31,7 @@ import com.arun.a85mm.fragment.ProductionFragment;
 import com.arun.a85mm.fragment.TagWorkFragment;
 import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.ShareWindow;
+import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.helper.UserManager;
 import com.arun.a85mm.presenter.MorePresenter;
 import com.arun.a85mm.utils.AppUtils;
@@ -216,11 +217,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
                                         FragmentCommonActivity.FRAGMENT_LATEST_WORKS, bean.showName, map);
                             } else {
                                 if (!TextUtils.isEmpty(bean.url)) {
-                                    if (!TextUtils.isEmpty(bean.showName) && bean.showName.equals("我的金币")) {
-                                        WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url, WebViewActivity.TYPE_MY_COIN, "我的金币");
-                                    } else {
-                                        WebViewActivity.jumpToWebViewActivity(MoreSettingActivity.this, bean.url);
-                                    }
+                                    UrlJumpHelper.urlJumpTo(MoreSettingActivity.this, bean.url, "我的金币");
                                 }
                             }
                         }
