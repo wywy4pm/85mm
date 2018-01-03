@@ -64,7 +64,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout custom_menu;
     private View line_custom_menu;
     private ImageView user_head;
-    private TextView user_name;
+    private TextView user_name, bottom_text;
     private ImageView more_detail;
     private SwitchCompat switchView;
     private SwitchCompat switchView_wImg;
@@ -104,6 +104,7 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         line_custom_menu = findViewById(R.id.line_custom_menu);
         user_head = (ImageView) findViewById(R.id.user_head);
         user_name = (TextView) findViewById(R.id.user_name);
+        bottom_text = (TextView) findViewById(R.id.bottom_text);
         switchView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -153,6 +154,9 @@ public class MoreSettingActivity extends BaseActivity implements View.OnClickLis
         } else {
             layout_change_server.setVisibility(View.GONE);
         }
+
+        int currentBrowser = SharedPreferencesUtils.getConfigInt(this, SharedPreferencesUtils.KEY_BROWSER_LIMIT);
+        bottom_text.setText("v" + AppUtils.getAppVersion(this) + " 今日已阅读 " + currentBrowser);
     }
 
     private void setHeadTitle(String uid) {

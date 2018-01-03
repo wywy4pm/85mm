@@ -14,6 +14,7 @@ public class ConfigHelper {
     public static int isShowWImage;
     public static List<UserTagBean> userTags;
     public static List<MenuListBean> menuList;
+    public static int workBrowserLimit = 200;
     //public static List<MenuListBean> customMenuList;
     //public static AllUserInfoBean userInfoBean;
 }

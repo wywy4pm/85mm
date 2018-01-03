@@ -21,6 +21,7 @@ import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.dialog.BrowserLimitDialog;
 import com.arun.a85mm.event.UpdateMesDotEvent;
 import com.arun.a85mm.fragment.ArticleFragment;
 import com.arun.a85mm.fragment.AssociationFragment;
@@ -420,6 +421,17 @@ public class MainActivity extends AppCompatActivity {
     public void refreshComments(String commentId) {
         if (associationFragment != null) {
             associationFragment.refreshComments(commentId);
+        }
+    }
+
+    private BrowserLimitDialog browserLimitDialog;
+
+    public void showBrowserDialog(Context context) {
+        if (browserLimitDialog == null) {
+            browserLimitDialog = new BrowserLimitDialog(context, R.style.CustomDialog);
+        }
+        if (!browserLimitDialog.isShowing()) {
+            browserLimitDialog.show();
         }
     }
 

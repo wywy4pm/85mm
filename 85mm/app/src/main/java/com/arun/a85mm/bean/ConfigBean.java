@@ -55,4 +55,9 @@ public class ConfigBean {
      * 自定义菜单列表
      */
     public List<MenuListBean> customMenuList;
+
+    /**
+     * 浏览作品数限制
+     */
+    public int workLimit;
 }

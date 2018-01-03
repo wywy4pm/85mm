@@ -363,7 +363,7 @@
                     android:layout_height="wrap_content"
                     android:onClick="copyWeChat"
                     android:text="点击复制"
-                    android:textColor="@color/more_yellow"
+                    android:textColor="@color/text_green"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -380,11 +380,11 @@
                 android:layout_height="31dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="29dp"
-                android:background="@drawable/shape_jump_to_wechat"
+                android:background="@drawable/shape_jump_to_wechat_green"
                 android:gravity="center"
                 android:onClick="openWeChat"
                 android:text="打开微信"
-                android:textColor="@color/open_wechat"
+                android:textColor="@color/text_green"
                 android:textSize="15sp" />
             <!--<com.arun.a85mm.widget.ListViewForScrollView
                 android:id="@+id/configListView"
@@ -394,7 +394,15 @@
                 android:divider="@null"
                 android:scrollbars="none"
                 android:visibility="gone" />-->
-
+            <TextView
+                android:id="@+id/bottom_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
+                android:text="" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

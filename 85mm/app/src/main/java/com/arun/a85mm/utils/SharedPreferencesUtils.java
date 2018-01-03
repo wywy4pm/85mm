@@ -24,6 +24,7 @@ public class SharedPreferencesUtils {
     public static final String KEY_MAIN_TAB_POS = "main_tab_pos";
     public static final String KEY_SERVER = "server";
     public static final String KEY_WIDTH_IMAGE = "width_image";
+    public static final String KEY_BROWSER_LIMIT = "browser_limit";
 
     public static void saveUid(Context context, String uid) {
         if (!TextUtils.isEmpty(uid)) {

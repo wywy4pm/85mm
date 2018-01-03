@@ -26,6 +26,7 @@ import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.dialog.BrowserLimitDialog;
 import com.arun.a85mm.fragment.TagWorkFragment;
 import com.arun.a85mm.helper.ConfigHelper;
 import com.arun.a85mm.helper.EventStatisticsHelper;
@@ -36,6 +37,7 @@ import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.GlideCircleTransform;
 import com.arun.a85mm.utils.GlideRoundTransform;
 import com.arun.a85mm.utils.NetUtils;
+import com.arun.a85mm.utils.SharedPreferencesUtils;
 import com.arun.a85mm.widget.AutoLineLinearLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -91,6 +93,17 @@ public class CommunityAdapter extends BaseExpandableListAdapter {
         WorkListHeadHolder workListHeadHolder = null;
         convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_goods_list, parent, false);
         workListHeadHolder = new WorkListHeadHolder(convertView);
+
+        int limit = SharedPreferencesUtils.getConfigInt(contexts.get(), SharedPreferencesUtils.KEY_BROWSER_LIMIT);
+        if (ConfigHelper.workBrowserLimit != -1 && limit >= ConfigHelper.workBrowserLimit) {
+            if (contexts.get() instanceof MainActivity) {
+                ((MainActivity) contexts.get()).showBrowserDialog(contexts.get());
+            } else if (contexts.get() instanceof BaseActivity) {
+                ((BaseActivity) contexts.get()).showBrowserDialog(contexts.get());
+            }
+        }
+        limit += 1;
+        SharedPreferencesUtils.setConfigInt(contexts.get(), SharedPreferencesUtils.KEY_BROWSER_LIMIT, limit);
 
         final WorkListHeadHolder headHolder = workListHeadHolder;
         final WorkListBean bean = workList.get(groupPosition);

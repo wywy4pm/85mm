@@ -27,8 +27,10 @@ import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.bean.WorkListItemBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.dialog.BrowserLimitDialog;
 import com.arun.a85mm.fragment.TagWorkFragment;
 import com.arun.a85mm.helper.ConfigHelper;
+import com.arun.a85mm.helper.DialogHelper;
 import com.arun.a85mm.listener.EventListener;
 import com.arun.a85mm.listener.OnImageClick;
 import com.arun.a85mm.listener.OnTagWorkListener;
@@ -84,13 +86,32 @@ public class ProductListAdapter extends BaseExpandableListAdapter {
         this.eventListener = eventListener;
     }
 
-    @Override
+    private BrowserLimitDialog browserLimitDialog;
 
+    private void showBrowserDialog(Context context) {
+        if (browserLimitDialog == null) {
+            browserLimitDialog = new BrowserLimitDialog(context, R.style.CustomDialog);
+        }
+        if (!browserLimitDialog.isShowing()) {
+            browserLimitDialog.show();
+        }
+    }
+
+    @Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         WorkListHeadHolder workListHeadHolder = null;
         convertView = LayoutInflater.from(contexts.get()).inflate(R.layout.layout_work_list, parent, false);
         workListHeadHolder = new WorkListHeadHolder(contexts.get(), convertView);
-
+        int limit = SharedPreferencesUtils.getConfigInt(contexts.get(), SharedPreferencesUtils.KEY_BROWSER_LIMIT);
+        if (ConfigHelper.workBrowserLimit != -1 && limit >= ConfigHelper.workBrowserLimit) {
+            if (contexts.get() instanceof MainActivity) {
+                ((MainActivity) contexts.get()).showBrowserDialog(contexts.get());
+            } else if (contexts.get() instanceof BaseActivity) {
+                ((BaseActivity) contexts.get()).showBrowserDialog(contexts.get());
+            }
+        }
+        limit += 1;
+        SharedPreferencesUtils.setConfigInt(contexts.get(), SharedPreferencesUtils.KEY_BROWSER_LIMIT, limit);
        /* if (ConfigHelper.tipsPosition > 0 && ConfigHelper.tipsPosition == groupPosition + 1) {
             isHaveAuditTips = true;
             workListHeadHolder.layout_auditing_tips.setVisibility(View.VISIBLE);

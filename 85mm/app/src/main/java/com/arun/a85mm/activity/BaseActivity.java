@@ -1,5 +1,6 @@
 package com.arun.a85mm.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.DrawableRes;
@@ -20,6 +21,7 @@ import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.bean.WorkListBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.common.EventConstant;
+import com.arun.a85mm.dialog.BrowserLimitDialog;
 import com.arun.a85mm.fragment.BaseFragment;
 import com.arun.a85mm.handler.ShowTopHandler;
 import com.arun.a85mm.helper.EventStatisticsHelper;
@@ -337,4 +339,15 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeBac
                 ShareParaUtils.getWorkDetailShareUrl(workListBean.id), workListBean.coverUrl, eventStatisticsHelper);
     }
 
+
+    private BrowserLimitDialog browserLimitDialog;
+
+    public void showBrowserDialog(Context context) {
+        if (browserLimitDialog == null) {
+            browserLimitDialog = new BrowserLimitDialog(context, R.style.CustomDialog);
+        }
+        if (!browserLimitDialog.isShowing()) {
+            browserLimitDialog.show();
+        }
+    }
 }
