@@ -60,4 +60,9 @@ public class ConfigBean {
      * 浏览作品数限制
      */
     public int workLimit;
+
+    /**
+     * 版本更新信息
+     */
+    public AppInfoBean appInfo;
 }
