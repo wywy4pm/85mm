@@ -2,13 +2,19 @@ package com.arun.a85mm.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
+import android.util.Log;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -133,4 +139,48 @@ public class AppUtils {
         context.startActivity(i);
         android.os.Process.killProcess(android.os.Process.myPid());
     }
+
+
+    /**
+     * @param file
+     * @return
+     * @Description 安装apk
+     */
+    public static void installApk(Context context, File file) {
+        /*Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { // 7.0+以上版本
+            Uri apkUri = FileProvider.getUriForFile(context, "com.shawpoo.app.fileprovider", file); //与manifest中定义的provider中的authorities="com.shawpoo.app.fileprovider"保持一致
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+        } else {
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        }
+        context.startActivity(intent);*/
+
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(file),"application/vnd.android.package-archive");
+        context.startActivity(intent);
+    }
+
+    public static boolean isServiceRunning(Context context,String className){
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> serviceList = activityManager.getRunningServices(500);
+        if (serviceList.size() < 1){
+            return false;
+        }
+        Log.e("service", "isServiceRunning: "+serviceList.size());
+        for (int i = 0; i < serviceList.size(); i++) {
+            ActivityManager.RunningServiceInfo serviceInfo = serviceList.get(i);
+            ComponentName componentName = serviceInfo.service;
+            if (componentName.getClassName().equals(className)) {
+                Log.e("name",componentName.getClassName());
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

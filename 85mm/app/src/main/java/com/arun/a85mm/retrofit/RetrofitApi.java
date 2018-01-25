@@ -25,18 +25,21 @@ import com.arun.a85mm.bean.request.AddMessageRequest;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import rx.Observable;
 
 public interface RetrofitApi {
 
-    /*@GET
-    Call<ResponseBody> downLoadImage(@Url String url);*/
+    @GET
+    Call<ResponseBody> commonDownLoad(@Url String url);
 
     @GET(RetrofitUrl.ARTICLE_LIST)
     Observable<CommonApiResponse<ArticleListBody>> getArticleList(@Query("lastId") String lastId);
@@ -138,6 +141,4 @@ public interface RetrofitApi {
     @Headers({"Content-Type:application/json;charset=UTF-8"})
     @POST(RetrofitUrl.USER_AWARD)
     Observable<CommonApiResponse<AwardBodyBean>> userAward(@Query("workId") String workId);
-
-
 }

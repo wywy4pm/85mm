@@ -1,7 +1,9 @@
 package com.arun.a85mm.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,10 +14,12 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arun.a85mm.R;
 import com.arun.a85mm.adapter.CommonFragmentPagerAdapter;
 import com.arun.a85mm.bean.ActionBean;
+import com.arun.a85mm.bean.AppInfoBean;
 import com.arun.a85mm.bean.MenuListBean;
 import com.arun.a85mm.bean.ShowTopBean;
 import com.arun.a85mm.bean.WorkListBean;
@@ -37,6 +41,8 @@ import com.arun.a85mm.helper.SaveImageHelper;
 import com.arun.a85mm.helper.ShareWindow;
 import com.arun.a85mm.helper.UrlJumpHelper;
 import com.arun.a85mm.helper.UserManager;
+import com.arun.a85mm.service.DownLoadApkService;
+import com.arun.a85mm.utils.AppUtils;
 import com.arun.a85mm.utils.DataCleanManager;
 import com.arun.a85mm.utils.DensityUtil;
 import com.arun.a85mm.utils.ShareParaUtils;
@@ -51,6 +57,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -121,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (!TextUtils.isEmpty(type) && map != null) {
             jumpToOther();
+        } else {
+            judgeShowUpdate(ConfigHelper.appInfo);
         }
     }
 
@@ -348,6 +357,54 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 LoginActivity.jumpToLoginForResult(this);
             }
+        }
+    }
+
+    public void judgeShowUpdate(final AppInfoBean appInfoBean) {
+        /*appInfoBean.update = 1;
+        appInfoBean.forceUpdate = 0;*/
+        if (appInfoBean != null && appInfoBean.update == 1) {//需要更新
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("版本更新");
+            String forceUpdateDes = appInfoBean.forceUpdate == 1 ? "需强制更新，" : "";
+            String updateDes = "发现新版本，" + forceUpdateDes + "是否更新?";
+            builder.setMessage(updateDes);
+            builder.setPositiveButton("暂不", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (appInfoBean.forceUpdate == 1) {//强制更新
+                        finish();
+                    }
+                }
+            });
+            builder.setNegativeButton("更新", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (appInfoBean.forceUpdate == 1) {
+                        try {//下面三句控制弹框的关闭
+                            Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
+                            field.setAccessible(true);
+                            field.set(dialog, false);//false不关闭
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (!TextUtils.isEmpty(appInfoBean.downloadUrl)) {
+                        if (!AppUtils.isServiceRunning(MainActivity.this, DownLoadApkService.class.getName())) {
+                            DownLoadApkService.startDownLoadApk(MainActivity.this, appInfoBean.downloadUrl);
+                            Toast.makeText(MainActivity.this, "更新安装包正在下载，请耐心等待", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "当前更新安装包已经在下载了", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
+            AlertDialog dialog = builder.create();
+            if (appInfoBean.forceUpdate == 1) {//强制更新
+                dialog.setCancelable(false);
+            }
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
         }
     }
 

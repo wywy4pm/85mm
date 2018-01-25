@@ -202,6 +202,7 @@ public class SplashActivity extends AppCompatActivity implements CommonView3 {
                 ConfigHelper.userTags = config.userTagList;
                 ConfigHelper.menuList = config.menuList;
                 ConfigHelper.workBrowserLimit = config.workLimit;
+                ConfigHelper.appInfo = config.appInfo;
                 //ConfigHelper.customMenuList = config.customMenuList;
                 SharedPreferencesUtils.setConfigInt(this, SharedPreferencesUtils.KEY_NEW_MESSAGE, config.hasNewMsg);
                 UserManager.getInstance().setLogin(config.isLogin == 1);

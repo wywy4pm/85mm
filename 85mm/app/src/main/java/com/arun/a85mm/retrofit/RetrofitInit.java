@@ -3,6 +3,8 @@ package com.arun.a85mm.retrofit;
 import com.arun.a85mm.bean.AppBean;
 import com.arun.a85mm.common.Constant;
 import com.arun.a85mm.helper.AppHelper;
+import com.arun.a85mm.helper.ProgressResponseBody;
+import com.arun.a85mm.listener.DownLoadListener;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -116,6 +118,24 @@ public class RetrofitInit {
 
     private RetrofitInit() {
 
+    }
+
+    public static <T> RetrofitApi getDownLoadApi(final DownLoadListener<T> callback) {
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+        clientBuilder.addInterceptor(new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Chain chain) throws IOException {
+                okhttp3.Response response = chain.proceed(chain.request());
+                //将ResponseBody转换成我们需要的FileResponseBody
+                return response.newBuilder().body(new ProgressResponseBody(response.body(), callback)).build();
+            }
+        });
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constant.API_BASE_URL)
+                .client(clientBuilder.build())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return retrofit.create(RetrofitApi.class);
     }
 
     private static RetrofitApi retrofitApi;

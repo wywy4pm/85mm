@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId "com.arun.a85mm"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 140
         versionName "1.4.0"
